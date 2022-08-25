@@ -21,6 +21,7 @@
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #include <algorithm>
+#include <sstream>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
@@ -206,6 +207,16 @@ MelBanks::MelBanks(const MelBanksOptions &opts,
       bins_[bin].second[0] = 0.0;
     }
   }  // for (int32_t bin = 0; bin < num_bins; ++bin) {
+
+  if (debug_) {
+    std::ostringstream os;
+    for (size_t i = 0; i < bins_.size(); i++) {
+      os << "bin " << i << ", offset = " << bins_[i].first << ", vec = ";
+      for (auto k : bins_[i].second) os << k << ", ";
+      os << "\n";
+    }
+    KNF_LOG(INFO) << os.str();
+  }
 }
 
 // "power_spectrum" contains fft energies.

@@ -52,14 +52,11 @@ FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &opts)
   }
 }
 
-void FeatureWindowFunction::Apply(float *wave, int32_t num_frames) const {
+void FeatureWindowFunction::Apply(float *wave) const {
   int32_t window_size = window_.size();
   const float *p = window_.data();
-  for (int32_t i = 0; i != num_frames; ++i) {
-    for (int32_t k = 0; k != window_size; ++k) {
-      wave[k] *= p[k];
-    }
-    wave += window_size;
+  for (int32_t k = 0; k != window_size; ++k) {
+    wave[k] *= p[k];
   }
 }
 
@@ -233,7 +230,7 @@ void ProcessWindow(const FrameExtractionOptions &opts,
     Preemphasize(window, frame_length, opts.preemph_coeff);
   }
 
-  window_function.Apply(window, 1);
+  window_function.Apply(window);
 }
 
 }  // namespace knf

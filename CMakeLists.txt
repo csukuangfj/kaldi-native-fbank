@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "0.1")
+set(KALDI_NATIVE_FBANK_VERSION "1.1")
 
 set(ALLOWABLE_BUILD_TYPES Debug Release RelWithDebInfo MinSizeRel)
 set(DEFAULT_BUILD_TYPE "Release")
@@ -42,13 +42,13 @@ set(BUILD_RPATH_USE_ORIGIN TRUE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if(NOT APPLE)
-  set(kaldi_native_io_rpath_origin "$ORIGIN")
+  set(kaldi_native_fbank_rpath_origin "$ORIGIN")
 else()
-  set(kaldi_native_io_rpath_origin "@loader_path")
+  set(kaldi_native_fbank_rpath_origin "@loader_path")
 endif()
 
-set(CMAKE_INSTALL_RPATH ${kaldi_native_io_rpath_origin})
-set(CMAKE_BUILD_RPATH ${kaldi_native_io_rpath_origin})
+set(CMAKE_INSTALL_RPATH ${kaldi_native_fbank_rpath_origin})
+set(CMAKE_BUILD_RPATH ${kaldi_native_fbank_rpath_origin})
 
 set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ version to be used.")
 
@@ -58,12 +58,16 @@ if(WIN32)
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 endif()
 
+option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ON)
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(pybind11)
 
-enable_testing()
-include(googletest)
+if(KALDI_NATIVE_FBANK_BUILD_TESTS)
+  enable_testing()
+  include(googletest)
+endif()
 
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
