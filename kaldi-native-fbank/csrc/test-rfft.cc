@@ -30,21 +30,23 @@ tensor([ 39.0000+0.0000j, -28.1924-2.2929j,  18.0000+5.0000j,  -9.8076+3.7071j,
 #endif
 
 TEST(Rfft, TestRfft) {
-  std::vector<float> d = {1, -1, 3, 8, 20, 6, 0, 2};
   knf::Rfft fft(8);
-  fft.Compute(d.data());
+  for (int32_t i = 0; i != 10; ++i) {
+    std::vector<float> d = {1, -1, 3, 8, 20, 6, 0, 2};
+    fft.Compute(d.data());
 
-  EXPECT_EQ(d[0], 39);
-  EXPECT_EQ(d[1], 9);
+    EXPECT_EQ(d[0], 39);
+    EXPECT_EQ(d[1], 9);
 
-  EXPECT_NEAR(d[2], -28.1924, 1e-3);
-  EXPECT_NEAR(-d[3], -2.2929, 1e-3);
+    EXPECT_NEAR(d[2], -28.1924, 1e-3);
+    EXPECT_NEAR(-d[3], -2.2929, 1e-3);
 
-  EXPECT_NEAR(d[4], 18, 1e-3);
-  EXPECT_NEAR(-d[5], 5, 1e-3);
+    EXPECT_NEAR(d[4], 18, 1e-3);
+    EXPECT_NEAR(-d[5], 5, 1e-3);
 
-  EXPECT_NEAR(d[6], -9.8076, 1e-3);
-  EXPECT_NEAR(-d[7], 3.7071, 1e-3);
+    EXPECT_NEAR(d[6], -9.8076, 1e-3);
+    EXPECT_NEAR(-d[7], 3.7071, 1e-3);
+  }
 }
 
 }  // namespace knf

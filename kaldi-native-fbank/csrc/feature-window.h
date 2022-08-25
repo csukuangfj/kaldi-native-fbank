@@ -88,12 +88,11 @@ class FeatureWindowFunction {
   FeatureWindowFunction() = default;
   explicit FeatureWindowFunction(const FrameExtractionOptions &opts);
   /**
-   * @param wave Pointer to a 2-D array of shape [num_frames][window_size].
-   *             It is modified in-place. For each row `w`: w[i] = w[i] *
-   * window_[i].
+   * @param wave Pointer to a 1-D array of shape [window_size].
+   *             It is modified in-place: wave[i] = wave[i] * window_[i].
    * @param
    */
-  void Apply(float *wave, int32_t num_frames) const;
+  void Apply(float *wave) const;
 
  private:
   std::vector<float> window_;  // of size opts.WindowSize()

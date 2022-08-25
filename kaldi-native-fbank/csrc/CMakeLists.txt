@@ -44,6 +44,12 @@ set(test_srcs
   test-rfft.cc
 )
 
-foreach(source IN LISTS test_srcs)
-  kaldi_native_fbank_add_test(${source})
-endforeach()
+if(KALDI_NATIVE_FBANK_BUILD_TESTS)
+  foreach(source IN LISTS test_srcs)
+    kaldi_native_fbank_add_test(${source})
+  endforeach()
+endif()
+
+install(TARGETS kaldi-native-fbank-core
+  DESTINATION lib
+)

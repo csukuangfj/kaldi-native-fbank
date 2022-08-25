@@ -93,7 +93,7 @@ void FbankComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   // Its length is opts_.mel_opts.num_bins
   float *mel_energies = feature + mel_offset;
 
-  // Sum with mel fiterbanks over the power spectrum
+  // Sum with mel filter banks over the power spectrum
   mel_banks.Compute(signal_frame->data(), mel_energies);
 
   if (opts_.use_log_fbank) {
