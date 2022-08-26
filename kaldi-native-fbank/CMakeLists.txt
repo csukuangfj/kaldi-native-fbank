@@ -1,2 +1,5 @@
 add_subdirectory(csrc)
-add_subdirectory(python)
+
+if(kALDI_NATIVE_FBANK_BUILD_PYTHON)
+  add_subdirectory(python)
+endif()

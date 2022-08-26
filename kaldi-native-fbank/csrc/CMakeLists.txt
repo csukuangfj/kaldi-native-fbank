@@ -21,6 +21,9 @@ if(KNF_HAVE_CXXABI_H)
   target_compile_definitions(kaldi-native-fbank-core PRIVATE KNF_HAVE_CXXABI_H=1)
 endif()
 
+add_executable(test-online-fbank test-online-fbank.cc)
+target_link_libraries(test-online-fbank kaldi-native-fbank-core)
+
 function(kaldi_native_fbank_add_test source)
   get_filename_component(name ${source} NAME_WE)
   add_executable(${name} "${source}")
@@ -52,4 +55,25 @@ endif()
 
 install(TARGETS kaldi-native-fbank-core
   DESTINATION lib
+)
+
+install(TARGETS test-online-fbank
+  DESTINATION bin
+)
+
+file(MAKE_DIRECTORY
+  DESTINATION
+    ${PROJECT_BINARY_DIR}/include/kaldi-native-fbank/csrc
+)
+file(GLOB_RECURSE all_headers *.h)
+message(STATUS "All headers: ${all_headers}")
+
+file(COPY
+  ${all_headers}
+  DESTINATION
+    ${PROJECT_BINARY_DIR}/include/kaldi-native-fbank/csrc
+)
+
+install(FILES ${all_headers}
+  DESTINATION include/kaldi-native-fbank/csrc
 )
