@@ -9,6 +9,16 @@ to build this project"
   )
 endif()
 
+if(CMAKE_TOOLCHAIN_FILE)
+  set(_BUILD_PYTHON OFF)
+  set(_BUILD_TESTS OFF)
+else()
+  set(_BUILD_PYTHON ON)
+  set(_BUILD_TESTS ON)
+endif()
+
+
+
 if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)
 endif()
@@ -58,18 +68,25 @@ if(WIN32)
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 endif()
 
-option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ON)
+option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
+option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BUILD_PYTHON})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-include(pybind11)
+
+if(kALDI_NATIVE_FBANK_BUILD_PYTHON)
+  include(pybind11)
+endif()
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   enable_testing()
   include(googletest)
 endif()
 
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
+
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 
 include(CheckIncludeFileCXX)
 check_include_file_cxx(cxxabi.h KNF_HAVE_CXXABI_H)
