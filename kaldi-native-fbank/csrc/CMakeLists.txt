@@ -66,7 +66,10 @@ file(MAKE_DIRECTORY
     ${PROJECT_BINARY_DIR}/include/kaldi-native-fbank/csrc
 )
 file(GLOB_RECURSE all_headers *.h)
-message(STATUS "All headers: ${all_headers}")
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  message(STATUS "All headers: ${all_headers}")
+endif()
 
 file(COPY
   ${all_headers}
