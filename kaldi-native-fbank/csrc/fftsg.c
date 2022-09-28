@@ -1,3 +1,6 @@
+/* This file is copied from
+ * https://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
+ */
 /*
 Fast Fourier/Cosine/Sine Transform
     dimension   :one
