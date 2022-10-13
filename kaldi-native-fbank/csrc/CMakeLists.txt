@@ -11,7 +11,9 @@ add_library(kaldi-native-fbank-core
   rfft.cc
 )
 # We are using std::call_once() in log.h,which requires us to link with -pthread
-target_link_libraries(kaldi-native-fbank-core -pthread)
+if(NOT WIN32)
+  target_link_libraries(kaldi-native-fbank-core -pthread)
+endif()
 
 if(KNF_HAVE_EXECINFO_H)
   target_compile_definitions(kaldi-native-fbank-core PRIVATE KNF_HAVE_EXECINFO_H=1)

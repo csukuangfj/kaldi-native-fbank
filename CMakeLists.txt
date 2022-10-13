@@ -27,7 +27,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.1")
+set(KALDI_NATIVE_FBANK_VERSION "1.2")
 
 set(ALLOWABLE_BUILD_TYPES Debug Release RelWithDebInfo MinSizeRel)
 set(DEFAULT_BUILD_TYPE "Release")
@@ -82,7 +82,7 @@ option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BU
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-if(kALDI_NATIVE_FBANK_BUILD_PYTHON)
+if(KALDI_NATIVE_FBANK_BUILD_PYTHON)
   include(pybind11)
 endif()
 
