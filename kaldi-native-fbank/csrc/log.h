@@ -51,13 +51,21 @@ enum class LogLevel {
 //
 //  KNF_LOG(TRACE) << "some message";
 //  KNF_LOG(DEBUG) << "some message";
-//
+#ifndef _MSC_VER
 constexpr LogLevel TRACE = LogLevel::kTrace;
 constexpr LogLevel DEBUG = LogLevel::kDebug;
 constexpr LogLevel INFO = LogLevel::kInfo;
 constexpr LogLevel WARNING = LogLevel::kWarning;
 constexpr LogLevel ERROR = LogLevel::kError;
 constexpr LogLevel FATAL = LogLevel::kFatal;
+#else
+#define TRACE LogLevel::kTrace
+#define DEBUG LogLevel::kDebug
+#define INFO LogLevel::kInfo
+#define WARNING LogLevel::kWarning
+#define ERROR LogLevel::kError
+#define FATAL LogLevel::kFatal
+#endif
 
 std::string GetStackTrace();
 

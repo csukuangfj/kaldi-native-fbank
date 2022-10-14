@@ -27,22 +27,10 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.5")
+set(KALDI_NATIVE_FBANK_VERSION "1.6")
 
-set(ALLOWABLE_BUILD_TYPES Debug Release RelWithDebInfo MinSizeRel)
-set(DEFAULT_BUILD_TYPE "Release")
 if(NOT DEFINED CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
-endif()
-
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${ALLOWABLE_BUILD_TYPES}")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  # CMAKE_CONFIGURATION_TYPES: with config type values from other generators (IDE).
-  message(STATUS "No CMAKE_BUILD_TYPE given, default to ${DEFAULT_BUILD_TYPE}")
-  set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}")
-elseif(NOT CMAKE_BUILD_TYPE IN_LIST ALLOWABLE_BUILD_TYPES)
-  message(FATAL_ERROR "Invalid build type: ${CMAKE_BUILD_TYPE}, \
-    choose one from ${ALLOWABLE_BUILD_TYPES}")
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
