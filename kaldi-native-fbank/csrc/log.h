@@ -180,6 +180,7 @@ class Logger {
 
       fflush(nullptr);
 
+#ifndef __ANDROID_API__
       if (EnableAbort()) {
         // NOTE: abort() will terminate the program immediately without
         // printing the Python stack backtrace.
@@ -187,6 +188,9 @@ class Logger {
       }
 
       throw std::runtime_error(kErrMsg);
+#else
+      abort();
+#endif
     }
   }
 
