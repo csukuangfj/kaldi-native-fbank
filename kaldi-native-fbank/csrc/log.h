@@ -29,6 +29,8 @@
 
 namespace knf {
 
+#if KNF_ENABLE_CHECK
+
 #if defined(NDEBUG)
 constexpr bool kDisableDebug = true;
 #else
@@ -264,13 +266,26 @@ class Logger {
   LogLevel level_;
   LogLevel cur_level_;
 };
+#endif  // KNF_ENABLE_CHECK
 
 class Voidifier {
  public:
-  void operator&(const Logger &)const {}
+#if KNF_ENABLE_CHECK
+  void operator&(const Logger &) const {}
+#endif
 };
+#if !defined(KNF_ENABLE_CHECK)
+template <typename T>
+const Voidifier &operator<<(const Voidifier &v, T &&) {
+  return v;
+}
+#endif
 
 }  // namespace knf
+
+#define KNF_STATIC_ASSERT(x) static_assert(x, "")
+
+#ifdef KNF_ENABLE_CHECK
 
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__) || \
     defined(__PRETTY_FUNCTION__)
@@ -280,8 +295,6 @@ class Voidifier {
 // for other compilers
 #define KNF_FUNC __func__
 #endif
-
-#define KNF_STATIC_ASSERT(x) static_assert(x, "")
 
 #define KNF_CHECK(x)                                                  \
   (x) ? (void)0                                                       \
@@ -343,5 +356,28 @@ class Voidifier {
 
 #define KNF_DLOG(x) \
   ::knf::kDisableDebug ? (void)0 : ::knf::Voidifier() & KNF_LOG(x)
+
+#else
+
+#define KNF_CHECK(x) ::knf::Voidifier()
+#define KNF_LOG(x) ::knf::Voidifier()
+
+#define KNF_CHECK_EQ(x, y) ::knf::Voidifier()
+#define KNF_CHECK_NE(x, y) ::knf::Voidifier()
+#define KNF_CHECK_LT(x, y) ::knf::Voidifier()
+#define KNF_CHECK_LE(x, y) ::knf::Voidifier()
+#define KNF_CHECK_GT(x, y) ::knf::Voidifier()
+#define KNF_CHECK_GE(x, y) ::knf::Voidifier()
+
+#define KNF_DCHECK(x) ::knf::Voidifier()
+#define KNF_DLOG(x) ::knf::Voidifier()
+#define KNF_DCHECK_EQ(x, y) ::knf::Voidifier()
+#define KNF_DCHECK_NE(x, y) ::knf::Voidifier()
+#define KNF_DCHECK_LT(x, y) ::knf::Voidifier()
+#define KNF_DCHECK_LE(x, y) ::knf::Voidifier()
+#define KNF_DCHECK_GT(x, y) ::knf::Voidifier()
+#define KNF_DCHECK_GE(x, y) ::knf::Voidifier()
+
+#endif  // KNF_CHECK_NE
 
 #endif  // KALDI_NATIVE_FBANK_CSRC_LOG_H_

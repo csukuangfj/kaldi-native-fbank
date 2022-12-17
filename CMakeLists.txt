@@ -12,11 +12,12 @@ endif()
 if(CMAKE_TOOLCHAIN_FILE)
   set(_BUILD_PYTHON OFF)
   set(_BUILD_TESTS OFF)
+  set(_ENABLE_CHECK OFF)
 else()
   set(_BUILD_PYTHON ON)
   set(_BUILD_TESTS ON)
+  set(_ENABLE_CHECK ON)
 endif()
-
 
 
 if(POLICY CMP0057)
@@ -29,7 +30,7 @@ project(kaldi-native-fbank CXX C)
 
 set(KALDI_NATIVE_FBANK_VERSION "1.7")
 
-if(NOT DEFINED CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
@@ -66,9 +67,12 @@ endif()
 
 option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
 option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BUILD_PYTHON})
+option(KALDI_NATIVE_FBANK_ENABLE_CHECK "Whether to build with log" ${_ENABLE_CHECK})
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
 
 if(KALDI_NATIVE_FBANK_BUILD_PYTHON)
   include(pybind11)
