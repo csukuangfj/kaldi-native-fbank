@@ -1,4 +1,4 @@
-# Introductio
+# Introduction
 
 Kaldi-compatible online fbank feature extractor without external dependencies.
 
