@@ -28,11 +28,19 @@ or use
 pip install kaldi-native-fbank
 ```
 
-Then please refer to
+To check that you have installed `kaldi-native-fbank` successfully, please use
+
+```
+python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
+```
+
+which should print the version you have installed.
+
+Please refer to
 <https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/python/tests/test_online_fbank.py>
 for usages.
 
-For easier references, we post the above file below:
+For easier reference, we post the above file below:
 
 ```python3
 #!/usr/bin/env python3
