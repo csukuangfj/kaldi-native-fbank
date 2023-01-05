@@ -1,16 +1,28 @@
-# Introduction
+# Introductio
 
 Kaldi-compatible online fbank feature extractor without external dependencies.
 
+Tested on the following architectures and operating systems:
+
+  - Linux
+  - macOS
+  - Windows
+  - Android
+  - x86
+  - arm
+  - aarch64
+
 # Usage
 
-See the following CMake-based projects for its usage:
+See the following CMake-based speech recognition (i.e., text-to-speech) projects
+for its usage:
 
 - <https://github.com/k2-fsa/sherpa-ncnn>
   - Specifically, please have a look at <https://github.com/k2-fsa/sherpa-ncnn/blob/master/sherpa-ncnn/csrc/features.h>
 - <https://github.com/k2-fsa/sherpa-onnx>
 
-They use kaldi-native-fbank to compute fbank features for speech recognition.
+They use `kaldi-native-fbank` to compute fbank features for **real-time**
+speech recognition.
 
 # Python APIs
 
