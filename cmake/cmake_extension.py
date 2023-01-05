@@ -58,6 +58,8 @@ class BuildExtension(build_ext):
         # build/lib.linux-x86_64-3.8
         os.makedirs(self.build_lib, exist_ok=True)
 
+        install_dir = Path(self.build_lib).resolve() / "kaldi_native_fbank"
+
         kaldi_native_fbank_dir = Path(__file__).parent.parent.resolve()
 
         cmake_args = os.environ.get("KALDI_NATIVE_FBANK_CMAKE_ARGS", "")
@@ -67,8 +69,8 @@ class BuildExtension(build_ext):
         if cmake_args == "":
             cmake_args = "-DCMAKE_BUILD_TYPE=Release"
 
-        extra_cmake_args = " -DKALDI_NATIVE_FBANK_BUILD_TESTS=OFF "
-        extra_cmake_args += f" -DCMAKE_INSTALL_PREFIX={Path(self.build_lib).resolve()}/kaldi_native_fbank "  # noqa
+        extra_cmake_args = f" -DCMAKE_INSTALL_PREFIX={install_dir} "
+        extra_cmake_args += " -DKALDI_NATIVE_FBANK_BUILD_TESTS=OFF "
 
         if "PYTHON_EXECUTABLE" not in cmake_args:
             print(f"Setting PYTHON_EXECUTABLE to {sys.executable}")
@@ -79,7 +81,6 @@ class BuildExtension(build_ext):
         if is_windows():
             build_cmd = f"""
                 cmake {cmake_args} -B {self.build_temp} -S {kaldi_native_fbank_dir}
-                cmake --build {self.build_temp} --target _kaldi_native_fbank --config Release -- -m
                 cmake --build {self.build_temp} --target install --config Release -- -m
             """
             print(f"build command is:\n{build_cmd}")
@@ -88,12 +89,6 @@ class BuildExtension(build_ext):
             )
             if ret != 0:
                 raise Exception("Failed to configure kaldi_native_fbank")
-
-            ret = os.system(
-                f"cmake --build {self.build_temp} --target _kaldi_native_fbank --config Release -- -m"
-            )
-            if ret != 0:
-                raise Exception("Failed to build kaldi_native_fbank")
 
             ret = os.system(
                 f"cmake --build {self.build_temp} --target install --config Release -- -m"
@@ -112,8 +107,7 @@ class BuildExtension(build_ext):
 
                 cmake {cmake_args} {kaldi_native_fbank_dir}
 
-
-                make {make_args} _kaldi_native_fbank install
+                make {make_args} install
             """
             print(f"build command is:\n{build_cmd}")
 

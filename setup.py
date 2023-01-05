@@ -24,7 +24,7 @@ def get_package_version():
     return latest_version
 
 
-package_name = "kaldi_native_fbank"
+package_name = "kaldi-native-fbank"
 
 with open("kaldi-native-fbank/python/kaldi_native_fbank/__init__.py", "a") as f:
     f.write(f"__version__ = '{get_package_version()}'\n")
@@ -34,8 +34,8 @@ setuptools.setup(
     version=get_package_version(),
     author="Fangjun Kuang",
     author_email="csukuangfj@gmail.com",
-    package_dir={package_name: "kaldi-native-fbank/python/kaldi_native_fbank"},
-    packages=[package_name],
+    package_dir={"kaldi_native_fbank": "kaldi-native-fbank/python/kaldi_native_fbank"},
+    packages=["kaldi_native_fbank"],
     url="https://github.com/csukuangfj/kaldi-native-fbank",
     long_description=read_long_description(),
     long_description_content_type="text/markdown",
@@ -46,9 +46,6 @@ setuptools.setup(
         "Programming Language :: C++",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     python_requires=">=3.6.0",
