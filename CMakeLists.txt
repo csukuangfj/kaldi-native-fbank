@@ -28,7 +28,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.9")
+set(KALDI_NATIVE_FBANK_VERSION "1.10")
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
