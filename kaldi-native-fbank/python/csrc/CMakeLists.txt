@@ -22,11 +22,6 @@ if(NOT WIN32)
 endif()
 
 target_link_libraries(_kaldi_native_fbank PRIVATE kaldi-native-fbank-core)
-if(UNIX AND NOT APPLE)
-  target_link_libraries(_kaldi_native_fbank PUBLIC ${PYTHON_LIBRARY})
-elseif(WIN32)
-  target_link_libraries(_kaldi_native_fbank PUBLIC ${PYTHON_LIBRARIES})
-endif()
 
 install(TARGETS _kaldi_native_fbank
   DESTINATION ../
