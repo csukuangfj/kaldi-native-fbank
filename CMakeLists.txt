@@ -12,13 +12,10 @@ endif()
 if(CMAKE_TOOLCHAIN_FILE)
   set(_BUILD_PYTHON OFF)
   set(_BUILD_TESTS OFF)
-  set(_ENABLE_CHECK OFF)
 else()
   set(_BUILD_PYTHON ON)
   set(_BUILD_TESTS ON)
-  set(_ENABLE_CHECK ON)
 endif()
-
 
 if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)
@@ -67,7 +64,7 @@ endif()
 
 option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
 option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BUILD_PYTHON})
-option(KALDI_NATIVE_FBANK_ENABLE_CHECK "Whether to build with log" ${_ENABLE_CHECK})
+option(KALDI_NATIVE_FBANK_ENABLE_CHECK "Whether to build with log" OFF)
 
 message(STATUS "KALDI_NATIVE_FBANK_BUILD_TESTS: ${KALDI_NATIVE_FBANK_BUILD_TESTS}")
 message(STATUS "KALDI_NATIVE_FBANK_BUILD_PYTHON: ${KALDI_NATIVE_FBANK_BUILD_PYTHON}")
@@ -77,6 +74,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
+
+if(WIN32)
+  add_definitions(-DNOMINMAX) # Otherwise, std::max() and std::min() won't work
+endif()
 
 if(KALDI_NATIVE_FBANK_BUILD_PYTHON)
   include(pybind11)
