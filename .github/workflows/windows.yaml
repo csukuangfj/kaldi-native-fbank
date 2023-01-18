@@ -64,6 +64,7 @@ jobs:
         run: |
           cd build
           export PYTHONPATH=$PWD/lib/Release:$PYTHONPATH
+          export PYTHONPATH=$PWD/../kaldi-native-fbank/python:$PYTHONPATH
           ctest --verbose -C Release --output-on-failure
 
       - name: Setup Python
