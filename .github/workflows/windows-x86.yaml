@@ -50,7 +50,8 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -T ${{ matrix.toolset-version}},host=x64 -D CMAKE_BUILD_TYPE=Release ..
+          cmake -T ${{ matrix.toolset-version}},host=x64 -A Win32 -D CMAKE_BUILD_TYPE=Release ..
+          cat CMakeCache.txt
 
 
       - name: Build kaldi-native-fbank for windows
@@ -60,9 +61,8 @@ jobs:
           cmake --build . --target ALL_BUILD --config Release
 
       - name: Run tests for windows
+        shell: bash
         run: |
           cd build
-
-          dumpbin bin/Release/test-log.exe
 
           ctest --verbose -C Release --output-on-failure -E py

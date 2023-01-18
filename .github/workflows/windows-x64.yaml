@@ -58,6 +58,7 @@ jobs:
         run: |
           cd build
           cmake --build . --target ALL_BUILD --config Release
+          cat CMakeCache.txt
 
       - name: Run tests for windows
         shell: bash
