@@ -101,4 +101,20 @@ check_include_file_cxx(execinfo.h KNF_HAVE_EXECINFO_H)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
+if(WIN32)
+  # disable various warnings for MSVC
+  # 4244: '=': conversion from 'double' to 'float', possible loss of data
+  # 4624: destructor was implicitly defined as deleted because a base class destructor is inaccessible or deleted
+  # 4627: 'return': conversion from 'size_t' to 'int32_t', possible loss of data
+  set(disabled_warnings
+      /wd4244
+      /wd4624
+      /wd4627
+  )
+  message(STATUS "Disabled warnings: ${disabled_warnings}")
+  foreach(w IN LISTS disabled_warnings)
+    string(APPEND CMAKE_CXX_FLAGS " ${w} ")
+  endforeach()
+endif()
+
 add_subdirectory(kaldi-native-fbank)
