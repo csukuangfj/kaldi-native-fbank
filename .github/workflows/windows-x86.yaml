@@ -60,10 +60,9 @@ jobs:
           cmake --build . --target ALL_BUILD --config Release
 
       - name: Run tests for windows
-        shell: bash
         run: |
           cd build
 
-          dumpbin bin\Release\test-log.exe
+          dumpbin bin/Release/test-log.exe
 
           ctest --verbose -C Release --output-on-failure -E py
