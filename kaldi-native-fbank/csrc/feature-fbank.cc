@@ -20,7 +20,10 @@
 //
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 

@@ -25,7 +25,7 @@
 
 namespace knf {
 
-static void PybindFrameExtractionOptions(py::module &m) {
+static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
   using PyClass = FrameExtractionOptions;
   py::class_<PyClass>(m, "FrameExtractionOptions")
       .def(py::init<>())
@@ -60,6 +60,8 @@ static void PybindFrameExtractionOptions(py::module &m) {
           }));
 }
 
-void PybindFeatureWindow(py::module &m) { PybindFrameExtractionOptions(m); }
+void PybindFeatureWindow(py::module &m) {  // NOLINT
+  PybindFrameExtractionOptions(m);
+}
 
 }  // namespace knf

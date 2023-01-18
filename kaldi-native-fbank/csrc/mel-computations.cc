@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 

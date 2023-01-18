@@ -22,6 +22,8 @@
 #define KALDI_NATIVE_FBANK_CSRC_FEATURE_FBANK_H_
 
 #include <map>
+#include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"

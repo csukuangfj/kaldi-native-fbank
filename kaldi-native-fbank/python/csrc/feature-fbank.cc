@@ -26,7 +26,7 @@
 
 namespace knf {
 
-static void PybindFbankOptions(py::module &m) {
+static void PybindFbankOptions(py::module &m) {  // NOLINT
   using PyClass = FbankOptions;
   py::class_<PyClass>(m, "FbankOptions")
       .def(py::init<>())
@@ -50,6 +50,8 @@ static void PybindFbankOptions(py::module &m) {
           [](py::dict dict) -> PyClass { return FbankOptionsFromDict(dict); }));
 }
 
-void PybindFeatureFbank(py::module &m) { PybindFbankOptions(m); }
+void PybindFeatureFbank(py::module &m) {  // NOLINT
+  PybindFbankOptions(m);
+}
 
 }  // namespace knf

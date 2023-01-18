@@ -25,7 +25,7 @@
 
 namespace knf {
 
-static void PybindMelBanksOptions(py::module &m) {
+static void PybindMelBanksOptions(py::module &m) {  // NOLINT
   using PyClass = MelBanksOptions;
   py::class_<PyClass>(m, "MelBanksOptions")
       .def(py::init<>())
@@ -51,6 +51,8 @@ static void PybindMelBanksOptions(py::module &m) {
           }));
 }
 
-void PybindMelComputations(py::module &m) { PybindMelBanksOptions(m); }
+void PybindMelComputations(py::module &m) {  // NOLINT
+  PybindMelBanksOptions(m);
+}
 
 }  // namespace knf

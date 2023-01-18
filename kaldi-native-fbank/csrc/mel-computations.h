@@ -21,6 +21,8 @@
 
 #include <cmath>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 

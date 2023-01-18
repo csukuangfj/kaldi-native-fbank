@@ -17,8 +17,8 @@
  */
 
 // This file is copied/modified from kaldi/src/feat/feature-functions.h
-#ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H
-#define KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H
+#ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H_
+#define KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H_
 
 #include <vector>
 namespace knf {
@@ -35,4 +35,4 @@ void ComputePowerSpectrum(std::vector<float> *complex_fft);
 
 }  // namespace knf
 
-#endif  // KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H
+#endif  // KALDI_NATIVE_FBANK_CSRC_FEATURE_FUNCTIONS_H_
