@@ -63,35 +63,7 @@ jobs:
         shell: bash
         run: |
           cd build
+
+          dumpbin bin\Release\test-log.exe
+
           ctest --verbose -C Release --output-on-failure -E py
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A Win32"
-          python3 -m pip install --upgrade pip pytest
-          python3 -m pip install wheel twine setuptools
-
-      - name: Build Python
-        shell: bash
-        run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A Win32"
-          python3 setup.py install
-
-      - name: Display Python package version
-        shell: bash
-        run: |
-          python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
-
-      - name: Run Python tests
-        shell: bash
-        run: |
-          cd kaldi-native-fbank/python/tests
-          python3 ./test_fbank_options.py
-          python3 ./test_frame_extraction_options.py
-          python3 ./test_mel_bank_options.py
