@@ -63,9 +63,7 @@ jobs:
         shell: bash
         run: |
           cd build
-          export PYTHONPATH=$PWD/lib/Release:$PYTHONPATH
-          export PYTHONPATH=$PWD/../kaldi-native-fbank/python:$PYTHONPATH
-          ctest --verbose -C Release --output-on-failure
+          ctest --verbose -C Release --output-on-failure -E py
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -88,3 +86,9 @@ jobs:
         shell: bash
         run: |
           python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
+
+      - name: Run Python tests
+        shell: bash
+        run: |
+          cd kaldi-native-fbank/python/tests
+          pytest
