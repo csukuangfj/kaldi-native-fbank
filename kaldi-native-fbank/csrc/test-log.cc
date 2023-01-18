@@ -21,6 +21,8 @@
 
 namespace knf {
 
+#if KNF_ENABLE_CHECK
+
 TEST(Log, TestLog) {
   KNF_LOG(TRACE) << "this is a trace message";
   KNF_LOG(DEBUG) << "this is a debug message";
@@ -65,5 +67,7 @@ TEST(Log, TestCheck) {
   ASSERT_THROW(KNF_CHECK_EQ(2, 1) << "bad things happened", std::runtime_error);
 #endif
 }
+
+#endif
 
 }  // namespace knf
