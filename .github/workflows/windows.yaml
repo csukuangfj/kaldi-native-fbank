@@ -63,7 +63,8 @@ jobs:
         shell: bash
         run: |
           cd build
-          ctest -C Release --output-on-failure
+          export PYTHONPATH=$PWD/lib/Release:$PYTHONPATH
+          ctest --verbose -C Release --output-on-failure
 
       - name: Setup Python
         uses: actions/setup-python@v2
