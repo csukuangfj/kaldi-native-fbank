@@ -1,4 +1,4 @@
-name: windows-x64
+name: windows-x86
 
 on:
   push:
@@ -10,14 +10,14 @@ on:
       - master
 
 concurrency:
-  group: windows-x64-${{ github.ref }}
+  group: windows-x86-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  windows_x64:
+  windows_x86:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.vs-version }}
     strategy:
@@ -73,14 +73,14 @@ jobs:
       - name: Install Python dependencies
         shell: bash
         run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A x64"
+          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A Win32"
           python3 -m pip install --upgrade pip pytest
           python3 -m pip install wheel twine setuptools
 
       - name: Build Python
         shell: bash
         run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A x64"
+          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A Win32"
           python3 setup.py install
 
       - name: Display Python package version
