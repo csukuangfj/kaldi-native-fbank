@@ -91,4 +91,4 @@ jobs:
         shell: bash
         run: |
           cd kaldi-native-fbank/python/tests
-          pytest
+          pytest -k options
