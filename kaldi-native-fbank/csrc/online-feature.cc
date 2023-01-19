@@ -21,6 +21,10 @@
 
 #include "kaldi-native-fbank/csrc/online-feature.h"
 
+#include <algorithm>
+#include <utility>
+#include <vector>
+
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/log.h"
 

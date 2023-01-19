@@ -99,7 +99,7 @@ function do_check() {
       ;;
     2)
       echo "Check all files"
-      files=$(find $kaldi_native_fbank_dir/kaldi_native_fbank -name "*.h" -o -name "*.cc" -o -name "*.cu")
+      files=$(find $kaldi_native_fbank_dir/kaldi-native-fbank -name "*.h" -o -name "*.cc" -o -name "*.cu")
       ;;
     *)
       echo "Check last commit"

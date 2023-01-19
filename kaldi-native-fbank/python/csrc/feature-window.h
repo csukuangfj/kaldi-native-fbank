@@ -23,7 +23,7 @@
 
 namespace knf {
 
-void PybindFeatureWindow(py::module &m);
+void PybindFeatureWindow(py::module &m);  // NOLINT
 
 }  // namespace knf
 

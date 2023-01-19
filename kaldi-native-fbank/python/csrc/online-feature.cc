@@ -19,12 +19,14 @@
 #include "kaldi-native-fbank/python/csrc/online-feature.h"
 
 #include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/online-feature.h"
 namespace knf {
 
 template <typename C>
-void PybindOnlineFeatureTpl(py::module &m, const std::string &class_name,
+void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
+                            const std::string &class_name,
                             const std::string &class_help_doc = "") {
   using PyClass = OnlineGenericBaseFeature<C>;
   using Options = typename C::Options;
@@ -59,7 +61,7 @@ void PybindOnlineFeatureTpl(py::module &m, const std::string &class_name,
       .def("input_finished", &PyClass::InputFinished);
 }
 
-void PybindOnlineFeature(py::module &m) {
+void PybindOnlineFeature(py::module &m) {  // NOLINT
   PybindOnlineFeatureTpl<FbankComputer>(m, "OnlineFbank");
 }
 

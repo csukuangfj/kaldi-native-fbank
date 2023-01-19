@@ -4,8 +4,8 @@
 
 // This file is copied/modified from kaldi/src/feat/feature-window.h
 
-#ifndef KALDI_NATIVE_FEAT_CSRC_FEATURE_WINDOW_H_
-#define KALDI_NATIVE_FEAT_CSRC_FEATURE_WINDOW_H_
+#ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_WINDOW_H_
+#define KALDI_NATIVE_FBANK_CSRC_FEATURE_WINDOW_H_
 
 #include <sstream>
 #include <string>
@@ -175,4 +175,4 @@ float InnerProduct(const float *a, const float *b, int32_t n);
 
 }  // namespace knf
 
-#endif  // KALDI_NATIVE_FEAT_CSRC_FEATURE_WINDOW_H_
+#endif  // KALDI_NATIVE_FBANK_CSRC_FEATURE_WINDOW_H_

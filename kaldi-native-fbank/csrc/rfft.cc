@@ -18,6 +18,7 @@
 
 #include "kaldi-native-fbank/csrc/rfft.h"
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 

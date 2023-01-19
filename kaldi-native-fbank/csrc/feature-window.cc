@@ -6,7 +6,9 @@
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 #ifndef M_2PI

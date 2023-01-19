@@ -23,7 +23,7 @@
 
 namespace knf {
 
-void PybindMelComputations(py::module &m);
+void PybindMelComputations(py::module &m);  // NOLINT
 
 }  // namespace knf
 

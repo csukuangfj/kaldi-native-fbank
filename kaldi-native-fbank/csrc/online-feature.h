@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <deque>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 
