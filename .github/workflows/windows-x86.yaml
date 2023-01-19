@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -T ${{ matrix.toolset-version}},host=x64 -A Win32 -D CMAKE_BUILD_TYPE=Release ..
+          cmake -T ${{ matrix.toolset-version}},host=x64 -A Win32 -D CMAKE_BUILD_TYPE=Release -DKALDI_NATIVE_FBANK_BUILD_PYTHON=OFF ..
           cat CMakeCache.txt
 
 
