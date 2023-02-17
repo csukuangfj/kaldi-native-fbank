@@ -25,7 +25,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.11")
+set(KALDI_NATIVE_FBANK_VERSION "1.12")
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -101,7 +101,7 @@ check_include_file_cxx(execinfo.h KNF_HAVE_EXECINFO_H)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-if(WIN32)
+if(WIN32 AND MSVC)
   # disable various warnings for MSVC
   # 4244: '=': conversion from 'double' to 'float', possible loss of data
   # 4267: 'return': conversion from 'size_t' to 'int32_t', possible loss of data
