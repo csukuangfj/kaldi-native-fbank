@@ -25,7 +25,7 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.12")
+set(KALDI_NATIVE_FBANK_VERSION "1.13")
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -56,11 +56,6 @@ if(NOT DEFINED BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON)
 endif()
 message(STATUS "BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
-
-if(WIN32)
-  message(STATUS "Set BUILD_SHARED_LIBS to OFF for Windows")
-  set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-endif()
 
 option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
 option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BUILD_PYTHON})
