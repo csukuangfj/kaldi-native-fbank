@@ -45,11 +45,6 @@ struct FrameExtractionOptions {
   // bool allow_downsample = false;
   // bool allow_upsample = false;
 
-  // Used for streaming feature extraction. It indicates the number
-  // of feature frames to keep in the recycling vector. -1 means to
-  // keep all feature frames.
-  int32_t max_feature_vectors = -1;
-
   int32_t WindowShift() const {
     return static_cast<int32_t>(samp_freq * 0.001f * frame_shift_ms);
   }
@@ -75,7 +70,6 @@ struct FrameExtractionOptions {
     KNF_PRINT(snip_edges);
     // KNF_PRINT(allow_downsample);
     // KNF_PRINT(allow_upsample);
-    KNF_PRINT(max_feature_vectors);
 #undef KNF_PRINT
     return os.str();
   }

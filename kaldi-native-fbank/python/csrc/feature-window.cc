@@ -39,7 +39,6 @@ static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
       .def_readwrite("round_to_power_of_two", &PyClass::round_to_power_of_two)
       .def_readwrite("blackman_coeff", &PyClass::blackman_coeff)
       .def_readwrite("snip_edges", &PyClass::snip_edges)
-      .def_readwrite("max_feature_vectors", &PyClass::max_feature_vectors)
       .def("as_dict",
            [](const PyClass &self) -> py::dict { return AsDict(self); })
       .def_static("from_dict",
