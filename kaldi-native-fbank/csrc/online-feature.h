@@ -56,6 +56,9 @@ class RecyclingVector {
   /// called.
   int32_t Size() const;
 
+  // discard the first n frames
+  void Pop(int32_t n);
+
  private:
   std::deque<std::vector<float>> items_;
   int32_t items_to_hold_;
@@ -102,6 +105,9 @@ class OnlineGenericBaseFeature {
   // of features, in the case where snip-edges == false; it also
   // affects the return value of IsLastFrame().
   void InputFinished();
+
+  // discard the first n frames
+  void Pop(int32_t n) { features_.Pop(n); }
 
  private:
   // This function computes any additional feature frames that it is possible to

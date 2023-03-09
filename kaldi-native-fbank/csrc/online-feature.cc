@@ -60,12 +60,19 @@ int32_t RecyclingVector::Size() const {
   return first_available_index_ + static_cast<int32_t>(items_.size());
 }
 
+// discard the first n frames
+void RecyclingVector::Pop(int32_t n) {
+  for (int32_t i = 0; i < n && !items_.empty(); ++i) {
+    items_.pop_front();
+    ++first_available_index_;
+  }
+}
+
 template <class C>
 OnlineGenericBaseFeature<C>::OnlineGenericBaseFeature(
     const typename C::Options &opts)
     : computer_(opts),
       window_function_(computer_.GetFrameOptions()),
-      features_(opts.frame_opts.max_feature_vectors),
       input_finished_(false),
       waveform_offset_(0) {
   // RE the following assert: search for ONLINE_IVECTOR_LIMIT in
