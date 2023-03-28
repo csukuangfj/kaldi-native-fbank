@@ -215,9 +215,6 @@ void ProcessWindow(const FrameExtractionOptions &opts,
                    float *log_energy_pre_window /*= nullptr*/) {
   int32_t frame_length = opts.WindowSize();
 
-  // TODO(fangjun): Remove dither
-  KNF_CHECK_EQ(opts.dither, 0);
-
   if (opts.remove_dc_offset) {
     RemoveDcOffset(window, frame_length);
   }
