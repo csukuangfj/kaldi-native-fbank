@@ -55,6 +55,13 @@ set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ version to be used.")
 if(NOT DEFINED BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON)
 endif()
+
+# See
+# https://stackoverflow.com/questions/33062728/cmake-link-shared-library-on-windows
+if(BUILD_SHARED_LIBS AND MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+message(STATUS "CMAKE_EXPORT_COMPILE_COMMANDS: ${CMAKE_EXPORT_COMPILE_COMMANDS}")
 message(STATUS "BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 
 option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
