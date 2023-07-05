@@ -74,13 +74,7 @@ OnlineGenericBaseFeature<C>::OnlineGenericBaseFeature(
     : computer_(opts),
       window_function_(computer_.GetFrameOptions()),
       input_finished_(false),
-      waveform_offset_(0) {
-  // RE the following assert: search for ONLINE_IVECTOR_LIMIT in
-  // online-ivector-feature.cc.
-  // Casting to uint32, an unsigned type, means that -1 would be treated
-  // as `very large`.
-  KNF_CHECK(static_cast<uint32_t>(opts.frame_opts.max_feature_vectors) > 200);
-}
+      waveform_offset_(0) {}
 
 template <class C>
 void OnlineGenericBaseFeature<C>::AcceptWaveform(float sampling_rate,
