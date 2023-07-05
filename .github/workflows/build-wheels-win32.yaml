@@ -3,7 +3,7 @@ name: build-wheels-win32
 on:
   push:
     branches:
-      - win32-wheel
+      - wheel
     tags:
       - '*'
 
