@@ -3,7 +3,7 @@ name: build-wheels-win64
 on:
   push:
     branches:
-      - win64-wheel
+      - wheel
     tags:
       - '*'
 
