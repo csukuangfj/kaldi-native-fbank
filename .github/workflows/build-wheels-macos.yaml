@@ -28,7 +28,8 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.11.4
         env:
-          CIBW_ARCHS: "x86_64 universal2 arm64"
+          CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+          CIBW_ARCHS: "universal2"
           CIBW_BUILD_VERBOSITY: 3
 
       - name: Display wheels
