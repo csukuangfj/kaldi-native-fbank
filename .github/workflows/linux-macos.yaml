@@ -62,9 +62,10 @@ jobs:
       - name: Build Python
         shell: bash
         run: |
-          python3 setup.py install
+          python3 -m pip install --verbose .
 
       - name: Display Python package version
         shell: bash
         run: |
           python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
+          python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__file__)"

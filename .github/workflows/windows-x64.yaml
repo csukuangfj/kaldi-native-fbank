@@ -17,27 +17,12 @@ permissions:
 
 jobs:
   windows_x64:
+    name: Test on Win64
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.vs-version }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        include:
-          - vs-version: vs2015
-            toolset-version: v140
-            os: windows-2019
-
-          - vs-version: vs2017
-            toolset-version: v141
-            os: windows-2019
-
-          - vs-version: vs2019
-            toolset-version: v142
-            os: windows-2022
-
-          - vs-version: vs2022
-            toolset-version: v143
-            os: windows-2022
+        os: [windows-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -49,7 +34,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -T ${{ matrix.toolset-version}},host=x64 -D CMAKE_BUILD_TYPE=Release ..
+          cmake -D CMAKE_BUILD_TYPE=Release ..
 
 
       - name: Build kaldi-native-fbank for windows
@@ -73,20 +58,19 @@ jobs:
       - name: Install Python dependencies
         shell: bash
         run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A x64"
           python3 -m pip install --upgrade pip pytest
           python3 -m pip install wheel twine setuptools
 
       - name: Build Python
         shell: bash
         run: |
-          export KALDI_NATIVE_FBANK_CMAKE_ARGS="-T ${{ matrix.toolset-version}},host=x64 -A x64"
-          python3 setup.py install
+          python3 -m pip install --verbose .
 
       - name: Display Python package version
         shell: bash
         run: |
           python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
+          python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__file__)"
 
       - name: Run Python tests
         shell: bash
