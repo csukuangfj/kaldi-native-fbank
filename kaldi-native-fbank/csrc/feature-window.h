@@ -87,6 +87,7 @@ class FeatureWindowFunction {
    * @param
    */
   void Apply(float *wave) const;
+  const std::vector<float> &GetWindow() const { return window_; }
 
  private:
   std::vector<float> window_;  // of size opts.WindowSize()

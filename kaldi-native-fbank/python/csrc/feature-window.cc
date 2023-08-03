@@ -58,9 +58,22 @@ static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
             return FrameExtractionOptionsFromDict(dict);
           }));
 }
+static void PybindFeatureWindowFunction(py::module *m) {
+  using PyClass = FeatureWindowFunction;
+  py::class_<PyClass>(*m, "FeatureWindowFunction")
+      .def(py::init<const FrameExtractionOptions &>(), py::arg("opts"))
+      .def("apply",
+           [](const PyClass &self,
+              std::vector<float> &wave) -> std::vector<float> {
+             self.Apply(wave.data());
+             return wave;
+           })
+      .def_property_readonly("window", &PyClass::GetWindow);
+}
 
 void PybindFeatureWindow(py::module &m) {  // NOLINT
   PybindFrameExtractionOptions(m);
+  PybindFeatureWindowFunction(&m);
 }
 
 }  // namespace knf
