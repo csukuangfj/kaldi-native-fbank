@@ -19,9 +19,10 @@ endfunction()
 
 # please sort the files in alphabetic order
 set(py_test_files
+  test_fbank_options.py
   test_frame_extraction_options.py
   test_mel_bank_options.py
-  test_fbank_options.py
+  test_rfft.py
 )
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
