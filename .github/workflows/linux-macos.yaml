@@ -38,7 +38,11 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip numpy
           python3 -m pip install wheel twine setuptools
-          python3 -m pip install torch==1.13.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+          if [[ ${{ matrix.os }} == "ubuntu" ]] then
+            python3 -m pip install torch==1.13.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+          else
+            python3 -m pip install torch==1.13.0 -f https://download.pytorch.org/whl/torch_stable.html
+          fi
 
       - name: Configure Cmake
         shell: bash
