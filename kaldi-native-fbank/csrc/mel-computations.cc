@@ -218,7 +218,8 @@ MelBanks::MelBanks(const MelBanksOptions &opts,
   }
 }
 
-MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols) {
+MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols)
+    : debug_(false), htk_mode_(false) {
   bins_.resize(num_rows);
   for (int32_t bin = 0; bin < num_rows; ++bin) {
     const float *this_bin = weights + bin * num_cols;
