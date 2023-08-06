@@ -35,7 +35,8 @@ struct FrameExtractionOptions {
   float preemph_coeff = 0.97f;    // Preemphasis coefficient.
   bool remove_dc_offset = true;   // Subtract mean of wave before FFT.
   std::string window_type = "povey";  // e.g. Hamming window
-  // May be "hamming", "rectangular", "povey", "hanning", "sine", "blackman"
+  // May be "hamming", "rectangular", "povey", "hanning", "hann", "sine",
+  // "blackman".
   // "povey" is a window I made to be similar to Hamming but to go to zero at
   // the edges, it's pow((0.5 - 0.5*cos(n/N*2*pi)), 0.85) I just don't think the
   // Hamming window makes sense as a windowing function.
@@ -87,6 +88,7 @@ class FeatureWindowFunction {
    * @param
    */
   void Apply(float *wave) const;
+  const std::vector<float> &GetWindow() const { return window_; }
 
  private:
   std::vector<float> window_;  // of size opts.WindowSize()
@@ -105,7 +107,7 @@ int64_t FirstSampleOfFrame(int32_t frame, const FrameExtractionOptions &opts);
       @param [in] flush   True if we are asserting that this number of samples
    is 'all there is', false if we expecting more data to possibly come in.  This
    only makes a difference to the answer
-   if opts.snips_edges== false.  For offline feature extraction you always want
+   if opts.snip_edges== false.  For offline feature extraction you always want
    flush == true.  In an online-decoding context, once you know (or decide) that
    no more data is coming in, you'd call it with flush == true at the end to
    flush out any remaining data.

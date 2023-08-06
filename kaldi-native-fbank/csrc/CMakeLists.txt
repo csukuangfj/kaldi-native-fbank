@@ -8,6 +8,7 @@ set(sources
   mel-computations.cc
   online-feature.cc
   rfft.cc
+  whisper-feature.cc
 )
 
 if(KALDI_NATIVE_FBANK_ENABLE_CHECK)

@@ -28,6 +28,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip numpy
+          python3 -m pip install wheel twine setuptools
+          if [[ ${{ matrix.os }} == "ubuntu" ]]; then
+            python3 -m pip install torch==1.13.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+          else
+            python3 -m pip install torch==1.13.0 -f https://download.pytorch.org/whl/torch_stable.html
+          fi
+
       - name: Configure Cmake
         shell: bash
         run: |
@@ -47,17 +63,6 @@ jobs:
         run: |
           cd build
           ctest --output-on-failure
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install wheel twine setuptools
 
       - name: Build Python
         shell: bash

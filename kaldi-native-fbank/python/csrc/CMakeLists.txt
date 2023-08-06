@@ -4,6 +4,7 @@ pybind11_add_module(_kaldi_native_fbank
   kaldi-native-fbank.cc
   mel-computations.cc
   online-feature.cc
+  rfft.cc
   utils.cc
 )
 

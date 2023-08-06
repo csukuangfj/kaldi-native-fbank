@@ -1,5 +1,5 @@
 /**
- * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ * Copyright (c)  2022-2023  Xiaomi Corporation (authors: Fangjun Kuang)
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,24 +16,23 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/python/csrc/kaldi-native-fbank.h"
-
-#include "kaldi-native-fbank/python/csrc/feature-fbank.h"
-#include "kaldi-native-fbank/python/csrc/feature-window.h"
-#include "kaldi-native-fbank/python/csrc/mel-computations.h"
-#include "kaldi-native-fbank/python/csrc/online-feature.h"
 #include "kaldi-native-fbank/python/csrc/rfft.h"
+
+#include <string>
+#include <vector>
+
+#include "kaldi-native-fbank/csrc/rfft.h"
 
 namespace knf {
 
-PYBIND11_MODULE(_kaldi_native_fbank, m) {
-  m.doc() = "Python wrapper for kaldi native fbank";
-  PybindFeatureWindow(m);
-  PybindMelComputations(m);
-  PybindFeatureFbank(m);
-  PybindRfft(m);
-
-  PybindOnlineFeature(m);
+void PybindRfft(py::module &m) {  // NOLINT
+  py::class_<Rfft>(m, "Rfft")
+      .def(py::init<int32_t>(), py::arg("n"))
+      .def("compute",
+           [](Rfft &self, std::vector<float> &d) -> std::vector<float> {
+             self.Compute(d.data());
+             return d;
+           });
 }
 
 }  // namespace knf

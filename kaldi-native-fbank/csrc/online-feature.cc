@@ -162,5 +162,6 @@ void OnlineGenericBaseFeature<C>::ComputeFeatures() {
 }
 
 template class OnlineGenericBaseFeature<FbankComputer>;
+template class OnlineGenericBaseFeature<WhisperFeatureComputer>;
 
 }  // namespace knf
