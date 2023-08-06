@@ -89,6 +89,12 @@ class MelBanks {
   MelBanks(const MelBanksOptions &opts,
            const FrameExtractionOptions &frame_opts, float vtln_warp_factor);
 
+  // Initialize with a 2-d weights matrix
+  // @param weights Pointer to the start address of the matrix
+  // @param num_rows It equls to number of mel bins
+  // @param num_cols It equals to (number of fft bins)/2+1
+  MelBanks(const float *weights, int32_t num_rows, int32_t num_cols);
+
   /// Compute Mel energies (note: not log energies).
   /// At input, "fft_energies" contains the FFT energies (not log).
   ///
@@ -99,10 +105,6 @@ class MelBanks {
   int32_t NumBins() const { return bins_.size(); }
 
  private:
-  // center frequencies of bins, numbered from 0 ... num_bins-1.
-  // Needed by GetCenterFreqs().
-  std::vector<float> center_freqs_;
-
   // the "bins_" vector is a vector, one for each bin, of a pair:
   // (the first nonzero fft-bin), (the vector of weights).
   std::vector<std::pair<int32_t, std::vector<float>>> bins_;

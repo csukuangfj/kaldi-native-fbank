@@ -32,6 +32,7 @@ void rdft(int n, int isgn, double *a, int *ip, double *w);
 #endif
 
 namespace knf {
+
 class Rfft::RfftImpl {
  public:
   explicit RfftImpl(int32_t n) : n_(n), ip_(2 + std::sqrt(n / 2)), w_(n / 2) {

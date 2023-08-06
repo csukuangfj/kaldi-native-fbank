@@ -19,6 +19,7 @@
 #include "kaldi-native-fbank/python/csrc/feature-window.h"
 
 #include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/python/csrc/utils.h"

@@ -157,7 +157,6 @@ MelBanks::MelBanks(const MelBanksOptions &opts,
   }
 
   bins_.resize(num_bins);
-  center_freqs_.resize(num_bins);
 
   for (int32_t bin = 0; bin < num_bins; ++bin) {
     float left_mel = mel_low_freq + bin * mel_freq_delta,
@@ -172,7 +171,6 @@ MelBanks::MelBanks(const MelBanksOptions &opts,
       right_mel = VtlnWarpMelFreq(vtln_low, vtln_high, low_freq, high_freq,
                                   vtln_warp_factor, right_mel);
     }
-    center_freqs_[bin] = InverseMelScale(center_mel);
 
     // this_bin will be a vector of coefficients that is only
     // nonzero where this mel bin is active.
@@ -217,6 +215,32 @@ MelBanks::MelBanks(const MelBanksOptions &opts,
       os << "\n";
     }
     KNF_LOG(INFO) << os.str();
+  }
+}
+
+MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols) {
+  bins_.resize(num_rows);
+  for (int32_t bin = 0; bin < num_rows; ++bin) {
+    const float *this_bin = weights + bin * num_cols;
+
+    int32_t first_index = -1, last_index = -1;
+
+    for (int32_t i = 0; i < num_cols; ++i) {
+      if (this_bin[i] == 0) {
+        continue;
+      }
+      if (first_index == -1) first_index = i;
+      last_index = i;
+    }
+
+    KNF_CHECK(first_index != -1 && last_index >= first_index &&
+              "You have an incorrect weight matrix.");
+
+    bins_[bin].first = first_index;
+    int32_t size = last_index + 1 - first_index;
+
+    bins_[bin].second.insert(bins_[bin].second.end(), this_bin + first_index,
+                             this_bin + first_index + size);
   }
 }
 

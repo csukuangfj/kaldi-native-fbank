@@ -19,6 +19,7 @@
 #include "kaldi-native-fbank/python/csrc/rfft.h"
 
 #include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/rfft.h"
 

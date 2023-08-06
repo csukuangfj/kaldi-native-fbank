@@ -63,6 +63,7 @@ void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
 
 void PybindOnlineFeature(py::module &m) {  // NOLINT
   PybindOnlineFeatureTpl<FbankComputer>(m, "OnlineFbank");
+  PybindOnlineFeatureTpl<WhisperFeatureComputer>(m, "OnlineWhisperFbank");
 }
 
 }  // namespace knf

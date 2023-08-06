@@ -23,6 +23,7 @@ set(py_test_files
   test_feature_window_function.py
   test_frame_extraction_options.py
   test_mel_bank_options.py
+  test_online_whisper_fbank.py
   test_rfft.py
 )
 
