@@ -21,9 +21,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
-        # python-version: ["3.7", "3.8", "3.9", "3.10"]
-        python-version: ["3.10"]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
 
     steps:
       - uses: actions/checkout@v2
@@ -42,9 +41,7 @@ jobs:
           python3 -m pip install kaldi-native-fbank
 
       - name: Display version
-        shell: cmd
+        shell: bash
         run: |
-          dir C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages
-          dir C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\kaldi_native_fbank
-          python -c "import kaldi_native_fbank"
-          python -c "import _kaldi_native_fbank; print(_kaldi_native_fbank.__file__)"
+          python -c "import kaldi_native_fbank; print(kaldi_native_fbank.__file__")
+          python -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__")
