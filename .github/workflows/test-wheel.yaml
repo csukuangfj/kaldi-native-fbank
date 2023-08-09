@@ -48,4 +48,3 @@ jobs:
           dir C:\hostedtoolcache\windows\Python\3.10.11\x64\lib\site-packages\kaldi_native_fbank
           python -c "import kaldi_native_fbank"
           python -c "import _kaldi_native_fbank; print(_kaldi_native_fbank.__file__)"
-le__)"
