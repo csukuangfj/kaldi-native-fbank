@@ -1,0 +1,46 @@
+name: test-wheel
+
+on:
+  push:
+    branches:
+      - test-wheel
+
+  workflow_dispatch:
+
+concurrency:
+  group: test-wheel-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test_wheel:
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install kaldi-native-fbank
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip numpy
+          python3 -m pip install kaldi-native-fbank
+
+      - name: Display version
+        shell: bash
+        run: |
+          python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
