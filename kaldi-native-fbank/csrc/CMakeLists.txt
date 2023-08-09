@@ -70,6 +70,11 @@ endif()
 install(TARGETS kaldi-native-fbank-core
   DESTINATION lib
 )
+if(KALDI_NATIVE_FBANK_BUILD_PYTHON AND WIN32)
+  install(TARGETS kaldi-native-fbank-core
+    DESTINATION ..
+  )
+endif()
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   install(TARGETS test-online-fbank
