@@ -291,7 +291,63 @@ Appendix :
     w[] and ip[] are compatible with all routines.
 */
 
+#include <math.h>
 
+#ifdef USE_CDFT_PTHREADS
+#define USE_CDFT_THREADS
+#ifndef CDFT_THREADS_BEGIN_N
+#define CDFT_THREADS_BEGIN_N 8192
+#endif
+#ifndef CDFT_4THREADS_BEGIN_N
+#define CDFT_4THREADS_BEGIN_N 65536
+#endif
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define cdft_thread_t pthread_t
+#define cdft_thread_create(thp,func,argp) { \
+    if (pthread_create(thp, NULL, func, (void *) argp) != 0) { \
+        fprintf(stderr, "cdft thread error\n"); \
+        exit(1); \
+    } \
+}
+#define cdft_thread_wait(th) { \
+    if (pthread_join(th, NULL) != 0) { \
+        fprintf(stderr, "cdft thread error\n"); \
+        exit(1); \
+    } \
+}
+#endif /* USE_CDFT_PTHREADS */
+
+
+#ifdef USE_CDFT_WINTHREADS
+#define USE_CDFT_THREADS
+#ifndef CDFT_THREADS_BEGIN_N
+#define CDFT_THREADS_BEGIN_N 32768
+#endif
+#ifndef CDFT_4THREADS_BEGIN_N
+#define CDFT_4THREADS_BEGIN_N 524288
+#endif
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define cdft_thread_t HANDLE
+#define cdft_thread_create(thp,func,argp) { \
+    DWORD thid; \
+    *(thp) = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, (LPVOID) argp, 0, &thid); \
+    if (*(thp) == 0) { \
+        fprintf(stderr, "cdft thread error\n"); \
+        exit(1); \
+    } \
+}
+#define cdft_thread_wait(th) { \
+    WaitForSingleObject(th, INFINITE); \
+    CloseHandle(th); \
+}
+#endif /* USE_CDFT_WINTHREADS */
+
+
+namespace knf {
 
 void rdft(int n, int isgn, double *a, int *ip, double *w)
 {
@@ -340,7 +396,6 @@ void rdft(int n, int isgn, double *a, int *ip, double *w)
 /* -------- initializing routines -------- */
 
 
-#include <math.h>
 
 void makewt(int nw, int *ip, double *w)
 {
@@ -445,58 +500,6 @@ void makect(int nc, int *ip, double *c)
 /* -------- child routines -------- */
 
 
-#ifdef USE_CDFT_PTHREADS
-#define USE_CDFT_THREADS
-#ifndef CDFT_THREADS_BEGIN_N
-#define CDFT_THREADS_BEGIN_N 8192
-#endif
-#ifndef CDFT_4THREADS_BEGIN_N
-#define CDFT_4THREADS_BEGIN_N 65536
-#endif
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#define cdft_thread_t pthread_t
-#define cdft_thread_create(thp,func,argp) { \
-    if (pthread_create(thp, NULL, func, (void *) argp) != 0) { \
-        fprintf(stderr, "cdft thread error\n"); \
-        exit(1); \
-    } \
-}
-#define cdft_thread_wait(th) { \
-    if (pthread_join(th, NULL) != 0) { \
-        fprintf(stderr, "cdft thread error\n"); \
-        exit(1); \
-    } \
-}
-#endif /* USE_CDFT_PTHREADS */
-
-
-#ifdef USE_CDFT_WINTHREADS
-#define USE_CDFT_THREADS
-#ifndef CDFT_THREADS_BEGIN_N
-#define CDFT_THREADS_BEGIN_N 32768
-#endif
-#ifndef CDFT_4THREADS_BEGIN_N
-#define CDFT_4THREADS_BEGIN_N 524288
-#endif
-#include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
-#define cdft_thread_t HANDLE
-#define cdft_thread_create(thp,func,argp) { \
-    DWORD thid; \
-    *(thp) = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) func, (LPVOID) argp, 0, &thid); \
-    if (*(thp) == 0) { \
-        fprintf(stderr, "cdft thread error\n"); \
-        exit(1); \
-    } \
-}
-#define cdft_thread_wait(th) { \
-    WaitForSingleObject(th, INFINITE); \
-    CloseHandle(th); \
-}
-#endif /* USE_CDFT_WINTHREADS */
 
 
 void cftfsub(int n, double *a, int *ip, int nw, double *w)
@@ -2972,4 +2975,4 @@ void rftbsub(int n, double *a, int nc, double *c)
     }
 }
 
-
+}  // namespace knf

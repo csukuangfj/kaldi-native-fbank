@@ -24,14 +24,10 @@
 
 #include "kaldi-native-fbank/csrc/log.h"
 
-// see fftsg.c
-#ifdef __cplusplus
-extern "C" void rdft(int n, int isgn, double *a, int *ip, double *w);
-#else
-void rdft(int n, int isgn, double *a, int *ip, double *w);
-#endif
-
 namespace knf {
+
+// see fftsg.c
+void rdft(int n, int isgn, double *a, int *ip, double *w);
 
 class Rfft::RfftImpl {
  public:

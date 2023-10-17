@@ -4,7 +4,7 @@ set(sources
   feature-fbank.cc
   feature-functions.cc
   feature-window.cc
-  fftsg.c
+  fftsg.cc
   mel-computations.cc
   online-feature.cc
   rfft.cc
