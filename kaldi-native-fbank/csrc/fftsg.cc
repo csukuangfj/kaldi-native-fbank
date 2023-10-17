@@ -349,57 +349,27 @@ Appendix :
 
 namespace knf {
 
-void rdft(int n, int isgn, double *a, int *ip, double *w)
+static void makeipt(int nw, int *ip)
 {
-    void makewt(int nw, int *ip, double *w);
-    void makect(int nc, int *ip, double *c);
-    void cftfsub(int n, double *a, int *ip, int nw, double *w);
-    void cftbsub(int n, double *a, int *ip, int nw, double *w);
-    void rftfsub(int n, double *a, int nc, double *c);
-    void rftbsub(int n, double *a, int nc, double *c);
-    int nw, nc;
-    double xi;
+    int j, l, m, m2, p, q;
 
-    nw = ip[0];
-    if (n > (nw << 2)) {
-        nw = n >> 2;
-        makewt(nw, ip, w);
-    }
-    nc = ip[1];
-    if (n > (nc << 2)) {
-        nc = n >> 2;
-        makect(nc, ip, w + nw);
-    }
-    if (isgn >= 0) {
-        if (n > 4) {
-            cftfsub(n, a, ip, nw, w);
-            rftfsub(n, a, nc, w + nw);
-        } else if (n == 4) {
-            cftfsub(n, a, ip, nw, w);
+    ip[2] = 0;
+    ip[3] = 16;
+    m = 2;
+    for (l = nw; l > 32; l >>= 2) {
+        m2 = m << 1;
+        q = m2 << 3;
+        for (j = m; j < m2; j++) {
+            p = ip[j] << 2;
+            ip[m + j] = p;
+            ip[m2 + j] = p + q;
         }
-        xi = a[0] - a[1];
-        a[0] += a[1];
-        a[1] = xi;
-    } else {
-        a[1] = 0.5 * (a[0] - a[1]);
-        a[0] -= a[1];
-        if (n > 4) {
-            rftbsub(n, a, nc, w + nw);
-            cftbsub(n, a, ip, nw, w);
-        } else if (n == 4) {
-            cftbsub(n, a, ip, nw, w);
-        }
+        m = m2;
     }
 }
 
-
-/* -------- initializing routines -------- */
-
-
-
-void makewt(int nw, int *ip, double *w)
+static void makewt(int nw, int *ip, double *w)
 {
-    void makeipt(int nw, int *ip);
     int j, nwh, nw0, nw1;
     double delta, wn4r, wk1r, wk1i, wk3r, wk3i;
 
@@ -457,28 +427,7 @@ void makewt(int nw, int *ip, double *w)
     }
 }
 
-
-void makeipt(int nw, int *ip)
-{
-    int j, l, m, m2, p, q;
-
-    ip[2] = 0;
-    ip[3] = 16;
-    m = 2;
-    for (l = nw; l > 32; l >>= 2) {
-        m2 = m << 1;
-        q = m2 << 3;
-        for (j = m; j < m2; j++) {
-            p = ip[j] << 2;
-            ip[m + j] = p;
-            ip[m2 + j] = p + q;
-        }
-        m = m2;
-    }
-}
-
-
-void makect(int nc, int *ip, double *c)
+static void makect(int nc, int *ip, double *c)
 {
     int j, nch;
     double delta;
@@ -496,109 +445,9 @@ void makect(int nc, int *ip, double *c)
     }
 }
 
-
 /* -------- child routines -------- */
 
-
-
-
-void cftfsub(int n, double *a, int *ip, int nw, double *w)
-{
-    void bitrv2(int n, int *ip, double *a);
-    void bitrv216(double *a);
-    void bitrv208(double *a);
-    void cftf1st(int n, double *a, double *w);
-    void cftrec4(int n, double *a, int nw, double *w);
-    void cftleaf(int n, int isplt, double *a, int nw, double *w);
-    void cftfx41(int n, double *a, int nw, double *w);
-    void cftf161(double *a, double *w);
-    void cftf081(double *a, double *w);
-    void cftf040(double *a);
-    void cftx020(double *a);
-#ifdef USE_CDFT_THREADS
-    void cftrec4_th(int n, double *a, int nw, double *w);
-#endif /* USE_CDFT_THREADS */
-
-    if (n > 8) {
-        if (n > 32) {
-            cftf1st(n, a, &w[nw - (n >> 2)]);
-#ifdef USE_CDFT_THREADS
-            if (n > CDFT_THREADS_BEGIN_N) {
-                cftrec4_th(n, a, nw, w);
-            } else
-#endif /* USE_CDFT_THREADS */
-            if (n > 512) {
-                cftrec4(n, a, nw, w);
-            } else if (n > 128) {
-                cftleaf(n, 1, a, nw, w);
-            } else {
-                cftfx41(n, a, nw, w);
-            }
-            bitrv2(n, ip, a);
-        } else if (n == 32) {
-            cftf161(a, &w[nw - 8]);
-            bitrv216(a);
-        } else {
-            cftf081(a, w);
-            bitrv208(a);
-        }
-    } else if (n == 8) {
-        cftf040(a);
-    } else if (n == 4) {
-        cftx020(a);
-    }
-}
-
-
-void cftbsub(int n, double *a, int *ip, int nw, double *w)
-{
-    void bitrv2conj(int n, int *ip, double *a);
-    void bitrv216neg(double *a);
-    void bitrv208neg(double *a);
-    void cftb1st(int n, double *a, double *w);
-    void cftrec4(int n, double *a, int nw, double *w);
-    void cftleaf(int n, int isplt, double *a, int nw, double *w);
-    void cftfx41(int n, double *a, int nw, double *w);
-    void cftf161(double *a, double *w);
-    void cftf081(double *a, double *w);
-    void cftb040(double *a);
-    void cftx020(double *a);
-#ifdef USE_CDFT_THREADS
-    void cftrec4_th(int n, double *a, int nw, double *w);
-#endif /* USE_CDFT_THREADS */
-
-    if (n > 8) {
-        if (n > 32) {
-            cftb1st(n, a, &w[nw - (n >> 2)]);
-#ifdef USE_CDFT_THREADS
-            if (n > CDFT_THREADS_BEGIN_N) {
-                cftrec4_th(n, a, nw, w);
-            } else
-#endif /* USE_CDFT_THREADS */
-            if (n > 512) {
-                cftrec4(n, a, nw, w);
-            } else if (n > 128) {
-                cftleaf(n, 1, a, nw, w);
-            } else {
-                cftfx41(n, a, nw, w);
-            }
-            bitrv2conj(n, ip, a);
-        } else if (n == 32) {
-            cftf161(a, &w[nw - 8]);
-            bitrv216neg(a);
-        } else {
-            cftf081(a, w);
-            bitrv208neg(a);
-        }
-    } else if (n == 8) {
-        cftb040(a);
-    } else if (n == 4) {
-        cftx020(a);
-    }
-}
-
-
-void bitrv2(int n, int *ip, double *a)
+static void bitrv2(int n, int *ip, double *a)
 {
     int j, j1, k, k1, l, m, nh, nm;
     double xr, xi, yr, yi;
@@ -944,8 +793,7 @@ void bitrv2(int n, int *ip, double *a)
     }
 }
 
-
-void bitrv2conj(int n, int *ip, double *a)
+static void bitrv2conj(int n, int *ip, double *a)
 {
     int j, j1, k, k1, l, m, nh, nm;
     double xr, xi, yr, yi;
@@ -1299,8 +1147,7 @@ void bitrv2conj(int n, int *ip, double *a)
     }
 }
 
-
-void bitrv216(double *a)
+static void bitrv216(double *a)
 {
     double x1r, x1i, x2r, x2i, x3r, x3i, x4r, x4i,
         x5r, x5i, x7r, x7i, x8r, x8i, x10r, x10i,
@@ -1356,8 +1203,7 @@ void bitrv216(double *a)
     a[29] = x7i;
 }
 
-
-void bitrv216neg(double *a)
+static void bitrv216neg(double *a)
 {
     double x1r, x1i, x2r, x2i, x3r, x3i, x4r, x4i,
         x5r, x5i, x6r, x6i, x7r, x7i, x8r, x8i,
@@ -1426,8 +1272,7 @@ void bitrv216neg(double *a)
     a[31] = x8i;
 }
 
-
-void bitrv208(double *a)
+static void bitrv208(double *a)
 {
     double x1r, x1i, x3r, x3i, x4r, x4i, x6r, x6i;
 
@@ -1449,8 +1294,7 @@ void bitrv208(double *a)
     a[13] = x3i;
 }
 
-
-void bitrv208neg(double *a)
+static void bitrv208neg(double *a)
 {
     double x1r, x1i, x2r, x2i, x3r, x3i, x4r, x4i,
         x5r, x5i, x6r, x6i, x7r, x7i;
@@ -1485,8 +1329,7 @@ void bitrv208neg(double *a)
     a[15] = x4i;
 }
 
-
-void cftf1st(int n, double *a, double *w)
+static void cftf1st(int n, double *a, double *w)
 {
     int j, j0, j1, j2, j3, k, m, mh;
     double wn4r, csc1, csc3, wk1r, wk1i, wk3r, wk3i,
@@ -1691,8 +1534,7 @@ void cftf1st(int n, double *a, double *w)
     a[j3 + 3] = wk3i * x0i - wk3r * x0r;
 }
 
-
-void cftb1st(int n, double *a, double *w)
+static void cftb1st(int n, double *a, double *w)
 {
     int j, j0, j1, j2, j3, k, m, mh;
     double wn4r, csc1, csc3, wk1r, wk1i, wk3r, wk3i,
@@ -1897,236 +1739,7 @@ void cftb1st(int n, double *a, double *w)
     a[j3 + 3] = wk3i * x0i - wk3r * x0r;
 }
 
-
-#ifdef USE_CDFT_THREADS
-struct cdft_arg_st {
-    int n0;
-    int n;
-    double *a;
-    int nw;
-    double *w;
-};
-typedef struct cdft_arg_st cdft_arg_t;
-
-
-void cftrec4_th(int n, double *a, int nw, double *w)
-{
-    void *cftrec1_th(void *p);
-    void *cftrec2_th(void *p);
-    int i, idiv4, m, nthread;
-    cdft_thread_t th[4];
-    cdft_arg_t ag[4];
-
-    nthread = 2;
-    idiv4 = 0;
-    m = n >> 1;
-    if (n > CDFT_4THREADS_BEGIN_N) {
-        nthread = 4;
-        idiv4 = 1;
-        m >>= 1;
-    }
-    for (i = 0; i < nthread; i++) {
-        ag[i].n0 = n;
-        ag[i].n = m;
-        ag[i].a = &a[i * m];
-        ag[i].nw = nw;
-        ag[i].w = w;
-        if (i != idiv4) {
-            cdft_thread_create(&th[i], cftrec1_th, &ag[i]);
-        } else {
-            cdft_thread_create(&th[i], cftrec2_th, &ag[i]);
-        }
-    }
-    for (i = 0; i < nthread; i++) {
-        cdft_thread_wait(th[i]);
-    }
-}
-
-
-void *cftrec1_th(void *p)
-{
-    int cfttree(int n, int j, int k, double *a, int nw, double *w);
-    void cftleaf(int n, int isplt, double *a, int nw, double *w);
-    void cftmdl1(int n, double *a, double *w);
-    int isplt, j, k, m, n, n0, nw;
-    double *a, *w;
-
-    n0 = ((cdft_arg_t *) p)->n0;
-    n = ((cdft_arg_t *) p)->n;
-    a = ((cdft_arg_t *) p)->a;
-    nw = ((cdft_arg_t *) p)->nw;
-    w = ((cdft_arg_t *) p)->w;
-    m = n0;
-    while (m > 512) {
-        m >>= 2;
-        cftmdl1(m, &a[n - m], &w[nw - (m >> 1)]);
-    }
-    cftleaf(m, 1, &a[n - m], nw, w);
-    k = 0;
-    for (j = n - m; j > 0; j -= m) {
-        k++;
-        isplt = cfttree(m, j, k, a, nw, w);
-        cftleaf(m, isplt, &a[j - m], nw, w);
-    }
-    return (void *) 0;
-}
-
-
-void *cftrec2_th(void *p)
-{
-    int cfttree(int n, int j, int k, double *a, int nw, double *w);
-    void cftleaf(int n, int isplt, double *a, int nw, double *w);
-    void cftmdl2(int n, double *a, double *w);
-    int isplt, j, k, m, n, n0, nw;
-    double *a, *w;
-
-    n0 = ((cdft_arg_t *) p)->n0;
-    n = ((cdft_arg_t *) p)->n;
-    a = ((cdft_arg_t *) p)->a;
-    nw = ((cdft_arg_t *) p)->nw;
-    w = ((cdft_arg_t *) p)->w;
-    k = 1;
-    m = n0;
-    while (m > 512) {
-        m >>= 2;
-        k <<= 2;
-        cftmdl2(m, &a[n - m], &w[nw - m]);
-    }
-    cftleaf(m, 0, &a[n - m], nw, w);
-    k >>= 1;
-    for (j = n - m; j > 0; j -= m) {
-        k++;
-        isplt = cfttree(m, j, k, a, nw, w);
-        cftleaf(m, isplt, &a[j - m], nw, w);
-    }
-    return (void *) 0;
-}
-#endif /* USE_CDFT_THREADS */
-
-
-void cftrec4(int n, double *a, int nw, double *w)
-{
-    int cfttree(int n, int j, int k, double *a, int nw, double *w);
-    void cftleaf(int n, int isplt, double *a, int nw, double *w);
-    void cftmdl1(int n, double *a, double *w);
-    int isplt, j, k, m;
-
-    m = n;
-    while (m > 512) {
-        m >>= 2;
-        cftmdl1(m, &a[n - m], &w[nw - (m >> 1)]);
-    }
-    cftleaf(m, 1, &a[n - m], nw, w);
-    k = 0;
-    for (j = n - m; j > 0; j -= m) {
-        k++;
-        isplt = cfttree(m, j, k, a, nw, w);
-        cftleaf(m, isplt, &a[j - m], nw, w);
-    }
-}
-
-
-int cfttree(int n, int j, int k, double *a, int nw, double *w)
-{
-    void cftmdl1(int n, double *a, double *w);
-    void cftmdl2(int n, double *a, double *w);
-    int i, isplt, m;
-
-    if ((k & 3) != 0) {
-        isplt = k & 1;
-        if (isplt != 0) {
-            cftmdl1(n, &a[j - n], &w[nw - (n >> 1)]);
-        } else {
-            cftmdl2(n, &a[j - n], &w[nw - n]);
-        }
-    } else {
-        m = n;
-        for (i = k; (i & 3) == 0; i >>= 2) {
-            m <<= 2;
-        }
-        isplt = i & 1;
-        if (isplt != 0) {
-            while (m > 128) {
-                cftmdl1(m, &a[j - m], &w[nw - (m >> 1)]);
-                m >>= 2;
-            }
-        } else {
-            while (m > 128) {
-                cftmdl2(m, &a[j - m], &w[nw - m]);
-                m >>= 2;
-            }
-        }
-    }
-    return isplt;
-}
-
-
-void cftleaf(int n, int isplt, double *a, int nw, double *w)
-{
-    void cftmdl1(int n, double *a, double *w);
-    void cftmdl2(int n, double *a, double *w);
-    void cftf161(double *a, double *w);
-    void cftf162(double *a, double *w);
-    void cftf081(double *a, double *w);
-    void cftf082(double *a, double *w);
-
-    if (n == 512) {
-        cftmdl1(128, a, &w[nw - 64]);
-        cftf161(a, &w[nw - 8]);
-        cftf162(&a[32], &w[nw - 32]);
-        cftf161(&a[64], &w[nw - 8]);
-        cftf161(&a[96], &w[nw - 8]);
-        cftmdl2(128, &a[128], &w[nw - 128]);
-        cftf161(&a[128], &w[nw - 8]);
-        cftf162(&a[160], &w[nw - 32]);
-        cftf161(&a[192], &w[nw - 8]);
-        cftf162(&a[224], &w[nw - 32]);
-        cftmdl1(128, &a[256], &w[nw - 64]);
-        cftf161(&a[256], &w[nw - 8]);
-        cftf162(&a[288], &w[nw - 32]);
-        cftf161(&a[320], &w[nw - 8]);
-        cftf161(&a[352], &w[nw - 8]);
-        if (isplt != 0) {
-            cftmdl1(128, &a[384], &w[nw - 64]);
-            cftf161(&a[480], &w[nw - 8]);
-        } else {
-            cftmdl2(128, &a[384], &w[nw - 128]);
-            cftf162(&a[480], &w[nw - 32]);
-        }
-        cftf161(&a[384], &w[nw - 8]);
-        cftf162(&a[416], &w[nw - 32]);
-        cftf161(&a[448], &w[nw - 8]);
-    } else {
-        cftmdl1(64, a, &w[nw - 32]);
-        cftf081(a, &w[nw - 8]);
-        cftf082(&a[16], &w[nw - 8]);
-        cftf081(&a[32], &w[nw - 8]);
-        cftf081(&a[48], &w[nw - 8]);
-        cftmdl2(64, &a[64], &w[nw - 64]);
-        cftf081(&a[64], &w[nw - 8]);
-        cftf082(&a[80], &w[nw - 8]);
-        cftf081(&a[96], &w[nw - 8]);
-        cftf082(&a[112], &w[nw - 8]);
-        cftmdl1(64, &a[128], &w[nw - 32]);
-        cftf081(&a[128], &w[nw - 8]);
-        cftf082(&a[144], &w[nw - 8]);
-        cftf081(&a[160], &w[nw - 8]);
-        cftf081(&a[176], &w[nw - 8]);
-        if (isplt != 0) {
-            cftmdl1(64, &a[192], &w[nw - 32]);
-            cftf081(&a[240], &w[nw - 8]);
-        } else {
-            cftmdl2(64, &a[192], &w[nw - 64]);
-            cftf082(&a[240], &w[nw - 8]);
-        }
-        cftf081(&a[192], &w[nw - 8]);
-        cftf082(&a[208], &w[nw - 8]);
-        cftf081(&a[224], &w[nw - 8]);
-    }
-}
-
-
-void cftmdl1(int n, double *a, double *w)
+static void cftmdl1(int n, double *a, double *w)
 {
     int j, j0, j1, j2, j3, k, m, mh;
     double wn4r, wk1r, wk1i, wk3r, wk3i;
@@ -2235,8 +1848,7 @@ void cftmdl1(int n, double *a, double *w)
     a[j3 + 1] = -wn4r * (x0i - x0r);
 }
 
-
-void cftmdl2(int n, double *a, double *w)
+static void cftmdl2(int n, double *a, double *w)
 {
     int j, j0, j1, j2, j3, k, kr, m, mh;
     double wn4r, wk1r, wk1i, wk3r, wk3i, wd1r, wd1i, wd3r, wd3i;
@@ -2369,29 +1981,39 @@ void cftmdl2(int n, double *a, double *w)
     a[j3 + 1] = y0i + y2i;
 }
 
-
-void cftfx41(int n, double *a, int nw, double *w)
+static int cfttree(int n, int j, int k, double *a, int nw, double *w)
 {
-    void cftf161(double *a, double *w);
-    void cftf162(double *a, double *w);
-    void cftf081(double *a, double *w);
-    void cftf082(double *a, double *w);
+    int i, isplt, m;
 
-    if (n == 128) {
-        cftf161(a, &w[nw - 8]);
-        cftf162(&a[32], &w[nw - 32]);
-        cftf161(&a[64], &w[nw - 8]);
-        cftf161(&a[96], &w[nw - 8]);
+    if ((k & 3) != 0) {
+        isplt = k & 1;
+        if (isplt != 0) {
+            cftmdl1(n, &a[j - n], &w[nw - (n >> 1)]);
+        } else {
+            cftmdl2(n, &a[j - n], &w[nw - n]);
+        }
     } else {
-        cftf081(a, &w[nw - 8]);
-        cftf082(&a[16], &w[nw - 8]);
-        cftf081(&a[32], &w[nw - 8]);
-        cftf081(&a[48], &w[nw - 8]);
+        m = n;
+        for (i = k; (i & 3) == 0; i >>= 2) {
+            m <<= 2;
+        }
+        isplt = i & 1;
+        if (isplt != 0) {
+            while (m > 128) {
+                cftmdl1(m, &a[j - m], &w[nw - (m >> 1)]);
+                m >>= 2;
+            }
+        } else {
+            while (m > 128) {
+                cftmdl2(m, &a[j - m], &w[nw - m]);
+                m >>= 2;
+            }
+        }
     }
+    return isplt;
 }
 
-
-void cftf161(double *a, double *w)
+static void cftf161(double *a, double *w)
 {
     double wn4r, wk1r, wk1i,
         x0r, x0i, x1r, x1i, x2r, x2i, x3r, x3i,
@@ -2549,8 +2171,7 @@ void cftf161(double *a, double *w)
     a[7] = x1i - x3r;
 }
 
-
-void cftf162(double *a, double *w)
+static void cftf162(double *a, double *w)
 {
     double wn4r, wk1r, wk1i, wk2r, wk2i, wk3r, wk3i,
         x0r, x0i, x1r, x1i, x2r, x2i,
@@ -2732,8 +2353,7 @@ void cftf162(double *a, double *w)
     a[31] = x1i - x2r;
 }
 
-
-void cftf081(double *a, double *w)
+static void cftf081(double *a, double *w)
 {
     double wn4r, x0r, x0i, x1r, x1i, x2r, x2i, x3r, x3i,
         y0r, y0i, y1r, y1i, y2r, y2i, y3r, y3i,
@@ -2794,8 +2414,7 @@ void cftf081(double *a, double *w)
     a[7] = y2i - y6r;
 }
 
-
-void cftf082(double *a, double *w)
+static void cftf082(double *a, double *w)
 {
     double wn4r, wk1r, wk1i, x0r, x0i, x1r, x1i,
         y0r, y0i, y1r, y1i, y2r, y2i, y3r, y3i,
@@ -2866,8 +2485,7 @@ void cftf082(double *a, double *w)
     a[15] = x0i - x1r;
 }
 
-
-void cftf040(double *a)
+static void cftf040(double *a)
 {
     double x0r, x0i, x1r, x1i, x2r, x2i, x3r, x3i;
 
@@ -2889,8 +2507,7 @@ void cftf040(double *a)
     a[7] = x1i - x3r;
 }
 
-
-void cftb040(double *a)
+static void cftb040(double *a)
 {
     double x0r, x0i, x1r, x1i, x2r, x2i, x3r, x3i;
 
@@ -2912,8 +2529,7 @@ void cftb040(double *a)
     a[7] = x1i + x3r;
 }
 
-
-void cftx020(double *a)
+static void cftx020(double *a)
 {
     double x0r, x0i;
 
@@ -2925,8 +2541,97 @@ void cftx020(double *a)
     a[3] = x0i;
 }
 
+static void cftfx41(int n, double *a, int nw, double *w)
+{
+    if (n == 128) {
+        cftf161(a, &w[nw - 8]);
+        cftf162(&a[32], &w[nw - 32]);
+        cftf161(&a[64], &w[nw - 8]);
+        cftf161(&a[96], &w[nw - 8]);
+    } else {
+        cftf081(a, &w[nw - 8]);
+        cftf082(&a[16], &w[nw - 8]);
+        cftf081(&a[32], &w[nw - 8]);
+        cftf081(&a[48], &w[nw - 8]);
+    }
+}
 
-void rftfsub(int n, double *a, int nc, double *c)
+static void cftleaf(int n, int isplt, double *a, int nw, double *w)
+{
+    if (n == 512) {
+        cftmdl1(128, a, &w[nw - 64]);
+        cftf161(a, &w[nw - 8]);
+        cftf162(&a[32], &w[nw - 32]);
+        cftf161(&a[64], &w[nw - 8]);
+        cftf161(&a[96], &w[nw - 8]);
+        cftmdl2(128, &a[128], &w[nw - 128]);
+        cftf161(&a[128], &w[nw - 8]);
+        cftf162(&a[160], &w[nw - 32]);
+        cftf161(&a[192], &w[nw - 8]);
+        cftf162(&a[224], &w[nw - 32]);
+        cftmdl1(128, &a[256], &w[nw - 64]);
+        cftf161(&a[256], &w[nw - 8]);
+        cftf162(&a[288], &w[nw - 32]);
+        cftf161(&a[320], &w[nw - 8]);
+        cftf161(&a[352], &w[nw - 8]);
+        if (isplt != 0) {
+            cftmdl1(128, &a[384], &w[nw - 64]);
+            cftf161(&a[480], &w[nw - 8]);
+        } else {
+            cftmdl2(128, &a[384], &w[nw - 128]);
+            cftf162(&a[480], &w[nw - 32]);
+        }
+        cftf161(&a[384], &w[nw - 8]);
+        cftf162(&a[416], &w[nw - 32]);
+        cftf161(&a[448], &w[nw - 8]);
+    } else {
+        cftmdl1(64, a, &w[nw - 32]);
+        cftf081(a, &w[nw - 8]);
+        cftf082(&a[16], &w[nw - 8]);
+        cftf081(&a[32], &w[nw - 8]);
+        cftf081(&a[48], &w[nw - 8]);
+        cftmdl2(64, &a[64], &w[nw - 64]);
+        cftf081(&a[64], &w[nw - 8]);
+        cftf082(&a[80], &w[nw - 8]);
+        cftf081(&a[96], &w[nw - 8]);
+        cftf082(&a[112], &w[nw - 8]);
+        cftmdl1(64, &a[128], &w[nw - 32]);
+        cftf081(&a[128], &w[nw - 8]);
+        cftf082(&a[144], &w[nw - 8]);
+        cftf081(&a[160], &w[nw - 8]);
+        cftf081(&a[176], &w[nw - 8]);
+        if (isplt != 0) {
+            cftmdl1(64, &a[192], &w[nw - 32]);
+            cftf081(&a[240], &w[nw - 8]);
+        } else {
+            cftmdl2(64, &a[192], &w[nw - 64]);
+            cftf082(&a[240], &w[nw - 8]);
+        }
+        cftf081(&a[192], &w[nw - 8]);
+        cftf082(&a[208], &w[nw - 8]);
+        cftf081(&a[224], &w[nw - 8]);
+    }
+}
+
+static void cftrec4(int n, double *a, int nw, double *w)
+{
+    int isplt, j, k, m;
+
+    m = n;
+    while (m > 512) {
+        m >>= 2;
+        cftmdl1(m, &a[n - m], &w[nw - (m >> 1)]);
+    }
+    cftleaf(m, 1, &a[n - m], nw, w);
+    k = 0;
+    for (j = n - m; j > 0; j -= m) {
+        k++;
+        isplt = cfttree(m, j, k, a, nw, w);
+        cftleaf(m, isplt, &a[j - m], nw, w);
+    }
+}
+
+static void rftfsub(int n, double *a, int nc, double *c)
 {
     int j, k, kk, ks, m;
     double wkr, wki, xr, xi, yr, yi;
@@ -2950,8 +2655,7 @@ void rftfsub(int n, double *a, int nc, double *c)
     }
 }
 
-
-void rftbsub(int n, double *a, int nc, double *c)
+static void rftbsub(int n, double *a, int nc, double *c)
 {
     int j, k, kk, ks, m;
     double wkr, wki, xr, xi, yr, yi;
@@ -2972,6 +2676,207 @@ void rftbsub(int n, double *a, int nc, double *c)
         a[j + 1] -= yi;
         a[k] += yr;
         a[k + 1] -= yi;
+    }
+}
+
+#ifdef USE_CDFT_THREADS
+struct cdft_arg_st {
+    int n0;
+    int n;
+    double *a;
+    int nw;
+    double *w;
+};
+typedef struct cdft_arg_st cdft_arg_t;
+
+static void cftrec4_th(int n, double *a, int nw, double *w)
+{
+    int i, idiv4, m, nthread;
+    cdft_thread_t th[4];
+    cdft_arg_t ag[4];
+
+    nthread = 2;
+    idiv4 = 0;
+    m = n >> 1;
+    if (n > CDFT_4THREADS_BEGIN_N) {
+        nthread = 4;
+        idiv4 = 1;
+        m >>= 1;
+    }
+    for (i = 0; i < nthread; i++) {
+        ag[i].n0 = n;
+        ag[i].n = m;
+        ag[i].a = &a[i * m];
+        ag[i].nw = nw;
+        ag[i].w = w;
+        if (i != idiv4) {
+            cdft_thread_create(&th[i], cftrec1_th, &ag[i]);
+        } else {
+            cdft_thread_create(&th[i], cftrec2_th, &ag[i]);
+        }
+    }
+    for (i = 0; i < nthread; i++) {
+        cdft_thread_wait(th[i]);
+    }
+}
+
+static void *cftrec1_th(void *p)
+{
+    int cfttree(int n, int j, int k, double *a, int nw, double *w);
+    void cftleaf(int n, int isplt, double *a, int nw, double *w);
+    void cftmdl1(int n, double *a, double *w);
+    int isplt, j, k, m, n, n0, nw;
+    double *a, *w;
+
+    n0 = ((cdft_arg_t *) p)->n0;
+    n = ((cdft_arg_t *) p)->n;
+    a = ((cdft_arg_t *) p)->a;
+    nw = ((cdft_arg_t *) p)->nw;
+    w = ((cdft_arg_t *) p)->w;
+    m = n0;
+    while (m > 512) {
+        m >>= 2;
+        cftmdl1(m, &a[n - m], &w[nw - (m >> 1)]);
+    }
+    cftleaf(m, 1, &a[n - m], nw, w);
+    k = 0;
+    for (j = n - m; j > 0; j -= m) {
+        k++;
+        isplt = cfttree(m, j, k, a, nw, w);
+        cftleaf(m, isplt, &a[j - m], nw, w);
+    }
+    return (void *) 0;
+}
+
+static void *cftrec2_th(void *p)
+{
+    int cfttree(int n, int j, int k, double *a, int nw, double *w);
+    void cftleaf(int n, int isplt, double *a, int nw, double *w);
+    void cftmdl2(int n, double *a, double *w);
+    int isplt, j, k, m, n, n0, nw;
+    double *a, *w;
+
+    n0 = ((cdft_arg_t *) p)->n0;
+    n = ((cdft_arg_t *) p)->n;
+    a = ((cdft_arg_t *) p)->a;
+    nw = ((cdft_arg_t *) p)->nw;
+    w = ((cdft_arg_t *) p)->w;
+    k = 1;
+    m = n0;
+    while (m > 512) {
+        m >>= 2;
+        k <<= 2;
+        cftmdl2(m, &a[n - m], &w[nw - m]);
+    }
+    cftleaf(m, 0, &a[n - m], nw, w);
+    k >>= 1;
+    for (j = n - m; j > 0; j -= m) {
+        k++;
+        isplt = cfttree(m, j, k, a, nw, w);
+        cftleaf(m, isplt, &a[j - m], nw, w);
+    }
+    return (void *) 0;
+}
+#endif /* USE_CDFT_THREADS */
+
+static void cftbsub(int n, double *a, int *ip, int nw, double *w)
+{
+    if (n > 8) {
+        if (n > 32) {
+            cftb1st(n, a, &w[nw - (n >> 2)]);
+#ifdef USE_CDFT_THREADS
+            if (n > CDFT_THREADS_BEGIN_N) {
+                cftrec4_th(n, a, nw, w);
+            } else
+#endif /* USE_CDFT_THREADS */
+            if (n > 512) {
+                cftrec4(n, a, nw, w);
+            } else if (n > 128) {
+                cftleaf(n, 1, a, nw, w);
+            } else {
+                cftfx41(n, a, nw, w);
+            }
+            bitrv2conj(n, ip, a);
+        } else if (n == 32) {
+            cftf161(a, &w[nw - 8]);
+            bitrv216neg(a);
+        } else {
+            cftf081(a, w);
+            bitrv208neg(a);
+        }
+    } else if (n == 8) {
+        cftb040(a);
+    } else if (n == 4) {
+        cftx020(a);
+    }
+}
+
+static void cftfsub(int n, double *a, int *ip, int nw, double *w)
+{
+    if (n > 8) {
+        if (n > 32) {
+            cftf1st(n, a, &w[nw - (n >> 2)]);
+#ifdef USE_CDFT_THREADS
+            if (n > CDFT_THREADS_BEGIN_N) {
+                cftrec4_th(n, a, nw, w);
+            } else
+#endif /* USE_CDFT_THREADS */
+            if (n > 512) {
+                cftrec4(n, a, nw, w);
+            } else if (n > 128) {
+                cftleaf(n, 1, a, nw, w);
+            } else {
+                cftfx41(n, a, nw, w);
+            }
+            bitrv2(n, ip, a);
+        } else if (n == 32) {
+            cftf161(a, &w[nw - 8]);
+            bitrv216(a);
+        } else {
+            cftf081(a, w);
+            bitrv208(a);
+        }
+    } else if (n == 8) {
+        cftf040(a);
+    } else if (n == 4) {
+        cftx020(a);
+    }
+}
+
+void rdft(int n, int isgn, double *a, int *ip, double *w)
+{
+    int nw, nc;
+    double xi;
+
+    nw = ip[0];
+    if (n > (nw << 2)) {
+        nw = n >> 2;
+        makewt(nw, ip, w);
+    }
+    nc = ip[1];
+    if (n > (nc << 2)) {
+        nc = n >> 2;
+        makect(nc, ip, w + nw);
+    }
+    if (isgn >= 0) {
+        if (n > 4) {
+            cftfsub(n, a, ip, nw, w);
+            rftfsub(n, a, nc, w + nw);
+        } else if (n == 4) {
+            cftfsub(n, a, ip, nw, w);
+        }
+        xi = a[0] - a[1];
+        a[0] += a[1];
+        a[1] = xi;
+    } else {
+        a[1] = 0.5 * (a[0] - a[1]);
+        a[0] -= a[1];
+        if (n > 4) {
+            rftbsub(n, a, nc, w + nw);
+            cftbsub(n, a, ip, nw, w);
+        } else if (n == 4) {
+            cftbsub(n, a, ip, nw, w);
+        }
     }
 }
 

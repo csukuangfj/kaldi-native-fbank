@@ -26,7 +26,7 @@
 
 namespace knf {
 
-// see fftsg.c
+// see fftsg.cc
 void rdft(int n, int isgn, double *a, int *ip, double *w);
 
 class Rfft::RfftImpl {
