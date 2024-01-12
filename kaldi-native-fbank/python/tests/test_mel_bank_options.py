@@ -16,6 +16,8 @@ def test_default():
     assert opts.vtln_high == -500
     assert opts.debug_mel is False
     assert opts.htk_mode is False
+    assert opts.is_librosa is False
+    assert opts.norm == "slaney"
 
 
 def test_set_get():
@@ -40,6 +42,12 @@ def test_set_get():
 
     opts.htk_mode = True
     assert opts.htk_mode is True
+
+    opts.is_librosa = True
+    assert opts.is_librosa is True
+
+    opts.norm = "slaney"
+    assert opts.norm == "slaney"
 
 
 def test_from_empty_dict():

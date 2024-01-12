@@ -75,6 +75,8 @@ MelBanksOptions MelBanksOptionsFromDict(py::dict dict) {
   FROM_DICT(float_, vtln_high);
   FROM_DICT(bool_, debug_mel);
   FROM_DICT(bool_, htk_mode);
+  FROM_DICT(bool_, is_librosa);
+  FROM_DICT(str, norm);
 
   return opts;
 }
@@ -88,6 +90,8 @@ py::dict AsDict(const MelBanksOptions &opts) {
   AS_DICT(vtln_high);
   AS_DICT(debug_mel);
   AS_DICT(htk_mode);
+  AS_DICT(is_librosa);
+  AS_DICT(norm);
 
   return dict;
 }

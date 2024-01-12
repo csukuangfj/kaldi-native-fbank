@@ -22,7 +22,6 @@
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
-#include "kaldi-native-fbank/csrc/whisper-mel-bank.h"
 
 #ifndef M_2PI
 #define M_2PI 6.283185307179586476925286766559005
@@ -115,8 +114,7 @@ static void fft(const std::vector<float> &in, std::vector<float> *out) {
 }
 
 WhisperFeatureComputer::WhisperFeatureComputer(
-    const FrameExtractionOptions & /*unused={}*/)
-    : mel_banks_(kWhisperMelArray, kWhisperMelRows, kWhisperMelCols) {
+    const FrameExtractionOptions & /*unused={}*/) {
   frame_opts_.samp_freq = 16000;
   frame_opts_.frame_shift_ms = 10;
   frame_opts_.frame_length_ms = 25;
@@ -126,6 +124,13 @@ WhisperFeatureComputer::WhisperFeatureComputer(
   frame_opts_.window_type = "hann";
   frame_opts_.round_to_power_of_two = false;
   frame_opts_.snip_edges = false;
+
+  MelBanksOptions mel_opts;
+  mel_opts.num_bins = 80;
+  mel_opts.low_freq = 0;
+  mel_opts.is_librosa = true;
+
+  mel_banks_ = std::make_unique<MelBanks>(mel_opts, frame_opts_, 1.0f);
 }
 
 void WhisperFeatureComputer::Compute(float /*signal_raw_log_energy*/,
@@ -147,7 +152,7 @@ void WhisperFeatureComputer::Compute(float /*signal_raw_log_energy*/,
   }
 
   // feature is pre-allocated by the user
-  mel_banks_.Compute(power.data(), feature);
+  mel_banks_->Compute(power.data(), feature);
 }
 
 }  // namespace knf
