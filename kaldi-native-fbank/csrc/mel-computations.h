@@ -48,6 +48,18 @@ struct MelBanksOptions {
   // mel-energy flooring and reproduces a bug in HTK.
   bool htk_mode = false;
 
+  // Note that if you set is_librosa, you probably need to set
+  // low_freq to 0.
+  // Please see
+  // https://librosa.org/doc/main/generated/librosa.filters.mel.html
+  bool is_librosa = false;
+
+  // used only when is_librosa=true
+  // Possible values: "", slaney. We don't support a numeric value here, but
+  // it can be added on demand.
+  // See https://librosa.org/doc/main/generated/librosa.filters.mel.html
+  std::string norm = "slaney";
+
   std::string ToString() const {
     std::ostringstream os;
     os << "num_bins: " << num_bins << "\n";
@@ -57,6 +69,8 @@ struct MelBanksOptions {
     os << "vtln_high: " << vtln_high << "\n";
     os << "debug_mel: " << debug_mel << "\n";
     os << "htk_mode: " << htk_mode << "\n";
+    os << "is_librosa: " << is_librosa << "\n";
+    os << "norm: " << norm << "\n";
     return os.str();
   }
 };
@@ -65,12 +79,41 @@ std::ostream &operator<<(std::ostream &os, const MelBanksOptions &opts);
 
 class MelBanks {
  public:
+  // see also https://en.wikipedia.org/wiki/Mel_scale
+  // htk, mel to hz
   static inline float InverseMelScale(float mel_freq) {
     return 700.0f * (expf(mel_freq / 1127.0f) - 1.0f);
   }
 
+  // htk, hz to mel
   static inline float MelScale(float freq) {
     return 1127.0f * logf(1.0f + freq / 700.0f);
+  }
+
+  // slaney, mel to hz
+  static inline float InverseMelScaleSlaney(float mel_freq) {
+    if (mel_freq <= 15) {
+      return 200.0f / 3 * mel_freq;
+    }
+
+    // return 1000 * expf((mel_freq - 15) * logf(6.4f) / 27);
+
+    // Note: log(6.4)/27 = 0.06875177742094911
+
+    return 1000 * expf((mel_freq - 15) * 0.06875177742094911f);
+  }
+
+  // slaney, hz to mel
+  static inline float MelScaleSlaney(float freq) {
+    if (freq <= 1000) {
+      return freq * 3 / 200.0f;
+    }
+
+    // return 15 + 27 * logf(freq / 1000) / logf(6.4f)
+    //
+    // Note: 27/log(6.4) = 14.545078505785561
+
+    return 15 + 14.545078505785561f * logf(freq / 1000);
   }
 
   static float VtlnWarpFreq(
@@ -103,6 +146,18 @@ class MelBanks {
   void Compute(const float *fft_energies, float *mel_energies_out) const;
 
   int32_t NumBins() const { return bins_.size(); }
+
+ private:
+  // for kaldi-compatible
+  void InitKaldiMelBanks(const MelBanksOptions &opts,
+                         const FrameExtractionOptions &frame_opts,
+                         float vtln_warp_factor);
+
+  // for librosa-compatible
+  // See https://librosa.org/doc/main/generated/librosa.filters.mel.html
+  void InitLibrosaMelBanks(const MelBanksOptions &opts,
+                           const FrameExtractionOptions &frame_opts,
+                           float vtln_warp_factor);
 
  private:
   // the "bins_" vector is a vector, one for each bin, of a pair:

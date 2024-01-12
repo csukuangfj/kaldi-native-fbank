@@ -25,7 +25,15 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.18.5")
+set(KALDI_NATIVE_FBANK_VERSION "1.18.6")
+
+# Disable warning about
+#
+# "The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+#  not set.
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+  cmake_policy(SET CMP0135 NEW)
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)

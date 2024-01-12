@@ -19,6 +19,7 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_WHISPER_FEATURE_H_
 #define KALDI_NATIVE_FBANK_CSRC_WHISPER_FEATURE_H_
 
+#include <memory>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
@@ -44,7 +45,7 @@ class WhisperFeatureComputer {
   using Options = FrameExtractionOptions;
 
  private:
-  MelBanks mel_banks_;
+  std::unique_ptr<MelBanks> mel_banks_;
   FrameExtractionOptions frame_opts_;
 };
 
