@@ -237,6 +237,7 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
 void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
                                    const FrameExtractionOptions &frame_opts,
                                    float vtln_warp_factor) {
+  htk_mode_ = opts.htk_mode;
   int32_t num_bins = opts.num_bins;
   if (num_bins < 3) {
     KNF_LOG(FATAL) << "Must have at least 3 mel bins";

@@ -165,8 +165,8 @@ class MelBanks {
   std::vector<std::pair<int32_t, std::vector<float>>> bins_;
 
   // TODO(fangjun): Remove debug_ and htk_mode_
-  bool debug_;
-  bool htk_mode_;
+  bool debug_ = false;
+  bool htk_mode_ = false;
 };
 
 }  // namespace knf
