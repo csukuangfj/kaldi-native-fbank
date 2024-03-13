@@ -5,6 +5,7 @@ set(sources
   feature-functions.cc
   feature-window.cc
   fftsg.cc
+  kaldi-math.cc
   mel-computations.cc
   online-feature.cc
   rfft.cc
