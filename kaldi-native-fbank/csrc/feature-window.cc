@@ -12,8 +12,6 @@
 #include <limits>
 #include <vector>
 
-#include <iostream>  // DEBUG
-
 namespace knf {
 
 std::ostream &operator<<(std::ostream &os, const FrameExtractionOptions &opts) {
@@ -205,12 +203,6 @@ float InnerProduct(const float *a, const float *b, int32_t n) {
 }
 
 void Dither(float *d, int32_t n, float dither_value) {
-  static bool print_message = true;
-  if (print_message) {
-    std::cout << std::endl << "DEBUG: kaldi-native-fbank, Dither, dither_value: " << dither_value << std::endl;
-    print_message = false;
-  }
-
   if (dither_value == 0.0)
     return;
   RandomState rstate;
