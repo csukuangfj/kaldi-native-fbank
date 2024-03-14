@@ -31,7 +31,8 @@ struct FrameExtractionOptions {
   float samp_freq = 16000;
   float frame_shift_ms = 10.0f;   // in milliseconds.
   float frame_length_ms = 25.0f;  // in milliseconds.
-  float dither = 1.0f;            // Amount of dithering, 0.0 means no dither.
+  float dither = 0.00003f;        // Amount of dithering, 0.0 means no dither.
+                                  // Value 0.00003f is equivalent to 1.0 in kaldi.
   float preemph_coeff = 0.97f;    // Preemphasis coefficient.
   bool remove_dc_offset = true;   // Subtract mean of wave before FFT.
   std::string window_type = "povey";  // e.g. Hamming window
