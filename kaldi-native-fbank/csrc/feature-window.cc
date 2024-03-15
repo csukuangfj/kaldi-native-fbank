@@ -5,15 +5,12 @@
 // This file is copied/modified from kaldi/src/feat/feature-window.cc
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/kaldi-math.h"
 
 #include <algorithm>
 #include <cmath>
 #include <limits>
 #include <vector>
-
-#ifndef M_2PI
-#define M_2PI 6.283185307179586476925286766559005
-#endif
 
 namespace knf {
 
@@ -205,6 +202,14 @@ float InnerProduct(const float *a, const float *b, int32_t n) {
   return sum;
 }
 
+void Dither(float *d, int32_t n, float dither_value) {
+  if (dither_value == 0.0)
+    return;
+  RandomState rstate;
+  for (int32_t i = 0; i < n; i++)
+    d[i] += RandGauss(&rstate) * dither_value;
+}
+
 static void Preemphasize(float *d, int32_t n, float preemph_coeff) {
   if (preemph_coeff == 0.0) {
     return;
@@ -222,6 +227,9 @@ void ProcessWindow(const FrameExtractionOptions &opts,
                    const FeatureWindowFunction &window_function, float *window,
                    float *log_energy_pre_window /*= nullptr*/) {
   int32_t frame_length = opts.WindowSize();
+
+  if (opts.dither != 0.0)
+    Dither(window, frame_length, opts.dither);
 
   if (opts.remove_dc_offset) {
     RemoveDcOffset(window, frame_length);
