@@ -12,7 +12,7 @@ def test_default():
     assert opts.samp_freq == 16000
     assert opts.frame_shift_ms == 10.0
     assert opts.frame_length_ms == 25.0
-    assert opts.dither == 1.0
+    assert abs(opts.dither - 0.00003) < 1e-6
     assert abs(opts.preemph_coeff - 0.97) < 1e-6
     assert opts.remove_dc_offset is True
     assert opts.window_type == "povey"
