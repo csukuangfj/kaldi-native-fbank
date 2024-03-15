@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - wheel
+      - fix-wheel
     tags:
       - '*'
 
@@ -30,6 +31,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.16.5
         env:
           CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-A Win32"
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_SKIP: "*-win_amd64"
           CIBW_BUILD_VERBOSITY: 3
 
