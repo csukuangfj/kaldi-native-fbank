@@ -13,22 +13,24 @@ concurrency:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        python-version: ["cp37", "cp38", "cp39", "cp310", "cp311", "cp312"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
       # for a list of versions
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.4
+        uses: pypa/cibuildwheel@v2.16.5
         env:
-          CIBW_SKIP: "cp27-* cp35-* pp* *-musllinux*"
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
           CIBW_BUILD_VERBOSITY: 3
 
       - name: Display wheels
@@ -36,10 +38,9 @@ jobs:
         run: |
           ls -lh ./wheelhouse/
 
-          ls -lh ./wheelhouse/*.whl
-
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
+          name: wheel-${{ matrix.python-version }}
           path: ./wheelhouse/*.whl
 
       - name: Publish wheels to PyPI
@@ -54,14 +55,14 @@ jobs:
           twine upload ./wheelhouse/*.whl
 
       - name: Build sdist
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.python-version == 'cp38' }}
         shell: bash
         run: |
           python3 setup.py sdist
           ls -l dist/*
 
       - name: Publish sdist to PyPI
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.python-version == 'cp38' }}
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

@@ -1,4 +1,4 @@
-name: build-wheels-aarch64
+name: build-wheels-macos-x64
 
 on:
   push:
@@ -8,36 +8,39 @@ on:
       - '*'
 
 concurrency:
-  group: build-wheels-aarch64-${{ github.ref }}
+  group: build-wheels-macos-x64-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build_wheels_aarch64:
+  build_wheels_x64:
     name: ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [macos-latest]
         python-version: ["cp37", "cp38", "cp39", "cp310", "cp311", "cp312"]
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: all
+      - uses: actions/checkout@v2
 
       # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
       # for a list of versions
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
+        if: matrix.python-version == 'cp37'
+        uses: pypa/cibuildwheel@v2.11.4
         env:
-          CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64'"
+          CIBW_ARCHS: "x86_64"
           CIBW_BUILD_VERBOSITY: 3
-          CIBW_ARCHS_LINUX: aarch64
+
+      - name: Build wheels
+        if: matrix.python-version != 'cp37'
+        uses: pypa/cibuildwheel@v2.15.0
+        env:
+          CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64'"
+          CIBW_ARCHS: "x86_64"
+          CIBW_BUILD_VERBOSITY: 3
 
       - name: Display wheels
         shell: bash
