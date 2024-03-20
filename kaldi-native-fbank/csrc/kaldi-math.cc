@@ -2,13 +2,15 @@
 //
 // Copyright (c)  2024  Brno University of Technology (authors: Karel Vesely)
 
-// This file is an excerpt from kaldi/src/feat/kaldi-math.cc
+// This file is an excerpt from kaldi/src/base/kaldi-math.cc
 
-#include "kaldi-math.h"
+#include "kaldi-native-fbank/csrc/kaldi-math.h"
+
+#include <mutex>  // NOLINT
 
 namespace knf {
 
-int Rand(struct RandomState* state) {
+int Rand(struct RandomState *state) {
 #if !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
   // On Windows and Cygwin, just call Rand()
   return rand();
