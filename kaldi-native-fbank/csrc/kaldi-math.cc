@@ -18,6 +18,7 @@ int Rand(struct RandomState *state) {
   if (state) {
     return rand_r(&(state->seed));
   } else {
+    static std::mutex _RandMutex;
     std::lock_guard<std::mutex> lock(_RandMutex);
     return rand();
   }
