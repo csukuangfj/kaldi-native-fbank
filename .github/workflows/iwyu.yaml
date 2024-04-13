@@ -1,0 +1,129 @@
+name: iwyu
+
+on:
+  push:
+    branches:
+      - master
+      - iwyu
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+concurrency:
+  group: iwyu-${{ github.ref }}
+  cancel-in-progress: true
+
+# References
+# https://github.com/official-stockfish/Stockfish/blob/master/.github/workflows/iwyu.yml
+# https://github.com/acts-project/acts/actions/runs/8588671882/workflow
+# https://github.com/acts-project/acts/tree/main/CI/iwyu
+
+jobs:
+  iwyu:
+    name: Include what you use
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download required linux packages
+        shell: bash
+        run: |
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main'
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo apt update
+          sudo apt install -y libclang-17-dev clang-17 libc++-17-dev
+
+      - name: Display llvm
+        shell: bash
+        run: |
+          ls -lh /usr/lib/*llvm*
+
+          ls -lh /usr/bin/*clang*
+
+      - name: cache-iwyu
+        id: cache-iwyu
+        uses: actions/cache@v4
+        with:
+          path: iwyu-install
+          key: iwyu-install-2024-04-13
+
+      - name: Get IWYU source
+        if: steps.cache-iwyu.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: include-what-you-use/include-what-you-use
+          ref: clang_17
+          path: iwyu
+
+      - name: Build IWYU
+        if: steps.cache-iwyu.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          mkdir iwyu-build iwyu-install
+          cmake -B iwyu-build -S iwyu -DCMAKE_PREFIX_PATH=/usr/lib/llvm-17 -DCMAKE_INSTALL_PREFIX=iwyu-install
+          cmake --build iwyu-build --target install
+
+          ls -lh iwyu-install
+          tree iwyu-install
+
+          ./iwyu-install/bin/include-what-you-use --version
+
+      - name: setup path
+        shell: bash
+        run: |
+          echo "$GITHUB_WORKSPACE/iwyu-install/bin"  >> "$GITHUB_PATH"
+
+      - name: display include what you use version
+        shell: bash
+        run: |
+          include-what-you-use --version
+          which include-what-you-use
+
+          include-what-you-use --help
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iwyu-install
+          path: iwyu-install/*
+
+
+      - name: Check
+        shell: bash
+        run: |
+          mkdir build
+          cd build
+
+          cmake \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            ..
+
+          cd ..
+
+          python3 iwyu-install/bin/iwyu_tool.py -p build/ | tee iwyu-output.txt
+
+      - name: Upload IWYU output
+        uses: actions/upload-artifact@v4
+        with:
+          name: iwyu
+          path: |
+            iwyu-output.txt
+
+      - name: Apply iwyu
+        shell: bash
+        run: |
+          git status
+          echo "---"
+          python3 iwyu-install/bin/fix_includes.py < iwyu-output.txt
+          echo "---"
+          git status
+          git diff
