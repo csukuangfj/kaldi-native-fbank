@@ -113,7 +113,7 @@ jobs:
       - name: Run iwyu_tool.py
         shell: bash
         run: |
-          python3 iwyu-install/bin/iwyu_tool.py -p build/ -j2 -- -Xiwyu  | tee iwyu-output.txt
+          python3 iwyu-install/bin/iwyu_tool.py -p build/ -j2 | tee iwyu-output.txt
 
       - name: Filter IWYU output
         shell: bash
