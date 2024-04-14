@@ -24,7 +24,6 @@
 #include <cmath>
 #include <limits>
 #include <vector>
-#include <ostream>
 #include <utility>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"

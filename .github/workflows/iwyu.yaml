@@ -152,6 +152,9 @@ jobs:
 
           git diff
           git diff > a.diff
+          # Download a.diff
+          # Run
+          #   git apply a.diff
 
       - name: Upload IWYU output
         uses: actions/upload-artifact@v4
