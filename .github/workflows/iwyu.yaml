@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - iwyu
+      - iwyu-2
   pull_request:
     branches:
       - master
@@ -22,6 +22,9 @@ concurrency:
 
 jobs:
   iwyu:
+    if: github.repository_owner == 'csukuangfj' || github.repository_owner == 'k2-fsa'
+    permissions:
+      contents: write  # for stefanzweifel/git-auto-commit-action to push code in repo
     name: Include what you use
     runs-on: ${{ matrix.os }}
     strategy:
@@ -107,9 +110,15 @@ jobs:
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             ..
 
-          cd ..
+      - name: Run iwyu_tool.py
+        shell: bash
+        run: |
+          python3 iwyu-install/bin/iwyu_tool.py -p build/ -j2 -- -Xiwyu  | tee iwyu-output.txt
 
-          python3 iwyu-install/bin/iwyu_tool.py -p build/ | tee iwyu-output.txt
+      - name: Filter IWYU output
+        shell: bash
+        run: |
+          python3 .github/scripts/filter.py .github/scripts/filter.yaml iwyu-output.txt iwyu-filtered.txt
 
       - name: Upload IWYU output
         uses: actions/upload-artifact@v4
@@ -117,13 +126,24 @@ jobs:
           name: iwyu
           path: |
             iwyu-output.txt
+            iwyu-filtered.txt
 
       - name: Apply iwyu
         shell: bash
         run: |
           git status
           echo "---"
-          python3 iwyu-install/bin/fix_includes.py < iwyu-output.txt
+          python3 iwyu-install/bin/fix_includes.py < iwyu-filtered.txt
           echo "---"
           git status
           git diff
+
+          rm -rf iwyu-install
+          rm -rf iwyu-build
+          rm -rf iwyu-output
+
+      # https://github.com/stefanzweifel/git-auto-commit-action
+      # - uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     file_pattern: '*.h *.cc'
+      #     commit_message: "apply iwyu changes"
