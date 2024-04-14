@@ -67,6 +67,5 @@ TEST(Log, TestCheck) {
 #endif
 }
 
-#endif
-
 }  // namespace knf
+#endif
