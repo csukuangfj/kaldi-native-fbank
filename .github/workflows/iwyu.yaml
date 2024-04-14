@@ -138,12 +138,12 @@ jobs:
           git status
           git diff
 
-          rm -rf iwyu-install
-          rm -rf iwyu-build
-          rm -rf iwyu-output
+          rm -rf iwyu*
+
+          git status
 
       # https://github.com/stefanzweifel/git-auto-commit-action
-      # - uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     file_pattern: '*.h *.cc'
-      #     commit_message: "apply iwyu changes"
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: '*.h *.cc'
+          commit_message: "apply iwyu changes"
