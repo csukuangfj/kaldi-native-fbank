@@ -151,9 +151,18 @@ jobs:
           git status
 
           git diff
+          git diff > a.diff
+
+      - name: Upload IWYU output
+        uses: actions/upload-artifact@v4
+        with:
+          name: diff
+          path: |
+            a.diff
 
       # https://github.com/stefanzweifel/git-auto-commit-action
       - uses: stefanzweifel/git-auto-commit-action@v5
+        if: false
         with:
           file_pattern: '*.h *.cc'
           commit_message: "apply iwyu changes"
