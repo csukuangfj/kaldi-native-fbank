@@ -57,7 +57,7 @@ jobs:
         id: cache-iwyu
         uses: actions/cache@v4
         with:
-          path: iwyu-install
+          path: /tmp/iwyu-install
           key: iwyu-install-2024-04-13
 
       - name: Get IWYU source
@@ -73,18 +73,18 @@ jobs:
         shell: bash
         run: |
           mkdir iwyu-build iwyu-install
-          cmake -B iwyu-build -S iwyu -DCMAKE_PREFIX_PATH=/usr/lib/llvm-17 -DCMAKE_INSTALL_PREFIX=iwyu-install
+          cmake -B iwyu-build -S iwyu -DCMAKE_PREFIX_PATH=/usr/lib/llvm-17 -DCMAKE_INSTALL_PREFIX=/tmp/iwyu-install
           cmake --build iwyu-build --target install
 
-          ls -lh iwyu-install
-          tree iwyu-install
+          ls -lh /tmp/iwyu-install
+          tree /tmp/iwyu-install
 
-          ./iwyu-install/bin/include-what-you-use --version
+          /tmp/iwyu-install/bin/include-what-you-use --version
 
       - name: setup path
         shell: bash
         run: |
-          echo "$GITHUB_WORKSPACE/iwyu-install/bin"  >> "$GITHUB_PATH"
+          echo "/tmp/iwyu-install/bin"  >> "$GITHUB_PATH"
 
       - name: display include what you use version
         shell: bash
@@ -97,8 +97,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: iwyu-install
-          path: iwyu-install/*
-
+          path: /tmpiwyu-install/*
 
       - name: Check
         shell: bash
