@@ -122,7 +122,7 @@ jobs:
       - name: Show IWYU output
         shell: bash
         run: |
-          cat iwyu-out.txt
+          cat iwyu-output.txt
 
       - name: Show filtered IWYU output
         shell: bash
