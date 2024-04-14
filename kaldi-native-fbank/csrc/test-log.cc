@@ -16,9 +16,11 @@
  * limitations under the License.
  */
 
-namespace knf {
-
 #if KNF_ENABLE_CHECK
+#include "gtest/gtest.h"
+#include "kaldi-native-fbank/csrc/log.h"
+
+namespace knf {
 
 TEST(Log, TestLog) {
   KNF_LOG(TRACE) << "this is a trace message";
