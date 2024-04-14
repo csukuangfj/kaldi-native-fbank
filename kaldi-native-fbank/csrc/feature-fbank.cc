@@ -24,8 +24,10 @@
 #include <cmath>
 #include <limits>
 #include <vector>
+#include <utility>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
+#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 

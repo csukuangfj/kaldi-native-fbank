@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
+#include <cstdint>
+#include <vector>
+
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/rfft.h"
 

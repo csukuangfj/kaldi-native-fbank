@@ -6,7 +6,9 @@
 
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 
+#if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 #include <mutex>  // NOLINT
+#endif
 
 namespace knf {
 
