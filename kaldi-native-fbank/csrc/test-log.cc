@@ -16,9 +16,6 @@
  * limitations under the License.
  */
 
-#include "gtest/gtest.h"
-#include "kaldi-native-fbank/csrc/log.h"
-
 namespace knf {
 
 #if KNF_ENABLE_CHECK

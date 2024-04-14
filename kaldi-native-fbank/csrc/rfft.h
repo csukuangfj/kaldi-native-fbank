@@ -20,6 +20,7 @@
 #define KALDI_NATIVE_FBANK_CSRC_RFFT_H_
 
 #include <memory>
+#include <cstdint>
 
 namespace knf {
 
@@ -48,6 +49,7 @@ class Rfft {
 
  private:
   class RfftImpl;
+
   std::unique_ptr<RfftImpl> impl_;
 };
 

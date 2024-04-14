@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <vector>
+#include <cstdint>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"

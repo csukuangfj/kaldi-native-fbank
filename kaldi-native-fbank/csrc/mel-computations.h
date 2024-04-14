@@ -23,10 +23,13 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cstdint>
+#include <sstream>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
 namespace knf {
+struct FrameExtractionOptions;
 
 struct MelBanksOptions {
   int32_t num_bins = 25;  // e.g. 25; number of triangular bins

@@ -27,6 +27,7 @@
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
+#include "kaldi-native-fbank/csrc/feature-window.h"
 
 namespace knf {
 
