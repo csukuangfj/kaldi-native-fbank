@@ -20,11 +20,13 @@
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
+#include <stdio.h>
 #include <algorithm>
 #include <sstream>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 

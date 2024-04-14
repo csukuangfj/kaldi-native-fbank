@@ -18,8 +18,8 @@
 
 #include "kaldi-native-fbank/python/csrc/rfft.h"
 
-#include <string>
 #include <vector>
+#include <cstdint>
 
 #include "kaldi-native-fbank/csrc/rfft.h"
 

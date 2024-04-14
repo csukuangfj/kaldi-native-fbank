@@ -20,8 +20,10 @@
 
 #include <cmath>
 #include <vector>
+#include <string>
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
+#include "kaldi-native-fbank/csrc/log.h"
 
 #ifndef M_2PI
 #define M_2PI 6.283185307179586476925286766559005

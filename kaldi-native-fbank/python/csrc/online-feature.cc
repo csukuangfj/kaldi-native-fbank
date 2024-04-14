@@ -20,8 +20,16 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include "kaldi-native-fbank/csrc/online-feature.h"
+#include "kaldi-native-fbank/csrc/feature-fbank.h"
+#include "kaldi-native-fbank/csrc/whisper-feature.h"
+
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
+
 namespace knf {
 
 template <typename C>
