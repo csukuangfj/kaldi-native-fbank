@@ -112,12 +112,22 @@ jobs:
       - name: Run iwyu_tool.py
         shell: bash
         run: |
-          python3 iwyu-install/bin/iwyu_tool.py -p build/ -j2 | tee iwyu-output.txt
+          python3 /tmp/iwyu-install/bin/iwyu_tool.py -p build/ -j2 | tee iwyu-output.txt
 
       - name: Filter IWYU output
         shell: bash
         run: |
           python3 .github/scripts/filter.py .github/scripts/filter.yaml iwyu-output.txt iwyu-filtered.txt
+
+      - name: Show IWYU output
+        shell: bash
+        run: |
+          cat iwyu-out.txt
+
+      - name: Show filtered IWYU output
+        shell: bash
+        run: |
+          cat iwyu-filtered.txt
 
       - name: Upload IWYU output
         uses: actions/upload-artifact@v4
@@ -131,15 +141,16 @@ jobs:
         shell: bash
         run: |
           git status
-          echo "---"
-          python3 iwyu-install/bin/fix_includes.py < iwyu-filtered.txt
-          echo "---"
-          git status
-          git diff
+          python3 /tmp/iwyu-install/bin/fix_includes.py < iwyu-filtered.txt
 
           rm -rf iwyu*
 
+      - name: Show diff
+        shell: bash
+        run: |
           git status
+
+          git diff
 
       # https://github.com/stefanzweifel/git-auto-commit-action
       - uses: stefanzweifel/git-auto-commit-action@v5
