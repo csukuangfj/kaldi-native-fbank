@@ -3,6 +3,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 set(sources
   feature-fbank.cc
   feature-functions.cc
+  feature-mfcc.cc
   feature-window.cc
   fftsg.cc
   kaldi-math.cc

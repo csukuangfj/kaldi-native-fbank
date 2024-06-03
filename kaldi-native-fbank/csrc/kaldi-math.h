@@ -18,6 +18,10 @@
 #define M_2PI 6.283185307179586476925286766559005
 #endif
 
+#ifndef M_SQRT2
+#define M_SQRT2 1.4142135623730950488016887
+#endif
+
 namespace knf {
 
 inline float Log(float x) { return logf(x); }
@@ -40,6 +44,8 @@ inline float RandGauss(struct RandomState *state = NULL) {
   return static_cast<float>(sqrtf(-2 * Log(RandUniform(state))) *
                             cosf(2 * M_PI * RandUniform(state)));
 }
+
+void Sqrt(float *in_out, int32_t n);
 
 }  // namespace knf
 #endif  // KALDI_NATIVE_FBANK_CSRC_KALDI_MATH_H_

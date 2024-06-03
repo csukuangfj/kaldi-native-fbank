@@ -26,8 +26,9 @@
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
-#include "kaldi-native-fbank/csrc/whisper-feature.h"
+#include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 namespace knf {
 
@@ -144,6 +145,7 @@ class OnlineGenericBaseFeature {
 };
 
 using OnlineFbank = OnlineGenericBaseFeature<FbankComputer>;
+using OnlineMfcc = OnlineGenericBaseFeature<MfccComputer>;
 using OnlineWhisperFbank = OnlineGenericBaseFeature<WhisperFeatureComputer>;
 
 }  // namespace knf

@@ -20,11 +20,11 @@
 #define KALDI_NATIVE_FBANK_CSRC_MEL_COMPUTATIONS_H_
 
 #include <cmath>
+#include <cstdint>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <cstdint>
-#include <sstream>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
@@ -171,6 +171,11 @@ class MelBanks {
   bool debug_ = false;
   bool htk_mode_ = false;
 };
+
+// Compute liftering coefficients (scaling on cepstral coeffs)
+// coeffs are numbered slightly differently from HTK: the zeroth
+// index is C0, which is not affected.
+void ComputeLifterCoeffs(float Q, std::vector<float> *coeffs);
 
 }  // namespace knf
 
