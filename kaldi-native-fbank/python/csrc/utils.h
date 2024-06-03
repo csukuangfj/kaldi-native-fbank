@@ -20,6 +20,7 @@
 #define KALDI_NATIVE_FBANK_PYTHON_CSRC_UTILS_H_
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
+#include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/python/csrc/kaldi-native-fbank.h"
@@ -46,6 +47,9 @@ py::dict AsDict(const MelBanksOptions &opts);
 
 FbankOptions FbankOptionsFromDict(py::dict dict);
 py::dict AsDict(const FbankOptions &opts);
+
+MfccOptions MfccOptionsFromDict(py::dict dict);
+py::dict AsDict(const MfccOptions &opts);
 
 }  // namespace knf
 

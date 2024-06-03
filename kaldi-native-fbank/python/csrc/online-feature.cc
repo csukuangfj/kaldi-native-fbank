@@ -18,12 +18,13 @@
 
 #include "kaldi-native-fbank/python/csrc/online-feature.h"
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
 
-#include "kaldi-native-fbank/csrc/online-feature.h"
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
+#include "kaldi-native-fbank/csrc/feature-mfcc.h"
+#include "kaldi-native-fbank/csrc/online-feature.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 namespace pybind11 {
@@ -66,11 +67,15 @@ void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
           },
           py::arg("sampling_rate"), py::arg("waveform"),
           py::call_guard<py::gil_scoped_release>())
-      .def("input_finished", &PyClass::InputFinished);
+      .def("input_finished", &PyClass::InputFinished,
+           py::call_guard<py::gil_scoped_release>())
+      .def("pop", &PyClass::Pop, py::arg("n"),
+           py::call_guard<py::gil_scoped_release>());
 }
 
 void PybindOnlineFeature(py::module &m) {  // NOLINT
   PybindOnlineFeatureTpl<FbankComputer>(m, "OnlineFbank");
+  PybindOnlineFeatureTpl<MfccComputer>(m, "OnlineMfcc");
   PybindOnlineFeatureTpl<WhisperFeatureComputer>(m, "OnlineWhisperFbank");
 }
 

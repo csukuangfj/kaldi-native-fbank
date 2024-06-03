@@ -3,7 +3,9 @@ from _kaldi_native_fbank import (
     FeatureWindowFunction,
     FrameExtractionOptions,
     MelBanksOptions,
+    MfccOptions,
     OnlineFbank,
+    OnlineMfcc,
     OnlineWhisperFbank,
     Rfft,
 )
