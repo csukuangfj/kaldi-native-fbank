@@ -116,7 +116,6 @@ void MfccComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   const MelBanks &mel_banks = *(GetMelBanks(vtln_warp));
 
   KNF_CHECK_EQ(signal_frame->size(), opts_.frame_opts.PaddedWindowSize());
-  KNF_CHECK_EQ(feature->size(), opts_.num_ceps);
 
   // Compute energy after window function (not the raw one).
   if (opts_.use_energy && !opts_.raw_energy) {
@@ -127,8 +126,6 @@ void MfccComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   }
   rfft_.Compute(signal_frame->data());  // signal_frame is modified in-place
   ComputePowerSpectrum(signal_frame);
-
-  Sqrt(signal_frame->data(), signal_frame->size() / 2 + 1);
 
   // Sum with mel filter banks over the power spectrum
   mel_banks.Compute(signal_frame->data(), mel_energies_.data());
