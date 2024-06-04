@@ -7,7 +7,8 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_KALDI_MATH_H_
 #define KALDI_NATIVE_FBANK_CSRC_KALDI_MATH_H_
 
-#include <cmath>    // logf, sqrtf, cosf
+#include <cmath>  // logf, sqrtf, cosf
+#include <cstdint>
 #include <cstdlib>  // RAND_MAX
 
 #ifndef M_PI
