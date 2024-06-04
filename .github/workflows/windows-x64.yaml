@@ -51,7 +51,7 @@ jobs:
           ctest --verbose -C Release --output-on-failure -E py
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.8"
 
