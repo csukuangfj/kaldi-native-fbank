@@ -49,7 +49,10 @@ python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
 which should print the version you have installed.
 
 Please refer to
-<https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/python/tests/test_online_fbank.py>
+
+  - <https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/python/tests/test_online_fbank.py>
+  - <https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/python/tests/test_online_mfcc.py>
+
 for usages.
 
 For easier reference, we post the above file below:

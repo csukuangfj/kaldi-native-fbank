@@ -21,11 +21,13 @@
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #include <stdio.h>
+
 #include <algorithm>
 #include <sstream>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
@@ -405,6 +407,15 @@ void MelBanks::Compute(const float *power_spectrum,
     for (int32_t i = 0; i < num_bins; i++)
       fprintf(stderr, " %f", mel_energies_out[i]);
     fprintf(stderr, "\n");
+  }
+}
+
+void ComputeLifterCoeffs(float Q, std::vector<float> *coeffs) {
+  // Compute liftering coefficients (scaling on cepstral coeffs)
+  // coeffs are numbered slightly differently from HTK: the zeroth
+  // index is C0, which is not affected.
+  for (int32_t i = 0; i != static_cast<int32_t>(coeffs->size()); ++i) {
+    (*coeffs)[i] = 1.0 + 0.5 * Q * sin(M_PI * i / Q);
   }
 }
 

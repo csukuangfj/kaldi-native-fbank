@@ -21,21 +21,15 @@
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 
 #include <algorithm>
-#include <cmath>
 #include <limits>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
+#include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
-
-static void Sqrt(float *in_out, int32_t n) {
-  for (int32_t i = 0; i != n; ++i) {
-    in_out[i] = std::sqrt(in_out[i]);
-  }
-}
 
 std::ostream &operator<<(std::ostream &os, const FbankOptions &opts) {
   os << opts.ToString();
