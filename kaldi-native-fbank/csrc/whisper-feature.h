@@ -19,23 +19,36 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_WHISPER_FEATURE_H_
 #define KALDI_NATIVE_FBANK_CSRC_WHISPER_FEATURE_H_
 
+#include <cstdint>
 #include <memory>
 #include <vector>
-#include <cstdint>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 namespace knf {
 
+struct WhisperFeatureOptions {
+  WhisperFeatureOptions(const FrameExtractionOptions &frame_opts = {},
+                        int32_t dim = 80)
+      : frame_opts(frame_opts), dim(dim) {}
+
+  FrameExtractionOptions frame_opts;
+  int32_t dim = 80;
+
+  std::string ToString() const;
+};
+
 class WhisperFeatureComputer {
  public:
-  explicit WhisperFeatureComputer(
-      const FrameExtractionOptions &unused_frame_opts_ = {});
+  // note: opts.frame_opts is ignored and we reset it inside
+  explicit WhisperFeatureComputer(const WhisperFeatureOptions &opts = {});
 
-  int32_t Dim() const { return 80; }
+  int32_t Dim() const { return opts_.dim; }
 
-  const FrameExtractionOptions &GetFrameOptions() const { return frame_opts_; }
+  const FrameExtractionOptions &GetFrameOptions() const {
+    return opts_.frame_opts;
+  }
 
   void Compute(float /*signal_raw_log_energy*/, float /*vtln_warp*/,
                std::vector<float> *signal_frame, float *feature);
@@ -43,11 +56,11 @@ class WhisperFeatureComputer {
   // if true, compute log_energy_pre_window but after dithering and dc removal
   bool NeedRawLogEnergy() const { return false; }
 
-  using Options = FrameExtractionOptions;
+  using Options = WhisperFeatureOptions;
 
  private:
   std::unique_ptr<MelBanks> mel_banks_;
-  FrameExtractionOptions frame_opts_;
+  WhisperFeatureOptions opts_;
 };
 
 }  // namespace knf

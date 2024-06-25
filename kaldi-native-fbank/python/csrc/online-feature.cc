@@ -26,12 +26,34 @@
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/online-feature.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
+#include "kaldi-native-fbank/python/csrc/utils.h"
 
 namespace pybind11 {
 class gil_scoped_release;
 }  // namespace pybind11
 
 namespace knf {
+
+static void PybindWhisperFeatureOptions(py::module &m) {  // NOLINT
+  using PyClass = WhisperFeatureOptions;
+  py::class_<PyClass>(m, "WhisperFeatureOptions")
+      .def(py::init<>())
+      .def_readwrite("frame_opts", &PyClass::frame_opts)
+      .def_readwrite("dim", &PyClass::dim)
+      .def("__str__",
+           [](const PyClass &self) -> std::string { return self.ToString(); })
+      .def("as_dict",
+           [](const PyClass &self) -> py::dict { return AsDict(self); })
+      .def_static("from_dict",
+                  [](py::dict dict) -> PyClass {
+                    return WhisperFeatureOptionsFromDict(dict);
+                  })
+      .def(py::pickle(
+          [](const PyClass &self) -> py::dict { return AsDict(self); },
+          [](py::dict dict) -> PyClass {
+            return WhisperFeatureOptionsFromDict(dict);
+          }));
+}
 
 template <typename C>
 void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
@@ -76,6 +98,9 @@ void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
 void PybindOnlineFeature(py::module &m) {  // NOLINT
   PybindOnlineFeatureTpl<FbankComputer>(m, "OnlineFbank");
   PybindOnlineFeatureTpl<MfccComputer>(m, "OnlineMfcc");
+
+  PybindWhisperFeatureOptions(m);
+
   PybindOnlineFeatureTpl<WhisperFeatureComputer>(m, "OnlineWhisperFbank");
 }
 
