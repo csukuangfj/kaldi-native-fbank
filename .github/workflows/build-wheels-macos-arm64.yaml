@@ -6,6 +6,7 @@ on:
       - wheel
     tags:
       - '*'
+  workflow_dispatch:
 
 concurrency:
   group: build-wheels-macos-arm64-${{ github.ref }}
@@ -60,7 +61,13 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         shell: bash
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install wheel twine setuptools
+          opts='--break-system-packages'
+          v=${{ matrix.python-version }}
+          if [[ $v == cp37 || $v == cp38 || $v == cp39 ]]; then
+            opts=''
+          fi
+
+          python3 -m pip install $opts --upgrade pip
+          python3 -m pip install $opts wheel twine setuptools
 
           twine upload ./wheelhouse/*.whl

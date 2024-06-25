@@ -6,6 +6,7 @@ on:
       - wheel
     tags:
       - '*'
+  workflow_dispatch:
 
 concurrency:
   group: build-wheels-${{ github.ref }}
