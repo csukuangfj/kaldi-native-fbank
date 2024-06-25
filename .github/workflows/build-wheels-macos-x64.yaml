@@ -30,6 +30,7 @@ jobs:
         if: matrix.python-version == 'cp37'
         uses: pypa/cibuildwheel@v2.11.4
         env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64'"
           CIBW_ARCHS: "x86_64"
           CIBW_BUILD_VERBOSITY: 3
@@ -38,6 +39,7 @@ jobs:
         if: matrix.python-version != 'cp37'
         uses: pypa/cibuildwheel@v2.15.0
         env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64'"
           CIBW_ARCHS: "x86_64"
           CIBW_BUILD_VERBOSITY: 3
