@@ -19,17 +19,25 @@
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 #include <cmath>
-#include <vector>
 #include <string>
+#include <vector>
 
-#include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/csrc/log.h"
+#include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #ifndef M_2PI
 #define M_2PI 6.283185307179586476925286766559005
 #endif
 
 namespace knf {
+
+std::string WhisperFeatureOptions::ToString() const {
+  std::ostringstream os;
+  os << "WhisperFeatureOptions(";
+  os << "frame_opts=" << frame_opts.ToString() << ", ";
+  os << "dim=" << dim << ")";
+  return os.str();
+}
 
 static void dft(const std::vector<float> &in, std::vector<float> *out) {
   // this function is modified from
@@ -116,23 +124,24 @@ static void fft(const std::vector<float> &in, std::vector<float> *out) {
 }
 
 WhisperFeatureComputer::WhisperFeatureComputer(
-    const FrameExtractionOptions & /*unused={}*/) {
-  frame_opts_.samp_freq = 16000;
-  frame_opts_.frame_shift_ms = 10;
-  frame_opts_.frame_length_ms = 25;
-  frame_opts_.dither = 0;
-  frame_opts_.preemph_coeff = 0;
-  frame_opts_.remove_dc_offset = false;
-  frame_opts_.window_type = "hann";
-  frame_opts_.round_to_power_of_two = false;
-  frame_opts_.snip_edges = false;
+    const WhisperFeatureOptions &opts /*= {}*/)
+    : opts_(opts) {
+  opts_.frame_opts.samp_freq = 16000;
+  opts_.frame_opts.frame_shift_ms = 10;
+  opts_.frame_opts.frame_length_ms = 25;
+  opts_.frame_opts.dither = 0;
+  opts_.frame_opts.preemph_coeff = 0;
+  opts_.frame_opts.remove_dc_offset = false;
+  opts_.frame_opts.window_type = "hann";
+  opts_.frame_opts.round_to_power_of_two = false;
+  opts_.frame_opts.snip_edges = false;
 
   MelBanksOptions mel_opts;
-  mel_opts.num_bins = 80;
+  mel_opts.num_bins = opts_.dim;
   mel_opts.low_freq = 0;
   mel_opts.is_librosa = true;
 
-  mel_banks_ = std::make_unique<MelBanks>(mel_opts, frame_opts_, 1.0f);
+  mel_banks_ = std::make_unique<MelBanks>(mel_opts, opts_.frame_opts, 1.0f);
 }
 
 void WhisperFeatureComputer::Compute(float /*signal_raw_log_energy*/,

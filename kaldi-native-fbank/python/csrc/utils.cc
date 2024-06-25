@@ -23,6 +23,7 @@
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 #define FROM_DICT(type, key)         \
   if (dict.contains(#key)) {         \
@@ -82,6 +83,7 @@ MelBanksOptions MelBanksOptionsFromDict(py::dict dict) {
 
   return opts;
 }
+
 py::dict AsDict(const MelBanksOptions &opts) {
   py::dict dict;
 
@@ -166,6 +168,27 @@ py::dict AsDict(const MfccOptions &opts) {
   AS_DICT(raw_energy);
   AS_DICT(cepstral_lifter);
   AS_DICT(htk_compat);
+
+  return dict;
+}
+
+WhisperFeatureOptions WhisperFeatureOptionsFromDict(py::dict dict) {
+  WhisperFeatureOptions opts;
+
+  if (dict.contains("frame_opts")) {
+    opts.frame_opts = FrameExtractionOptionsFromDict(dict["frame_opts"]);
+  }
+
+  FROM_DICT(int_, dim);
+
+  return opts;
+}
+
+py::dict AsDict(const WhisperFeatureOptions &opts) {
+  py::dict dict;
+
+  dict["frame_opts"] = AsDict(opts.frame_opts);
+  AS_DICT(dim);
 
   return dict;
 }

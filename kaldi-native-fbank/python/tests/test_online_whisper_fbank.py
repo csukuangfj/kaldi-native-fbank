@@ -9,7 +9,10 @@ import torch
 
 
 def test():
-    opts = knf.FrameExtractionOptions()
+    opts = knf.WhisperFeatureOptions()
+
+    # Use 128 for whisper large v3
+    opts.dim = 128
     online_whisper_fbank = knf.OnlineWhisperFbank(opts)
 
     audio = torch.rand(100000)
@@ -36,7 +39,7 @@ def test():
     mel = mel.t().unsqueeze(0)
     print(mel.shape)
 
-    assert mel.shape == (1, 80, 3000), mel.shape
+    assert mel.shape == (1, opts.dim, 3000), mel.shape
     # Now you can input 'mel' to whisper.encoder model
 
 
