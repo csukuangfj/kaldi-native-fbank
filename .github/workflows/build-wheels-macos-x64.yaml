@@ -62,11 +62,6 @@ jobs:
         shell: bash
         run: |
           opts='--break-system-packages'
-          v=${{ matrix.python-version }}
-          if [[ $v == cp37 || $v == cp38 || $v == cp39 ]]; then
-            opts=''
-          fi
-
           python3 -m pip install $opts --upgrade pip
           python3 -m pip install $opts wheel twine setuptools
 
