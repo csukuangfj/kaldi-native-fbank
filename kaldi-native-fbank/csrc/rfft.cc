@@ -32,7 +32,7 @@ void rdft(int n, int isgn, double *a, int *ip, double *w);
 class Rfft::RfftImpl {
  public:
   explicit RfftImpl(int32_t n) : n_(n), ip_(2 + std::sqrt(n / 2)), w_(n / 2) {
-    if (n & (n - 1) != 0) {
+    if ((n & (n - 1)) != 0) {
       fprintf(stderr,
               "Please set round_to_power_of_two to true. Note that it is ok "
               "even if your trained model uses round_to_power_of_two=false\n");
