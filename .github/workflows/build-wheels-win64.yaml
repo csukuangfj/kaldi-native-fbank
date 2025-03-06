@@ -19,20 +19,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
-        python-version: ["cp37", "cp38", "cp39", "cp310", "cp311", "cp312"]
+        os: [windows-2019]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
 
-      # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
-      # for a list of versions
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
-        env:
-          CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_SKIP: "cp27-* cp35-* *-win32 pp* *-musllinux*"
-          CIBW_BUILD_VERBOSITY: 3
+        shell: bash
+        run: |
+          pip install setuptools wheel
+
+          python3 setup.py bdist_wheel
+
+          ls -lh ./dist/
+
+          mv dist wheelhouse
 
       - name: Display wheels
         shell: bash
@@ -50,7 +57,10 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         shell: bash
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install wheel twine setuptools
+          if [[ ${{ matrix.python-version }} == "3.7" ]]; then
+            python3 -m pip install wheel twine setuptools
+          else
+            python3 -m pip install wheel twine==5.0.0 setuptools
+          fi
 
           twine upload ./wheelhouse/*.whl

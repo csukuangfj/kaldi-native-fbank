@@ -9,8 +9,8 @@ import kaldi_native_fbank as knf
 
 
 def test_rfft():
-    N = 12
-    t = torch.arange(N)
+    t = torch.tensor([-1, 1.5, 10, 3, -2, 9, 11, 8, 0])
+    N = t.size(0)
     r = torch.fft.rfft(t)
     assert len(r) == N // 2 + 1, (len(r), N // 2 + 1)
 
@@ -23,7 +23,6 @@ def test_rfft():
 
     p = rfft.compute(k)
     print(p)
-    return
 
     assert abs(p[0] - real[0]) < 1e-5, (p[0], real[0])
     assert imag[0] == 0, imag[0]
