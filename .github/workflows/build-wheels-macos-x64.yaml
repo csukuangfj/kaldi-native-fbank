@@ -37,16 +37,7 @@ jobs:
           CIBW_BUILD_VERBOSITY: 3
 
       - name: Build wheels
-        if: matrix.python-version != 'cp37' && matrix.python-version != 'cp313'
-        uses: pypa/cibuildwheel@v2.11.4
-        env:
-          CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64'"
-          CIBW_ARCHS: "x86_64"
-          CIBW_BUILD_VERBOSITY: 3
-
-      - name: Build wheels
-        if: matrix.python-version == 'cp313'
+        if: matrix.python-version != 'cp37'
         uses: pypa/cibuildwheel@v2.21.3
         env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
