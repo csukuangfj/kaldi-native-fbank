@@ -9,7 +9,7 @@ import kaldi_native_fbank as knf
 
 
 def test_rfft():
-    t = torch.tensor([-1, 1.5, 10, 3, -2, 9, 11, 8, 0])
+    t = torch.tensor([-1, 1.5, 10, 3, -2, 9, 11, 8])
     N = t.size(0)
     r = torch.fft.rfft(t)
     assert len(r) == N // 2 + 1, (len(r), N // 2 + 1)

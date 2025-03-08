@@ -8,9 +8,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <limits>
 #include <vector>
-#include <cstddef>
 
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 
@@ -22,14 +22,20 @@ std::ostream &operator<<(std::ostream &os, const FrameExtractionOptions &opts) {
 }
 
 FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &opts)
-    : window_(opts.WindowSize()) {
-  int32_t frame_length = opts.WindowSize();
+    : FeatureWindowFunction(opts.window_type, opts.WindowSize(),
+                            opts.blackman_coeff) {}
+
+FeatureWindowFunction::FeatureWindowFunction(const std::string &window_type,
+                                             int32_t window_size,
+                                             float blackman_coeff /*= 0.42*/)
+    : window_(window_size) {
+  int32_t frame_length = window_size;
   KNF_CHECK_GT(frame_length, 0);
 
   float *window_data = window_.data();
 
   double a = M_2PI / (frame_length - 1);
-  if (opts.window_type == "hann") {
+  if (window_type == "hann") {
     // see https://pytorch.org/docs/stable/generated/torch.hann_window.html
     // We assume periodic is true
     a = M_2PI / frame_length;
@@ -37,26 +43,27 @@ FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &opts)
 
   for (int32_t i = 0; i < frame_length; i++) {
     double i_fl = static_cast<double>(i);
-    if (opts.window_type == "hanning") {
+    if (window_type == "hanning") {
       window_data[i] = 0.5 - 0.5 * cos(a * i_fl);
-    } else if (opts.window_type == "sine") {
+    } else if (window_type == "sine") {
       // when you are checking ws wikipedia, please
       // note that 0.5 * a = M_PI/(frame_length-1)
       window_data[i] = sin(0.5 * a * i_fl);
-    } else if (opts.window_type == "hamming") {
+    } else if (window_type == "hamming") {
       window_data[i] = 0.54 - 0.46 * cos(a * i_fl);
-    } else if (opts.window_type == "hann") {
+    } else if (window_type == "hann") {
       window_data[i] = 0.50 - 0.50 * cos(a * i_fl);
-    } else if (opts.window_type == "povey") {
+    } else if (window_type == "povey") {
       // like hamming but goes to zero at edges.
       window_data[i] = pow(0.5 - 0.5 * cos(a * i_fl), 0.85);
-    } else if (opts.window_type == "rectangular") {
+    } else if (window_type == "rectangular") {
       window_data[i] = 1.0;
-    } else if (opts.window_type == "blackman") {
-      window_data[i] = opts.blackman_coeff - 0.5 * cos(a * i_fl) +
-                       (0.5 - opts.blackman_coeff) * cos(2 * a * i_fl);
+    } else if (window_type == "blackman") {
+      window_data[i] = blackman_coeff - 0.5 * cos(a * i_fl) +
+                       (0.5 - blackman_coeff) * cos(2 * a * i_fl);
     } else {
-      KNF_LOG(FATAL) << "Invalid window type " << opts.window_type;
+      fprintf(stderr, "Invalid window type '%s'\n", window_type.c_str());
+      exit(-1);
     }
   }
 }

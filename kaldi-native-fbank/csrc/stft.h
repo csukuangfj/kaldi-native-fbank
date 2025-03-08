@@ -30,15 +30,16 @@ struct StftConfig {
   int32_t n_fft;  // should be a power of two
   int32_t hop_length;
   int32_t win_length;
-  std::string window_type = "povey";  // e.g. Hamming window
+  std::string window_type;
   bool center = true;
   std::string pad_mode = "reflect";
+  bool normalized = false;
 
   std::string ToString() const;
 };
 
 struct StftResult {
-  // [n_frames, n_fft/2+1], flattened in row major
+  // [num_frames, n_fft/2+1], flattened in row major
   std::vector<float> real;
   std::vector<float> imag;
   int32_t num_frames;

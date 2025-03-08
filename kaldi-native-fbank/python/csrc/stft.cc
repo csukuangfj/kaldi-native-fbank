@@ -19,6 +19,7 @@
 #include "kaldi-native-fbank/csrc/stft.h"
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "kaldi-native-fbank/python/csrc/stft.h"
@@ -29,10 +30,10 @@ void PybindStftConfig(py::module *m) {
   using PyClass = StftConfig;
   py::class_<PyClass>(*m, "StftConfig")
       .def(py::init<int32_t, int32_t, int32_t, const std::string &, bool,
-                    const std::string &>(),
+                    const std::string &, bool>(),
            py::arg("n_fft"), py::arg("hop_length"), py::arg("win_length"),
            py::arg("window_type") = "povey", py::arg("center") = true,
-           py::arg("pad_mode") = "reflect")
+           py::arg("pad_mode") = "reflect", py::arg("normalized") = false)
       .def_readwrite("n_fft", &PyClass::n_fft)
       .def_readwrite("hop_length", &PyClass::hop_length)
       .def_readwrite("win_length", &PyClass::win_length)
@@ -40,6 +41,7 @@ void PybindStftConfig(py::module *m) {
       .def_readwrite("window_type", &PyClass::window_type)
       .def_readwrite("center", &PyClass::center)
       .def_readwrite("pad_mode", &PyClass::pad_mode)
+      .def_readwrite("normalized", &PyClass::normalized)
       .def("__str__", &PyClass::ToString);
 }
 

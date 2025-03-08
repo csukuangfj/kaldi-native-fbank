@@ -7,10 +7,10 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_WINDOW_H_
 #define KALDI_NATIVE_FBANK_CSRC_FEATURE_WINDOW_H_
 
+#include <cstdint>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 #include "kaldi-native-fbank/csrc/log.h"
 
@@ -86,6 +86,8 @@ class FeatureWindowFunction {
  public:
   FeatureWindowFunction() = default;
   explicit FeatureWindowFunction(const FrameExtractionOptions &opts);
+  FeatureWindowFunction(const std::string &window_type, int32_t window_size,
+                        float blackman_coeff = 0.42);
   /**
    * @param wave Pointer to a 1-D array of shape [window_size].
    *             It is modified in-place: wave[i] = wave[i] * window_[i].
