@@ -8,5 +8,8 @@ from _kaldi_native_fbank import (
     OnlineMfcc,
     OnlineWhisperFbank,
     Rfft,
+    Stft,
+    StftConfig,
+    StftResult,
     WhisperFeatureOptions,
 )

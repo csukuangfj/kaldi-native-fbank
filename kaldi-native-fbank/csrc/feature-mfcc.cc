@@ -156,7 +156,7 @@ void MfccComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   }
 
   if (opts_.htk_compat) {
-    float energy = feature[0];
+    double energy = feature[0];
 
     for (int32_t i = 0; i < opts_.num_ceps - 1; ++i) {
       feature[i] = feature[i + 1];
@@ -167,7 +167,7 @@ void MfccComputer::Compute(float signal_raw_log_energy, float vtln_warp,
     }
     // we previously added that's part of one common definition of
     // the cosine transform.)
-    feature[opts_.num_ceps - 1] = energy;
+    feature[opts_.num_ceps - 1] = static_cast<float>(energy);
   }
 }
 

@@ -26,7 +26,8 @@ set(py_test_files
   test_online_whisper_fbank.py
   test_online_fbank.py
   test_online_mfcc.py
-  # test_rfft.py
+  test_rfft.py
+  test_stft.py
 )
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)

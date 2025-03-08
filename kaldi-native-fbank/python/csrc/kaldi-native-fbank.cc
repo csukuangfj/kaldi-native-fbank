@@ -24,6 +24,7 @@
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 #include "kaldi-native-fbank/python/csrc/online-feature.h"
 #include "kaldi-native-fbank/python/csrc/rfft.h"
+#include "kaldi-native-fbank/python/csrc/stft.h"
 
 namespace knf {
 
@@ -34,6 +35,7 @@ PYBIND11_MODULE(_kaldi_native_fbank, m) {
   PybindFeatureFbank(m);
   PybindFeatureMfcc(m);
   PybindRfft(m);
+  PybindStft(&m);
 
   PybindOnlineFeature(m);
 }

@@ -10,6 +10,7 @@ set(sources
   mel-computations.cc
   online-feature.cc
   rfft.cc
+  stft.cc
   whisper-feature.cc
 )
 
