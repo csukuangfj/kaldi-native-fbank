@@ -1,5 +1,5 @@
 /**
- * Copyright (c)  2022-2023  Xiaomi Corporation (authors: Fangjun Kuang)
+ * Copyright (c)  2025  Xiaomi Corporation (authors: Fangjun Kuang)
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,23 +16,15 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/python/csrc/rfft.h"
+#ifndef KALDI_NATIVE_FBANK_PYTHON_CSRC_ISTFT_H_
+#define KALDI_NATIVE_FBANK_PYTHON_CSRC_ISTFT_H_
 
-#include <cstdint>
-#include <vector>
-
-#include "kaldi-native-fbank/csrc/rfft.h"
+#include "kaldi-native-fbank/python/csrc/kaldi-native-fbank.h"
 
 namespace knf {
 
-void PybindRfft(py::module &m) {  // NOLINT
-  py::class_<Rfft>(m, "Rfft")
-      .def(py::init<int32_t, bool>(), py::arg("n"), py::arg("inverse") = false)
-      .def("compute",
-           [](Rfft &self, std::vector<float> &d) -> std::vector<float> {
-             self.Compute(d.data());
-             return d;
-           });
-}
+void PybindIStft(py::module *m);
 
 }  // namespace knf
+
+#endif  // KALDI_NATIVE_FBANK_PYTHON_CSRC_ISTFT_H_

@@ -19,8 +19,8 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_RFFT_H_
 #define KALDI_NATIVE_FBANK_CSRC_RFFT_H_
 
-#include <memory>
 #include <cstdint>
+#include <memory>
 
 namespace knf {
 
@@ -32,7 +32,7 @@ namespace knf {
 class Rfft {
  public:
   // @param n Number of fft bins. it should be a power of 2.
-  explicit Rfft(int32_t n);
+  explicit Rfft(int32_t n, bool inverse = false);
   ~Rfft();
 
   /** @param in_out A 1-D array of size n.

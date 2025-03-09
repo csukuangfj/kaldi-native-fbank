@@ -1,5 +1,5 @@
 /**
- * Copyright (c)  2022-2023  Xiaomi Corporation (authors: Fangjun Kuang)
+ * Copyright (c)  2025  Xiaomi Corporation (authors: Fangjun Kuang)
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,23 +16,24 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/python/csrc/rfft.h"
+#include "kaldi-native-fbank/csrc/istft.h"
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
-#include "kaldi-native-fbank/csrc/rfft.h"
+#include "kaldi-native-fbank/python/csrc/stft.h"
 
 namespace knf {
 
-void PybindRfft(py::module &m) {  // NOLINT
-  py::class_<Rfft>(m, "Rfft")
-      .def(py::init<int32_t, bool>(), py::arg("n"), py::arg("inverse") = false)
-      .def("compute",
-           [](Rfft &self, std::vector<float> &d) -> std::vector<float> {
-             self.Compute(d.data());
-             return d;
-           });
+void PybindIStft(py::module *m) {
+  using PyClass = IStft;
+  py::class_<IStft>(*m, "IStft")
+      .def(py::init<const StftConfig &>(), py::arg("config"))
+      .def("compute", &PyClass::Compute, py::arg("stft_result"),
+           py::call_guard<py::gil_scoped_release>())
+      .def("__call__", &PyClass::Compute, py::arg("stft_result"),
+           py::call_guard<py::gil_scoped_release>());
 }
 
 }  // namespace knf
