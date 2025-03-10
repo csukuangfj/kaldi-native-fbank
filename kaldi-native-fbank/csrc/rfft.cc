@@ -31,7 +31,8 @@ void rdft(int n, int isgn, double *a, int *ip, double *w);
 
 class Rfft::RfftImpl {
  public:
-  explicit RfftImpl(int32_t n) : n_(n), ip_(2 + std::sqrt(n / 2)), w_(n / 2) {
+  RfftImpl(int32_t n, bool inverse)
+      : n_(n), inverse_(inverse), ip_(2 + std::sqrt(n / 2)), w_(n / 2) {
     if ((n & (n - 1)) != 0) {
       fprintf(stderr,
               "Please set round_to_power_of_two to true. Note that it is ok "
@@ -50,16 +51,18 @@ class Rfft::RfftImpl {
 
   void Compute(double *in_out) {
     // 1 means forward fft
-    rdft(n_, 1, in_out, ip_.data(), w_.data());
+    rdft(n_, inverse_ ? -1 : 1, in_out, ip_.data(), w_.data());
   }
 
  private:
   int32_t n_;
+  bool inverse_ = false;
   std::vector<int32_t> ip_;
   std::vector<double> w_;
 };
 
-Rfft::Rfft(int32_t n) : impl_(std::make_unique<RfftImpl>(n)) {}
+Rfft::Rfft(int32_t n, bool inverse /*=false*/)
+    : impl_(std::make_unique<RfftImpl>(n, inverse)) {}
 
 Rfft::~Rfft() = default;
 

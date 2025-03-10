@@ -32,7 +32,7 @@ void PybindStftConfig(py::module *m) {
       .def(py::init<int32_t, int32_t, int32_t, const std::string &, bool,
                     const std::string &, bool>(),
            py::arg("n_fft"), py::arg("hop_length"), py::arg("win_length"),
-           py::arg("window_type") = "povey", py::arg("center") = true,
+           py::arg("window_type") = "", py::arg("center") = true,
            py::arg("pad_mode") = "reflect", py::arg("normalized") = false)
       .def_readwrite("n_fft", &PyClass::n_fft)
       .def_readwrite("hop_length", &PyClass::hop_length)
@@ -59,6 +59,7 @@ void PybindStftResult(py::module *m) {
 void PybindStft(py::module *m) {
   PybindStftConfig(m);
   PybindStftResult(m);
+  using PyClass = Stft;
   py::class_<Stft>(*m, "Stft")
       .def(py::init<const StftConfig &>(), py::arg("config"))
       .def(
@@ -66,14 +67,14 @@ void PybindStft(py::module *m) {
           [](Stft &self, const std::vector<float> &d) -> StftResult {
             return self.Compute(d.data(), d.size());
           },
-          py::arg("input"))
+          py::arg("input"), py::call_guard<py::gil_scoped_release>())
 
       .def(
           "__call__",
           [](Stft &self, const std::vector<float> &d) -> StftResult {
             return self.Compute(d.data(), d.size());
           },
-          py::arg("input"));
+          py::arg("input"), py::call_guard<py::gil_scoped_release>());
 }
 
 }  // namespace knf

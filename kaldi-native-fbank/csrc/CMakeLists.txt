@@ -6,6 +6,7 @@ set(sources
   feature-mfcc.cc
   feature-window.cc
   fftsg.cc
+  istft.cc
   kaldi-math.cc
   mel-computations.cc
   online-feature.cc
