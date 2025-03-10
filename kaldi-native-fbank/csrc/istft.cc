@@ -21,6 +21,7 @@
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <utility>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/rfft.h"
@@ -41,7 +42,6 @@ class IStft::Impl {
 
     int32_t num_samples =
         config_.n_fft + (stft_result.num_frames - 1) * config_.hop_length;
-    printf("num_samples: %d\n", num_samples);
 
     std::vector<float> samples(num_samples);
     for (int32_t i = 0; i < stft_result.num_frames; ++i) {
@@ -57,6 +57,11 @@ class IStft::Impl {
       }
     }
 
+    if (config_.center) {
+      samples = {samples.begin() + config_.n_fft / 2,
+                 samples.end() - config_.n_fft / 2};
+    }
+
     return samples;
   }
 
@@ -68,19 +73,25 @@ class IStft::Impl {
     const float *p_real = r.real.data() + frame_index * (n_fft / 2 + 1);
     const float *p_imag = r.imag.data() + frame_index * (n_fft / 2 + 1);
     std::vector<float> tmp(n_fft);
-    for (int32_t i = 0; i < n_fft; ++i) {
+
+    float scale = 1;
+    if (config_.normalized) {
+      scale = std::sqrt(n_fft);
+    }
+
+    for (int32_t i = 0; i < n_fft / 2; ++i) {
       if (i == 0) {
-        tmp[0] = p_real[0];
-        tmp[1] = p_real[n_fft / 2];
+        tmp[0] = p_real[0] * scale;
+        tmp[1] = p_real[n_fft / 2] * scale;
       } else {
-        tmp[2 * i] = p_real[i];
-        tmp[2 * i + 1] = -1 * p_imag[i];
+        tmp[2 * i] = p_real[i] * scale;
+        tmp[2 * i + 1] = -1 * p_imag[i] * scale;
       }
     }
 
     rfft->Compute(tmp.data());
 
-    float scale = 2.0f / n_fft;
+    scale = 2.0f / n_fft;
     for (auto &f : tmp) {
       f *= scale;
     }
@@ -124,11 +135,6 @@ class IStft::Impl {
         }
       }
     }
-
-    for (auto i : ans) {
-      fprintf(stderr, "%.3f ", i);
-    }
-    fprintf(stderr, "\n");
 
     return ans;
   }

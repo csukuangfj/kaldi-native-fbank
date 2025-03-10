@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/csrc/istft.h"
+#include "kaldi-native-fbank/python/csrc/istft.h"
 
 #include <cstdint>
 #include <string>
 #include <vector>
 
-#include "kaldi-native-fbank/python/csrc/stft.h"
+#include "kaldi-native-fbank/csrc/istft.h"
 
 namespace knf {
 

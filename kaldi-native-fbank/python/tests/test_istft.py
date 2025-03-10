@@ -8,17 +8,17 @@ import torch
 import kaldi_native_fbank as knf
 
 
-def test_istft():
-    n_fft = 16
-    hop_length = 4
-    center = False
-    normalized = False
-    window = None
-    samples = torch.tensor(
-        [1, 0, -2, 5, 9, -3, 2.5, 4, -1, 0.5, 3.5, -5, 6.5, 7, -2.75, 8, 12, -13]
-    )
+def _test_istft_impl(n_fft, normalized, window_type, center):
+    print(n_fft, normalized, window_type, center)
+    hop_length = n_fft // 4
+    win_length = n_fft
 
-    print(samples.shape)
+    window = None
+
+    if window_type == "hann":
+        window = torch.hann_window(win_length)
+
+    samples = torch.rand(20000)
 
     torch_result = torch.stft(
         samples,
@@ -31,9 +31,7 @@ def test_istft():
     )
     # torch_result: (n_fft/2+1, num_frames), complex tensor
 
-    print(torch_result)
-    print(torch_result.shape)
-    x = torch.istft(
+    torch_result = torch.istft(
         torch_result,
         n_fft=n_fft,
         hop_length=hop_length,
@@ -41,24 +39,50 @@ def test_istft():
         center=center,
         normalized=normalized,
     )
-    print(x)
-    print(x.shape)
 
     config = knf.StftConfig(
         n_fft=n_fft,
         hop_length=hop_length,
         win_length=n_fft,
-        window_type="",
+        window_type="hann",
         center=center,
         pad_mode="reflect",
         normalized=normalized,
     )
     stft = knf.Stft(config)
     k = stft(samples.tolist())
-    print(k.real)
-    print(k.imag)
     istft = knf.IStft(config)
-    print(istft(k))
+    knf_result = istft(k)
+    knf_result = torch.tensor(knf_result)
+    assert torch.allclose(torch_result, knf_result, atol=1e-1), (
+        (torch_result - knf_result).abs().max(),
+        (torch_result - knf_result).abs().sum(),
+        n_fft,
+        normalized,
+        window_type,
+        center,
+        samples.shape,
+        torch_result,
+        knf_result,
+    )
+
+
+def test_istft():
+    n_fft_list = [64, 128, 256, 512, 1024, 2048, 4096]
+    normalized_list = [False, True]
+    window_type_list = ["hann", ""]
+    center_list = [True]
+
+    for n_fft in n_fft_list:
+        for normalized in normalized_list:
+            for window_type in window_type_list:
+                for center in center_list:
+                    _test_istft_impl(
+                        n_fft=n_fft,
+                        normalized=normalized,
+                        window_type=window_type,
+                        center=center,
+                    )
 
 
 def main():
