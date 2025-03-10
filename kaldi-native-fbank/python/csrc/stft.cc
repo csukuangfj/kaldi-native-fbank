@@ -30,10 +30,11 @@ void PybindStftConfig(py::module *m) {
   using PyClass = StftConfig;
   py::class_<PyClass>(*m, "StftConfig")
       .def(py::init<int32_t, int32_t, int32_t, const std::string &, bool,
-                    const std::string &, bool>(),
+                    const std::string &, bool, const std::vector<float> &>(),
            py::arg("n_fft"), py::arg("hop_length"), py::arg("win_length"),
            py::arg("window_type") = "", py::arg("center") = true,
-           py::arg("pad_mode") = "reflect", py::arg("normalized") = false)
+           py::arg("pad_mode") = "reflect", py::arg("normalized") = false,
+           py::arg("window") = std::vector<float>{})
       .def_readwrite("n_fft", &PyClass::n_fft)
       .def_readwrite("hop_length", &PyClass::hop_length)
       .def_readwrite("win_length", &PyClass::win_length)

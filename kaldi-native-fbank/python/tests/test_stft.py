@@ -29,6 +29,8 @@ def _test_stft_impl(n_fft, normalized, window_type="", center=False):
 
     if window_type == "hann":
         window = torch.hann_window(win_length)
+    elif window_type == "hann2":
+        window = torch.hann_window(win_length).pow(0.5)
 
     samples = torch.rand(50000)
     config = knf.StftConfig(
@@ -39,6 +41,7 @@ def _test_stft_impl(n_fft, normalized, window_type="", center=False):
         center=center,
         pad_mode="reflect",
         normalized=normalized,
+        window=window.tolist() if window is not None else [],
     )
     torch_result = torch.stft(
         samples,
@@ -70,7 +73,7 @@ def _test_stft_impl(n_fft, normalized, window_type="", center=False):
 def test_stft():
     n_fft_list = [8, 64, 128, 256, 512, 1024, 2048, 4096]
     normalized_list = [True, False]
-    window_type_list = ["", "hann"]
+    window_type_list = ["", "hann", "hann2"]
     center_list = [True, False]
 
     for n_fft in n_fft_list:
