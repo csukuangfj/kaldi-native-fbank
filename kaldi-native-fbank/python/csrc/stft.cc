@@ -49,6 +49,9 @@ void PybindStftConfig(py::module *m) {
 void PybindStftResult(py::module *m) {
   using PyClass = StftResult;
   py::class_<PyClass>(*m, "StftResult")
+      .def(py::init<const std::vector<float> &, const std::vector<float> &,
+                    int32_t>(),
+           py::arg("real"), py::arg("imag"), py::arg("num_frames"))
       .def_property_readonly("real",
                              [](const PyClass &self) { return self.real; })
       .def_property_readonly("imag",
