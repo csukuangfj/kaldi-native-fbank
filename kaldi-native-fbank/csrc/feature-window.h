@@ -88,12 +88,16 @@ class FeatureWindowFunction {
   explicit FeatureWindowFunction(const FrameExtractionOptions &opts);
   FeatureWindowFunction(const std::string &window_type, int32_t window_size,
                         float blackman_coeff = 0.42);
+
+  explicit FeatureWindowFunction(const std::vector<float> &window);
+
   /**
    * @param wave Pointer to a 1-D array of shape [window_size].
    *             It is modified in-place: wave[i] = wave[i] * window_[i].
    * @param
    */
   void Apply(float *wave) const;
+
   const std::vector<float> &GetWindow() const { return window_; }
 
  private:
@@ -174,6 +178,9 @@ void ProcessWindow(const FrameExtractionOptions &opts,
 
 // Compute the inner product of two vectors
 float InnerProduct(const float *a, const float *b, int32_t n);
+
+std::vector<float> GetWindow(const std::string &window_type,
+                             int32_t window_size, float blackman_coeff = 0.42);
 
 }  // namespace knf
 

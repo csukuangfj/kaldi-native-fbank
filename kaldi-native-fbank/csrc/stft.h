@@ -35,6 +35,9 @@ struct StftConfig {
   std::string pad_mode = "reflect";
   bool normalized = false;
 
+  // if it is specified, then window_type is ignored
+  std::vector<float> window;
+
   std::string ToString() const;
 };
 

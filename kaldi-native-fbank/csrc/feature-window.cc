@@ -21,18 +21,14 @@ std::ostream &operator<<(std::ostream &os, const FrameExtractionOptions &opts) {
   return os;
 }
 
-FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &opts)
-    : FeatureWindowFunction(opts.window_type, opts.WindowSize(),
-                            opts.blackman_coeff) {}
-
-FeatureWindowFunction::FeatureWindowFunction(const std::string &window_type,
-                                             int32_t window_size,
-                                             float blackman_coeff /*= 0.42*/)
-    : window_(window_size) {
+std::vector<float> GetWindow(const std::string &window_type,
+                             int32_t window_size,
+                             float blackman_coeff /*= 0.42*/) {
+  std::vector<float> window(window_size);
   int32_t frame_length = window_size;
   KNF_CHECK_GT(frame_length, 0);
 
-  float *window_data = window_.data();
+  float *window_data = window.data();
 
   double a = M_2PI / (frame_length - 1);
   if (window_type == "hann") {
@@ -66,7 +62,21 @@ FeatureWindowFunction::FeatureWindowFunction(const std::string &window_type,
       exit(-1);
     }
   }
+
+  return window;
 }
+
+FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &opts)
+    : FeatureWindowFunction(opts.window_type, opts.WindowSize(),
+                            opts.blackman_coeff) {}
+
+FeatureWindowFunction::FeatureWindowFunction(const std::string &window_type,
+                                             int32_t window_size,
+                                             float blackman_coeff /*= 0.42*/)
+    : window_(knf::GetWindow(window_type, window_size, blackman_coeff)) {}
+
+FeatureWindowFunction::FeatureWindowFunction(const std::vector<float> &window)
+    : window_(window) {}
 
 void FeatureWindowFunction::Apply(float *wave) const {
   int32_t window_size = window_.size();

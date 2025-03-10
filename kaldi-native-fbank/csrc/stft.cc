@@ -42,7 +42,9 @@ std::string StftConfig::ToString() const {
 class Stft::Impl {
  public:
   explicit Impl(const StftConfig &config) : config_(config) {
-    if (!config.window_type.empty()) {
+    if (!config.window.empty()) {
+      window_ = std::make_unique<FeatureWindowFunction>(config.window);
+    } else if (!config.window_type.empty()) {
       window_ = std::make_unique<FeatureWindowFunction>(config.window_type,
                                                         config.win_length);
     }
