@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+#
+# Copyright (c)  2025 (authors: Bangwen He)
+
 import torch
 import torch.nn as nn
 import kaldi_native_fbank as knf
