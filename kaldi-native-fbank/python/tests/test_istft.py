@@ -71,7 +71,8 @@ def _test_istft_impl(n_fft, normalized, window_type, center):
 
 
 def test_istft():
-    n_fft_list = [64, 128, 256, 512, 1024, 2048, 4096]
+    n_fft_list = [6, 10, 400, 1000]
+    n_fft_list += [64, 128, 256, 512, 1024, 2048, 4096]
     normalized_list = [False, True]
     window_type_list = ["hann", "", "hann2"]
     center_list = [True]

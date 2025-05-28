@@ -1,3 +1,7 @@
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0")
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
+
 if("x${CMAKE_SOURCE_DIR}" STREQUAL "x${CMAKE_BINARY_DIR}")
   message(FATAL_ERROR "\
 In-source build is not a good practice.
@@ -21,11 +25,11 @@ if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)
 endif()
 
-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.21.1")
+set(KALDI_NATIVE_FBANK_VERSION "1.21.2")
 
 # Disable warning about
 #
@@ -81,8 +85,8 @@ message(STATUS "KALDI_NATIVE_FBANK_BUILD_TESTS: ${KALDI_NATIVE_FBANK_BUILD_TESTS
 message(STATUS "KALDI_NATIVE_FBANK_BUILD_PYTHON: ${KALDI_NATIVE_FBANK_BUILD_PYTHON}")
 message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
 
@@ -128,4 +132,6 @@ if(WIN32 AND MSVC)
   endforeach()
 endif()
 
+
+include(kissfft)
 add_subdirectory(kaldi-native-fbank)
