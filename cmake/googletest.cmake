@@ -1,4 +1,4 @@
-function(download_googltest)
+function(download_googletest)
   if(CMAKE_VERSION VERSION_LESS 3.11)
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
   endif()
@@ -76,4 +76,4 @@ function(download_googltest)
   )
 endfunction()
 
-download_googltest()
+download_googletest()

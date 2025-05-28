@@ -87,13 +87,13 @@ class IStft::Impl {
         tmp[1] = p_real[n_fft / 2] * scale;
       } else {
         tmp[2 * i] = p_real[i] * scale;
-        tmp[2 * i + 1] = -1 * p_imag[i] * scale;
+        tmp[2 * i + 1] = p_imag[i] * scale;
       }
     }
 
     rfft->Compute(tmp.data());
 
-    scale = 2.0f / n_fft;
+    scale = 1.0f / n_fft;
     for (auto &f : tmp) {
       f *= scale;
     }

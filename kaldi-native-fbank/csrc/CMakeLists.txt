@@ -5,7 +5,6 @@ set(sources
   feature-functions.cc
   feature-mfcc.cc
   feature-window.cc
-  fftsg.cc
   istft.cc
   kaldi-math.cc
   mel-computations.cc
@@ -36,6 +35,7 @@ endif()
 if(NOT WIN32 AND KALDI_NATIVE_FBANK_ENABLE_CHECK)
   target_link_libraries(kaldi-native-fbank-core -pthread)
 endif()
+target_link_libraries(kaldi-native-fbank-core kissfft)
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   add_executable(test-online-fbank test-online-fbank.cc)

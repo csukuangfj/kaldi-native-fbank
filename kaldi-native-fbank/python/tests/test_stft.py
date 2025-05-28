@@ -71,7 +71,8 @@ def _test_stft_impl(n_fft, normalized, window_type="", center=False):
 
 
 def test_stft():
-    n_fft_list = [8, 64, 128, 256, 512, 1024, 2048, 4096]
+    n_fft_list = [6, 10, 400, 1000]
+    n_fft_list += [8, 64, 128, 256, 512, 1024, 2048, 4096]
     normalized_list = [True, False]
     window_type_list = ["", "hann", "hann2"]
     center_list = [True, False]

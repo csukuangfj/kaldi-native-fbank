@@ -89,8 +89,7 @@ class Stft::Impl {
         } else {
           ans.real[i * (n_fft / 2 + 1) + k] = tmp[2 * k];
 
-          // we use -1 here so it matches the results of torch.stft
-          ans.imag[i * (n_fft / 2 + 1) + k] = -1 * tmp[2 * k + 1];
+          ans.imag[i * (n_fft / 2 + 1) + k] = tmp[2 * k + 1];
         }
       }
     }
