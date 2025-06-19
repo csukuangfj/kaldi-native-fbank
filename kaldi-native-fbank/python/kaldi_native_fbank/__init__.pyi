@@ -7,49 +7,6 @@ Type stubs for kaldi-native-fbank
 from typing import Dict, List, Union
 import numpy as np
 
-class FrameExtractionOptions:
-    """Frame extraction options for audio processing."""
-
-    def __init__(self) -> None: ...
-
-    # Properties
-    samp_freq: float
-    frame_shift_ms: float
-    frame_length_ms: float
-    dither: float
-    preemph_coeff: float
-    remove_dc_offset: bool
-    window_type: str
-    round_to_power_of_two: bool
-    blackman_coeff: float
-    snip_edges: bool
-
-    def __str__(self) -> str: ...
-    def as_dict(self) -> Dict[str, Union[float, bool, str]]: ...
-    @staticmethod
-    def from_dict(d: Dict[str, Union[float, bool, str]]) -> "FrameExtractionOptions": ...
-
-class MelBanksOptions:
-    """Mel filter bank options."""
-
-    def __init__(self) -> None: ...
-
-    # Properties
-    num_bins: int
-    low_freq: float
-    high_freq: float
-    vtln_low: float
-    vtln_high: float
-    debug_mel: bool
-    htk_mode: bool
-    is_librosa: bool
-    norm: str
-
-    def __str__(self) -> str: ...
-    def as_dict(self) -> Dict[str, Union[int, float, bool, str]]: ...
-    @staticmethod
-    def from_dict(d: Dict[str, Union[int, float, bool, str]]) -> "MelBanksOptions": ...
-
 class FbankOptions:
     """Filter bank feature extraction options."""
 
@@ -90,6 +47,67 @@ class MfccOptions:
     @staticmethod
     def from_dict(d: Dict[str, Union[Dict, int, bool, float]]) -> "MfccOptions": ...
 
+class FrameExtractionOptions:
+    """Frame extraction options for audio processing."""
+
+    def __init__(self) -> None: ...
+
+    # Properties
+    samp_freq: float
+    frame_shift_ms: float
+    frame_length_ms: float
+    dither: float
+    preemph_coeff: float
+    remove_dc_offset: bool
+    window_type: str
+    round_to_power_of_two: bool
+    blackman_coeff: float
+    snip_edges: bool
+
+    def __str__(self) -> str: ...
+    def as_dict(self) -> Dict[str, Union[float, bool, str]]: ...
+    @staticmethod
+    def from_dict(d: Dict[str, Union[float, bool, str]]) -> "FrameExtractionOptions": ...
+
+class FeatureWindowFunction:
+    """Feature window function for applying windowing to audio frames."""
+
+    def __init__(self, opts: FrameExtractionOptions) -> None: ...
+
+    def apply(self, wave: List[float]) -> List[float]: ...
+
+    @property
+    def window(self) -> List[float]: ...
+
+class IStft:
+    """Inverse Short-Time Fourier Transform."""
+
+    def __init__(self, config: StftConfig) -> None: ...
+
+    def compute(self, stft_result: StftResult) -> List[float]: ...
+    def __call__(self, stft_result: StftResult) -> List[float]: ...
+
+class MelBanksOptions:
+    """Mel filter bank options."""
+
+    def __init__(self) -> None: ...
+
+    # Properties
+    num_bins: int
+    low_freq: float
+    high_freq: float
+    vtln_low: float
+    vtln_high: float
+    debug_mel: bool
+    htk_mode: bool
+    is_librosa: bool
+    norm: str
+
+    def __str__(self) -> str: ...
+    def as_dict(self) -> Dict[str, Union[int, float, bool, str]]: ...
+    @staticmethod
+    def from_dict(d: Dict[str, Union[int, float, bool, str]]) -> "MelBanksOptions": ...
+
 class WhisperFeatureOptions:
     """Whisper feature extraction options."""
 
@@ -103,16 +121,6 @@ class WhisperFeatureOptions:
     def as_dict(self) -> Dict[str, Union[Dict, int]]: ...
     @staticmethod
     def from_dict(d: Dict[str, Union[Dict, int]]) -> "WhisperFeatureOptions": ...
-
-class FeatureWindowFunction:
-    """Feature window function for applying windowing to audio frames."""
-
-    def __init__(self, opts: FrameExtractionOptions) -> None: ...
-
-    def apply(self, wave: List[float]) -> List[float]: ...
-
-    @property
-    def window(self) -> List[float]: ...
 
 class OnlineFbank:
     """Online filter bank feature extractor."""
@@ -229,10 +237,3 @@ class Stft:
     def compute(self, input: List[float]) -> StftResult: ...
     def __call__(self, input: List[float]) -> StftResult: ...
 
-class IStft:
-    """Inverse Short-Time Fourier Transform."""
-
-    def __init__(self, config: StftConfig) -> None: ...
-
-    def compute(self, stft_result: StftResult) -> List[float]: ...
-    def __call__(self, stft_result: StftResult) -> List[float]: ...
