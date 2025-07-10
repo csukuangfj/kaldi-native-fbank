@@ -63,6 +63,12 @@ struct MelBanksOptions {
   // See https://librosa.org/doc/main/generated/librosa.filters.mel.html
   std::string norm = "slaney";
 
+  // used only when is_librosa is true
+  bool use_slaney_mel_scale = true;
+
+  // used only when is_librosa is true
+  bool floor_to_int_bin = false;
+
   std::string ToString() const {
     std::ostringstream os;
     os << "num_bins: " << num_bins << "\n";
@@ -74,6 +80,8 @@ struct MelBanksOptions {
     os << "htk_mode: " << htk_mode << "\n";
     os << "is_librosa: " << is_librosa << "\n";
     os << "norm: " << norm << "\n";
+    os << "use_slaney_mel_scale: " << use_slaney_mel_scale << "\n";
+    os << "floor_to_int_bin: " << floor_to_int_bin << "\n";
     return os.str();
   }
 };

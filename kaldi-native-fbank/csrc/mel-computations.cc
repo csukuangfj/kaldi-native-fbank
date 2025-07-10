@@ -270,8 +270,16 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 
   float fft_bin_width = sample_freq / window_length_padded;
 
-  float mel_low_freq = MelScaleSlaney(low_freq);
-  float mel_high_freq = MelScaleSlaney(high_freq);
+  float mel_low_freq;
+  float mel_high_freq;
+
+  if (opts.use_slaney_mel_scale) {
+    mel_low_freq = MelScaleSlaney(low_freq);
+    mel_high_freq = MelScaleSlaney(high_freq);
+  } else {
+    mel_low_freq = MelScale(low_freq);
+    mel_high_freq = MelScale(high_freq);
+  }
 
   debug_ = opts.debug_mel;
 
@@ -293,9 +301,29 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
     float center_mel = mel_low_freq + (bin + 1) * mel_freq_delta;
     float right_mel = mel_low_freq + (bin + 2) * mel_freq_delta;
 
-    float left_hz = InverseMelScaleSlaney(left_mel);
-    float center_hz = InverseMelScaleSlaney(center_mel);
-    float right_hz = InverseMelScaleSlaney(right_mel);
+    float left_hz;
+    float center_hz;
+    float right_hz;
+
+    if (opts.use_slaney_mel_scale) {
+      left_hz = InverseMelScaleSlaney(left_mel);
+      center_hz = InverseMelScaleSlaney(center_mel);
+      right_hz = InverseMelScaleSlaney(right_mel);
+    } else {
+      left_hz = InverseMelScale(left_mel);
+      center_hz = InverseMelScale(center_mel);
+      right_hz = InverseMelScale(right_mel);
+    }
+
+    if (opts.floor_to_int_bin) {
+      left_hz *= (window_length_padded + 1.0) / sample_freq;
+      center_hz *= (window_length_padded + 1.0) / sample_freq;
+      right_hz *= (window_length_padded + 1.0) / sample_freq;
+
+      left_hz = static_cast<int32_t>(left_hz);
+      center_hz = static_cast<int32_t>(center_hz);
+      right_hz = static_cast<int32_t>(right_hz);
+    }
 
     // this_bin will be a vector of coefficients that is only
     // nonzero where this mel bin is active.
@@ -306,7 +334,14 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 
     int32_t first_index = -1, last_index = -1;
     for (int32_t i = 0; i < num_fft_bins + 1; ++i) {
-      float hz = (fft_bin_width * i);  // Center frequency of this fft bin.
+      float hz;  // Center frequency of this fft bin.
+
+      if (opts.floor_to_int_bin) {
+        hz = i;
+      } else {
+        hz = fft_bin_width * i;
+      }
+
       if (hz > left_hz && hz < right_hz) {
         float weight;
         if (hz <= center_hz) {
