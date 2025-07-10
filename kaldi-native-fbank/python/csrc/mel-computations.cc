@@ -38,6 +38,8 @@ static void PybindMelBanksOptions(py::module &m) {  // NOLINT
       .def_readwrite("htk_mode", &PyClass::htk_mode)
       .def_readwrite("is_librosa", &PyClass::is_librosa)
       .def_readwrite("norm", &PyClass::norm)
+      .def_readwrite("use_slaney_mel_scale", &PyClass::use_slaney_mel_scale)
+      .def_readwrite("floor_to_int_bin", &PyClass::floor_to_int_bin)
       .def("__str__",
            [](const PyClass &self) -> std::string { return self.ToString(); })
       .def("as_dict",
