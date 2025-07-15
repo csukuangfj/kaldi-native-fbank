@@ -14,8 +14,8 @@ function(download_kissfft)
   # please pre-download kissfft
   set(possible_file_locations
     $ENV{HOME}/Downloads/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
-    ${PROJECT_SOURCE_DIR}/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
-    ${PROJECT_BINARY_DIR}/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
+    ${CMAKE_SOURCE_DIR}/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
+    ${CMAKE_BINARY_DIR}/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
     /tmp/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
     /star-fj/fangjun/download/github/kissfft-febd4caeed32e33ad8b2e0bb5ea77542c40f18ec.zip
   )
