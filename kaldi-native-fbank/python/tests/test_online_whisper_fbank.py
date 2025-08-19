@@ -35,7 +35,7 @@ def test():
     log_spec = torch.maximum(log_spec, log_spec.max() - 8.0)
     mel = (log_spec + 4.0) / 4.0
     target = 3000
-    mel = torch.nn.functional.pad(mel, (0, 0, 0, target - mel.shape[0]), "constant", 0)
+    mel = torch.nn.functional.pad(mel, (0, 0, 0, target - mel.shape[0]), "constant", mel[0].min().item())
     mel = mel.t().unsqueeze(0)
     print(mel.shape)
 
