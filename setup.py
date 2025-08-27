@@ -48,8 +48,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    python_requires=">=3.6.0",
-    license="Apache licensed, as found in the LICENSE file",
+    python_requires=">=3.8.0",
+    license="Apache-2.0",
 )
 
 # remove the line __version__ from kaldi-native-fbank/python/kaldi_native_fbank/__init__.py

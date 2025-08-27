@@ -29,7 +29,7 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.21.3")
+set(KALDI_NATIVE_FBANK_VERSION "1.21.4")
 
 # Disable warning about
 #
@@ -62,7 +62,7 @@ endif()
 set(CMAKE_INSTALL_RPATH ${kaldi_native_fbank_rpath_origin})
 set(CMAKE_BUILD_RPATH ${kaldi_native_fbank_rpath_origin})
 
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ version to be used.")
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ version to be used.")
 
 if(NOT DEFINED BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON)
