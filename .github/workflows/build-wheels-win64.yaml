@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [windows-latest]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +46,8 @@ jobs:
         run: |
           ls -lh ./wheelhouse/
 
+          unzip -l wheelhouse/*.whl
+
       - uses: actions/upload-artifact@v4
         with:
           name: wheel-${{ matrix.python-version }}
@@ -57,10 +59,6 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         shell: bash
         run: |
-          if [[ ${{ matrix.python-version }} == "3.7" ]]; then
-            python3 -m pip install wheel twine setuptools
-          else
-            python3 -m pip install wheel twine==5.0.0 setuptools
-          fi
+          python3 -m pip install wheel twine==5.0.0 setuptools
 
           twine upload ./wheelhouse/*.whl
