@@ -35,6 +35,8 @@ struct RawAudioSamplesOptions {
     frame_opts.dither = 0;
     frame_opts.preemph_coeff = 0;
     frame_opts.remove_dc_offset = false;
+    frame_opts.round_to_power_of_two = false;
+    frame_opts.snip_edges = true;
   }
 
   std::string ToString() const {
