@@ -162,6 +162,7 @@ void OnlineGenericBaseFeature<C>::ComputeFeatures() {
   }
 }
 
+template class OnlineGenericBaseFeature<RawAudioSamplesComputer>;
 template class OnlineGenericBaseFeature<FbankComputer>;
 template class OnlineGenericBaseFeature<MfccComputer>;
 template class OnlineGenericBaseFeature<WhisperFeatureComputer>;

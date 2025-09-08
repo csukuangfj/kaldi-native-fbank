@@ -21,6 +21,7 @@
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
+#include "kaldi-native-fbank/csrc/feature-raw-audio-samples.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
@@ -51,6 +52,9 @@ py::dict AsDict(const FbankOptions &opts);
 
 MfccOptions MfccOptionsFromDict(py::dict dict);
 py::dict AsDict(const MfccOptions &opts);
+
+RawAudioSamplesOptions RawAudioSamplesOptionsFromDict(py::dict dict);
+py::dict AsDict(const RawAudioSamplesOptions &opts);
 
 WhisperFeatureOptions WhisperFeatureOptionsFromDict(py::dict dict);
 py::dict AsDict(const WhisperFeatureOptions &opts);

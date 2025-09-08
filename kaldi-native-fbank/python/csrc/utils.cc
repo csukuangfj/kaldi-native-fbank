@@ -22,6 +22,7 @@
 
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
+#include "kaldi-native-fbank/csrc/feature-raw-audio-samples.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 
@@ -172,6 +173,24 @@ py::dict AsDict(const MfccOptions &opts) {
   AS_DICT(raw_energy);
   AS_DICT(cepstral_lifter);
   AS_DICT(htk_compat);
+
+  return dict;
+}
+
+RawAudioSamplesOptions RawAudioSamplesOptionsFromDict(py::dict dict) {
+  RawAudioSamplesOptions opts;
+
+  if (dict.contains("frame_opts")) {
+    opts.frame_opts = FrameExtractionOptionsFromDict(dict["frame_opts"]);
+  }
+
+  return opts;
+}
+
+py::dict AsDict(const RawAudioSamplesOptions &opts) {
+  py::dict dict;
+
+  dict["frame_opts"] = AsDict(opts.frame_opts);
 
   return dict;
 }

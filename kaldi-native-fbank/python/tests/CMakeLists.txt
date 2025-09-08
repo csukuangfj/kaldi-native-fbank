@@ -26,6 +26,7 @@ set(py_test_files
   test_mel_bank_options.py
   test_online_fbank.py
   test_online_mfcc.py
+  test_online_raw_audio_samples.py
   test_online_whisper_fbank.py
   test_rfft.py
   test_stft.py
