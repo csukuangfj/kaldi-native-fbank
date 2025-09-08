@@ -16,19 +16,14 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-fbank.h
-
 #ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_RAW_AUDIO_SAMPLES_H_
 #define KALDI_NATIVE_FBANK_CSRC_FEATURE_RAW_AUDIO_SAMPLES_H_
 
 #include <cstdint>
-#include <map>
 #include <sstream>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
-#include "kaldi-native-fbank/csrc/mel-computations.h"
-#include "kaldi-native-fbank/csrc/rfft.h"
 
 namespace knf {
 
