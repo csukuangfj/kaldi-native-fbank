@@ -29,7 +29,7 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.22.1")
+set(KALDI_NATIVE_FBANK_VERSION "1.22.2")
 
 # Disable warning about
 #
