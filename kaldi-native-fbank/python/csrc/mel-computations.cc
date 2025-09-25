@@ -18,6 +18,7 @@
 
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 
+#include <algorithm>
 #include <string>
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
@@ -67,6 +68,18 @@ void PybindMelComputations(py::module &m) {  // NOLINT
            py::arg("frame_opts") = FrameExtractionOptions{},
            py::arg("vtln_warp_factor") = 1.0,
            py::call_guard<py::gil_scoped_release>())
+      .def("get_matrix",
+           [](const PyClass &self) -> py::array_t<float> {
+             std::vector<float> matrix = self.GetMatrix();
+             int32_t num_rows = self.NumBins();
+             int32_t num_cols = matrix.size() / num_rows;
+
+             py::array_t<float> ans({num_rows, num_cols});
+             py::buffer_info buf = ans.request();
+             auto p = static_cast<float *>(buf.ptr);
+             std::copy(matrix.begin(), matrix.end(), p);
+             return ans;
+           })
       .def(
           "compute",
           [](const PyClass &self, const py::array_t<float> &fft_energies) {

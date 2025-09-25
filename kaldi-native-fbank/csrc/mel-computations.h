@@ -158,6 +158,8 @@ class MelBanks {
 
   int32_t NumBins() const { return bins_.size(); }
 
+  std::vector<float> GetMatrix() const;
+
  private:
   // for kaldi-compatible
   void InitKaldiMelBanks(const MelBanksOptions &opts,
@@ -178,6 +180,7 @@ class MelBanks {
   // TODO(fangjun): Remove debug_ and htk_mode_
   bool debug_ = false;
   bool htk_mode_ = false;
+  int32_t num_fft_bins_ = -1;
 };
 
 // Compute liftering coefficients (scaling on cepstral coeffs)

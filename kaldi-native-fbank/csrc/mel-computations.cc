@@ -110,7 +110,8 @@ float MelBanks::VtlnWarpMelFreq(
 
 MelBanks::MelBanks(const MelBanksOptions &opts,
                    const FrameExtractionOptions &frame_opts,
-                   float vtln_warp_factor) {
+                   float vtln_warp_factor)
+    : num_fft_bins_(frame_opts.PaddedWindowSize()) {
   if (opts.is_librosa) {
     InitLibrosaMelBanks(opts, frame_opts, vtln_warp_factor);
   } else {
@@ -385,7 +386,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 }
 
 MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols)
-    : debug_(false), htk_mode_(false) {
+    : debug_(false), htk_mode_(false), num_fft_bins_((num_cols - 1) * 2) {
   bins_.resize(num_rows);
   for (int32_t bin = 0; bin < num_rows; ++bin) {
     const float *this_bin = weights + bin * num_cols;
@@ -443,6 +444,23 @@ void MelBanks::Compute(const float *power_spectrum,
       fprintf(stderr, " %f", mel_energies_out[i]);
     fprintf(stderr, "\n");
   }
+}
+
+std::vector<float> MelBanks::GetMatrix() const {
+  int32_t num_rows = NumBins();
+  int32_t num_cols = num_fft_bins_ / 2 + 1;
+
+  std::vector<float> ans(num_rows * num_cols);
+
+  for (int32_t i = 0; i < num_rows; ++i) {
+    float *p = ans.data() + i * num_cols;
+
+    int32_t offset = bins_[i].first;
+    const auto &v = bins_[i].second;
+    std::copy(v.begin(), v.end(), p + offset);
+  }
+
+  return ans;
 }
 
 void ComputeLifterCoeffs(float Q, std::vector<float> *coeffs) {
