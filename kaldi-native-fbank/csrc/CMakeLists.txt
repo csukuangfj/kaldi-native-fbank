@@ -88,7 +88,6 @@ if(KALDI_NATIVE_FBANK_BUILD_TESTS)
 endif()
 
 file(MAKE_DIRECTORY
-  DESTINATION
     ${PROJECT_BINARY_DIR}/include/kaldi-native-fbank/csrc
 )
 file(GLOB_RECURSE all_headers *.h)
