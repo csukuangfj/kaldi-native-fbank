@@ -38,6 +38,7 @@ static void PybindFbankOptions(py::module &m) {  // NOLINT
       .def_readwrite("raw_energy", &PyClass::raw_energy)
       .def_readwrite("htk_compat", &PyClass::htk_compat)
       .def_readwrite("use_log_fbank", &PyClass::use_log_fbank)
+      .def_readwrite("eps", &PyClass::eps)
       .def_readwrite("use_power", &PyClass::use_power)
       .def("__str__",
            [](const PyClass &self) -> std::string { return self.ToString(); })

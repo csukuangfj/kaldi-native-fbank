@@ -121,6 +121,7 @@ FbankOptions FbankOptionsFromDict(py::dict dict) {
   FROM_DICT(bool_, raw_energy);
   FROM_DICT(bool_, htk_compat);
   FROM_DICT(bool_, use_log_fbank);
+  FROM_DICT(float_, eps);
   FROM_DICT(bool_, use_power);
 
   return opts;
@@ -136,6 +137,7 @@ py::dict AsDict(const FbankOptions &opts) {
   AS_DICT(raw_energy);
   AS_DICT(htk_compat);
   AS_DICT(use_log_fbank);
+  AS_DICT(eps);
   AS_DICT(use_power);
 
   return dict;

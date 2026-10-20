@@ -96,10 +96,10 @@ void FbankComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   mel_banks.Compute(signal_frame->data(), mel_energies);
 
   if (opts_.use_log_fbank) {
-    // Avoid log of zero (which should be prevented anyway by dithering).
+    // Avoid log of zero with an additive guard: log(mel_energy + eps).
+    // eps defaults to FLT_EPSILON; NeMo models set it to 2^-24.
     for (int32_t i = 0; i != opts_.mel_opts.num_bins; ++i) {
-      auto t = std::max(mel_energies[i], std::numeric_limits<float>::epsilon());
-      mel_energies[i] = std::log(t);
+      mel_energies[i] = std::log(mel_energies[i] + opts_.eps);
     }
   }
 

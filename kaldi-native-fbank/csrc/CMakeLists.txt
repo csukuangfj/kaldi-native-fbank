@@ -62,6 +62,7 @@ endfunction()
 # please sort the source files alphabetically
 set(test_srcs
   # test-online-feature.cc
+  test-fbank-eps.cc
   test-log.cc
   test-rfft.cc
 )

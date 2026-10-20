@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <limits>
 #include <sstream>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
@@ -51,6 +52,12 @@ struct FbankOptions {
   // if true (default), produce log-filterbank, else linear
   bool use_log_fbank = true;
 
+  // Added to each mel energy before the log when use_log_fbank is true, i.e.
+  // log(mel_energy + eps). This is an additive log-zero guard, unlike Kaldi's
+  // log(max(mel_energy, epsilon)). The default is FLT_EPSILON; NeMo models use
+  // 2^-24 (5.9604644775390625e-08).
+  float eps = std::numeric_limits<float>::epsilon();
+
   // if true (default), use power in filterbank
   // analysis, else magnitude.
   bool use_power = true;
@@ -71,6 +78,7 @@ struct FbankOptions {
     os << "raw_energy: " << raw_energy << "\n";
     os << "htk_compat: " << htk_compat << "\n";
     os << "use_log_fbank: " << use_log_fbank << "\n";
+    os << "eps: " << eps << "\n";
     os << "use_power: " << use_power << "\n";
     return os.str();
   }
