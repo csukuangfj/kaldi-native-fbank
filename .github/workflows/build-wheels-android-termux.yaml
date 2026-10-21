@@ -57,29 +57,21 @@ jobs:
         shell: bash
         run: |
           mkdir -p build dist wheelhouse
-          # termux-docker must run unprivileged -- it has no root and no sudo.
-          # Pre-create the staging dirs and make the workspace world-writable
-          # on the host instead: the container cannot create directories here
-          # (no permissions), and its `rm`/`cp` must be able to write back out.
-          chmod -R 777 "${{ github.workspace }}/" || true
+          chmod -R a+w "${{ github.workspace }}"
 
           docker run --rm \
+            --user 0:0 \
             --volume ${{ github.workspace }}/:/work \
-            --workdir /work \
             termux/termux-docker:${{ matrix.abi }} \
           bash -c '
-            set -ex
+            set -e
 
             apt update -y
-            # libc++ must be present at *build* time, not just at test time:
-            # clang pulls in ndk-sysroot, and without Termux's libc++ the
-            # compile falls back to the NDK libc++ (inline namespace
-            # std::__ndk1), which does not match the std::__1 that Termux
-            # actually ships.
-            apt install -y cmake make git python python-pip clang libc++ patchelf zip
+            apt install -y cmake make git python python-pip clang libc++
             apt install -y android-liblog || true
             apt install -y libandroid-dev || true
             apt install -y android-libandroid || true
+            apt install -y patchelf
 
             pip install --upgrade pip setuptools wheel
 
@@ -164,17 +156,18 @@ jobs:
       - name: Run smoke test
         shell: bash
         run: |
-          chmod -R 777 /tmp/wheels "${{ github.workspace }}/" || true
+          chmod -R a+w /tmp/wheels "${{ github.workspace }}"
 
           docker run --rm \
+            --user 0:0 \
             --volume /tmp/wheels:/wheels:ro \
             --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py:ro \
             termux/termux-docker:${{ matrix.abi }} \
           bash -c '
-            set -ex
+            set -e
 
             apt update -y
-            apt install -y python python-pip clang libc++ patchelf
+            apt install -y python python-pip libc++ clang
             apt install -y android-liblog || true
             apt install -y libandroid-dev || true
             apt install -y android-libandroid || true
@@ -184,8 +177,10 @@ jobs:
 
             pip install /wheels/*.whl
 
-            # termux has no writable /tmp; "/" is fine as a cwd outside the
-            # source tree.
+            # termux has no writable /tmp and / is not writable, so use "/"
+            # as a clean cwd outside the source tree. sys.path[0] is the
+            # directory of the script itself (/test, containing only
+            # smoke_test.py), so the installed wheel is what gets imported.
             cd /
             python3 /test/smoke_test.py
           '
