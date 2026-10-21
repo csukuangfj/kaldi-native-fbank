@@ -95,18 +95,13 @@ jobs:
               find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
               find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
 
-              # Safety net: if a shared object still names the NDK
-              # libc++_shared.so, rewrite it to the name Termux actually
-              # ships. Both are LLVM libc++ (std::__1) when built with
-              # Termux clang, so this avoids bundling a second C++ runtime.
-              # NOTE: no single quotes below -- this script is itself inside
-              # a single-quoted bash -c string.
-              for so in $(find "$tmpdir" -name "*.so"); do
-                if patchelf --print-needed "$so" | grep -q libc++_shared; then
-                  echo "  rewriting libc++_shared.so -> libc++.so in $so"
-                  patchelf --replace-needed libc++_shared.so libc++.so "$so"
-                fi
-              done
+              # Only RPATH is fixed up here. Do NOT rewrite DT_NEEDED: the
+              # clang in these images targets Android, so the objects use the
+              # NDK libc++ (std::__ndk1) and depend on libc++_shared.so. That
+              # is correct and loadable on Termux -- the piper-phonemize
+              # android wheels are built the same way and pass their smoke
+              # test. Rewriting the dependency to libc++.so would bind it to
+              # the std::__1 library instead and the symbols would not resolve.
 
               rm "$whl"
               (cd "$tmpdir" && zip -qr "$OLDPWD/$whl" .)
