@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04-arm]
-        python-version: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313", "cp314"]
+        python-version: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313", "cp314", "cp315"]
         manylinux: [manylinux2014] #, manylinux_2_28]
 
     steps:
@@ -29,8 +29,25 @@ jobs:
 
       # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
       # for a list of versions
+
+      # CPython 3.8 is EOL and has been dropped upstream: the manylinux images
+      # removed the interpreter on 2026-05-07 and cibuildwheel 4.0 removed
+      # support for building it. The last combination that still works is
+      # cibuildwheel 3.x plus a pinned image from before that drop.
+      - name: Build wheels (cp38)
+        if: matrix.python-version == 'cp38'
+        uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_BUILD_VERBOSITY: 3
+          CIBW_ARCHS_LINUX: aarch64
+          # https://quay.io/repository/pypa/manylinux2014_aarch64?tab=tags
+          CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/${{ matrix.manylinux }}_aarch64:2026.05.07-1
+
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.1.4
+        if: matrix.python-version != 'cp38'
+        uses: pypa/cibuildwheel@v4.3.2
         env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"

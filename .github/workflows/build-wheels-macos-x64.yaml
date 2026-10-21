@@ -20,13 +20,28 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest]
-        python-version: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313", "cp314"]
+        python-version: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313", "cp314", "cp315"]
 
     steps:
       - uses: actions/checkout@v4
 
+      # CPython 3.8 is EOL and cibuildwheel 4.0 dropped support for building it,
+      # so use the last 3.x release for the cp38 leg.
+      - name: Build wheels (cp38)
+        if: matrix.python-version == 'cp38'
+        uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_ENVIRONMENT: >
+            KALDI_NATIVE_FBANK_CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES='x86_64' -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
+            MACOSX_DEPLOYMENT_TARGET=10.15
+
+          CIBW_ARCHS: "x86_64"
+          CIBW_BUILD_VERBOSITY: 3
+
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.1.4
+        if: matrix.python-version != 'cp38'
+        uses: pypa/cibuildwheel@v4.3.2
         env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_ENVIRONMENT: >
@@ -54,8 +69,11 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         shell: bash
         run: |
-          opts='--break-system-packages'
+          # python3 on macOS runners is managed by Homebrew and cannot be
+          # upgraded in place ("no RECORD file was found for pip"), so install
+          # twine into a throwaway venv instead of the system environment.
+          python3 -m venv "$RUNNER_TEMP/twine"
 
-          python3 -m pip install $opts -U pip wheel twine==5.0.0 setuptools
+          "$RUNNER_TEMP/twine/bin/python" -m pip install -U pip wheel twine==5.0.0 setuptools
 
-          twine upload ./wheelhouse/*.whl
+          "$RUNNER_TEMP/twine/bin/twine" upload ./wheelhouse/*.whl
