@@ -53,20 +53,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Pre-create the staging directories and make the workspace writable on
-      # the host first: the container runs as root and cannot create
-      # directories here (no permissions), and its `rm`/`cp` must be able to
-      # write back out.
       - name: Build wheel with the Termux toolchain
         shell: bash
         run: |
-          mkdir -p dist
-          mkdir -p wheelhouse
-          chmod -R a+w "${{ github.workspace }}/"
+          mkdir -p build dist wheelhouse
+          # termux-docker must run unprivileged -- it has no root and no sudo.
+          # Pre-create the staging dirs and make the workspace world-writable
+          # on the host instead: the container cannot create directories here
+          # (no permissions), and its `rm`/`cp` must be able to write back out.
+          chmod -R 777 "${{ github.workspace }}/" || true
 
           docker run --rm \
-            --user 0:0 \
             --volume ${{ github.workspace }}/:/work \
+            --workdir /work \
             termux/termux-docker:${{ matrix.abi }} \
           bash -c '
             set -ex
@@ -123,7 +122,9 @@ jobs:
       - name: Display wheels
         shell: bash
         run: |
-          sudo chown -R "$USER" ./dist
+          # setup.py rewrites kaldi_native_fbank/__init__.py, so the source
+          # tree is dirty too -- take back everything the container touched.
+          sudo chown -R "$USER" ./build ./dist ./wheelhouse ./kaldi-native-fbank
           ls -lh ./dist/
           unzip -l ./dist/*.whl
 
@@ -163,10 +164,9 @@ jobs:
       - name: Run smoke test
         shell: bash
         run: |
-          chmod -R a+w /tmp/wheels "${{ github.workspace }}/"
+          chmod -R 777 /tmp/wheels "${{ github.workspace }}/" || true
 
           docker run --rm \
-            --user 0:0 \
             --volume /tmp/wheels:/wheels:ro \
             --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py:ro \
             termux/termux-docker:${{ matrix.abi }} \
