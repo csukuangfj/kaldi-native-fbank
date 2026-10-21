@@ -92,12 +92,14 @@ jobs:
               find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
               find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
 
-              # Safety net: if a shared object still names the NDK's
+              # Safety net: if a shared object still names the NDK
               # libc++_shared.so, rewrite it to the name Termux actually
-              # ships. Both are LLVM libc++ (std::__1) when built with Termux's
-              # clang, so this avoids bundling a second C++ runtime.
+              # ships. Both are LLVM libc++ (std::__1) when built with
+              # Termux clang, so this avoids bundling a second C++ runtime.
+              # NOTE: no single quotes below -- this script is itself inside
+              # a single-quoted bash -c string.
               for so in $(find "$tmpdir" -name "*.so"); do
-                if patchelf --print-needed "$so" | grep -q '^libc++_shared\.so$'; then
+                if patchelf --print-needed "$so" | grep -q libc++_shared; then
                   echo "  rewriting libc++_shared.so -> libc++.so in $so"
                   patchelf --replace-needed libc++_shared.so libc++.so "$so"
                 fi
