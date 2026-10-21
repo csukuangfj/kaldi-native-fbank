@@ -84,8 +84,16 @@ jobs:
             # Replicate what auditwheel does for the manylinux wheels: the
             # extension lives at the wheel root and loads
             # kaldi_native_fbank/lib/libkaldi-native-fbank-core.so next to it.
-            RPATH_EXT="\$ORIGIN:\$ORIGIN/kaldi_native_fbank/lib"
-            RPATH_LIB="\$ORIGIN"
+            #
+            # TERMUX_LIB must stay in the RPATH: patchelf --set-rpath replaces
+            # the whole RUNPATH, and the one the linker recorded for a plain
+            # cmake build is what resolves libc++_shared.so (the clang in these
+            # images targets Android, so the objects depend on it). The
+            # piper-phonemize android wheels carry the same directory in
+            # DT_RUNPATH and do not ship libc++_shared.so themselves.
+            TERMUX_LIB=/data/data/com.termux/files/usr/lib
+            RPATH_EXT="\$ORIGIN:\$ORIGIN/kaldi_native_fbank/lib:$TERMUX_LIB"
+            RPATH_LIB="\$ORIGIN:$TERMUX_LIB"
 
             for whl in dist/*.whl; do
               echo "Patching RPATH in $whl"
