@@ -24,7 +24,7 @@ def get_package_version():
     return latest_version
 
 
-package_name = "kaldi-native-fbank"
+package_name = "kaldi_native_fbank"
 
 with open("kaldi-native-fbank/python/kaldi_native_fbank/__init__.py", "a") as f:
     f.write(f"__version__ = '{get_package_version()}'\n")

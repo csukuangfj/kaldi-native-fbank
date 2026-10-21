@@ -27,20 +27,20 @@ permissions:
 jobs:
   test_wheel:
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }}
+    name: ${{ matrix.os }} / py${{ matrix.python-version }}
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
