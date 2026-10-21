@@ -38,6 +38,10 @@ jobs:
           CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-A Win32"
           CIBW_SKIP: "*-win_amd64"
           CIBW_BUILD_VERBOSITY: 3
+          # The wheel already ships kaldi-native-fbank-core.dll next to the .pyd,
+          # so cibuildwheel 4.x's default `delvewheel repair` has nothing to
+          # bundle and fails with "Unable to find library". Skip the repair step.
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: ""
 
       - name: Build wheels
         if: matrix.python-version != 'cp38'
@@ -47,6 +51,10 @@ jobs:
           CIBW_ENVIRONMENT: KALDI_NATIVE_FBANK_CMAKE_ARGS="-A Win32"
           CIBW_SKIP: "*-win_amd64"
           CIBW_BUILD_VERBOSITY: 3
+          # The wheel already ships kaldi-native-fbank-core.dll next to the .pyd,
+          # so cibuildwheel 4.x's default `delvewheel repair` has nothing to
+          # bundle and fails with "Unable to find library". Skip the repair step.
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: ""
 
       - name: Display wheels
         shell: bash
@@ -69,4 +77,4 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install wheel twine==5.0.0 setuptools
 
-          twine upload ./wheelhouse/*.whl
+          twine upload --skip-existing ./wheelhouse/*.whl

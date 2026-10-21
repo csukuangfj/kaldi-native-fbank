@@ -76,4 +76,4 @@ jobs:
 
           "$RUNNER_TEMP/twine/bin/python" -m pip install -U pip wheel twine==5.0.0 setuptools
 
-          "$RUNNER_TEMP/twine/bin/twine" upload ./wheelhouse/*.whl
+          "$RUNNER_TEMP/twine/bin/twine" upload --skip-existing ./wheelhouse/*.whl
