@@ -52,10 +52,15 @@ struct FbankOptions {
   // if true (default), produce log-filterbank, else linear
   bool use_log_fbank = true;
 
-  // Added to each mel energy before the log when use_log_fbank is true, i.e.
-  // log(mel_energy + eps). This is an additive log-zero guard, unlike Kaldi's
-  // log(max(mel_energy, epsilon)). The default is FLT_EPSILON; NeMo models use
-  // 2^-24 (5.9604644775390625e-08).
+  // If true (default), use Kaldi's hard floor before the log, i.e.
+  // log(max(mel_energy, eps)). If false, use the additive guard
+  // log(mel_energy + eps). NeMo models use the additive guard with
+  // eps = FLT_EPSILON / 2 (2^-24).
+  bool use_log_floor = true;
+
+  // Value used by the log-zero guard selected by use_log_floor.
+  // It defaults to FLT_EPSILON; NeMo models use FLT_EPSILON / 2
+  // (2^-24, 5.9604644775390625e-08).
   float eps = std::numeric_limits<float>::epsilon();
 
   // if true (default), use power in filterbank
@@ -78,6 +83,7 @@ struct FbankOptions {
     os << "raw_energy: " << raw_energy << "\n";
     os << "htk_compat: " << htk_compat << "\n";
     os << "use_log_fbank: " << use_log_fbank << "\n";
+    os << "use_log_floor: " << use_log_floor << "\n";
     os << "eps: " << eps << "\n";
     os << "use_power: " << use_power << "\n";
     return os.str();

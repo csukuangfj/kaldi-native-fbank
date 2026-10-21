@@ -38,15 +38,30 @@ std::vector<float> ComputeOneFrame(const FbankOptions &opts) {
   return feature;
 }
 
-TEST(FbankEpsTest, DefaultIsFloatEpsilon) {
+TEST(FbankEpsTest, DefaultsPreserveKaldiFloor) {
   FbankOptions opts;
+  EXPECT_TRUE(opts.use_log_floor);
   EXPECT_EQ(opts.eps, std::numeric_limits<float>::epsilon());
+
+  opts.frame_opts.dither = 0;
+  opts.mel_opts.num_bins = 10;
+
+  FbankOptions raw_opts = opts;
+  raw_opts.use_log_fbank = false;
+  auto raw = ComputeOneFrame(raw_opts);
+  auto logged = ComputeOneFrame(opts);
+
+  for (size_t i = 0; i != raw.size(); ++i) {
+    EXPECT_NEAR(logged[i], std::log(std::max(raw[i], opts.eps)), 1e-6)
+        << "bin " << i;
+  }
 }
 
-TEST(FbankEpsTest, AddsEpsBeforeLog) {
+TEST(FbankEpsTest, AdditiveGuardWhenFloorDisabled) {
   FbankOptions opts;
   opts.frame_opts.dither = 0;
   opts.mel_opts.num_bins = 10;
+  opts.use_log_floor = false;
 
   opts.eps = 0.0f;  // log(mel_energy)
   auto no_guard = ComputeOneFrame(opts);
@@ -65,7 +80,9 @@ TEST(FbankEpsTest, ZeroFrameProducesLogEps) {
   FbankOptions opts;
   opts.frame_opts.dither = 0;
   opts.mel_opts.num_bins = 10;
-  opts.eps = 5.9604644775390625e-08f;  // 2^-24, NeMo's log-zero guard
+  opts.use_log_floor = false;
+  // NeMo's log-zero guard value.
+  opts.eps = std::numeric_limits<float>::epsilon() / 2;
 
   FbankComputer computer(opts);
   std::vector<float> frame(opts.frame_opts.PaddedWindowSize(), 0.0f);
