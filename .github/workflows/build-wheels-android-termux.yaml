@@ -71,7 +71,10 @@ jobs:
             apt install -y android-liblog || true
             apt install -y libandroid-dev || true
             apt install -y android-libandroid || true
-            apt install -y patchelf
+            # patchelf + zip are for the RPATH / DT_NEEDED fixups below; this
+            # mirrors sherpa-onnx build-wheels-android-*.yaml, which also
+            # unzips the wheel, patches the .so files and re-zips it.
+            apt install -y patchelf zip
 
             pip install --upgrade pip setuptools wheel
 
