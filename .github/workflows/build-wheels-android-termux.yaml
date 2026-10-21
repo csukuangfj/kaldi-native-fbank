@@ -72,7 +72,12 @@ jobs:
             set -ex
 
             apt update -y
-            apt install -y cmake make git python python-pip clang patchelf zip
+            # libc++ must be present at *build* time, not just at test time:
+            # clang pulls in ndk-sysroot, and without Termux's libc++ the
+            # compile falls back to the NDK libc++ (inline namespace
+            # std::__ndk1), which does not match the std::__1 that Termux
+            # actually ships.
+            apt install -y cmake make git python python-pip clang libc++ patchelf zip
             apt install -y android-liblog || true
             apt install -y libandroid-dev || true
             apt install -y android-libandroid || true
@@ -96,12 +101,16 @@ jobs:
               find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
               find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
 
-              # The clang in these images targets Android, so it links
-              # libc++_shared.so. Termux itself ships LLVM libc++ as libc++.so.
-              # Both are the same ABI (std::__1), so rewrite the dependency
-              # instead of bundling a second C++ runtime that would clash with
-              # the system one.
-              find "$tmpdir" -name "*.so" -print -exec patchelf --replace-needed libc++_shared.so libc++.so {} \;
+              # Safety net: if a shared object still names the NDK's
+              # libc++_shared.so, rewrite it to the name Termux actually
+              # ships. Both are LLVM libc++ (std::__1) when built with Termux's
+              # clang, so this avoids bundling a second C++ runtime.
+              for so in $(find "$tmpdir" -name "*.so"); do
+                if patchelf --print-needed "$so" | grep -q '^libc++_shared\.so$'; then
+                  echo "  rewriting libc++_shared.so -> libc++.so in $so"
+                  patchelf --replace-needed libc++_shared.so libc++.so "$so"
+                fi
+              done
 
               rm "$whl"
               (cd "$tmpdir" && zip -qr "$OLDPWD/$whl" .)
@@ -158,14 +167,17 @@ jobs:
 
           docker run --rm \
             --user 0:0 \
-            --volume /tmp/wheels:/wheels \
-            --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py \
+            --volume /tmp/wheels:/wheels:ro \
+            --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py:ro \
             termux/termux-docker:${{ matrix.abi }} \
           bash -c '
             set -ex
 
             apt update -y
             apt install -y python python-pip clang libc++ patchelf
+            apt install -y android-liblog || true
+            apt install -y libandroid-dev || true
+            apt install -y android-libandroid || true
             apt install -y python-numpy || true
 
             pip install --upgrade pip setuptools wheel
