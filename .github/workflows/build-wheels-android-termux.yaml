@@ -1,0 +1,269 @@
+name: build-wheels-android-termux
+
+# Builds Python wheels inside termux/termux-docker instead of with the Android
+# NDK, so that the result imports in Termux. Cross-compiling with the NDK
+# toolchain produces binaries that cannot load there.
+#
+# =============================================================================
+# WHAT MAKES THIS WORK -- please keep these intact.
+# =============================================================================
+# Reference: the csukuangfj/piper-phonemize v1.5.9 android wheels (same
+# termux-docker images, same clang) and sherpa-onnx
+# build-wheels-android-*.yaml. When something breaks, download one of those
+# released wheels and dump its ELF headers with readelf/pyelftools instead of
+# guessing -- that is what settled the two questions below.
+#
+# 1. THE OBJECTS USE THE NDK C++ RUNTIME, AND THAT IS CORRECT.
+#    The clang in these images targets Android, so the .so files use the
+#    NDK libc++ inline namespace "std::__ndk1" and record
+#        DT_NEEDED libc++_shared.so
+#    This is exactly what the piper-phonemize android wheels do. libc++
+#    _shared.so is NOT shipped in the wheel -- Termux provides it.
+#
+#    DO NOT "fix" this:
+#      - do not patchelf --replace-needed libc++_shared.so libc++.so
+#        Termux's libc++.so is the std::__1 build, so the module then dies with
+#        cannot locate symbol "_ZNSt6__ndk1...". Rewriting the name cannot fix
+#        a namespace mismatch.
+#      - installing the libc++ package in the build does not change it either.
+#
+# 2. RPATH MUST KEEP THE TERMUX LIB DIRECTORY.
+#    The dependency above is resolved by a RUNPATH the linker records during a
+#    plain cmake build:
+#        DT_RUNPATH = /data/data/com.termux/files/usr/lib:$ORIGIN
+#    patchelf --set-rpath REPLACES the entire RUNPATH, so any fixup must keep
+#    that directory or you get "dlopen failed: library libc++_shared.so not
+#    found". We set:
+#        extension : $ORIGIN:$ORIGIN/kaldi_native_fbank/lib:$PREFIX/lib
+#        core lib  : $ORIGIN:$PREFIX/lib
+#    $PREFIX/lib is the same directory piper-phonemize ships in DT_RUNPATH.
+#    The extra $ORIGIN/kaldi_native_fbank/lib is ours alone: our extension sits
+#    at the wheel root while libkaldi-native-fbank-core.so lives in
+#    kaldi_native_fbank/lib/. piper keeps all of its .so files in one directory
+#    and so needs no such entry.
+#
+# 3. THE CONTAINER SCRIPT IS PASSED AS A SINGLE-QUOTED STRING.
+#    The docker command hands the whole script to bash as one single-quoted
+#    argument, so the script must contain NO single quotes at all -- not even
+#    in comments. One apostrophe closes the string early and the script dies
+#    with "syntax error: unexpected end of file". Use double quotes inside.
+#    Do not spell out that opener in this comment: a literal copy of it makes
+#    grep and lint tooling mistake the comment for a real container script.
+#
+# 4. THERE IS NO AUDITWHEEL ON ANDROID.
+#    RPATH is therefore fixed up by hand below with patchelf, and the wheel is
+#    unzipped and re-zipped -- hence patchelf, zip and unzip in the apt list.
+#
+# 5. CONTAINER / RUNNER SETUP (piper-phonemize build-wheel-android.yaml).
+#    - the termux-docker images are native binaries per architecture: aarch64
+#      and arm run on ubuntu-24.04-arm, x86_64 and i686 on ubuntu-latest.
+#    - run the container with --user 0:0 and chmod -R a+w the workspace on the
+#      host first; pre-create build/ dist/ wheelhouse/ because the container
+#      cannot create directories here. Do not call sudo or su inside it.
+#    - apt list is pinned by what the two scripts below actually invoke.
+#
+# 6. THE SMOKE TEST RUNS IN THE SAME IMAGE.
+#    "cd /" gives a clean cwd -- termux has no writable /tmp. The script is
+#    mounted at /test so sys.path[0] is a directory holding only smoke_test.py,
+#    which means the installed wheel (not the source tree) is what gets
+#    imported.
+
+on:
+  push:
+    branches:
+      - wheel
+    tags:
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: build-wheels-android-termux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.abi }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: aarch64
+            os: ubuntu-24.04-arm
+            plat: android_24_arm64_v8a
+          - abi: arm
+            os: ubuntu-24.04-arm
+            plat: android_24_armeabi_v7a
+          - abi: x86_64
+            os: ubuntu-latest
+            plat: android_24_x86_64
+          - abi: i686
+            os: ubuntu-latest
+            plat: android_24_x86
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build wheel with the Termux toolchain
+        shell: bash
+        run: |
+          mkdir -p build dist wheelhouse
+          chmod -R a+w "${{ github.workspace }}"
+
+          docker run --rm \
+            --user 0:0 \
+            --volume ${{ github.workspace }}/:/work \
+            termux/termux-docker:${{ matrix.abi }} \
+          bash -c '
+            set -e
+
+            apt update -y
+            apt install -y cmake make git python python-pip clang libc++
+            apt install -y android-liblog || true
+            apt install -y libandroid-dev || true
+            apt install -y android-libandroid || true
+            # patchelf + zip/unzip are for the RPATH fixup below -- see point 4
+            # in the header. Same unzip / patch / re-zip step as sherpa-onnx
+            # build-wheels-android-*.yaml.
+            apt install -y patchelf zip unzip
+
+            pip install --upgrade pip setuptools wheel
+
+            cd /work
+            python3 setup.py bdist_wheel --plat-name=${{ matrix.plat }}
+
+            # Replicate what auditwheel does for the manylinux wheels: the
+            # extension lives at the wheel root and loads
+            # kaldi_native_fbank/lib/libkaldi-native-fbank-core.so next to it.
+            #
+            # TERMUX_LIB must stay in the RPATH: patchelf --set-rpath replaces
+            # the whole RUNPATH, and the one the linker recorded for a plain
+            # cmake build is what resolves libc++_shared.so (the clang in these
+            # images targets Android, so the objects depend on it). The
+            # piper-phonemize android wheels carry the same directory in
+            # DT_RUNPATH and do not ship libc++_shared.so themselves.
+            TERMUX_LIB=/data/data/com.termux/files/usr/lib
+            RPATH_EXT="\$ORIGIN:\$ORIGIN/kaldi_native_fbank/lib:$TERMUX_LIB"
+            RPATH_LIB="\$ORIGIN:$TERMUX_LIB"
+
+            for whl in dist/*.whl; do
+              echo "Patching RPATH in $whl"
+              tmpdir=$(mktemp -d)
+              unzip -q "$whl" -d "$tmpdir"
+
+              find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
+              find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
+
+              # Only RPATH is fixed up here. Do NOT rewrite DT_NEEDED: the
+              # clang in these images targets Android, so the objects use the
+              # NDK libc++ (std::__ndk1) and depend on libc++_shared.so. That
+              # is correct and loadable on Termux -- the piper-phonemize
+              # android wheels are built the same way and pass their smoke
+              # test. Rewriting the dependency to libc++.so would bind it to
+              # the std::__1 library instead and the symbols would not resolve.
+
+              rm "$whl"
+              (cd "$tmpdir" && zip -qr "$OLDPWD/$whl" .)
+              rm -rf "$tmpdir"
+            done
+
+            ls -lh dist
+          '
+
+      - name: Display wheels
+        shell: bash
+        run: |
+          # setup.py rewrites kaldi_native_fbank/__init__.py, so the source
+          # tree is dirty too -- take back everything the container touched.
+          sudo chown -R "$USER" ./build ./dist ./wheelhouse ./kaldi-native-fbank
+          ls -lh ./dist/
+          unzip -l ./dist/*.whl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-android-${{ matrix.abi }}
+          path: ./dist/*.whl
+
+  # Install the wheel we just built inside the matching Termux image and
+  # extract real features from it. The smoke test runs from outside the source
+  # tree so `import kaldi_native_fbank` resolves to site-packages.
+  test:
+    name: test ${{ matrix.abi }}
+    needs: [build]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: aarch64
+            os: ubuntu-24.04-arm
+          - abi: arm
+            os: ubuntu-24.04-arm
+          - abi: x86_64
+            os: ubuntu-latest
+          - abi: i686
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheel-android-${{ matrix.abi }}
+          path: /tmp/wheels
+
+      - name: Run smoke test
+        shell: bash
+        run: |
+          chmod -R a+w /tmp/wheels "${{ github.workspace }}"
+
+          docker run --rm \
+            --user 0:0 \
+            --volume /tmp/wheels:/wheels:ro \
+            --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py:ro \
+            termux/termux-docker:${{ matrix.abi }} \
+          bash -c '
+            set -e
+
+            apt update -y
+            apt install -y python python-pip libc++ clang
+            apt install -y android-liblog || true
+            apt install -y libandroid-dev || true
+            apt install -y android-libandroid || true
+            apt install -y python-numpy || true
+
+            pip install --upgrade pip setuptools wheel
+
+            pip install /wheels/*.whl
+
+            # termux has no writable /tmp and / is not writable, so use "/"
+            # as a clean cwd outside the source tree. sys.path[0] is the
+            # directory of the script itself (/test, containing only
+            # smoke_test.py), so the installed wheel is what gets imported.
+            cd /
+            python3 /test/smoke_test.py
+          '
+
+  publish:
+    name: publish to PyPI
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-android-*
+          path: /tmp/wheels
+          merge-multiple: true
+
+      - name: Publish wheels to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        shell: bash
+        run: |
+          ls -lh /tmp/wheels/
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel twine==5.0.0 setuptools
+
+          twine upload --skip-existing /tmp/wheels/*.whl

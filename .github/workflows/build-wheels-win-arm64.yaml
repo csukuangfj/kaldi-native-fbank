@@ -1,0 +1,79 @@
+name: build-wheels-win-arm64
+
+on:
+  push:
+    branches:
+      - wheel
+    tags:
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: build-wheels-win-arm64-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: ${{ matrix.python-version }}
+    runs-on: windows-11-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        # Windows on ARM only ships CPython 3.11+, so there is no cp38-cp310
+        # leg here. setup-python installs a native arm64 interpreter, and
+        # setuptools tags the wheel win_arm64 by itself.
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build wheels
+        shell: bash
+        run: |
+          pip install setuptools wheel
+
+          python3 setup.py bdist_wheel
+
+          ls -lh ./dist/
+
+          mv dist wheelhouse
+
+      - name: Display wheels
+        shell: bash
+        run: |
+          ls -lh ./wheelhouse/
+
+          unzip -l wheelhouse/*.whl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-win-arm64-${{ matrix.python-version }}
+          path: ./wheelhouse/*.whl
+
+      # Install the wheel we just built and extract real features from it, so
+      # a wheel with a missing DLL or a wrong architecture fails here. Run
+      # from outside the source tree so `import kaldi_native_fbank` resolves
+      # to site-packages and not to ./kaldi-native-fbank/python.
+      - name: Smoke test
+        shell: bash
+        run: |
+          python3 -m pip install --force-reinstall ./wheelhouse/*.whl
+
+          cd "$RUNNER_TEMP"
+
+          python3 "$GITHUB_WORKSPACE/scripts/smoke_test.py"
+
+      - name: Publish wheels to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        shell: bash
+        run: |
+          python3 -m pip install wheel twine==5.0.0 setuptools
+
+          twine upload --skip-existing ./wheelhouse/*.whl
