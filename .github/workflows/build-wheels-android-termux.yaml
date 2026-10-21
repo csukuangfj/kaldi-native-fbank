@@ -1,26 +1,77 @@
 name: build-wheels-android-termux
 
 # Builds Python wheels inside termux/termux-docker instead of with the Android
-# NDK.
+# NDK, so that the result imports in Termux. Cross-compiling with the NDK
+# toolchain produces binaries that cannot load there.
 #
-# Why: the NDK toolchain compiles C++ against the NDK libc++ (inline namespace
-# std::__ndk1). Termux links its own libc++ (inline namespace std::__1), so an
-# NDK-built extension cannot load there -- every "std::__ndk1::..." symbol is
-# undefined. These builds use Termux's clang/libc++, so the wheel imports in
-# Termux. The termux-docker images are native binaries per architecture, so
-# each ABI must run on a matching runner (an aarch64 image cannot exec on an
-# x86_64 runner -- "exec format error").
+# =============================================================================
+# WHAT MAKES THIS WORK -- please keep these intact.
+# =============================================================================
+# Reference: the csukuangfj/piper-phonemize v1.5.9 android wheels (same
+# termux-docker images, same clang) and sherpa-onnx
+# build-wheels-android-*.yaml. When something breaks, download one of those
+# released wheels and dump its ELF headers with readelf/pyelftools instead of
+# guessing -- that is what settled the two questions below.
 #
-# There is no auditwheel/delocate equivalent here, so the RPATH of the shipped
-# shared objects is set by hand with patchelf to match what auditwheel produces
-# for the manylinux wheels: the extension looks next to itself and in
-# kaldi_native_fbank/lib/ for libkaldi-native-fbank-core.so.
+# 1. THE OBJECTS USE THE NDK C++ RUNTIME, AND THAT IS CORRECT.
+#    The clang in these images targets Android, so the .so files use the
+#    NDK libc++ inline namespace "std::__ndk1" and record
+#        DT_NEEDED libc++_shared.so
+#    This is exactly what the piper-phonemize android wheels do. libc++
+#    _shared.so is NOT shipped in the wheel -- Termux provides it.
+#
+#    DO NOT "fix" this:
+#      - do not patchelf --replace-needed libc++_shared.so libc++.so
+#        Termux's libc++.so is the std::__1 build, so the module then dies with
+#        cannot locate symbol "_ZNSt6__ndk1...". Rewriting the name cannot fix
+#        a namespace mismatch.
+#      - installing the libc++ package in the build does not change it either.
+#
+# 2. RPATH MUST KEEP THE TERMUX LIB DIRECTORY.
+#    The dependency above is resolved by a RUNPATH the linker records during a
+#    plain cmake build:
+#        DT_RUNPATH = /data/data/com.termux/files/usr/lib:$ORIGIN
+#    patchelf --set-rpath REPLACES the entire RUNPATH, so any fixup must keep
+#    that directory or you get "dlopen failed: library libc++_shared.so not
+#    found". We set:
+#        extension : $ORIGIN:$ORIGIN/kaldi_native_fbank/lib:$PREFIX/lib
+#        core lib  : $ORIGIN:$PREFIX/lib
+#    $PREFIX/lib is the same directory piper-phonemize ships in DT_RUNPATH.
+#    The extra $ORIGIN/kaldi_native_fbank/lib is ours alone: our extension sits
+#    at the wheel root while libkaldi-native-fbank-core.so lives in
+#    kaldi_native_fbank/lib/. piper keeps all of its .so files in one directory
+#    and so needs no such entry.
+#
+# 3. THE CONTAINER SCRIPT IS PASSED AS A SINGLE-QUOTED STRING.
+#    The docker command hands the whole script to bash as one single-quoted
+#    argument, so the script must contain NO single quotes at all -- not even
+#    in comments. One apostrophe closes the string early and the script dies
+#    with "syntax error: unexpected end of file". Use double quotes inside.
+#    Do not spell out that opener in this comment: a literal copy of it makes
+#    grep and lint tooling mistake the comment for a real container script.
+#
+# 4. THERE IS NO AUDITWHEEL ON ANDROID.
+#    RPATH is therefore fixed up by hand below with patchelf, and the wheel is
+#    unzipped and re-zipped -- hence patchelf, zip and unzip in the apt list.
+#
+# 5. CONTAINER / RUNNER SETUP (piper-phonemize build-wheel-android.yaml).
+#    - the termux-docker images are native binaries per architecture: aarch64
+#      and arm run on ubuntu-24.04-arm, x86_64 and i686 on ubuntu-latest.
+#    - run the container with --user 0:0 and chmod -R a+w the workspace on the
+#      host first; pre-create build/ dist/ wheelhouse/ because the container
+#      cannot create directories here. Do not call sudo or su inside it.
+#    - apt list is pinned by what the two scripts below actually invoke.
+#
+# 6. THE SMOKE TEST RUNS IN THE SAME IMAGE.
+#    "cd /" gives a clean cwd -- termux has no writable /tmp. The script is
+#    mounted at /test so sys.path[0] is a directory holding only smoke_test.py,
+#    which means the installed wheel (not the source tree) is what gets
+#    imported.
 
 on:
   push:
     branches:
       - wheel
-      - wheel-win-arm64
     tags:
       - '*'
   workflow_dispatch:
@@ -71,9 +122,9 @@ jobs:
             apt install -y android-liblog || true
             apt install -y libandroid-dev || true
             apt install -y android-libandroid || true
-            # patchelf + zip/unzip are for the RPATH / DT_NEEDED fixups below;
-            # this mirrors sherpa-onnx build-wheels-android-*.yaml, which also
-            # unzips the wheel, patches the .so files and re-zips it.
+            # patchelf + zip/unzip are for the RPATH fixup below -- see point 4
+            # in the header. Same unzip / patch / re-zip step as sherpa-onnx
+            # build-wheels-android-*.yaml.
             apt install -y patchelf zip unzip
 
             pip install --upgrade pip setuptools wheel
