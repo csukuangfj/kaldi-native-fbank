@@ -34,6 +34,8 @@ def test_default():
     assert opts.raw_energy is True
     assert opts.htk_compat is False
     assert opts.use_log_fbank is True
+    assert opts.use_log_floor is True
+    assert opts.eps == 1.1920928955078125e-07  # FLT_EPSILON
     assert opts.use_power is True
 
 
@@ -53,6 +55,12 @@ def test_set_get():
 
     opts.use_log_fbank = False
     assert opts.use_log_fbank is False
+
+    opts.use_log_floor = False
+    assert opts.use_log_floor is False
+
+    opts.eps = 5.9604644775390625e-08
+    assert opts.eps == 5.9604644775390625e-08
 
     opts.use_power = False
     assert opts.use_power is False
@@ -147,11 +155,15 @@ def test_from_dict_full_and_as_dict():
     opts.htk_compat = True
     opts.mel_opts.num_bins = 80
     opts.frame_opts.samp_freq = 10
+    opts.use_log_floor = False
+    opts.eps = 5.9604644775390625e-08
 
     d = opts.as_dict()
     assert d["htk_compat"] is True
     assert d["mel_opts"]["num_bins"] == 80
     assert d["frame_opts"]["samp_freq"] == 10
+    assert d["use_log_floor"] is False
+    assert d["eps"] == 5.9604644775390625e-08
 
     mel_opts = knf.MelBanksOptions()
     mel_opts.num_bins = 80

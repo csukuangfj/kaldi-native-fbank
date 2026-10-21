@@ -20,6 +20,8 @@ class FbankOptions:
     raw_energy: bool
     htk_compat: bool
     use_log_fbank: bool
+    use_log_floor: bool
+    eps: float
     use_power: bool
 
     def __str__(self) -> str: ...

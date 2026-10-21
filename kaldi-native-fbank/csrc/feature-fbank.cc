@@ -96,10 +96,14 @@ void FbankComputer::Compute(float signal_raw_log_energy, float vtln_warp,
   mel_banks.Compute(signal_frame->data(), mel_energies);
 
   if (opts_.use_log_fbank) {
-    // Avoid log of zero (which should be prevented anyway by dithering).
+    // Guard against log(0). Kaldi clamps to a hard floor; NeMo uses an
+    // additive guard with eps = FLT_EPSILON / 2 (2^-24).
     for (int32_t i = 0; i != opts_.mel_opts.num_bins; ++i) {
-      auto t = std::max(mel_energies[i], std::numeric_limits<float>::epsilon());
-      mel_energies[i] = std::log(t);
+      if (opts_.use_log_floor) {
+        mel_energies[i] = std::log(std::max(mel_energies[i], opts_.eps));
+      } else {
+        mel_energies[i] = std::log(mel_energies[i] + opts_.eps);
+      }
     }
   }
 
