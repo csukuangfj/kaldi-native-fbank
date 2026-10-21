@@ -96,6 +96,13 @@ jobs:
               find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
               find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
 
+              # The clang in these images targets Android, so it links
+              # libc++_shared.so. Termux itself ships LLVM libc++ as libc++.so.
+              # Both are the same ABI (std::__1), so rewrite the dependency
+              # instead of bundling a second C++ runtime that would clash with
+              # the system one.
+              find "$tmpdir" -name "*.so" -print -exec patchelf --replace-needed libc++_shared.so libc++.so {} \;
+
               rm "$whl"
               (cd "$tmpdir" && zip -qr "$OLDPWD/$whl" .)
               rm -rf "$tmpdir"

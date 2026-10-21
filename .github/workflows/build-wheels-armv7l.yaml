@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - wheel
-      - wheel-win-arm64
     tags:
       - '*'
   workflow_dispatch:
@@ -37,7 +36,7 @@ jobs:
         uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_SKIP: "*-musllinux* *-manylinux_i686"
           CIBW_BUILD_VERBOSITY: 3
           CIBW_ARCHS_LINUX: armv7l
           # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags
@@ -49,7 +48,7 @@ jobs:
         uses: pypa/cibuildwheel@v4.3.2
         env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
-          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_SKIP: "*-musllinux* *-manylinux_i686"
           CIBW_BUILD_VERBOSITY: 3
           CIBW_ARCHS_LINUX: armv7l
           # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags

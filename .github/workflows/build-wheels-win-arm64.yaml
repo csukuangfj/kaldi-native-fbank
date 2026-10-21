@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - wheel
-      - wheel-win-arm64
     tags:
       - '*'
   workflow_dispatch:
