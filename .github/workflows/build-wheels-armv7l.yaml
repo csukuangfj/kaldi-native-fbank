@@ -1,0 +1,80 @@
+name: build-wheels-armv7l
+
+on:
+  push:
+    branches:
+      - wheel
+      - wheel-win-arm64
+    tags:
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: build-wheels-armv7l-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: ${{ matrix.python-version }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313", "cp314", "cp315"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
+      # for a list of versions
+
+      # CPython 3.8 is EOL and has been dropped upstream: the manylinux images
+      # removed the interpreter on 2026-05-07 and cibuildwheel 4.0 removed
+      # support for building it. The last combination that still works is
+      # cibuildwheel 3.x plus a pinned image from before that drop.
+      - name: Build wheels (cp38)
+        if: matrix.python-version == 'cp38'
+        uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_BUILD_VERBOSITY: 3
+          CIBW_ARCHS_LINUX: armv7l
+          # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags
+          CIBW_MANYLINUX_ARMV7L_IMAGE: quay.io/pypa/manylinux_2_35_armv7l:2025.11.29-1
+          CIBW_TEST_COMMAND: python3 {project}/scripts/smoke_test.py
+
+      - name: Build wheels
+        if: matrix.python-version != 'cp38'
+        uses: pypa/cibuildwheel@v4.3.2
+        env:
+          CIBW_BUILD: "${{ matrix.python-version}}-* "
+          CIBW_SKIP: "cp27-* cp35-* cp36-* *-win32 pp* *-musllinux* *-manylinux_i686"
+          CIBW_BUILD_VERBOSITY: 3
+          CIBW_ARCHS_LINUX: armv7l
+          # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags
+          CIBW_MANYLINUX_ARMV7L_IMAGE: quay.io/pypa/manylinux_2_35_armv7l
+          CIBW_TEST_COMMAND: python3 {project}/scripts/smoke_test.py
+
+      - name: Display wheels
+        shell: bash
+        run: |
+          ls -lh ./wheelhouse/
+
+          unzip -l ./wheelhouse/*.whl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-linux-armv7l-${{ matrix.python-version }}
+          path: ./wheelhouse/*.whl
+
+      - name: Publish wheels to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        shell: bash
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel twine==5.0.0 setuptools
+
+          twine upload --skip-existing ./wheelhouse/*.whl

@@ -1,0 +1,196 @@
+name: build-wheels-android-termux
+
+# Builds Python wheels inside termux/termux-docker instead of with the Android
+# NDK.
+#
+# Why: the NDK toolchain compiles C++ against the NDK libc++ (inline namespace
+# std::__ndk1). Termux links its own libc++ (inline namespace std::__1), so an
+# NDK-built extension cannot load there -- every "std::__ndk1::..." symbol is
+# undefined. These builds use Termux's clang/libc++, so the wheel imports in
+# Termux. The termux-docker images are native binaries per architecture, so
+# each ABI must run on a matching runner (an aarch64 image cannot exec on an
+# x86_64 runner -- "exec format error").
+#
+# There is no auditwheel/delocate equivalent here, so the RPATH of the shipped
+# shared objects is set by hand with patchelf to match what auditwheel produces
+# for the manylinux wheels: the extension looks next to itself and in
+# kaldi_native_fbank/lib/ for libkaldi-native-fbank-core.so.
+
+on:
+  push:
+    branches:
+      - wheel
+      - wheel-win-arm64
+    tags:
+      - '*'
+  workflow_dispatch:
+
+concurrency:
+  group: build-wheels-android-termux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.abi }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: aarch64
+            os: ubuntu-24.04-arm
+            plat: android_24_arm64_v8a
+          - abi: arm
+            os: ubuntu-24.04-arm
+            plat: android_24_armeabi_v7a
+          - abi: x86_64
+            os: ubuntu-latest
+            plat: android_24_x86_64
+          - abi: i686
+            os: ubuntu-latest
+            plat: android_24_x86
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pre-create the staging directories and make the workspace writable on
+      # the host first: the container runs as root and cannot create
+      # directories here (no permissions), and its `rm`/`cp` must be able to
+      # write back out.
+      - name: Build wheel with the Termux toolchain
+        shell: bash
+        run: |
+          mkdir -p dist
+          mkdir -p wheelhouse
+          chmod -R a+w "${{ github.workspace }}/"
+
+          docker run --rm \
+            --user 0:0 \
+            --volume ${{ github.workspace }}/:/work \
+            termux/termux-docker:${{ matrix.abi }} \
+          bash -c '
+            set -ex
+
+            apt update -y
+            apt install -y cmake make git python python-pip clang patchelf zip
+            apt install -y android-liblog || true
+            apt install -y libandroid-dev || true
+            apt install -y android-libandroid || true
+
+            pip install --upgrade pip setuptools wheel
+
+            cd /work
+            python3 setup.py bdist_wheel --plat-name=${{ matrix.plat }}
+
+            # Replicate what auditwheel does for the manylinux wheels: the
+            # extension lives at the wheel root and loads
+            # kaldi_native_fbank/lib/libkaldi-native-fbank-core.so next to it.
+            RPATH_EXT="\$ORIGIN:\$ORIGIN/kaldi_native_fbank/lib"
+            RPATH_LIB="\$ORIGIN"
+
+            for whl in dist/*.whl; do
+              echo "Patching RPATH in $whl"
+              tmpdir=$(mktemp -d)
+              unzip -q "$whl" -d "$tmpdir"
+
+              find "$tmpdir" -maxdepth 1 -name "*.so" -print -exec patchelf --set-rpath "$RPATH_EXT" {} \;
+              find "$tmpdir" -path "*/kaldi_native_fbank/lib/*.so" -print -exec patchelf --set-rpath "$RPATH_LIB" {} \;
+
+              rm "$whl"
+              (cd "$tmpdir" && zip -qr "$OLDPWD/$whl" .)
+              rm -rf "$tmpdir"
+            done
+
+            ls -lh dist
+          '
+
+      - name: Display wheels
+        shell: bash
+        run: |
+          sudo chown -R "$USER" ./dist
+          ls -lh ./dist/
+          unzip -l ./dist/*.whl
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-android-${{ matrix.abi }}
+          path: ./dist/*.whl
+
+  # Install the wheel we just built inside the matching Termux image and
+  # extract real features from it. The smoke test runs from outside the source
+  # tree so `import kaldi_native_fbank` resolves to site-packages.
+  test:
+    name: test ${{ matrix.abi }}
+    needs: [build]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: aarch64
+            os: ubuntu-24.04-arm
+          - abi: arm
+            os: ubuntu-24.04-arm
+          - abi: x86_64
+            os: ubuntu-latest
+          - abi: i686
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheel-android-${{ matrix.abi }}
+          path: /tmp/wheels
+
+      - name: Run smoke test
+        shell: bash
+        run: |
+          chmod -R a+w /tmp/wheels "${{ github.workspace }}/"
+
+          docker run --rm \
+            --user 0:0 \
+            --volume /tmp/wheels:/wheels \
+            --volume ${{ github.workspace }}/scripts/smoke_test.py:/test/smoke_test.py \
+            termux/termux-docker:${{ matrix.abi }} \
+          bash -c '
+            set -ex
+
+            apt update -y
+            apt install -y python python-pip clang libc++ patchelf
+            apt install -y python-numpy || true
+
+            pip install --upgrade pip setuptools wheel
+
+            pip install /wheels/*.whl
+
+            # termux has no writable /tmp; "/" is fine as a cwd outside the
+            # source tree.
+            cd /
+            python3 /test/smoke_test.py
+          '
+
+  publish:
+    name: publish to PyPI
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-android-*
+          path: /tmp/wheels
+          merge-multiple: true
+
+      - name: Publish wheels to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        shell: bash
+        run: |
+          ls -lh /tmp/wheels/
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install wheel twine==5.0.0 setuptools
+
+          twine upload --skip-existing /tmp/wheels/*.whl
