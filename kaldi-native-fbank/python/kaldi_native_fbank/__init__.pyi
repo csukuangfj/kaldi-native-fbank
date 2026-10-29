@@ -4,7 +4,7 @@ Type stubs for kaldi-native-fbank
 # Copyright (c) 2025 (authors: Bangwen He)
 """
 
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 import numpy as np
 
 class FbankOptions:
@@ -239,3 +239,45 @@ class Stft:
     def compute(self, input: List[float]) -> StftResult: ...
     def __call__(self, input: List[float]) -> StftResult: ...
 
+
+class NemoFbankOptions:
+    """Options for NeMo buffered filter banks. Frequencies are in Hz."""
+
+    def __init__(self) -> None: ...
+
+    samp_freq: float
+    frame_shift_ms: float
+    frame_length_ms: float
+    num_mel_bins: int
+    low_freq: float
+    high_freq: float
+    preemph_coeff: float
+    buffered_capacity: int
+
+    def __str__(self) -> str: ...
+    def as_dict(self) -> Dict[str, Union[float, int]]: ...
+    @staticmethod
+    def from_dict(d: Dict[str, Union[float, int]]) -> "NemoFbankOptions": ...
+
+class OnlineNemoFbank:
+    """Re-featurize requested windows; discard raw samples before each window."""
+
+    def __init__(self, opts: NemoFbankOptions) -> None: ...
+
+    @property
+    def dim(self) -> int: ...
+    @property
+    def frame_shift_in_seconds(self) -> float: ...
+    @property
+    def num_frames_ready(self) -> int: ...
+    @property
+    def num_trailing_samples(self) -> int: ...
+
+    def is_last_frame(self, frame: int) -> bool: ...
+    def accept_waveform(self, sampling_rate: float, waveform: List[float]) -> None: ...
+    def input_finished(self) -> None: ...
+    def get_frames(
+        self, frame_index: int, n: int, is_final: bool = False
+    ) -> Tuple[np.ndarray, int]:
+        """Return owned (n, dim) float32 frames and the start shift in samples."""
+        ...

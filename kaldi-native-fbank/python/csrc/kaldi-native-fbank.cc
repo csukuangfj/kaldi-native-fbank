@@ -25,6 +25,7 @@
 #include "kaldi-native-fbank/python/csrc/istft.h"
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 #include "kaldi-native-fbank/python/csrc/online-feature.h"
+#include "kaldi-native-fbank/python/csrc/online-nemo-fbank.h"
 #include "kaldi-native-fbank/python/csrc/rfft.h"
 #include "kaldi-native-fbank/python/csrc/stft.h"
 
@@ -42,6 +43,7 @@ PYBIND11_MODULE(_kaldi_native_fbank, m) {
   PybindIStft(&m);
 
   PybindOnlineFeature(m);
+  PybindOnlineNemoFbank(m);
 }
 
 }  // namespace knf
