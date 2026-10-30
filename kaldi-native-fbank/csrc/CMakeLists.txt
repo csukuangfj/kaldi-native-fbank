@@ -10,6 +10,7 @@ set(sources
   kaldi-math.cc
   mel-computations.cc
   online-feature.cc
+  online-nemo-fbank.cc
   rfft.cc
   stft.cc
   whisper-feature.cc
@@ -64,6 +65,7 @@ set(test_srcs
   # test-online-feature.cc
   test-fbank-eps.cc
   test-log.cc
+  test-online-nemo-fbank.cc
   test-rfft.cc
 )
 

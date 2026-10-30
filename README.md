@@ -107,3 +107,31 @@ if __name__ == "__main__":
     main()
     print("success")
 ```
+
+## NeMo buffered filter banks
+
+`NemoFbankOptions` and `OnlineNemoFbank` support models that re-featurize a
+moving audio buffer at every encoder step. They apply whole-buffer preemphasis,
+a centered zero-padded STFT with a symmetric Hann window, Slaney mel filters,
+and `log(mel + 2^-24)`. Samples use the range `[-1, 1]`; resampling and feature
+normalization are left to the caller.
+
+```python
+import kaldi_native_fbank as knf
+
+opts = knf.NemoFbankOptions()
+opts.num_mel_bins = 128
+opts.buffered_capacity = 672
+fbank = knf.OnlineNemoFbank(opts)
+fbank.accept_waveform(16000, samples)
+fbank.input_finished()
+frames, start_sample_offset = fbank.get_frames(0, fbank.num_frames_ready, True)
+```
+
+`get_frames()` returns owned NumPy data and discards raw samples before the
+requested window. Use absolute frame indices and retain enough left context in
+each request. A final request includes the partial hop. If its length equals
+`buffered_capacity`, the window shifts by that remainder to keep its sample
+length capped; `start_sample_offset` reports this shift. Shorter final windows
+keep their start and include the extra samples. `num_frames_ready` counts full
+hops only, and `num_trailing_samples` reports the remainder.
