@@ -3,6 +3,8 @@
  *           2014-2016  Johns Hopkins University (author: Daniel Povey)
  * Copyright 2024       Xiaomi Corporation (authors: Fangjun Kuang)
  *
+ * This file is copied/modified from kaldi/src/feat/feature-mfcc.h
+ *
  * See LICENSE for clarification regarding multiple authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +20,22 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-mfcc.h
+/**
+ * @file feature-mfcc.h
+ * @brief Kaldi-compatible MFCC features.
+ *
+ * This file is copied/modified from @kfile{src/feat/feature-mfcc.h}. It
+ * computes Mel-frequency cepstral coefficients, equal to kaldi's
+ * @kbin{compute-mfcc-feats} value-by-value for identical parameters.
+ *
+ * @code
+ *   knf::MfccOptions opts;
+ *   opts.frame_opts.samp_freq = 16000;
+ *   opts.num_ceps = 13;
+ *
+ *   knf::OnlineMfcc mfcc(opts);  // see online-feature.h
+ * @endcode
+ */
 
 #ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_MFCC_H_
 #define KALDI_NATIVE_FBANK_CSRC_FEATURE_MFCC_H_
@@ -35,38 +52,46 @@
 
 namespace knf {
 
-/// MfccOptions contains basic options for computing MFCC features.
-// (this class is copied from kaldi)
+/// @brief Options for computing MFCC features.
+///
+/// This is kaldi's MfccOptions (@kfile{src/feat/feature-mfcc.h}).
+///
+/// @see MfccComputer, FrameExtractionOptions, MelBanksOptions
 struct MfccOptions {
+  /// Options for frame extraction; see FrameExtractionOptions.
   FrameExtractionOptions frame_opts;
+
+  /// Options for the mel filter banks; see MelBanksOptions.
   MelBanksOptions mel_opts;
 
-  // Number of cepstra in MFCC computation (including C0)
+  /// Number of cepstra in MFCC computation (including C0), e.g. 13.
   int32_t num_ceps = 13;
 
-  // Use energy (not C0) in MFCC computation
+  /// Use energy (not C0) in MFCC computation.
   bool use_energy = true;
 
-  // Floor on energy (absolute, not relative) in MFCC
-  // computation. Only makes a difference if use_energy=true;
-  // only necessary if dither=0.0.
-  // Suggested values: 0.1 or 1.0
+  /// Floor on energy (absolute, not relative) in MFCC computation. Only
+  /// makes a difference if use_energy is true; only necessary if
+  /// frame_opts.dither is 0.0. Suggested values: 0.1 or 1.0.
   float energy_floor = 0.0;
 
-  // If true, compute energy before preemphasis and windowing
+  /// If true, compute energy before preemphasis and windowing.
   bool raw_energy = true;
 
-  // Constant that controls scaling of MFCCs
+  /// Constant that controls scaling of MFCCs (HTK liftering). If 0.0, no
+  /// liftering is done.
   float cepstral_lifter = 22.0;
 
-  // If true, put energy or C0 last and use a factor of
-  // sqrt(2) on C0.
-  // Warning: not sufficient to get HTK compatible features
-  // (need to change other parameters)
+  /// If true, put energy or C0 last and use a factor of sqrt(2) on C0.
+  ///
+  /// Warning: not sufficient to get HTK compatible features (need to change
+  /// other parameters).
   bool htk_compat = false;
 
+  /// Construct with the default options: 23 mel bins, 13 cepstra.
   MfccOptions() { mel_opts.num_bins = 23; }
 
+  /// Return the options as a string.
   std::string ToString() const {
     std::ostringstream os;
     os << "MfccOptions(";
@@ -84,24 +109,44 @@ struct MfccOptions {
   }
 };
 
+/// @brief Write the options to the stream, one option per line.
 std::ostream &operator<<(std::ostream &os, const MfccOptions &opts);
 
+/// @brief Class for computing MFCC features.
+///
+/// It computes one frame of features at a time from one frame of signal; see
+/// OnlineMfcc in online-feature.h for the streaming interface that feeds it.
+/// For more information, see @kfile{src/feat/feature-mfcc.h}.
+///
+/// @par Used by:
+/// OnlineMfcc = OnlineGenericBaseFeature<MfccComputer>
+/// (see online-feature.h) wraps this class for streaming use.
+///
+/// @see MfccOptions, MelBanks, ComputeLifterCoeffs, OnlineMfcc, ExtractWindow
 class MfccComputer {
  public:
+  /// Option type accepted by this computer.
   using Options = MfccOptions;
 
+  /// Construct from the given options.
   explicit MfccComputer(const MfccOptions &opts);
+
+  /// Destructor; frees the cached MelBanks.
   ~MfccComputer();
 
+  /// Return the dimension of the output features: num_ceps.
   int32_t Dim() const { return opts_.num_ceps; }
 
-  // if true, compute log_energy_pre_window but after dithering and dc removal
+  /// If true, compute log_energy_pre_window but after dithering and dc
+  /// removal.
   bool NeedRawLogEnergy() const { return opts_.use_energy && opts_.raw_energy; }
 
+  /// Return the frame-extraction options.
   const FrameExtractionOptions &GetFrameOptions() const {
     return opts_.frame_opts;
   }
 
+  /// Return the options this computer was constructed with.
   const MfccOptions &GetOptions() const { return opts_; }
 
   /**
@@ -129,20 +174,23 @@ class MfccComputer {
                std::vector<float> *signal_frame, float *feature);
 
  private:
+  /// Return the mel banks for the given VTLN factor, creating them on first
+  /// use.
   const MelBanks *GetMelBanks(float vtln_warp);
 
-  MfccOptions opts_;
-  float log_energy_floor_;
-  std::map<float, MelBanks *> mel_banks_;  // float is VTLN coefficient.
-  Rfft rfft_;
+  MfccOptions opts_;        ///< Options given to the constructor.
+  float log_energy_floor_;  ///< Floor for log energy, derived from opts_.
+  std::map<float, MelBanks *> mel_banks_;  ///< Mel banks per VTLN coefficient.
+  Rfft rfft_;  ///< FFT engine, of size opts_.PaddedWindowSize().
 
-  // temp buffer of size num_mel_bins = opts.mel_opts.num_bins
+  /// Temp buffer of size num_mel_bins = opts.mel_opts.num_bins.
   std::vector<float> mel_energies_;
 
-  // opts_.num_ceps
-  std::vector<float> lifter_coeffs_;
+  std::vector<float>
+      lifter_coeffs_;  ///< Liftering coeffs, size opts_.num_ceps.
 
-  // [num_ceps][num_mel_bins]
+  /// DCT matrix of shape [num_ceps][num_mel_bins], flattened in row major;
+  /// we left-multiply by it to get the cepstra.
   std::vector<float> dct_matrix_;
 };
 

@@ -1,7 +1,9 @@
 // kaldi-native-fbank/csrc/kaldi-math.cc
 //
+// Copyright 2009-2011  Microsoft Corporation;  Yanmin Qian;
+//                      Saarland University;  Jan Silovsky
 // Copyright (c)  2024  Brno University of Technology (authors: Karel Vesely)
-
+//
 // This file is an excerpt from kaldi/src/base/kaldi-math.cc
 
 #include "kaldi-native-fbank/csrc/kaldi-math.h"

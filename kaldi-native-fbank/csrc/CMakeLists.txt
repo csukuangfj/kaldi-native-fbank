@@ -1,6 +1,7 @@
 
 include_directories(${PROJECT_SOURCE_DIR})
 set(sources
+  feature-cmvn.cc
   feature-fbank.cc
   feature-functions.cc
   feature-mfcc.cc
@@ -38,6 +39,7 @@ if(NOT WIN32 AND KALDI_NATIVE_FBANK_ENABLE_CHECK)
   target_link_libraries(kaldi-native-fbank-core -pthread)
 endif()
 target_link_libraries(kaldi-native-fbank-core kissfft)
+target_link_libraries(kaldi-native-fbank-core Eigen3::Eigen)
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   add_executable(test-online-fbank test-online-fbank.cc)
@@ -63,6 +65,7 @@ endfunction()
 # please sort the source files alphabetically
 set(test_srcs
   # test-online-feature.cc
+  test-cmvn.cc
   test-fbank-eps.cc
   test-log.cc
   test-online-nemo-fbank.cc

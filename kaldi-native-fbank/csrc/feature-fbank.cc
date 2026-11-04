@@ -1,5 +1,9 @@
 /**
+ * Copyright 2009-2012  Karel Vesely
+ *                2016  Johns Hopkins University (author: Daniel Povey)
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/feature-fbank.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,7 +20,6 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-fbank.cc
 //
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 

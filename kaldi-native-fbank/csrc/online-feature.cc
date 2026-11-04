@@ -1,5 +1,10 @@
 /**
+ * Copyright    2013  Johns Hopkins University (author: Daniel Povey)
+ *              2014  Yanqing Sun, Junjie Wang,
+ *                    Daniel Povey, Korbinian Riedhammer
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/online-feature.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -15,9 +20,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// The content in this file is copied/modified from
-// This file is copied/modified from kaldi/src/feat/online-feature.cc
 
 #include "kaldi-native-fbank/csrc/online-feature.h"
 

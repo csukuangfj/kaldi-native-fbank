@@ -1,0 +1,8 @@
+/**
+ * @mainpage kaldi-native-fbank C++ API
+ *
+ * Kaldi-compatible feature extraction (MFCC/Fbank/CMVN/...).
+ * Headers live in kaldi-native-fbank/csrc/.
+ *
+ * See also the Python API documentation.
+ */

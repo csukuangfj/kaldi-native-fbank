@@ -19,6 +19,7 @@
 #include "kaldi-native-fbank/python/csrc/kaldi-native-fbank.h"
 
 #include "kaldi-native-fbank/python/csrc/feature-fbank.h"
+#include "kaldi-native-fbank/python/csrc/feature-cmvn.h"
 #include "kaldi-native-fbank/python/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/python/csrc/feature-raw-audio-samples.h"
 #include "kaldi-native-fbank/python/csrc/feature-window.h"
@@ -38,6 +39,7 @@ PYBIND11_MODULE(_kaldi_native_fbank, m) {
   PybindFeatureFbank(m);
   PybindFeatureRawAudioSamples(m);
   PybindFeatureMfcc(m);
+  PybindFeatureCmvn(m);
   PybindRfft(m);
   PybindStft(&m);
   PybindIStft(&m);

@@ -1,5 +1,8 @@
 /**
+ * Copyright 2009-2011  Phonexia s.r.o.;  Karel Vesely;  Microsoft Corporation
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/mel-computations.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -15,8 +18,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// This file is copied/modified from kaldi/src/feat/mel-computations.cc
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 

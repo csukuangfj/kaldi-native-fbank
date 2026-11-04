@@ -18,6 +18,8 @@
 
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 
+#include <vector>
+
 #include <algorithm>
 #include <string>
 
@@ -113,9 +115,7 @@ void PybindMelComputations(py::module &m) {  // NOLINT
       .def_static("mel_scale", &PyClass::MelScale, py::arg("hz"))
       .def_static("inverse_mel_scale_slaney", &PyClass::InverseMelScaleSlaney,
                   py::arg("mel"))
-      .def_static("mel_scale_slaney", &PyClass::MelScaleSlaney, py::arg("hz"))
-
-      ;
+      .def_static("mel_scale_slaney", &PyClass::MelScaleSlaney, py::arg("hz"));
 }
 
 }  // namespace knf

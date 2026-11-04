@@ -1,7 +1,10 @@
 // kaldi-native-fbank/csrc/feature-window.cc
 //
+// Copyright 2009-2011  Karel Vesely;  Petr Motlicek;  Microsoft Corporation
+//           2013-2016  Johns Hopkins University (author: Daniel Povey)
+//                2014  IMSL, PKU-HKUST (author: Wei Shi)
 // Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
-
+//
 // This file is copied/modified from kaldi/src/feat/feature-window.cc
 
 #include "kaldi-native-fbank/csrc/feature-window.h"

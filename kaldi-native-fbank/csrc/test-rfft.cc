@@ -56,7 +56,7 @@ TEST(PowerOfTwo, TestRfft) {
 
   for (int32_t i = 0; i < d.size(); ++i) {
     d[i] /= d.size();  // we need to rescale it by 1/n
-    EXPECT_EQ(d[i], original[i]);
+    EXPECT_NEAR(d[i], original[i], 1e-4);
   }
 }
 

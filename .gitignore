@@ -6,3 +6,21 @@ build-arm-linux-gnueabihf
 
 # vim
 *.sw?
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.sw?
+
+# misc build trees
+cmake-build-*/
+.venv/
+htmlcov/
+build-test
+# generated docs
+docs/build/
+
+# test caches
+.pytest_cache/
+*.pyc

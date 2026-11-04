@@ -1,0 +1,77 @@
+/**
+ * Copyright (c)  2026  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * See LICENSE for clarification regarding multiple authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "kaldi-native-fbank/python/csrc/feature-cmvn.h"
+
+#include <pybind11/eigen.h>
+
+#include <string>
+#include <vector>
+
+#include "kaldi-native-fbank/csrc/feature-cmvn.h"
+#include "kaldi-native-fbank/csrc/feature-matrix.h"
+
+namespace knf {
+
+void PybindFeatureCmvn(py::module &m) {  // NOLINT
+  py::class_<CmvnOptions>(m, "CmvnOptions")
+      .def(py::init<>())
+      .def_readwrite("norm_vars", &CmvnOptions::norm_vars)
+      .def_readwrite("reverse", &CmvnOptions::reverse)
+      .def("__str__", [](const CmvnOptions &opts) -> std::string {
+        std::ostringstream os;
+        os << "CmvnOptions(norm_vars=" << (opts.norm_vars ? "True" : "False")
+           << ", reverse=" << (opts.reverse ? "True" : "False") << ")";
+        return os.str();
+      });
+
+  m.def("compute_cmvn_stats", &ComputeCmvnStats, py::arg("feats"),
+        "Computes cmvn stats for a feature matrix (frames x dim). "
+        "Returns a 2 x (dim+1) double matrix: row0=[count,sums], "
+        "row1=[count,sumsq] (kaldi layout).");
+
+  m.def(
+      "apply_cmvn",
+      [](const MatrixD &stats, const CmvnOptions &opts, const MatrixF &feats)
+          -> MatrixF { return ApplyCmvn(stats, opts, feats); },
+      py::arg("stats"), py::arg("opts"), py::arg("feats"),
+      "Applies cmvn (kaldi ApplyCmvn semantics) and returns the "
+      "normalized copy.");
+
+  m.def(
+      "apply_cmvn_",
+      [](const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
+        ApplyCmvn(stats, opts, feats);
+      },
+      py::arg("stats"), py::arg("opts"), py::arg("feats"),
+      "In-place version of apply_cmvn.");
+
+  py::class_<CmvnAccumulator>(m, "CmvnAccumulator")
+      .def(py::init<int32_t>(), py::arg("dim") = 0)
+      .def("accumulate", &CmvnAccumulator::Accumulate, py::arg("feats"))
+      .def(
+          "add",
+          [](CmvnAccumulator &self, int32_t dim, std::vector<float> frame,
+             float weight) { self.Add(dim, frame.data(), weight); },
+          py::arg("dim"), py::arg("frame"), py::arg("weight") = 1.0f)
+      .def_property_readonly(
+          "stats",
+          [](const CmvnAccumulator &self) -> MatrixD { return self.Stats(); });
+}
+
+}  // namespace knf

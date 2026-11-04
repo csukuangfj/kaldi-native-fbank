@@ -134,4 +134,5 @@ endif()
 
 
 include(kissfft)
+include(eigen)
 add_subdirectory(kaldi-native-fbank)

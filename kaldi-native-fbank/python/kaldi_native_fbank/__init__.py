@@ -1,4 +1,9 @@
 from _kaldi_native_fbank import (
+    apply_cmvn,
+    apply_cmvn_,
+    CmvnAccumulator,
+    CmvnOptions,
+    compute_cmvn_stats,
     FbankOptions,
     FeatureWindowFunction,
     FrameExtractionOptions,

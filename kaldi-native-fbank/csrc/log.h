@@ -18,6 +18,16 @@
 
 // The content in this file is copied/modified from
 // https://github.com/k2-fsa/k2/blob/master/k2/csrc/log.h
+
+/**
+ * @file log.h
+ * @brief Logging and assertion macros.
+ *
+ * This file is copied/modified from
+ * https://github.com/k2-fsa/k2/blob/master/k2/csrc/log.h . It provides
+ * KNF_LOG() for leveled logging and KNF_CHECK_*() for assertions.
+ */
+
 #ifndef KALDI_NATIVE_FBANK_CSRC_LOG_H_
 #define KALDI_NATIVE_FBANK_CSRC_LOG_H_
 
@@ -37,22 +47,23 @@ constexpr bool kDisableDebug = true;
 constexpr bool kDisableDebug = false;
 #endif
 
+/// @brief Log severity levels, from the least to the most severe.
 enum class LogLevel {
-  kTrace = 0,
-  kDebug = 1,
-  kInfo = 2,
-  kWarning = 3,
-  kError = 4,
-  kFatal = 5,  // print message and abort the program
+  kTrace = 0,    ///< Very detailed debugging messages.
+  kDebug = 1,    ///< Debugging messages.
+  kInfo = 2,     ///< Informational messages.
+  kWarning = 3,  ///< Warnings.
+  kError = 4,    ///< Errors.
+  kFatal = 5,    ///< Print the message and abort the program.
 };
 
-// They are used in KNF_LOG(xxx), so their names
-// do not follow the google c++ code style
-//
-// You can use them in the following way:
-//
-//  KNF_LOG(TRACE) << "some message";
-//  KNF_LOG(DEBUG) << "some message";
+/// They are used in KNF_LOG(xxx), so their names
+/// do not follow the google c++ code style
+///
+/// You can use them in the following way:
+///
+///  KNF_LOG(TRACE) << "some message";
+///  KNF_LOG(DEBUG) << "some message";
 #ifndef _MSC_VER
 constexpr LogLevel TRACE = LogLevel::kTrace;
 constexpr LogLevel DEBUG = LogLevel::kDebug;
@@ -69,10 +80,14 @@ constexpr LogLevel FATAL = LogLevel::kFatal;
 #define FATAL LogLevel::kFatal
 #endif
 
+/// @brief Return the stack trace as a string; empty if unavailable.
 std::string GetStackTrace();
 
-/* Return the current log level.
+/**
+   Return the current log level.
 
+   The level is read once from the KNF_LOG_LEVEL environment variable
+   (TRACE, DEBUG, INFO, WARNING, ERROR, FATAL); the default is INFO.
 
    If the current log level is TRACE, then all logged messages are printed out.
 
@@ -114,6 +129,10 @@ inline LogLevel GetCurrentLogLevel() {
   return log_level;
 }
 
+/// @brief Return true if the KNF_ABORT environment variable is set.
+///
+/// If true, a failed KNF_CHECK aborts the process; otherwise it throws a
+/// std::runtime_error (which e.g. surfaces as a Python exception).
 inline bool EnableAbort() {
   static std::once_flag init_flag;
   static bool enable_abort = false;
@@ -123,8 +142,14 @@ inline bool EnableAbort() {
   return enable_abort;
 }
 
+/// @brief Prints one log message to stderr; used via the KNF_LOG() macro.
+///
+/// A message is streamed in via operator<< and is printed when the Logger
+/// object is destroyed. For FATAL, the destructor also prints a stack trace
+/// and then aborts the program or throws.
 class Logger {
  public:
+  /// Construct a logger that prints the message with the given severity.
   Logger(const char *filename, const char *func_name, uint32_t line_num,
          LogLevel level)
       : filename_(filename),
@@ -132,7 +157,6 @@ class Logger {
         line_num_(line_num),
         level_(level) {
     cur_level_ = GetCurrentLogLevel();
-    fprintf(stderr, "here\n");
     switch (level) {
       case TRACE:
         if (cur_level_ <= TRACE) fprintf(stderr, "[T] ");
@@ -159,6 +183,7 @@ class Logger {
     }
   }
 
+  /// Finish the message; abort/throw if the level is FATAL.
   ~Logger() noexcept(false) {
     static constexpr const char *kErrMsg = R"(
     Some bad things happened. Please read the above error messages and stack
@@ -196,6 +221,7 @@ class Logger {
     }
   }
 
+  /// Stream a bool to the message, as "true"/"false".
   const Logger &operator<<(bool b) const {
     if (cur_level_ <= level_) {
       fprintf(stderr, b ? "true" : "false");
@@ -203,48 +229,57 @@ class Logger {
     return *this;
   }
 
+  /// Stream an int8_t to the message.
   const Logger &operator<<(int8_t i) const {
     if (cur_level_ <= level_) fprintf(stderr, "%d", i);
     return *this;
   }
 
+  /// Stream a C string to the message.
   const Logger &operator<<(const char *s) const {
     if (cur_level_ <= level_) fprintf(stderr, "%s", s);
     return *this;
   }
 
+  /// Stream an int32_t to the message.
   const Logger &operator<<(int32_t i) const {
     if (cur_level_ <= level_) fprintf(stderr, "%d", i);
     return *this;
   }
 
+  /// Stream a uint32_t to the message.
   const Logger &operator<<(uint32_t i) const {
     if (cur_level_ <= level_) fprintf(stderr, "%u", i);
     return *this;
   }
 
+  /// Stream a uint64_t to the message.
   const Logger &operator<<(uint64_t i) const {
     if (cur_level_ <= level_)
       fprintf(stderr, "%llu", (long long unsigned int)i);  // NOLINT
     return *this;
   }
 
+  /// Stream an int64_t to the message.
   const Logger &operator<<(int64_t i) const {
     if (cur_level_ <= level_)
       fprintf(stderr, "%lli", (long long int)i);  // NOLINT
     return *this;
   }
 
+  /// Stream a float to the message.
   const Logger &operator<<(float f) const {
     if (cur_level_ <= level_) fprintf(stderr, "%f", f);
     return *this;
   }
 
+  /// Stream a double to the message.
   const Logger &operator<<(double d) const {
     if (cur_level_ <= level_) fprintf(stderr, "%f", d);
     return *this;
   }
 
+  /// Stream any type that overloads operator<< to the message.
   template <typename T>
   const Logger &operator<<(const T &t) const {
     // require T overloads operator<<
@@ -253,6 +288,7 @@ class Logger {
     return *this << os.str().c_str();
   }
 
+  /// Stream a nullptr to the message, as "(null)".
   // specialization to fix compile error: `stringstream << nullptr` is ambiguous
   const Logger &operator<<(const std::nullptr_t &null) const {
     if (cur_level_ <= level_) *this << "(null)";
@@ -260,21 +296,24 @@ class Logger {
   }
 
  private:
-  const char *filename_;
-  const char *func_name_;
-  uint32_t line_num_;
-  LogLevel level_;
-  LogLevel cur_level_;
+  const char *filename_;   ///< Source file of the log statement.
+  const char *func_name_;  ///< Function of the log statement.
+  uint32_t line_num_;      ///< Line number of the log statement.
+  LogLevel level_;         ///< Severity of this message.
+  LogLevel cur_level_;     ///< Severity threshold in effect.
 };
 #endif  // KNF_ENABLE_CHECK
 
+/// @brief Helper that swallows the stream expression of a failed check.
 class Voidifier {
  public:
 #if KNF_ENABLE_CHECK
+  /// Does nothing; exists for the `Voidifier() & Logger(...)` pattern.
   void operator&(const Logger &) const {}
 #endif
 };
 #if !defined(KNF_ENABLE_CHECK)
+/// Swallow streamed values when checks are disabled at compile time.
 template <typename T>
 const Voidifier &operator<<(const Voidifier &v, T &&) {
   return v;
@@ -283,6 +322,7 @@ const Voidifier &operator<<(const Voidifier &v, T &&) {
 
 }  // namespace knf
 
+/// @brief Compile-time assertion.
 #define KNF_STATIC_ASSERT(x) static_assert(x, "")
 
 #ifdef KNF_ENABLE_CHECK
@@ -290,12 +330,15 @@ const Voidifier &operator<<(const Voidifier &v, T &&) {
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__) || \
     defined(__PRETTY_FUNCTION__)
 // for clang and GCC
+/// Expands to the current function name.
 #define KNF_FUNC __PRETTY_FUNCTION__
 #else
 // for other compilers
+/// Expands to the current function name.
 #define KNF_FUNC __func__
 #endif
 
+/// Abort the program with an error message if `x` is false.
 #define KNF_CHECK(x)                                                  \
   (x) ? (void)0                                                       \
       : ::knf::Voidifier() &                                          \
@@ -318,6 +361,7 @@ const Voidifier &operator<<(const Voidifier &v, T &&) {
 //
 //  if `Foo()` or `Bar()` causes some side effects, e.g., changing some
 //  local static variables or global variables.
+/// Internal helper for the KNF_CHECK_* macros.
 #define _KNF_CHECK_OP(x, y, op)                                              \
   ((x)op(y)) ? (void)0                                                       \
              : ::knf::Voidifier() &                                          \
@@ -325,13 +369,21 @@ const Voidifier &operator<<(const Voidifier &v, T &&) {
                        << "Check failed: " << #x << " " << #op << " " << #y  \
                        << " (" << (x) << " vs. " << (y) << ") "
 
+/// Abort the program unless x == y.
 #define KNF_CHECK_EQ(x, y) _KNF_CHECK_OP(x, y, ==)
+/// Abort the program unless x != y.
 #define KNF_CHECK_NE(x, y) _KNF_CHECK_OP(x, y, !=)
+/// Abort the program unless x < y.
 #define KNF_CHECK_LT(x, y) _KNF_CHECK_OP(x, y, <)
+/// Abort the program unless x <= y.
 #define KNF_CHECK_LE(x, y) _KNF_CHECK_OP(x, y, <=)
+/// Abort the program unless x > y.
 #define KNF_CHECK_GT(x, y) _KNF_CHECK_OP(x, y, >)
+/// Abort the program unless x >= y.
 #define KNF_CHECK_GE(x, y) _KNF_CHECK_OP(x, y, >=)
 
+/// Print a message with the given level, e.g. KNF_LOG(INFO) << "hello";
+/// the level is one of TRACE, DEBUG, INFO, WARNING, ERROR, FATAL.
 #define KNF_LOG(x) ::knf::Logger(__FILE__, KNF_FUNC, __LINE__, ::knf::x)
 
 // ------------------------------------------------------------
@@ -340,20 +392,28 @@ const Voidifier &operator<<(const Voidifier &v, T &&) {
 // If you define the macro "-D NDEBUG" while compiling kaldi-native-fbank,
 // the following macros are in fact empty and does nothing.
 
+/// Like KNF_CHECK(x), but only active in debug builds.
 #define KNF_DCHECK(x) ::knf::kDisableDebug ? (void)0 : KNF_CHECK(x)
 
+/// Like KNF_CHECK_EQ(x, y), but only active in debug builds.
 #define KNF_DCHECK_EQ(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_EQ(x, y)
 
+/// Like KNF_CHECK_NE(x, y), but only active in debug builds.
 #define KNF_DCHECK_NE(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_NE(x, y)
 
+/// Like KNF_CHECK_LT(x, y), but only active in debug builds.
 #define KNF_DCHECK_LT(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_LT(x, y)
 
+/// Like KNF_CHECK_LE(x, y), but only active in debug builds.
 #define KNF_DCHECK_LE(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_LE(x, y)
 
+/// Like KNF_CHECK_GT(x, y), but only active in debug builds.
 #define KNF_DCHECK_GT(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_GT(x, y)
 
+/// Like KNF_CHECK_GE(x, y), but only active in debug builds.
 #define KNF_DCHECK_GE(x, y) ::knf::kDisableDebug ? (void)0 : KNF_CHECK_GE(x, y)
 
+/// Like KNF_LOG(x), but only active in debug builds.
 #define KNF_DLOG(x) \
   ::knf::kDisableDebug ? (void)0 : ::knf::Voidifier() & KNF_LOG(x)
 
