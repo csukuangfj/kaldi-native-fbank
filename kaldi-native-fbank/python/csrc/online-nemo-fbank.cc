@@ -74,7 +74,25 @@ NemoFbankOptions FromDict(py::dict dict) {
 void PybindOnlineNemoFbank(py::module &m) {  // NOLINT
   using Options = NemoFbankOptions;
   py::class_<Options>(m, "NemoFbankOptions")
-      .def(py::init<>())
+      .def(py::init([](float samp_freq, float frame_shift_ms,
+                       float frame_length_ms, int32_t num_mel_bins,
+                       float low_freq, float high_freq, float preemph_coeff,
+                       int32_t buffered_capacity) {
+             NemoFbankOptions opts;
+             opts.samp_freq = samp_freq;
+             opts.frame_shift_ms = frame_shift_ms;
+             opts.frame_length_ms = frame_length_ms;
+             opts.num_mel_bins = num_mel_bins;
+             opts.low_freq = low_freq;
+             opts.high_freq = high_freq;
+             opts.preemph_coeff = preemph_coeff;
+             opts.buffered_capacity = buffered_capacity;
+             return opts;
+           }),
+           py::arg("samp_freq") = 16000.0f, py::arg("frame_shift_ms") = 10.0f,
+           py::arg("frame_length_ms") = 25.0f, py::arg("num_mel_bins") = 80,
+           py::arg("low_freq") = 0, py::arg("high_freq") = 0,
+           py::arg("preemph_coeff") = 0.97f, py::arg("buffered_capacity") = 0)
       .def_readwrite("samp_freq", &Options::samp_freq)
       .def_readwrite("frame_shift_ms", &Options::frame_shift_ms)
       .def_readwrite("frame_length_ms", &Options::frame_length_ms)

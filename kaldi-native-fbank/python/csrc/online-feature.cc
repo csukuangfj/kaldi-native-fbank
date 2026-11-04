@@ -38,7 +38,9 @@ namespace knf {
 static void PybindWhisperFeatureOptions(py::module &m) {  // NOLINT
   using PyClass = WhisperFeatureOptions;
   py::class_<PyClass>(m, "WhisperFeatureOptions")
-      .def(py::init<>())
+      .def(py::init<const FrameExtractionOptions &, int32_t>(),
+           py::arg("frame_opts") = FrameExtractionOptions{},
+           py::arg("dim") = 80)
       .def_readwrite("frame_opts", &PyClass::frame_opts)
       .def_readwrite("dim", &PyClass::dim)
       .def("__str__",

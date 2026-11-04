@@ -18,10 +18,9 @@
 
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 
-#include <vector>
-
 #include <algorithm>
 #include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/python/csrc/utils.h"
@@ -33,7 +32,30 @@ namespace knf {
 static void PybindMelBanksOptions(py::module &m) {  // NOLINT
   using PyClass = MelBanksOptions;
   py::class_<PyClass>(m, "MelBanksOptions")
-      .def(py::init<>())
+      .def(py::init([](int32_t num_bins, float low_freq, float high_freq,
+                       float vtln_low, float vtln_high, bool debug_mel,
+                       bool htk_mode, bool is_librosa, const std::string &norm,
+                       bool use_slaney_mel_scale, bool floor_to_int_bin) {
+             MelBanksOptions opts;
+             opts.num_bins = num_bins;
+             opts.low_freq = low_freq;
+             opts.high_freq = high_freq;
+             opts.vtln_low = vtln_low;
+             opts.vtln_high = vtln_high;
+             opts.debug_mel = debug_mel;
+             opts.htk_mode = htk_mode;
+             opts.is_librosa = is_librosa;
+             opts.norm = norm;
+             opts.use_slaney_mel_scale = use_slaney_mel_scale;
+             opts.floor_to_int_bin = floor_to_int_bin;
+             return opts;
+           }),
+           py::arg("num_bins") = 25, py::arg("low_freq") = 20,
+           py::arg("high_freq") = 0, py::arg("vtln_low") = 100,
+           py::arg("vtln_high") = -500, py::arg("debug_mel") = false,
+           py::arg("htk_mode") = false, py::arg("is_librosa") = false,
+           py::arg("norm") = "slaney", py::arg("use_slaney_mel_scale") = true,
+           py::arg("floor_to_int_bin") = false)
       .def_readwrite("num_bins", &PyClass::num_bins)
       .def_readwrite("low_freq", &PyClass::low_freq)
       .def_readwrite("high_freq", &PyClass::high_freq)

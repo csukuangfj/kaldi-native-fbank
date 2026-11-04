@@ -10,7 +10,7 @@ import numpy as np
 class FbankOptions:
     """Filter bank feature extraction options."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, frame_opts: FrameExtractionOptions = ..., mel_opts: MelBanksOptions = ..., use_energy: bool = False, energy_floor: float = 0, raw_energy: bool = True, htk_compat: bool = False, use_log_fbank: bool = True, use_log_floor: bool = True, eps: float = 1.1920929e-07, use_power: bool = True) -> None: ...
 
     # Properties
     frame_opts: FrameExtractionOptions
@@ -32,7 +32,7 @@ class FbankOptions:
 class MfccOptions:
     """MFCC feature extraction options."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, frame_opts: FrameExtractionOptions = ..., mel_opts: MelBanksOptions = ..., num_ceps: int = 13, use_energy: bool = True, energy_floor: float = 0, raw_energy: bool = True, cepstral_lifter: float = 22, htk_compat: bool = False) -> None: ...
 
     # Properties
     frame_opts: FrameExtractionOptions
@@ -52,7 +52,7 @@ class MfccOptions:
 class FrameExtractionOptions:
     """Frame extraction options for audio processing."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, samp_freq: float = 16000, frame_shift_ms: float = 10, frame_length_ms: float = 25, dither: float = 0.00003, preemph_coeff: float = 0.97, remove_dc_offset: bool = True, window_type: str = "povey", round_to_power_of_two: bool = True, blackman_coeff: float = 0.42, snip_edges: bool = True) -> None: ...
 
     # Properties
     samp_freq: float
@@ -92,7 +92,7 @@ class IStft:
 class MelBanksOptions:
     """Mel filter bank options."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, num_bins: int = 25, low_freq: float = 20, high_freq: float = 0, vtln_low: float = 100, vtln_high: float = -500, debug_mel: bool = False, htk_mode: bool = False, is_librosa: bool = False, norm: str = "slaney", use_slaney_mel_scale: bool = True, floor_to_int_bin: bool = False) -> None: ...
 
     # Properties
     num_bins: int
@@ -113,7 +113,7 @@ class MelBanksOptions:
 class WhisperFeatureOptions:
     """Whisper feature extraction options."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, frame_opts: FrameExtractionOptions = ..., dim: int = 80) -> None: ...
 
     # Properties
     frame_opts: FrameExtractionOptions
@@ -243,7 +243,7 @@ class Stft:
 class NemoFbankOptions:
     """Options for NeMo buffered filter banks. Frequencies are in Hz."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, samp_freq: float = 16000, frame_shift_ms: float = 10, frame_length_ms: float = 25, num_mel_bins: int = 80, low_freq: float = 0, high_freq: float = 0, preemph_coeff: float = 0.97, buffered_capacity: int = 0) -> None: ...
 
     samp_freq: float
     frame_shift_ms: float
@@ -285,7 +285,7 @@ class OnlineNemoFbank:
 class CmvnOptions:
     """CMVN options (kaldi apply-cmvn flags)."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, norm_vars: bool = False, reverse: bool = False) -> None: ...
 
     # Properties
     norm_vars: bool
@@ -320,7 +320,7 @@ class MelBanks:
 class RawAudioSamplesOptions:
     """Raw audio samples framing options."""
 
-    def __init__(self) -> None: ...
+    def __init__(self, frame_opts: FrameExtractionOptions = ...) -> None: ...
 
     # Properties
     frame_opts: FrameExtractionOptions

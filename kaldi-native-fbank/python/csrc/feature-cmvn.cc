@@ -30,7 +30,13 @@ namespace knf {
 
 void PybindFeatureCmvn(py::module &m) {  // NOLINT
   py::class_<CmvnOptions>(m, "CmvnOptions")
-      .def(py::init<>())
+      .def(py::init([](bool norm_vars, bool reverse) {
+             CmvnOptions opts;
+             opts.norm_vars = norm_vars;
+             opts.reverse = reverse;
+             return opts;
+           }),
+           py::arg("norm_vars") = false, py::arg("reverse") = false)
       .def_readwrite("norm_vars", &CmvnOptions::norm_vars)
       .def_readwrite("reverse", &CmvnOptions::reverse)
       .def("__str__", [](const CmvnOptions &opts) -> std::string {
