@@ -18,8 +18,8 @@
 
 #include "kaldi-native-fbank/python/csrc/kaldi-native-fbank.h"
 
-#include "kaldi-native-fbank/python/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/python/csrc/feature-cmvn.h"
+#include "kaldi-native-fbank/python/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/python/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/python/csrc/feature-raw-audio-samples.h"
 #include "kaldi-native-fbank/python/csrc/feature-window.h"

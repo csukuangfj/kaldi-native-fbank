@@ -31,7 +31,9 @@ namespace knf {
 
 static void PybindMelBanksOptions(py::module &m) {  // NOLINT
   using PyClass = MelBanksOptions;
-  py::class_<PyClass>(m, "MelBanksOptions")
+  auto cls_MelBanksOptions = py::class_<PyClass>(m, "MelBanksOptions");
+  cls_MelBanksOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_MelBanksOptions
       .def(py::init([](int32_t num_bins, float low_freq, float high_freq,
                        float vtln_low, float vtln_high, bool debug_mel,
                        bool htk_mode, bool is_librosa, const std::string &norm,
@@ -50,11 +52,13 @@ static void PybindMelBanksOptions(py::module &m) {  // NOLINT
              opts.floor_to_int_bin = floor_to_int_bin;
              return opts;
            }),
-           py::arg("num_bins") = 25, py::arg("low_freq") = 20,
-           py::arg("high_freq") = 0, py::arg("vtln_low") = 100,
-           py::arg("vtln_high") = -500, py::arg("debug_mel") = false,
-           py::arg("htk_mode") = false, py::arg("is_librosa") = false,
-           py::arg("norm") = "slaney", py::arg("use_slaney_mel_scale") = true,
+           py::arg("num_bins") = 25, py::arg_v("low_freq", 20.0f, "20"),
+           py::arg_v("high_freq", 0.0f, "0"),
+           py::arg_v("vtln_low", 100.0f, "100"),
+           py::arg_v("vtln_high", -500.0f, "-500"),
+           py::arg("debug_mel") = false, py::arg("htk_mode") = false,
+           py::arg("is_librosa") = false, py::arg("norm") = "slaney",
+           py::arg("use_slaney_mel_scale") = true,
            py::arg("floor_to_int_bin") = false)
       .def_readwrite("num_bins", &PyClass::num_bins)
       .def_readwrite("low_freq", &PyClass::low_freq)
@@ -85,11 +89,14 @@ static void PybindMelBanksOptions(py::module &m) {  // NOLINT
 void PybindMelComputations(py::module &m) {  // NOLINT
   PybindMelBanksOptions(m);
   using PyClass = MelBanks;
-  py::class_<PyClass>(m, "MelBanks")
+  auto cls_MelBanks = py::class_<PyClass>(m, "MelBanks");
+  cls_MelBanks.attr("__module__") = "kaldi_native_fbank";
+  cls_MelBanks
       .def(py::init<const MelBanksOptions &, const FrameExtractionOptions &,
                     float>(),
-           py::arg("opts") = MelBanksOptions{},
-           py::arg("frame_opts") = FrameExtractionOptions{},
+           py::arg_v("opts", MelBanksOptions{}, "MelBanksOptions()"),
+           py::arg_v("frame_opts", FrameExtractionOptions{},
+                     "FrameExtractionOptions()"),
            py::arg("vtln_warp_factor") = 1.0,
            py::call_guard<py::gil_scoped_release>())
       .def("get_matrix",

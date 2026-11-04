@@ -28,8 +28,9 @@ namespace knf {
 
 void PybindIStft(py::module *m) {
   using PyClass = IStft;
-  py::class_<IStft>(*m, "IStft")
-      .def(py::init<const StftConfig &>(), py::arg("config"))
+  auto cls_IStft = py::class_<IStft>(*m, "IStft");
+  cls_IStft.attr("__module__") = "kaldi_native_fbank";
+  cls_IStft.def(py::init<const StftConfig &>(), py::arg("config"))
       .def("compute", &PyClass::Compute, py::arg("stft_result"),
            py::call_guard<py::gil_scoped_release>())
       .def("__call__", &PyClass::Compute, py::arg("stft_result"),

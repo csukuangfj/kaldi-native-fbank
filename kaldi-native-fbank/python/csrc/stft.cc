@@ -28,7 +28,9 @@ namespace knf {
 
 void PybindStftConfig(py::module *m) {
   using PyClass = StftConfig;
-  py::class_<PyClass>(*m, "StftConfig")
+  auto cls_StftConfig = py::class_<PyClass>(*m, "StftConfig");
+  cls_StftConfig.attr("__module__") = "kaldi_native_fbank";
+  cls_StftConfig
       .def(py::init<int32_t, int32_t, int32_t, const std::string &, bool,
                     const std::string &, bool, const std::vector<float> &>(),
            py::arg("n_fft"), py::arg("hop_length"), py::arg("win_length"),
@@ -48,7 +50,9 @@ void PybindStftConfig(py::module *m) {
 
 void PybindStftResult(py::module *m) {
   using PyClass = StftResult;
-  py::class_<PyClass>(*m, "StftResult")
+  auto cls_StftResult = py::class_<PyClass>(*m, "StftResult");
+  cls_StftResult.attr("__module__") = "kaldi_native_fbank";
+  cls_StftResult
       .def(py::init<const std::vector<float> &, const std::vector<float> &,
                     int32_t>(),
            py::arg("real"), py::arg("imag"), py::arg("num_frames"))
@@ -64,8 +68,9 @@ void PybindStft(py::module *m) {
   PybindStftConfig(m);
   PybindStftResult(m);
   using PyClass = Stft;
-  py::class_<Stft>(*m, "Stft")
-      .def(py::init<const StftConfig &>(), py::arg("config"))
+  auto cls_Stft = py::class_<Stft>(*m, "Stft");
+  cls_Stft.attr("__module__") = "kaldi_native_fbank";
+  cls_Stft.def(py::init<const StftConfig &>(), py::arg("config"))
       .def(
           "compute",
           [](Stft &self, const std::vector<float> &d) -> StftResult {

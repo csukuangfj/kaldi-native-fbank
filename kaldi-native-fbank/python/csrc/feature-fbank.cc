@@ -30,38 +30,43 @@ namespace knf {
 
 static void PybindFbankOptions(py::module &m) {  // NOLINT
   using PyClass = FbankOptions;
-  py::class_<PyClass>(m, "FbankOptions")
-      .def(
-          py::init([](const FrameExtractionOptions &frame_opts,
-                      const MelBanksOptions &mel_opts, bool use_energy,
-                      float energy_floor, bool raw_energy, bool htk_compat,
-                      bool use_log_fbank, bool use_log_floor, float eps,
-                      bool use_power) {
-            FbankOptions opts;
-            opts.frame_opts = frame_opts;
-            opts.mel_opts = mel_opts;
-            opts.use_energy = use_energy;
-            opts.energy_floor = energy_floor;
-            opts.raw_energy = raw_energy;
-            opts.htk_compat = htk_compat;
-            opts.use_log_fbank = use_log_fbank;
-            opts.use_log_floor = use_log_floor;
-            opts.eps = eps;
-            opts.use_power = use_power;
-            return opts;
-          }),
-          py::arg("frame_opts") = FrameExtractionOptions{},
-          py::arg("mel_opts") =
-              [] {
-                MelBanksOptions o;
-                o.num_bins = 23;
-                return o;
-              }(),
-          py::arg("use_energy") = false, py::arg("energy_floor") = 0.0f,
-          py::arg("raw_energy") = true, py::arg("htk_compat") = false,
-          py::arg("use_log_fbank") = true, py::arg("use_log_floor") = true,
-          py::arg("eps") = std::numeric_limits<float>::epsilon(),
-          py::arg("use_power") = true)
+  auto cls_FbankOptions = py::class_<PyClass>(m, "FbankOptions");
+  cls_FbankOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_FbankOptions
+      .def(py::init([](const FrameExtractionOptions &frame_opts,
+                       const MelBanksOptions &mel_opts, bool use_energy,
+                       float energy_floor, bool raw_energy, bool htk_compat,
+                       bool use_log_fbank, bool use_log_floor, float eps,
+                       bool use_power) {
+             FbankOptions opts;
+             opts.frame_opts = frame_opts;
+             opts.mel_opts = mel_opts;
+             opts.use_energy = use_energy;
+             opts.energy_floor = energy_floor;
+             opts.raw_energy = raw_energy;
+             opts.htk_compat = htk_compat;
+             opts.use_log_fbank = use_log_fbank;
+             opts.use_log_floor = use_log_floor;
+             opts.eps = eps;
+             opts.use_power = use_power;
+             return opts;
+           }),
+           py::arg_v("frame_opts", FrameExtractionOptions{},
+                     "FrameExtractionOptions()"),
+           py::arg_v(
+               "mel_opts",
+               [] {
+                 MelBanksOptions o;
+                 o.num_bins = 23;
+                 return o;
+               }(),
+               "MelBanksOptions(num_bins=23)"),
+           py::arg("use_energy") = false, py::arg_v("energy_floor", 0.0f, "0"),
+           py::arg("raw_energy") = true, py::arg("htk_compat") = false,
+           py::arg("use_log_fbank") = true, py::arg("use_log_floor") = true,
+           py::arg_v("eps", std::numeric_limits<float>::epsilon(),
+                     "1.1920929e-07"),
+           py::arg("use_power") = true)
       .def_readwrite("frame_opts", &PyClass::frame_opts)
       .def_readwrite("mel_opts", &PyClass::mel_opts)
       .def_readwrite("use_energy", &PyClass::use_energy)

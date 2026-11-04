@@ -27,18 +27,22 @@ namespace knf {
 
 static void PybindRawAudioSamplesOptions(py::module &m) {  // NOLINT
   using PyClass = RawAudioSamplesOptions;
-  py::class_<PyClass>(m, "RawAudioSamplesOptions")
-      .def(
-          py::init([](const FrameExtractionOptions &frame_opts) {
-            RawAudioSamplesOptions opts;
-            opts.frame_opts = frame_opts;
-            return opts;
-          }),
-          py::arg("frame_opts") =
-              [] {
-                RawAudioSamplesOptions o;
-                return o.frame_opts;
-              }())
+  auto cls_RawAudioSamplesOptions =
+      py::class_<PyClass>(m, "RawAudioSamplesOptions");
+  cls_RawAudioSamplesOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_RawAudioSamplesOptions
+      .def(py::init([](const FrameExtractionOptions &frame_opts) {
+             RawAudioSamplesOptions opts;
+             opts.frame_opts = frame_opts;
+             return opts;
+           }),
+           py::arg_v(
+               "frame_opts",
+               [] {
+                 RawAudioSamplesOptions o;
+                 return o.frame_opts;
+               }(),
+               "RawAudioSamplesOptions().frame_opts"))
       .def_readwrite("frame_opts", &PyClass::frame_opts)
       .def("__str__",
            [](const PyClass &self) -> std::string { return self.ToString(); })

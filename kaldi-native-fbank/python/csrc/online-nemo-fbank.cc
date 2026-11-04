@@ -73,7 +73,9 @@ NemoFbankOptions FromDict(py::dict dict) {
 
 void PybindOnlineNemoFbank(py::module &m) {  // NOLINT
   using Options = NemoFbankOptions;
-  py::class_<Options>(m, "NemoFbankOptions")
+  auto cls_NemoFbankOptions = py::class_<Options>(m, "NemoFbankOptions");
+  cls_NemoFbankOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_NemoFbankOptions
       .def(py::init([](float samp_freq, float frame_shift_ms,
                        float frame_length_ms, int32_t num_mel_bins,
                        float low_freq, float high_freq, float preemph_coeff,
@@ -92,7 +94,8 @@ void PybindOnlineNemoFbank(py::module &m) {  // NOLINT
            py::arg("samp_freq") = 16000.0f, py::arg("frame_shift_ms") = 10.0f,
            py::arg("frame_length_ms") = 25.0f, py::arg("num_mel_bins") = 80,
            py::arg("low_freq") = 0, py::arg("high_freq") = 0,
-           py::arg("preemph_coeff") = 0.97f, py::arg("buffered_capacity") = 0)
+           py::arg_v("preemph_coeff", 0.97f, "0.97"),
+           py::arg("buffered_capacity") = 0)
       .def_readwrite("samp_freq", &Options::samp_freq)
       .def_readwrite("frame_shift_ms", &Options::frame_shift_ms)
       .def_readwrite("frame_length_ms", &Options::frame_length_ms)
@@ -107,8 +110,9 @@ void PybindOnlineNemoFbank(py::module &m) {  // NOLINT
       .def(py::pickle(&AsDict, &FromDict));
 
   using PyClass = OnlineNemoFbank;
-  py::class_<PyClass>(m, "OnlineNemoFbank")
-      .def(py::init<const Options &>(), py::arg("opts"))
+  auto cls_OnlineNemoFbank = py::class_<PyClass>(m, "OnlineNemoFbank");
+  cls_OnlineNemoFbank.attr("__module__") = "kaldi_native_fbank";
+  cls_OnlineNemoFbank.def(py::init<const Options &>(), py::arg("opts"))
       .def_property_readonly("dim", &PyClass::Dim)
       .def_property_readonly("frame_shift_in_seconds",
                              &PyClass::FrameShiftInSeconds)

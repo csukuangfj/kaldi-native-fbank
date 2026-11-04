@@ -29,33 +29,38 @@ namespace knf {
 
 static void PybindMfccOptions(py::module &m) {  // NOLINT
   using PyClass = MfccOptions;
-  py::class_<PyClass>(m, "MfccOptions")
-      .def(
-          py::init([](const FrameExtractionOptions &frame_opts,
-                      const MelBanksOptions &mel_opts, int32_t num_ceps,
-                      bool use_energy, float energy_floor, bool raw_energy,
-                      float cepstral_lifter, bool htk_compat) {
-            MfccOptions opts;
-            opts.frame_opts = frame_opts;
-            opts.mel_opts = mel_opts;
-            opts.num_ceps = num_ceps;
-            opts.use_energy = use_energy;
-            opts.energy_floor = energy_floor;
-            opts.raw_energy = raw_energy;
-            opts.cepstral_lifter = cepstral_lifter;
-            opts.htk_compat = htk_compat;
-            return opts;
-          }),
-          py::arg("frame_opts") = FrameExtractionOptions{},
-          py::arg("mel_opts") =
-              [] {
-                MelBanksOptions o;
-                o.num_bins = 23;
-                return o;
-              }(),
-          py::arg("num_ceps") = 13, py::arg("use_energy") = true,
-          py::arg("energy_floor") = 0.0f, py::arg("raw_energy") = true,
-          py::arg("cepstral_lifter") = 22.0f, py::arg("htk_compat") = false)
+  auto cls_MfccOptions = py::class_<PyClass>(m, "MfccOptions");
+  cls_MfccOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_MfccOptions
+      .def(py::init([](const FrameExtractionOptions &frame_opts,
+                       const MelBanksOptions &mel_opts, int32_t num_ceps,
+                       bool use_energy, float energy_floor, bool raw_energy,
+                       float cepstral_lifter, bool htk_compat) {
+             MfccOptions opts;
+             opts.frame_opts = frame_opts;
+             opts.mel_opts = mel_opts;
+             opts.num_ceps = num_ceps;
+             opts.use_energy = use_energy;
+             opts.energy_floor = energy_floor;
+             opts.raw_energy = raw_energy;
+             opts.cepstral_lifter = cepstral_lifter;
+             opts.htk_compat = htk_compat;
+             return opts;
+           }),
+           py::arg_v("frame_opts", FrameExtractionOptions{},
+                     "FrameExtractionOptions()"),
+           py::arg_v(
+               "mel_opts",
+               [] {
+                 MelBanksOptions o;
+                 o.num_bins = 23;
+                 return o;
+               }(),
+               "MelBanksOptions(num_bins=23)"),
+           py::arg("num_ceps") = 13, py::arg("use_energy") = true,
+           py::arg_v("energy_floor", 0.0f, "0"), py::arg("raw_energy") = true,
+           py::arg_v("cepstral_lifter", 22.0f, "22"),
+           py::arg("htk_compat") = false)
       .def_readwrite("frame_opts", &PyClass::frame_opts)
       .def_readwrite("mel_opts", &PyClass::mel_opts)
       .def_readwrite("num_ceps", &PyClass::num_ceps)

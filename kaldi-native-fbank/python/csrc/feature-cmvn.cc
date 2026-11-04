@@ -29,7 +29,9 @@
 namespace knf {
 
 void PybindFeatureCmvn(py::module &m) {  // NOLINT
-  py::class_<CmvnOptions>(m, "CmvnOptions")
+  auto cls_CmvnOptions = py::class_<CmvnOptions>(m, "CmvnOptions");
+  cls_CmvnOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_CmvnOptions
       .def(py::init([](bool norm_vars, bool reverse) {
              CmvnOptions opts;
              opts.norm_vars = norm_vars;
@@ -69,8 +71,11 @@ void PybindFeatureCmvn(py::module &m) {  // NOLINT
       py::call_guard<py::gil_scoped_release>(),
       "In-place version of apply_cmvn.");
 
-  py::class_<CmvnAccumulator>(m, "CmvnAccumulator")
-      .def(py::init<int32_t>(), py::arg("dim") = 0)
+  auto cls_CmvnAccumulator = py::class_<CmvnAccumulator>(m, "CmvnAccumulator");
+
+  cls_CmvnAccumulator.attr("__module__") = "kaldi_native_fbank";
+
+  cls_CmvnAccumulator.def(py::init<int32_t>(), py::arg("dim") = 0)
       .def("accumulate", &CmvnAccumulator::Accumulate, py::arg("feats"),
            py::call_guard<py::gil_scoped_release>())
       .def(

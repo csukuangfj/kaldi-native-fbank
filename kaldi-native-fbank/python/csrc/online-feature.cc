@@ -37,9 +37,13 @@ namespace knf {
 
 static void PybindWhisperFeatureOptions(py::module &m) {  // NOLINT
   using PyClass = WhisperFeatureOptions;
-  py::class_<PyClass>(m, "WhisperFeatureOptions")
+  auto cls_WhisperFeatureOptions =
+      py::class_<PyClass>(m, "WhisperFeatureOptions");
+  cls_WhisperFeatureOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_WhisperFeatureOptions
       .def(py::init<const FrameExtractionOptions &, int32_t>(),
-           py::arg("frame_opts") = FrameExtractionOptions{},
+           py::arg_v("frame_opts", FrameExtractionOptions{},
+                     "FrameExtractionOptions()"),
            py::arg("dim") = 80)
       .def_readwrite("frame_opts", &PyClass::frame_opts)
       .def_readwrite("dim", &PyClass::dim)
@@ -64,8 +68,9 @@ void PybindOnlineFeatureTpl(py::module &m,  // NOLINT
                             const std::string &class_help_doc = "") {
   using PyClass = OnlineGenericBaseFeature<C>;
   using Options = typename C::Options;
-  py::class_<PyClass>(m, class_name.c_str(), class_help_doc.c_str())
-      .def(py::init<const Options &>(), py::arg("opts"))
+  auto cls = py::class_<PyClass>(m, class_name.c_str(), class_help_doc.c_str());
+  cls.attr("__module__") = "kaldi_native_fbank";
+  cls.def(py::init<const Options &>(), py::arg("opts"))
       .def_property_readonly("dim", &PyClass::Dim)
       .def_property_readonly("frame_shift_in_seconds",
                              &PyClass::FrameShiftInSeconds)

@@ -28,7 +28,10 @@ namespace knf {
 
 static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
   using PyClass = FrameExtractionOptions;
-  py::class_<PyClass>(m, "FrameExtractionOptions")
+  auto cls_FrameExtractionOptions =
+      py::class_<PyClass>(m, "FrameExtractionOptions");
+  cls_FrameExtractionOptions.attr("__module__") = "kaldi_native_fbank";
+  cls_FrameExtractionOptions
       .def(py::init([](float samp_freq, float frame_shift_ms,
                        float frame_length_ms, float dither, float preemph_coeff,
                        bool remove_dc_offset, const std::string &window_type,
@@ -48,11 +51,13 @@ static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
              return opts;
            }),
            py::arg("samp_freq") = 16000.0f, py::arg("frame_shift_ms") = 10.0f,
-           py::arg("frame_length_ms") = 25.0f, py::arg("dither") = 0.00003f,
-           py::arg("preemph_coeff") = 0.97f, py::arg("remove_dc_offset") = true,
-           py::arg("window_type") = "povey",
+           py::arg("frame_length_ms") = 25.0f,
+           py::arg_v("dither", 0.00003f, "0.00003"),
+           py::arg_v("preemph_coeff", 0.97f, "0.97"),
+           py::arg("remove_dc_offset") = true, py::arg("window_type") = "povey",
            py::arg("round_to_power_of_two") = true,
-           py::arg("blackman_coeff") = 0.42f, py::arg("snip_edges") = true)
+           py::arg_v("blackman_coeff", 0.42f, "0.42"),
+           py::arg("snip_edges") = true)
       .def_readwrite("samp_freq", &PyClass::samp_freq)
       .def_readwrite("frame_shift_ms", &PyClass::frame_shift_ms)
       .def_readwrite("frame_length_ms", &PyClass::frame_length_ms)
@@ -84,7 +89,10 @@ static void PybindFrameExtractionOptions(py::module &m) {  // NOLINT
 }
 static void PybindFeatureWindowFunction(py::module *m) {
   using PyClass = FeatureWindowFunction;
-  py::class_<PyClass>(*m, "FeatureWindowFunction")
+  auto cls_FeatureWindowFunction =
+      py::class_<PyClass>(*m, "FeatureWindowFunction");
+  cls_FeatureWindowFunction.attr("__module__") = "kaldi_native_fbank";
+  cls_FeatureWindowFunction
       .def(py::init<const FrameExtractionOptions &>(), py::arg("opts"))
       .def("apply",
            [](const PyClass &self,

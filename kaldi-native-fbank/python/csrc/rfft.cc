@@ -26,7 +26,9 @@
 namespace knf {
 
 void PybindRfft(py::module &m) {  // NOLINT
-  py::class_<Rfft>(m, "Rfft")
+  auto cls_Rfft = py::class_<Rfft>(m, "Rfft");
+  cls_Rfft.attr("__module__") = "kaldi_native_fbank";
+  cls_Rfft
       .def(py::init<int32_t, bool>(), py::arg("n"), py::arg("inverse") = false)
       .def("compute",
            [](Rfft &self, std::vector<float> &d) -> std::vector<float> {
