@@ -9,7 +9,6 @@
 #include <stdint.h>
 
 #include <cmath>
-#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -51,7 +50,8 @@ bool LoadNpy(const std::string &path, MatrixD *out) {
   auto sp = header.find("'shape': (") + 10;
   auto ep = header.find(')', sp);
   std::string shape = header.substr(sp, ep - sp);
-  int32_t rows = 0, cols = 0;
+  int32_t rows = 0;
+  int32_t cols = 0;
   if (shape.find(',') != std::string::npos) {
     rows = std::stoi(shape.substr(0, shape.find(',')));
     cols = std::stoi(shape.substr(shape.find(',') + 1));
@@ -78,9 +78,12 @@ bool LoadNpy(const std::string &path, MatrixD *out) {
 }
 
 std::string GoldenDir() {
-  std::filesystem::path p(__FILE__);
-  return (p.parent_path() / ".." / ".." / "tests" / "data" / "feat_golden")
-      .string();
+  // Locate tests/data/feat_golden relative to this source file, without
+  // std::filesystem (it is not portable).
+  std::string dir = __FILE__;
+  std::string::size_type pos = dir.find_last_of("/\\");
+  dir = (pos == std::string::npos) ? std::string(".") : dir.substr(0, pos);
+  return dir + "/../../tests/data/feat_golden";
 }
 
 }  // namespace
@@ -93,7 +96,8 @@ TEST(Cmvn, InitAndAccumulate) {
   EXPECT_EQ(stats.sum(), 0.0);
 
   // hand case: two frames [1 2 3], [3 4 5]
-  float f0[3] = {1, 2, 3}, f1[3] = {3, 4, 5};
+  float f0[3] = {1, 2, 3};
+  float f1[3] = {3, 4, 5};
   AccCmvnStats(f0, 3, 1.0f, &stats);
   AccCmvnStats(f1, 3, 1.0f, &stats);
   EXPECT_DOUBLE_EQ(stats(0, 3), 2.0);   // count

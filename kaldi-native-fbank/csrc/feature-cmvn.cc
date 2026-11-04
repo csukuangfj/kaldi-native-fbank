@@ -47,21 +47,27 @@ void AccCmvnStats(const float *feat, int32_t dim, float weight,
   }
   /// kaldi AccCmvnStats, same arithmetic:
   ///   count += weight; sum += x*w; sumsq += x*x*w
-  double *mean_ptr = stats->row(0).data();
-  double *var_ptr = stats->row(1).data();
-  double *count_ptr = mean_ptr + dim;
-  const float *feats_ptr = feat;
-  *count_ptr += weight;
-  for (; mean_ptr < count_ptr; mean_ptr++, var_ptr++, feats_ptr++) {
-    *mean_ptr += *feats_ptr * weight;
-    *var_ptr += *feats_ptr * *feats_ptr * weight;
-  }
+  Eigen::Map<const VectorF> x(feat, dim);
+  (*stats)(0, dim) += weight;
+  stats->row(0).head(dim) += x.cast<double>() * static_cast<double>(weight);
+  stats->row(1).head(dim) +=
+      x.cast<double>().array().square().matrix() * static_cast<double>(weight);
 }
 
 void AccCmvnStats(const MatrixF &feats, MatrixD *stats) {
-  for (int32_t i = 0; i < feats.rows(); ++i) {
-    AccCmvnStats(feats.row(i).data(), feats.cols(), 1.0f, stats);
+  if (stats == nullptr) {
+    throw std::invalid_argument("stats is null");
   }
+  int32_t dim = feats.cols();
+  if (stats->rows() != 2 || stats->cols() != dim + 1) {
+    throw std::invalid_argument("stats must be 2 x (dim+1)");
+  }
+  /// kaldi AccCmvnStats applied to every row at once:
+  ///   count += T; sum += colwise-sum; sumsq += colwise-sum-of-squares
+  (*stats)(0, dim) += static_cast<double>(feats.rows());
+  stats->row(0).head(dim) += feats.cast<double>().colwise().sum();
+  stats->row(1).head(dim) +=
+      feats.cast<double>().array().square().colwise().sum().matrix();
 }
 
 MatrixD ComputeCmvnStats(const MatrixF &feats) {
@@ -84,66 +90,47 @@ void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
                                 std::to_string(count));
   }
 
-  if (!opts.reverse) {
-    if (!opts.norm_vars) {
+  /// kaldi ApplyCmvn/ApplyCmvnReverse: x(d) <- x(d) * scale(d) + offset(d)
+  ///   forward, no var-norm: scale = 1,        offset = -1/count * mean_stats
+  ///   forward, var-norm:     scale = 1/sigma, offset = -(mean*scale)
+  ///   reverse:               scale = sigma|1, offset = mean
+  /// with mean = stats.row(0)/count, var = stats.row(1)/count - mean^2.
+  Eigen::RowVectorXd scale(dim);
+  Eigen::RowVectorXd offset(dim);
+
+  if (!opts.norm_vars) {
+    scale.setOnes();
+    if (!opts.reverse) {
       /// kaldi: offset = -1.0/count * mean_stats; feats += offset
-      VectorF offset(dim);
-      for (int32_t d = 0; d < dim; ++d) {
-        offset[d] = static_cast<float>(-1.0 / count * stats(0, d));
-      }
-      for (int32_t i = 0; i < feats->rows(); ++i) {
-        for (int32_t d = 0; d < dim; ++d) (*feats)(i, d) += offset[d];
-      }
-      return;
+      offset = (-1.0 / count) * stats.row(0).head(dim);
+    } else {
+      /// kaldi reverse: offset = mean
+      offset = stats.row(0).head(dim) / count;
     }
-    /// kaldi: x(d) <-- x(d) * scale + offset,  offset = -(mean*scale)
-    VectorF norm0(dim), norm1(dim);
-    for (int32_t d = 0; d < dim; ++d) {
-      double mean = stats(0, d) / count;
-      double var = (stats(1, d) / count) - mean * mean;
-      const double floor_val = 1.0e-20;
-      if (var < floor_val) {
-        fprintf(stderr, "WARNING: Flooring cepstral variance from %f to %f\n",
-                var, floor_val);
-        var = floor_val;
-      }
-      double scale = 1.0 / std::sqrt(var);
-      double offset = -(mean * scale);
-      norm0[d] = static_cast<float>(offset);
-      norm1[d] = static_cast<float>(scale);
+  } else {
+    Eigen::RowVectorXd mean = stats.row(0).head(dim) / count;
+    Eigen::RowVectorXd var =
+        stats.row(1).head(dim) / count - mean.array().square().matrix();
+    // kaldi floors the per-dim variance at 1e-20 (and warns).
+    if ((var.array() < 1.0e-20).any()) {
+      fprintf(stderr, "WARNING: Flooring cepstral variance to %e\n", 1.0e-20);
     }
-    for (int32_t i = 0; i < feats->rows(); ++i) {
-      for (int32_t d = 0; d < dim; ++d) {
-        (*feats)(i, d) = (*feats)(i, d) * norm1[d] + norm0[d];
-      }
+    var = var.cwiseMax(1.0e-20);
+    if (!opts.reverse) {
+      /// kaldi: scale = 1/sigma, offset = -(mean*scale)
+      scale = var.array().sqrt().inverse().matrix();
+      offset = -(mean.array() * scale.array()).matrix();
+    } else {
+      /// kaldi reverse: scale = sigma, offset = mean
+      scale = var.array().sqrt().matrix();
+      offset = mean;
     }
-    return;
   }
 
-  /// reverse: x(d) <-- x(d) * scale + offset with offset=mean,
-  // scale = (var_norm ? sqrt(var) : 1)
-  VectorF norm0(dim), norm1(dim);
-  for (int32_t d = 0; d < dim; ++d) {
-    double mean = stats(0, d) / count;
-    double scale = 1.0;
-    if (opts.norm_vars) {
-      double var = (stats(1, d) / count) - mean * mean;
-      const double floor_val = 1.0e-20;
-      if (var < floor_val) {
-        fprintf(stderr, "WARNING: Flooring cepstral variance from %f to %f\n",
-                var, floor_val);
-        var = floor_val;
-      }
-      scale = std::sqrt(var);
-    }
-    norm0[d] = static_cast<float>(mean);
-    norm1[d] = static_cast<float>(scale);
-  }
-  for (int32_t i = 0; i < feats->rows(); ++i) {
-    for (int32_t d = 0; d < dim; ++d) {
-      (*feats)(i, d) = (*feats)(i, d) * norm1[d] + norm0[d];
-    }
-  }
+  Eigen::RowVectorXf scale_f = scale.cast<float>();
+  Eigen::RowVectorXf offset_f = offset.cast<float>();
+  feats->array().rowwise() *= scale_f.array();
+  feats->array().rowwise() += offset_f.array();
 }
 
 MatrixF ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts,

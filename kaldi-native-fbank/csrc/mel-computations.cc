@@ -136,7 +136,8 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
   int32_t num_fft_bins = window_length_padded / 2;
   float nyquist = 0.5f * sample_freq;
 
-  float low_freq = opts.low_freq, high_freq;
+  float low_freq = opts.low_freq;
+  float high_freq;
   if (opts.high_freq > 0.0f) {
     high_freq = opts.high_freq;
   } else {
@@ -162,7 +163,8 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
   // spread out to the sides.
   float mel_freq_delta = (mel_high_freq - mel_low_freq) / (num_bins + 1);
 
-  float vtln_low = opts.vtln_low, vtln_high = opts.vtln_high;
+  float vtln_low = opts.vtln_low;
+  float vtln_high = opts.vtln_high;
   if (vtln_high < 0.0f) {
     vtln_high += nyquist;
   }
@@ -195,7 +197,8 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
     // nonzero where this mel bin is active.
     std::vector<float> this_bin(num_fft_bins);
 
-    int32_t first_index = -1, last_index = -1;
+    int32_t first_index = -1;
+    int32_t last_index = -1;
     for (int32_t i = 0; i < num_fft_bins; ++i) {
       float freq = (fft_bin_width * i);  // Center frequency of this fft
                                          // bin.
@@ -256,7 +259,8 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
   int32_t num_fft_bins = window_length_padded / 2;
   float nyquist = 0.5f * sample_freq;
 
-  float low_freq = opts.low_freq, high_freq;
+  float low_freq = opts.low_freq;
+  float high_freq;
   if (opts.high_freq > 0.0f) {
     high_freq = opts.high_freq;
   } else {
@@ -334,7 +338,8 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
     // from Kaldi.
     std::vector<float> this_bin(num_fft_bins + 1);
 
-    int32_t first_index = -1, last_index = -1;
+    int32_t first_index = -1;
+    int32_t last_index = -1;
     for (int32_t i = 0; i < num_fft_bins + 1; ++i) {
       float hz;  // Center frequency of this fft bin.
 
@@ -392,7 +397,8 @@ MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols)
   for (int32_t bin = 0; bin < num_rows; ++bin) {
     const float *this_bin = weights + bin * num_cols;
 
-    int32_t first_index = -1, last_index = -1;
+    int32_t first_index = -1;
+    int32_t last_index = -1;
 
     for (int32_t i = 0; i < num_cols; ++i) {
       if (this_bin[i] == 0) {

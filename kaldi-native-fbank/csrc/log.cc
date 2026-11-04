@@ -84,7 +84,8 @@ static std::string Demangle(const std::string &trace_name) {
   //
   // We want to extract the name e.g., '_ZN5kaldi13UnitTestErrorEv' and
   // demangle it info a readable name like kaldi::UnitTextError.
-  std::size_t begin, end;
+  std::size_t begin;
+  std::size_t end;
   if (!LocateSymbolRange(trace_name, &begin, &end)) {
     return trace_name;
   }
