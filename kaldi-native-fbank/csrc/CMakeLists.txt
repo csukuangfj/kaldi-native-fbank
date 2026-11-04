@@ -21,7 +21,7 @@ if(KALDI_NATIVE_FBANK_ENABLE_CHECK)
   list(APPEND sources log.cc)
 endif()
 
-add_library(kaldi-native-fbank-core ${sources})
+add_library(kaldi-native-fbank-core STATIC ${sources})
 if(KALDI_NATIVE_FBANK_ENABLE_CHECK)
   target_compile_definitions(kaldi-native-fbank-core PUBLIC KNF_ENABLE_CHECK=1)
 

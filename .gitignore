@@ -24,3 +24,9 @@ docs/build/
 # test caches
 .pytest_cache/
 *.pyc
+
+# built python module / shared libs
+*.so
+*.dylib
+*.dll
+path.sh

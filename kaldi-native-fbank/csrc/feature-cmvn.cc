@@ -77,8 +77,10 @@ MatrixD ComputeCmvnStats(const MatrixF &feats) {
   return stats;
 }
 
-void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
-  int32_t dim = feats->cols();
+namespace {
+void ApplyCmvnInPlace(const MatrixD &stats, const CmvnOptions &opts,
+                      Eigen::Ref<MatrixF> feats) {
+  int32_t dim = feats.cols();
   CheckStats(stats, dim);
   if (stats.rows() == 1 && opts.norm_vars) {
     throw std::invalid_argument(
@@ -129,14 +131,24 @@ void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
 
   Eigen::RowVectorXf scale_f = scale.cast<float>();
   Eigen::RowVectorXf offset_f = offset.cast<float>();
-  feats->array().rowwise() *= scale_f.array();
-  feats->array().rowwise() += offset_f.array();
+  feats.array().rowwise() *= scale_f.array();
+  feats.array().rowwise() += offset_f.array();
+}
+}  // namespace
+
+void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
+  ApplyCmvnInPlace(stats, opts, *feats);
+}
+
+void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts,
+               Eigen::Ref<MatrixF> feats) {
+  ApplyCmvnInPlace(stats, opts, feats);
 }
 
 MatrixF ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts,
                   const MatrixF &feats) {
   MatrixF ans = feats;
-  ApplyCmvn(stats, opts, &ans);
+  ApplyCmvnInPlace(stats, opts, ans);
   return ans;
 }
 

@@ -1,4 +1,4 @@
-from _kaldi_native_fbank import (
+from kaldi_native_fbank.lib._kaldi_native_fbank import (
     apply_cmvn,
     apply_cmvn_,
     CmvnAccumulator,

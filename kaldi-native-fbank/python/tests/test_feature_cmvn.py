@@ -80,6 +80,16 @@ class TestFeatureCmvn(unittest.TestCase):
         out = knf.apply_cmvn(stats, opts, feats)
         np.testing.assert_allclose(out, ref_out, rtol=1e-5, atol=1e-5)
 
+    def test_apply_cmvn_inplace(self):
+        feats = self._load("aishell3_typical", "mfcc.utt.npy").astype(np.float32)
+        stats = knf.compute_cmvn_stats(feats)
+        opts = knf.CmvnOptions()
+        expected = knf.apply_cmvn(stats, opts, feats)
+        got = feats.copy()
+        knf.apply_cmvn_(stats, opts, got)
+        self.assertFalse(np.allclose(got, feats))
+        np.testing.assert_allclose(got, expected, rtol=1e-5, atol=1e-5)
+
     def test_accumulator_matches_batch(self):
         feats = self._load("aishell3_typical", "mfcc.utt.npy").astype(np.float32)
         acc = knf.CmvnAccumulator()

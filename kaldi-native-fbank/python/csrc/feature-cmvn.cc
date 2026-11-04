@@ -41,29 +41,32 @@ void PybindFeatureCmvn(py::module &m) {  // NOLINT
       });
 
   m.def("compute_cmvn_stats", &ComputeCmvnStats, py::arg("feats"),
+        py::call_guard<py::gil_scoped_release>(),
         "Computes cmvn stats for a feature matrix (frames x dim). "
-        "Returns a 2 x (dim+1) double matrix: row0=[count,sums], "
-        "row1=[count,sumsq] (kaldi layout).");
+        "Returns a 2 x (dim+1) double matrix: row0=[sums, count], "
+        "row1=[sumsq, (unused)] (kaldi layout).");
 
   m.def(
       "apply_cmvn",
       [](const MatrixD &stats, const CmvnOptions &opts, const MatrixF &feats)
           -> MatrixF { return ApplyCmvn(stats, opts, feats); },
       py::arg("stats"), py::arg("opts"), py::arg("feats"),
+      py::call_guard<py::gil_scoped_release>(),
       "Applies cmvn (kaldi ApplyCmvn semantics) and returns the "
       "normalized copy.");
 
   m.def(
       "apply_cmvn_",
-      [](const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats) {
-        ApplyCmvn(stats, opts, feats);
-      },
+      [](const MatrixD &stats, const CmvnOptions &opts,
+         Eigen::Ref<MatrixF> feats) { ApplyCmvn(stats, opts, feats); },
       py::arg("stats"), py::arg("opts"), py::arg("feats"),
+      py::call_guard<py::gil_scoped_release>(),
       "In-place version of apply_cmvn.");
 
   py::class_<CmvnAccumulator>(m, "CmvnAccumulator")
       .def(py::init<int32_t>(), py::arg("dim") = 0)
-      .def("accumulate", &CmvnAccumulator::Accumulate, py::arg("feats"))
+      .def("accumulate", &CmvnAccumulator::Accumulate, py::arg("feats"),
+           py::call_guard<py::gil_scoped_release>())
       .def(
           "add",
           [](CmvnAccumulator &self, int32_t dim, std::vector<float> frame,

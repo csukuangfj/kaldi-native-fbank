@@ -196,6 +196,18 @@ MatrixD ComputeCmvnStats(const MatrixF &feats);
 void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts, MatrixF *feats);
 
 /**
+   @brief In-place variant taking a mutable Eigen view of the features.
+
+   Same semantics as the pointer version above. The view must already
+   have the right shape. It enables zero-copy application to a mapped
+   buffer (e.g. a numpy array via pybind11).
+
+   @see ApplyCmvn
+*/
+void ApplyCmvn(const MatrixD &stats, const CmvnOptions &opts,
+               Eigen::Ref<MatrixF> feats);
+
+/**
    @brief Convenience version of ApplyCmvn(): returns the normalized copy.
 
    Same semantics as the in-place ApplyCmvn() above, but `feats` is left
