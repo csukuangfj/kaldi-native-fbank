@@ -55,3 +55,13 @@ kaldi option                    python API
 ``--low-freq``/``--high-freq``  ``mel_opts.low_freq``/``high_freq``   
 ==============================  ======================================
 
+API reference
+-------------
+
+.. autoclass:: kaldi_native_fbank.FbankOptions
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.OnlineFbank
+   :members:
+   :special-members: __init__

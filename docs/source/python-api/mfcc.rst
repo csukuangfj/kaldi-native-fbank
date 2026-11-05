@@ -70,3 +70,14 @@ kaldi option                    python API
 With ``dither=0`` and identical parameters the output matches kaldi
 **value-by-value** (verified against :kaldi:`compute-mfcc-feats <src/featbin/compute-mfcc-feats.cc>` output; residual
 diff ~1e-4 at float rounding level).
+
+API reference
+-------------
+
+.. autoclass:: kaldi_native_fbank.MfccOptions
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.OnlineMfcc
+   :members:
+   :special-members: __init__

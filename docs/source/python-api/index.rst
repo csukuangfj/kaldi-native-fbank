@@ -4,9 +4,13 @@ Python API
 .. toctree::
    :maxdepth: 2
 
-   cmvn
-   mfcc
-   reference
    fbank
-   stft
+   mfcc
    whisper
+   nemo
+   raw-audio
+   window
+   mel
+   stft
+   cmvn
+   reference

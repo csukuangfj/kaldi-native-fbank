@@ -17,3 +17,26 @@ Short-time Fourier transform and its inverse
 Note: these are low-level signal-processing building blocks (as used inside
 kaldi's pitch tracker etc.); there is no direct kaldi *binary* counterpart —
 kaldi implements STFT inside feature extraction.
+
+API reference
+-------------
+
+.. autoclass:: kaldi_native_fbank.StftConfig
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.StftResult
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.Stft
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.IStft
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.Rfft
+   :members:
+   :special-members: __init__

@@ -230,6 +230,22 @@ The resulting ``cmvn_stats.scp``/``cmvn_feats.scp`` are ordinary kaldi scp
 files and can be consumed by kaldi binaries (e.g. ``apply-cmvn``, ``splice-feats``)
 unchanged.
 
+
+Full class/function documentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: kaldi_native_fbank.CmvnOptions
+   :members:
+   :special-members: __init__
+
+.. autoclass:: kaldi_native_fbank.CmvnAccumulator
+   :members:
+   :special-members: __init__
+
+.. autofunction:: kaldi_native_fbank.compute_cmvn_stats
+.. autofunction:: kaldi_native_fbank.apply_cmvn
+.. autofunction:: kaldi_native_fbank.apply_cmvn_
+
 Golden tests
 ------------
 

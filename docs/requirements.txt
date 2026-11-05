@@ -6,3 +6,4 @@ sphinxcontrib-youtube==1.1.0
 sphinx-tabs
 sphinx-copybutton
 breathe==5.1.0
+numpy

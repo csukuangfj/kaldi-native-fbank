@@ -7,6 +7,7 @@ on:
     paths:
       - 'docs/**'
       - 'kaldi-native-fbank/csrc/**'
+      - 'kaldi-native-fbank/python/**'
       - '.github/workflows/docs.yaml'
   pull_request:
     branches:
@@ -43,6 +44,13 @@ jobs:
         run: |
           python3 -m pip install -U pip
           python3 -m pip install -r docs/requirements.txt
+
+      - name: Build python module (autodoc imports it)
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
+            -DKALDI_NATIVE_FBANK_BUILD_TESTS=OFF \
+            -DPYTHON_EXECUTABLE=$(which python3)
+          cmake --build build -j2
 
       - name: Build HTML (sphinx + doxygen C++ API)
         run: |
