@@ -21,13 +21,13 @@
  */
 
 //
-#include "kaldi-native-fbank/csrc/feature-fbank.h"
-
 #include <algorithm>
 #include <limits>
 #include <utility>
 #include <vector>
+#include <stdexcept>
 
+#include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 

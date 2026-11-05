@@ -131,6 +131,11 @@ Three documentation layers, all must stay in sync:
    `kaldi_native_fbank/__init__.pyi` and `kaldi_native_fbank/lib/*.pyi`).
    Never hand-edit the generated stubs.
 
+## Git (hard rule)
+
+- **Never run `git commit` or `git push`** (or any other git write operation).
+  Only `git add` is allowed; the user reviews and commits/pushes themselves.
+
 ## Code style (hard rules)
 
 - **One declaration per statement**: `Type a; Type b;` — never `Type a, b;`

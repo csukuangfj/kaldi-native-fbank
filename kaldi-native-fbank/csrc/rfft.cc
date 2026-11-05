@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/csrc/rfft.h"
-
 #include <algorithm>
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
+#include "kaldi-native-fbank/csrc/rfft.h"
 #include "kaldi-native-fbank/csrc/macros.h"
 #include "kiss_fftr.h"  // NOLINT(build/include_subdir)
 

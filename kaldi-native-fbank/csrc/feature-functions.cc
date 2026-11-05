@@ -21,10 +21,10 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/csrc/feature-functions.h"
-
 #include <cstdint>
 #include <vector>
+
+#include "kaldi-native-fbank/csrc/feature-functions.h"
 
 namespace knf {
 

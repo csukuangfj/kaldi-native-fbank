@@ -21,8 +21,6 @@
  */
 
 //
-#include "kaldi-native-fbank/csrc/feature-mfcc.h"
-
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -31,6 +29,7 @@
 #include <utility>
 #include <vector>
 
+#include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"

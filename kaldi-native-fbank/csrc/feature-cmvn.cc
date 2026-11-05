@@ -10,13 +10,12 @@
 //
 // See ../../LICENSE for more information
 
-#include "kaldi-native-fbank/csrc/feature-cmvn.h"
-
 #include <cmath>
 #include <cstdio>
 #include <sstream>
 #include <stdexcept>
 
+#include "kaldi-native-fbank/csrc/feature-cmvn.h"
 #include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {

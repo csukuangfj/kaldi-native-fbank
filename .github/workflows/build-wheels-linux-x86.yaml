@@ -39,11 +39,23 @@ jobs:
         if: matrix.python-version == 'cp38'
         uses: pypa/cibuildwheel@v3.4.1
         env:
+          CIBW_BEFORE_ALL: echo "nameserver 8.8.8.8" > /etc/resolv.conf
+          CIBW_ENVIRONMENT: PIP_RETRIES=10 PIP_TIMEOUT=60
+        env:
           CIBW_BUILD: "${{ matrix.python-version}}-* "
           CIBW_SKIP: "cp27-* cp35-* cp36-* cp37-* *-win32 pp* *-musllinux*"
           CIBW_BUILD_VERBOSITY: 3
           CIBW_ARCHS: "i686"
           CIBW_MANYLINUX_I686_IMAGE: quay.io/pypa/${{ matrix.manylinux }}_i686:2026.05.07-1
+
+      # The manylinux2014 i686 container cannot resolve DNS on the hosted
+      # runners ("Name or service not known"); point it at a public resolver
+      # before the build and make pip more patient.
+      - name: Fix DNS inside the i686 container
+        shell: bash
+        run: |
+          echo 'CIBW_BEFORE_ALL=echo "nameserver 8.8.8.8" > /etc/resolv.conf' >> $GITHUB_ENV
+          echo 'CIBW_ENVIRONMENT=PIP_RETRIES=10 PIP_TIMEOUT=60' >> $GITHUB_ENV
 
       - name: Build wheels
         if: matrix.python-version != 'cp38'

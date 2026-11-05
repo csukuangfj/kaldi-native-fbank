@@ -16,14 +16,13 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/csrc/whisper-feature.h"
-
 #include <cmath>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
+#include "kaldi-native-fbank/csrc/whisper-feature.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #ifndef M_2PI

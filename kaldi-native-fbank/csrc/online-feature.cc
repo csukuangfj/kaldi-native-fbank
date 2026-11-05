@@ -21,13 +21,14 @@
  * limitations under the License.
  */
 
-#include "kaldi-native-fbank/csrc/online-feature.h"
-
 #include <algorithm>
 #include <cstddef>
 #include <utility>
 #include <vector>
+#include <stdexcept>
+#include <sstream>
 
+#include "kaldi-native-fbank/csrc/online-feature.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
 namespace knf {

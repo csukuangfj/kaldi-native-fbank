@@ -8,13 +8,13 @@
 //
 // See ../../LICENSE for more information
 
-#include "kaldi-native-fbank/csrc/feature-transform.h"
-
 #include <cstdint>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
 #include <vector>
+
+#include "kaldi-native-fbank/csrc/feature-transform.h"
 
 namespace knf {
 
@@ -175,8 +175,8 @@ MatrixF FeatureTransform::Apply(const MatrixF &feats) const {
     // transform-feats appends an implicit 1.0 to the input features).
     // One Eigen expression, evaluated once into the return value:
     //   Y = X * M[:, 0:dim]^T + 1 * b^T
-    return MatrixF((feats * mat_.leftCols(dim).transpose()).rowwise() +
-                   mat_.col(dim).transpose());
+    return (feats * mat_.leftCols(dim).transpose()).rowwise() +
+           mat_.col(dim).transpose();
   }
   std::ostringstream os;
   os << "FeatureTransform: transform has " << mat_.rows() << "x" << cols
