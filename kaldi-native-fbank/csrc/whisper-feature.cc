@@ -19,10 +19,12 @@
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 #include <cmath>
+#include <cstddef>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-#include "kaldi-native-fbank/csrc/log.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #ifndef M_2PI
@@ -53,8 +55,8 @@ static void dft(const std::vector<float> &in, std::vector<float> *out) {
 
     for (int32_t n = 0; n < N; ++n) {
       float angle = M_2PI_over_N * k * n;
-      re += in[n] * cos(angle);
-      im -= in[n] * sin(angle);
+      re += in[n] * cosf(angle);
+      im -= in[n] * sinf(angle);
     }
 
     (*out)[k * 2 + 0] = re;
@@ -107,8 +109,8 @@ static void fft(const std::vector<float> &in, std::vector<float> *out) {
   for (int32_t k = 0; k < N / 2; ++k) {
     float theta = M_2PI * k / N;
 
-    float re = cos(theta);
-    float im = -sin(theta);
+    float re = cosf(theta);
+    float im = -sinf(theta);
 
     float re_odd = odd_fft[2 * k + 0];
     float im_odd = odd_fft[2 * k + 1];
@@ -148,7 +150,10 @@ void WhisperFeatureComputer::Compute(float /*signal_raw_log_energy*/,
                                      float /*vtln_warp*/,
                                      std::vector<float> *signal_frame,
                                      float *feature) {
-  KNF_CHECK_EQ(signal_frame->size(), frame_opts_.PaddedWindowSize());
+  if (signal_frame->size() !=
+      static_cast<size_t>(opts_.frame_opts.PaddedWindowSize())) {
+    throw std::runtime_error("signal_frame has an unexpected size");
+  }
   // we have already applied window function to signal_frame before
   // calling this method
   std::vector<float> fft_out;

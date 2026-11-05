@@ -17,6 +17,9 @@
  */
 
 #include <cmath>
+#include <cstdint>
+#include <initializer_list>
+#include <string>
 #include <vector>
 
 #include "gtest/gtest.h"

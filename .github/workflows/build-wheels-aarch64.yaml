@@ -5,6 +5,7 @@ on:
     branches:
       - wheel
       - fix-wheel-2
+      - master
     tags:
       - '*'
   workflow_dispatch:

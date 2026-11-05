@@ -71,7 +71,8 @@ function is_source_code_file() {
 }
 
 function check_style() {
-  python3 $cpplint_src $1 || abort $1
+  # Silence vendored-cpplint DeprecationWarnings (sre_compile, codecs.open ...)
+  python3 -W ignore::DeprecationWarning $cpplint_src $1 || abort $1
 }
 
 function check_last_commit() {

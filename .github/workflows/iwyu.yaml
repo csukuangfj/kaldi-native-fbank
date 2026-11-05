@@ -41,10 +41,8 @@ jobs:
         shell: bash
         run: |
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main'
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo apt update
-          sudo apt install -y libclang-17-dev clang-17 libc++-17-dev
+          sudo apt-get update
+          sudo apt-get install -y libclang-17-dev clang-17 libc++-17-dev
 
       - name: Display llvm
         shell: bash
@@ -112,7 +110,8 @@ jobs:
       - name: Run iwyu_tool.py
         shell: bash
         run: |
-          python3 /tmp/iwyu-install/bin/iwyu_tool.py -p build/ -j2 | tee iwyu-output.txt
+          python3 /tmp/iwyu-install/bin/iwyu_tool.py -p build/ -j2 -- \
+            -Xiwyu --mapping_file="$PWD/.github/scripts/iwyu-mappings.imp" | tee iwyu-output.txt
 
       - name: Filter IWYU output
         shell: bash
@@ -150,18 +149,33 @@ jobs:
         run: |
           git status
 
-          git diff
-          git diff > a.diff
-          # Download a.diff
-          # Run
+          # If there are changes that need to be applied, dump them to the log
+          # and save them to a.diff (uploaded as an artifact by the next step).
+          # a.diff is only created when a diff exists.  To apply the changes
+          # locally, download the artifact and run:
           #   git apply a.diff
+          if git diff --quiet; then
+            echo "include-what-you-use: no changes needed"
+          else
+            git diff | tee a.diff
+            echo "Apply the changes above locally with: git apply a.diff"
+          fi
 
-      - name: Upload IWYU output
+      - name: Upload IWYU diff
+        if: hashFiles('a.diff') != ''
         uses: actions/upload-artifact@v4
         with:
           name: diff
           path: |
             a.diff
+
+      - name: Fail if include changes are needed
+        shell: bash
+        run: |
+          if [ -f a.diff ]; then
+            echo "::error::include-what-you-use wants include changes. Download the 'diff' artifact and apply it locally with 'git apply a.diff'."
+            exit 1
+          fi
 
       # https://github.com/stefanzweifel/git-auto-commit-action
       - uses: stefanzweifel/git-auto-commit-action@v5

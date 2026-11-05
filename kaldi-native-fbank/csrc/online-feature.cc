@@ -1,5 +1,10 @@
 /**
+ * Copyright    2013  Johns Hopkins University (author: Daniel Povey)
+ *              2014  Yanqing Sun, Junjie Wang,
+ *                    Daniel Povey, Korbinian Riedhammer
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/online-feature.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,33 +21,31 @@
  * limitations under the License.
  */
 
-// The content in this file is copied/modified from
-// This file is copied/modified from kaldi/src/feat/online-feature.cc
-
 #include "kaldi-native-fbank/csrc/online-feature.h"
 
 #include <algorithm>
 #include <cstddef>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
 RecyclingVector::RecyclingVector(int32_t items_to_hold)
-    : items_to_hold_(items_to_hold == 0 ? -1 : items_to_hold),
-      first_available_index_(0) {}
+    : items_to_hold_(items_to_hold == 0 ? -1 : items_to_hold) {}
 
 const float *RecyclingVector::At(int32_t index) const {
   if (index < first_available_index_) {
-    KNF_LOG(FATAL) << "Attempted to retrieve feature vector that was "
-                      "already removed by the RecyclingVector (index = "
-                   << index << "; "
-                   << "first_available_index = " << first_available_index_
-                   << "; "
-                   << "size = " << Size() << ")";
+    std::ostringstream os;
+    os << "Attempted to retrieve feature vector that was already removed by "
+       << "the RecyclingVector (index = " << index
+       << "; first_available_index = " << first_available_index_
+       << "; size = " << Size() << ")";
+    throw std::runtime_error(os.str());
   }
   // 'at' does size checking.
   return items_.at(index - first_available_index_).data();
@@ -72,10 +75,7 @@ void RecyclingVector::Pop(int32_t n) {
 template <class C>
 OnlineGenericBaseFeature<C>::OnlineGenericBaseFeature(
     const typename C::Options &opts)
-    : computer_(opts),
-      window_function_(computer_.GetFrameOptions()),
-      input_finished_(false),
-      waveform_offset_(0) {}
+    : computer_(opts), window_function_(computer_.GetFrameOptions()) {}
 
 template <class C>
 void OnlineGenericBaseFeature<C>::AcceptWaveform(float sampling_rate,
@@ -86,10 +86,13 @@ void OnlineGenericBaseFeature<C>::AcceptWaveform(float sampling_rate,
   }
 
   if (input_finished_) {
-    KNF_LOG(FATAL) << "AcceptWaveform called after InputFinished() was called.";
+    throw std::runtime_error(
+        "AcceptWaveform called after InputFinished() was called.");
   }
 
-  KNF_CHECK_EQ(sampling_rate, computer_.GetFrameOptions().samp_freq);
+  if (sampling_rate != computer_.GetFrameOptions().samp_freq) {
+    throw std::invalid_argument("sampling_rate does not match the options");
+  }
 
   waveform_remainder_.insert(waveform_remainder_.end(), waveform, waveform + n);
 
@@ -113,7 +116,9 @@ void OnlineGenericBaseFeature<C>::ComputeFeatures() {
   int32_t num_frames_new =
       NumFrames(num_samples_total, frame_opts, input_finished_);
 
-  KNF_CHECK_GE(num_frames_new, num_frames_old);
+  if (num_frames_new < num_frames_old) {
+    throw std::runtime_error("the number of frames decreased");
+  }
 
   // note: this online feature-extraction code does not support VTLN.
   float vtln_warp = 1.0;

@@ -1,5 +1,9 @@
 /**
+ * Copyright 2009-2012  Karel Vesely
+ *                2016  Johns Hopkins University (author: Daniel Povey)
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/feature-fbank.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,18 +20,19 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-fbank.cc
 //
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
 #include <limits>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -48,8 +53,9 @@ FbankComputer::FbankComputer(const FbankOptions &opts)
 }
 
 FbankComputer::~FbankComputer() {
-  for (auto iter = mel_banks_.begin(); iter != mel_banks_.end(); ++iter)
-    delete iter->second;
+  for (auto &kv : mel_banks_) {
+    delete kv.second;
+  }
 }
 
 const MelBanks *FbankComputer::GetMelBanks(float vtln_warp) {
@@ -70,7 +76,10 @@ void FbankComputer::Compute(float signal_raw_log_energy, float vtln_warp,
                             std::vector<float> *signal_frame, float *feature) {
   const MelBanks &mel_banks = *(GetMelBanks(vtln_warp));
 
-  KNF_CHECK_EQ(signal_frame->size(), opts_.frame_opts.PaddedWindowSize());
+  if (signal_frame->size() !=
+      static_cast<size_t>(opts_.frame_opts.PaddedWindowSize())) {
+    throw std::runtime_error("signal_frame has an unexpected size");
+  }
 
   // Compute energy after window function (not the raw one).
   if (opts_.use_energy && !opts_.raw_energy) {

@@ -1,11 +1,22 @@
 # This file is from
 # https://github.com/acts-project/acts/blob/main/CI/iwyu/filter.yaml
 remove_lines:
+  # <new>/<type_traits> uses only come from instantiated Eigen/gtest template
+  # code, never from project sources directly
+  - "^#include <new>"
+  - "^#include <type_traits>"
+  # Never remove these: <mutex> is used only on platforms that define
+  # _POSIX_THREAD_SAFE_FUNCTIONS (termux/bionic does; the Ubuntu IWYU run
+  # sees the other branch), and kaldi-math.h carries the M_PI/M_2PI/M_SQRT2
+  # fallback defines that MSVC needs (IWYU does not track macros).
+  - "^- #include <mutex>"
+  - "^- #include \"kaldi-native-fbank/csrc/kaldi-math.h\""
   # ignore pybind11
   - "^(- )?#include <pybind11/"
   - "^(- )?#include [<\"]pybind11/"
-  # ignore python
+  # ignore python C-API headers (pybind11 pulls them in transitively)
   - "^#include <abstract.h>"
+  - "^#include <ceval.h>"
   - "^#include <floatobject.h>"
   - "^#include <longobject.h>"
   - "^#include <pyerrors.h>"
@@ -18,6 +29,12 @@ replace_lines:
   - "^#include <unistd\\.h>": "#include <cunistd>"
   - "^#include <stdint\\.h>": "#include <cstdint>"
   - "^#include <stdlib.h>": "#include <cstdlib>"
+  # non-portable GCC internal (libstdc++ home of std::abs); <cmath> is the
+  # public header (also enforced by .github/scripts/iwyu-mappings.imp)
+  - "^#include <bits/std_abs\\.h>": "#include <cmath>"
+  # Eigen plugin .inc files are not standalone-includable; "Eigen/Core"
+  # publishes their API (also enforced by .github/scripts/iwyu-mappings.imp)
+  - "^#include \"Eigen/src/plugins/.*\\.inc\"": "#include \"Eigen/Core\""
 
 ignore_files:
   - ".*_deps/"

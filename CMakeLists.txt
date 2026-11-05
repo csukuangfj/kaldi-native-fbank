@@ -1,5 +1,5 @@
 if (CMAKE_VERSION VERSION_GREATER_EQUAL "4.0.0")
-  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
 endif()
 
 if("x${CMAKE_SOURCE_DIR}" STREQUAL "x${CMAKE_BINARY_DIR}")
@@ -25,11 +25,17 @@ if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)
 endif()
 
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
-set(KALDI_NATIVE_FBANK_VERSION "1.22.5")
+# Export compile_commands.json for clang-tidy.  Only do this when we are
+# the top-level project; as a sub-project the parent decides.
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "" FORCE)
+endif()
+
+set(KALDI_NATIVE_FBANK_VERSION "1.23.0")
 
 # Disable warning about
 #
@@ -79,16 +85,13 @@ message(STATUS "BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 
 option(KALDI_NATIVE_FBANK_BUILD_TESTS "Whether to build tests or not" ${_BUILD_TESTS})
 option(KALDI_NATIVE_FBANK_BUILD_PYTHON "Whether to build Python extension" ${_BUILD_PYTHON})
-option(KALDI_NATIVE_FBANK_ENABLE_CHECK "Whether to build with log" OFF)
 
 message(STATUS "KALDI_NATIVE_FBANK_BUILD_TESTS: ${KALDI_NATIVE_FBANK_BUILD_TESTS}")
 message(STATUS "KALDI_NATIVE_FBANK_BUILD_PYTHON: ${KALDI_NATIVE_FBANK_BUILD_PYTHON}")
-message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-message(STATUS "KALDI_NATIVE_FBANK_ENABLE_CHECK: ${KALDI_NATIVE_FBANK_ENABLE_CHECK}")
 
 if(WIN32)
   add_definitions(-DNOMINMAX) # Otherwise, std::max() and std::min() won't work
@@ -134,4 +137,5 @@ endif()
 
 
 include(kissfft)
+include(eigen)
 add_subdirectory(kaldi-native-fbank)

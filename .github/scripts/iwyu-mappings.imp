@@ -1,0 +1,21 @@
+# IWYU mapping file for kaldi-native-fbank.
+#
+# Passed to include-what-you-use via:
+#   iwyu_tool.py ... -- -Xiwyu --mapping_file=.github/scripts/iwyu-mappings.imp
+#
+# Each "include" mapping redirects IWYU from a private implementation header
+# to the public header users should include instead, so IWYU never suggests
+# the private header.  See the IWYU mapping-file documentation:
+# https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md
+
+[
+  # libstdc++ implements std::abs in <bits/std_abs.h>; the portable public
+  # header is <cmath>.  <bits/...> only exists with GCC's libstdc++, so it
+  # must never be suggested (macOS libc++ and MSVC builds would break).
+  { include: ["<bits/std_abs.h>", "private", "<cmath>", "public"] },
+
+  # Eigen plugin .inc files (e.g. ArrayCwiseUnaryOps.inc for ArrayBase::square)
+  # are pasted into class definitions and are not standalone-includable; their
+  # API is published via "Eigen/Core".
+  { include: ["@\"Eigen/src/plugins/.*\"", "private", "\"Eigen/Core\"", "public"] }
+]

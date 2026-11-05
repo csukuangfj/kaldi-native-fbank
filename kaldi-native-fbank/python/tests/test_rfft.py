@@ -3,10 +3,26 @@
 # Copyright (c)  2021-2023  Xiaomi Corporation (authors: Fangjun Kuang)
 
 
-import torch
+try:
+    import torch
+except ImportError:  # pragma: no cover
+    torch = None
 
-import kaldi_native_fbank as knf
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if torch is None:
+    _missing.append("torch")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 def test_rfft(N):
     t = torch.rand(N)

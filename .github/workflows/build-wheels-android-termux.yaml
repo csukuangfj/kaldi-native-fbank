@@ -56,7 +56,8 @@ name: build-wheels-android-termux
 #
 # 5. CONTAINER / RUNNER SETUP (piper-phonemize build-wheel-android.yaml).
 #    - the termux-docker images are native binaries per architecture: aarch64
-#      and arm run on ubuntu-24.04-arm, x86_64 and i686 on ubuntu-latest.
+#      and arm run on ubuntu-24.04-arm, x86_64 on ubuntu-latest (i686 is
+#      skipped: its package mirror is unreliable).
 #    - run the container with --user 0:0 and chmod -R a+w the workspace on the
 #      host first; pre-create build/ dist/ wheelhouse/ because the container
 #      cannot create directories here. Do not call sudo or su inside it.
@@ -72,6 +73,7 @@ on:
   push:
     branches:
       - wheel
+      - master
     tags:
       - '*'
   workflow_dispatch:
@@ -88,6 +90,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # i686 is skipped: the termux i686 package mirror is unreliable
+          # (its container cannot install patchelf/zip/pip).
           - abi: aarch64
             os: ubuntu-24.04-arm
             plat: android_24_arm64_v8a
@@ -97,9 +101,6 @@ jobs:
           - abi: x86_64
             os: ubuntu-latest
             plat: android_24_x86_64
-          - abi: i686
-            os: ubuntu-latest
-            plat: android_24_x86
 
     steps:
       - uses: actions/checkout@v4
@@ -117,15 +118,15 @@ jobs:
           bash -c '
             set -e
 
-            apt update -y
-            apt install -y cmake make git python python-pip clang libc++
-            apt install -y android-liblog || true
-            apt install -y libandroid-dev || true
-            apt install -y android-libandroid || true
+            for i in 1 2 3 4 5; do apt update -y && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y cmake make git python python-pip clang libc++ && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-liblog || true && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y libandroid-dev || true && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-libandroid || true && break || sleep 10; done
             # patchelf + zip/unzip are for the RPATH fixup below -- see point 4
             # in the header. Same unzip / patch / re-zip step as sherpa-onnx
             # build-wheels-android-*.yaml.
-            apt install -y patchelf zip unzip
+            for i in 1 2 3 4 5; do apt install -y patchelf zip unzip && break || sleep 10; done
 
             pip install --upgrade pip setuptools wheel
 
@@ -201,8 +202,6 @@ jobs:
             os: ubuntu-24.04-arm
           - abi: x86_64
             os: ubuntu-latest
-          - abi: i686
-            os: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -225,12 +224,12 @@ jobs:
           bash -c '
             set -e
 
-            apt update -y
-            apt install -y python python-pip libc++ clang
-            apt install -y android-liblog || true
-            apt install -y libandroid-dev || true
-            apt install -y android-libandroid || true
-            apt install -y python-numpy || true
+            for i in 1 2 3 4 5; do apt update -y && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y python python-pip libc++ clang && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-liblog || true && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y libandroid-dev || true && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-libandroid || true && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y python-numpy || true && break || sleep 10; done
 
             pip install --upgrade pip setuptools wheel
 

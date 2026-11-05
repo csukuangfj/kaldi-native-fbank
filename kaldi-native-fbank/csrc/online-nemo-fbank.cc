@@ -19,10 +19,11 @@
 #include "kaldi-native-fbank/csrc/online-nemo-fbank.h"
 
 #include <cmath>
+#include <cstddef>
 #include <sstream>
+#include <stdexcept>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -76,13 +77,22 @@ OnlineNemoFbank::OnlineNemoFbank(const NemoFbankOptions &opts) : opts_(opts) {
 
 void OnlineNemoFbank::AcceptWaveform(float sampling_rate, const float *waveform,
                                      int32_t n) {
-  KNF_CHECK_EQ(sampling_rate, opts_.samp_freq);
-  KNF_CHECK_GE(n, 0);
-  KNF_CHECK(n == 0 || waveform != nullptr);
+  if (sampling_rate != opts_.samp_freq) {
+    throw std::invalid_argument("sampling_rate does not match the options");
+  }
+  if (n < 0) {
+    throw std::invalid_argument("n must be >= 0");
+  }
+  if (!(n == 0 || waveform != nullptr)) {
+    throw std::invalid_argument("waveform is null");
+  }
   if (n == 0) {
     return;
   }
-  KNF_CHECK(!input_finished_);
+  if (input_finished_) {
+    throw std::runtime_error(
+        "AcceptWaveform called after InputFinished() was called");
+  }
   samples_.insert(samples_.end(), waveform, waveform + n);
   num_samples_ += n;
 }
@@ -110,17 +120,21 @@ std::vector<float> OnlineNemoFbank::GetFrames(int32_t frame_index, int32_t n,
       begin = end - static_cast<int64_t>(n) * hop_;
     }
   }
-  KNF_CHECK_GE(frame_index, 0);
-  KNF_CHECK_GE(n, 0);
-  KNF_CHECK_GE(begin, sample_offset_);
-  KNF_CHECK_LE(end, num_samples_);
+  if (frame_index < 0 || n < 0) {
+    throw std::invalid_argument("frame_index and n must be >= 0");
+  }
+  if (begin < sample_offset_ || end > num_samples_) {
+    throw std::invalid_argument("requested frames are out of range");
+  }
   if (start_sample_offset) {
     *start_sample_offset = begin - static_cast<int64_t>(frame_index) * hop_;
   }
   samples_.erase(samples_.begin(), samples_.begin() + (begin - sample_offset_));
   sample_offset_ = begin;
   std::vector<float> audio(samples_.begin(), samples_.begin() + (end - begin));
-  KNF_CHECK(opts_.preemph_coeff >= 0.0 && opts_.preemph_coeff <= 1.0);
+  if (!(opts_.preemph_coeff >= 0.0 && opts_.preemph_coeff <= 1.0)) {
+    throw std::invalid_argument("preemph_coeff must be in [0, 1]");
+  }
   for (int32_t i = static_cast<int32_t>(audio.size()) - 1; i > 0; --i) {
     audio[i] -= opts_.preemph_coeff * audio[i - 1];
   }

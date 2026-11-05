@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - wheel
+      - master
     tags:
       - '*'
   workflow_dispatch:

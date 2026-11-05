@@ -1,0 +1,24 @@
+PROJECT_NAME           = "kaldi-native-fbank C++ API"
+PROJECT_BRIEF          = "Kaldi-compatible feature extraction C++ API"
+OUTPUT_DIRECTORY       = build/doxygen
+INPUT                  = ../kaldi-native-fbank/csrc \
+                         mainpage.dox
+FILE_PATTERNS          = *.h
+RECURSIVE              = NO
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO
+JAVADOC_AUTOBRIEF      = YES
+
+# Render @f$ ... @f$ / @f[ ... @f] LaTeX equations in the HTML output.
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_3
+
+# @kfile{src/feat/feature-fbank.h} links to the corresponding kaldi source.
+# @kbin{apply-cmvn} links to the corresponding kaldi featbin binary source.
+ALIASES                = "kfile{1}=[\1](https://github.com/kaldi-asr/kaldi/blob/master/\1)" \
+                         "kbin{1}=[\1](https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/\1.cc)"

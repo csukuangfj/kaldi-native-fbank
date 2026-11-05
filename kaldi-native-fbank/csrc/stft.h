@@ -16,6 +16,14 @@
  * limitations under the License.
  */
 
+/**
+ * @file stft.h
+ * @brief Short-time Fourier transform (STFT).
+ *
+ * This is not from kaldi. It is compatible with librosa's stft() and is used
+ * by the NeMo filter-bank features (see online-nemo-fbank.h).
+ */
+
 #ifndef KALDI_NATIVE_FBANK_CSRC_STFT_H_
 #define KALDI_NATIVE_FBANK_CSRC_STFT_H_
 
@@ -26,32 +34,76 @@
 
 namespace knf {
 
+/// @brief Configuration for Stft.
+///
+/// @see Stft, IStft
 struct StftConfig {
-  int32_t n_fft;  // should be a power of two
-  int32_t hop_length;
-  int32_t win_length;
+  /// FFT size; should be a power of two.
+  int32_t n_fft = 0;
+
+  /// Number of samples between successive frames.
+  int32_t hop_length = 0;
+
+  /// Window size in samples; must be <= n_fft. The window is zero-padded to
+  /// n_fft.
+  int32_t win_length = 0;
+
+  /// Window type; see GetWindow() in feature-window.h for the supported
+  /// types and their formulas.
   std::string window_type;
+
+  /// If true, the signal is padded by n_fft/2 on both sides (using pad_mode)
+  /// and the frames are centered around time t.
   bool center = true;
+
+  /// Padding mode used when center is true; currently only "reflect".
   std::string pad_mode = "reflect";
+
+  /// If true, scale the FFT by 1/sqrt(n_fft) instead of 1.
   bool normalized = false;
 
-  // if it is specified, then window_type is ignored
+  /// Explicit window coefficients; if specified, window_type is ignored.
   std::vector<float> window;
 
+  /// Return the config as a string.
   std::string ToString() const;
 };
 
+/// @brief Result of Stft::Compute().
+///
+/// @see Stft, IStft
 struct StftResult {
-  // [num_frames, n_fft/2+1], flattened in row major
+  /// Real parts of the spectra, [num_frames, n_fft/2+1], flattened in row
+  /// major.
   std::vector<float> real;
+
+  /// Imaginary parts of the spectra, [num_frames, n_fft/2+1], flattened in
+  /// row major.
   std::vector<float> imag;
-  int32_t num_frames;
+
+  /// Number of frames in real/imag.
+  int32_t num_frames = 0;
 };
 
+/// @brief Compute the short-time Fourier transform of a waveform.
+///
+/// @par Used by:
+/// OnlineNemoFbank computes its spectra with Stft; IStft inverts them.
+///
+/// @see StftConfig, StftResult, IStft, Rfft
 class Stft {
  public:
+  /// Construct with the given config.
   explicit Stft(const StftConfig &config);
+
+  /// Destructor.
   ~Stft();
+
+  /// Compute the STFT of a waveform.
+  ///
+  /// @param data Pointer to a 1-D array of size n.
+  /// @param n    Number of samples in data.
+  /// @return     The complex spectra of all frames; see StftResult.
   StftResult Compute(const float *data, int32_t n) const;
 
  private:
@@ -62,4 +114,3 @@ class Stft {
 }  // namespace knf
 
 #endif  // KALDI_NATIVE_FBANK_CSRC_STFT_H_
-        //

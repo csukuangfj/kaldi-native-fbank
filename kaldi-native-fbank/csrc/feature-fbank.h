@@ -1,5 +1,9 @@
 /**
+ * Copyright 2009-2012  Karel Vesely
+ *                2016  Johns Hopkins University (author: Daniel Povey)
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/feature-fbank.h
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,17 +20,32 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-fbank.h
+/**
+ * @file feature-fbank.h
+ * @brief Kaldi-compatible filter-bank (fbank) features.
+ *
+ * This file is copied/modified from @kfile{src/feat/feature-fbank.h}. It
+ * computes mel-filterbank features, equal to kaldi's @kbin{compute-fbank-feats}
+ * for identical parameters.
+ *
+ * @code
+ *   knf::FbankOptions opts;
+ *   opts.frame_opts.samp_freq = 16000;
+ *   opts.mel_opts.num_bins = 23;
+ *
+ *   knf::OnlineFbank fbank(opts);  // see online-feature.h
+ * @endcode
+ */
 
 #ifndef KALDI_NATIVE_FBANK_CSRC_FEATURE_FBANK_H_
 #define KALDI_NATIVE_FBANK_CSRC_FEATURE_FBANK_H_
 
-#include <map>
-#include <string>
-#include <vector>
 #include <cstdint>
 #include <limits>
+#include <map>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
@@ -34,41 +53,59 @@
 
 namespace knf {
 
+/// @brief Options for computing filter-bank features.
+///
+/// This is kaldi's FbankOptions (@kfile{src/feat/feature-fbank.h}). It only
+/// includes things that can be done in a "stateless" way, i.e. it does not
+/// include energy max-normalization and it does not include delta computation.
+///
+/// @see FbankComputer, FrameExtractionOptions, MelBanksOptions
 struct FbankOptions {
+  /// Options for frame extraction; see FrameExtractionOptions.
   FrameExtractionOptions frame_opts;
+
+  /// Options for the mel filter banks; see MelBanksOptions.
   MelBanksOptions mel_opts;
-  // append an extra dimension with energy to the filter banks
+
+  /// If true, append an extra dimension with energy to the filter banks.
   bool use_energy = false;
+
+  /// Floor on energy (absolute, not relative) in fbank computation. Only
+  /// makes a difference if use_energy is true; only necessary if
+  /// frame_opts.dither is 0.0. Suggested values: 0.1 or 1.0.
   float energy_floor = 0.0f;  // active iff use_energy==true
 
-  // If true, compute log_energy before preemphasis and windowing
-  // If false, compute log_energy after preemphasis ans windowing
+  /// If true, compute log energy before preemphasis and windowing; if false,
+  /// compute it after preemphasis and windowing.
   bool raw_energy = true;  // active iff use_energy==true
 
-  // If true, put energy last (if using energy)
-  // If false, put energy first
+  /// If true, put energy last (if using energy); if false, put energy first.
+  ///
+  /// Warning: not sufficient to get HTK compatible features (need to change
+  /// other parameters).
   bool htk_compat = false;  // active iff use_energy==true
 
-  // if true (default), produce log-filterbank, else linear
+  /// If true (default), produce log-filterbank; else linear.
   bool use_log_fbank = true;
 
-  // If true (default), use Kaldi's hard floor before the log, i.e.
-  // log(max(mel_energy, eps)). If false, use the additive guard
-  // log(mel_energy + eps). NeMo models use the additive guard with
-  // eps = FLT_EPSILON / 2 (2^-24).
+  /// If true (default), use Kaldi's hard floor before the log, i.e.
+  /// \f$ \log(\max(e, \epsilon)) \f$. If false, use the additive guard
+  /// \f$ \log(e + \epsilon) \f$, where \f$ e \f$ is the mel energy. NeMo
+  /// models use the additive guard with eps = FLT_EPSILON / 2 (2^-24).
   bool use_log_floor = true;
 
-  // Value used by the log-zero guard selected by use_log_floor.
-  // It defaults to FLT_EPSILON; NeMo models use FLT_EPSILON / 2
-  // (2^-24, 5.9604644775390625e-08).
+  /// Value used by the log-zero guard selected by use_log_floor.
+  /// It defaults to FLT_EPSILON; NeMo models use FLT_EPSILON / 2
+  /// (2^-24, 5.9604644775390625e-08).
   float eps = std::numeric_limits<float>::epsilon();
 
-  // if true (default), use power in filterbank
-  // analysis, else magnitude.
+  /// If true (default), use power in filterbank analysis; else magnitude.
   bool use_power = true;
 
+  /// Construct with the default options: 23 mel bins.
   FbankOptions() { mel_opts.num_bins = 23; }
 
+  /// Return the options as a string.
   std::string ToString() const {
     std::ostringstream os;
     os << "frame_opts: \n";
@@ -90,26 +127,47 @@ struct FbankOptions {
   }
 };
 
+/// @brief Write the options to the stream, one option per line.
 std::ostream &operator<<(std::ostream &os, const FbankOptions &opts);
 
+/// @brief Class for computing mel-filterbank features.
+///
+/// It computes one frame of features at a time from one frame of signal; see
+/// OnlineFbank in online-feature.h for the streaming interface that feeds it.
+/// For more information, see @kfile{src/feat/feature-fbank.h}.
+///
+/// @par Used by:
+/// OnlineFbank = OnlineGenericBaseFeature<FbankComputer>
+/// (see online-feature.h) wraps this class for streaming use.
+///
+/// @see FbankOptions, MelBanks, OnlineFbank, ExtractWindow
 class FbankComputer {
  public:
+  /// Option type accepted by this computer.
   using Options = FbankOptions;
 
+  /// Construct from the given options.
   explicit FbankComputer(const FbankOptions &opts);
+
+  /// Destructor; frees the cached MelBanks.
   ~FbankComputer();
 
+  /// Return the dimension of the output features: num_bins, plus 1 if
+  /// use_energy is true.
   int32_t Dim() const {
     return opts_.mel_opts.num_bins + (opts_.use_energy ? 1 : 0);
   }
 
-  // if true, compute log_energy_pre_window but after dithering and dc removal
+  /// If true, compute log_energy_pre_window but after dithering and dc
+  /// removal.
   bool NeedRawLogEnergy() const { return opts_.use_energy && opts_.raw_energy; }
 
+  /// Return the frame-extraction options.
   const FrameExtractionOptions &GetFrameOptions() const {
     return opts_.frame_opts;
   }
 
+  /// Return the options this computer was constructed with.
   const FbankOptions &GetOptions() const { return opts_; }
 
   /**
@@ -137,12 +195,14 @@ class FbankComputer {
                std::vector<float> *signal_frame, float *feature);
 
  private:
+  /// Return the mel banks for the given VTLN factor, creating them on first
+  /// use.
   const MelBanks *GetMelBanks(float vtln_warp);
 
-  FbankOptions opts_;
-  float log_energy_floor_;
-  std::map<float, MelBanks *> mel_banks_;  // float is VTLN coefficient.
-  Rfft rfft_;
+  FbankOptions opts_;       ///< Options given to the constructor.
+  float log_energy_floor_;  ///< Floor for log energy, derived from opts_.
+  std::map<float, MelBanks *> mel_banks_;  ///< Mel banks per VTLN coefficient.
+  Rfft rfft_;  ///< FFT engine, of size opts_.PaddedWindowSize().
 };
 
 }  // namespace knf

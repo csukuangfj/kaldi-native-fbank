@@ -16,6 +16,11 @@
  * limitations under the License.
  */
 
+/**
+ * @file rfft.h
+ * @brief n-point real discrete Fourier transform.
+ */
+
 #ifndef KALDI_NATIVE_FBANK_CSRC_RFFT_H_
 #define KALDI_NATIVE_FBANK_CSRC_RFFT_H_
 
@@ -24,19 +29,33 @@
 
 namespace knf {
 
-// n-point Real discrete Fourier transform
-// where n is even. n >= 2
-//
-//  R[k] = sum_j=0^n-1 in[j]*cos(2*pi*j*k/n), 0<=k<=n/2
-//  I[k] = sum_j=0^n-1 in[j]*sin(2*pi*j*k/n), 0<k<n/2
+/// @brief n-point real discrete Fourier transform, where n is even, n >= 2.
+///
+/// Forward transform:
+/// \f[ R[k] = \sum_{j=0}^{n-1} \mathrm{in}[j] \cos(2\pi j k / n),
+///     \qquad 0 \le k \le n/2 \f]
+/// \f[ I[k] = \sum_{j=0}^{n-1} \mathrm{in}[j] \sin(2\pi j k / n),
+///     \qquad 0 < k < n/2 \f]
+///
+/// @par Used by:
+/// FbankComputer, MfccComputer, Stft and IStft.
+///
+/// @see ComputePowerSpectrum, Stft
 class Rfft {
  public:
-  // @param n Number of fft bins. it should be even.
+  /// Construct an Rfft object.
+  ///
+  /// @param n  Number of fft bins. It should be even.
+  /// @param inverse  If true, Compute() performs the inverse transform.
   explicit Rfft(int32_t n, bool inverse = false);
+
+  /// Destructor.
   ~Rfft();
 
-  /** @param in_out A 1-D array of size n.
-   *             On return:
+  /** Transform in place.
+
+   @param in_out A 1-D array of size n.
+   *             On return of the forward transform:
    *               in_out[0] = R[0]
    *               in_out[1] = R[n/2]
    *               for 1 < k < n/2,
@@ -45,12 +64,14 @@ class Rfft {
    *
    */
   void Compute(float *in_out);
+
+  /// Same as above, but for double precision.
   void Compute(double *in_out);
 
  private:
   class RfftImpl;
 
-  std::unique_ptr<RfftImpl> impl_;
+  std::unique_ptr<RfftImpl> impl_;  ///< Implementation details.
 };
 
 }  // namespace knf

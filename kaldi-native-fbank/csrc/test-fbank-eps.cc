@@ -16,12 +16,17 @@
  * limitations under the License.
  */
 
+#include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <limits>
+#include <string>
 #include <vector>
 
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
+#include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/mel-computations.h"
 
 namespace knf {
 namespace {

@@ -2,9 +2,15 @@
 #
 # Copyright (c)  2025 (authors: Bangwen He)
 
-import torch
-import torch.nn as nn
-import kaldi_native_fbank as knf
+try:
+    import torch
+    import torch.nn as nn
+except ImportError:  # pragma: no cover
+    torch = None
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
 
 
 # copied from [vocos heads](https://github.com/gemelo-ai/vocos/blob/main/vocos/spectral_ops.py#L7)
@@ -31,6 +37,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if torch is None:
+    _missing.append("torch")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
+
 class ISTFT(nn.Module):
     """
     Custom implementation of ISTFT since torch.istft doesn't allow custom padding (other than `center=True`) with

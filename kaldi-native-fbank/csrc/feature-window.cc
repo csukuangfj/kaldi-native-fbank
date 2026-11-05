@@ -1,18 +1,22 @@
 // kaldi-native-fbank/csrc/feature-window.cc
 //
+// Copyright 2009-2011  Karel Vesely;  Petr Motlicek;  Microsoft Corporation
+//           2013-2016  Johns Hopkins University (author: Daniel Povey)
+//                2014  IMSL, PKU-HKUST (author: Wei Shi)
 // Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
-
+//
 // This file is copied/modified from kaldi/src/feat/feature-window.cc
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef>
 #include <limits>
+#include <stdexcept>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
+#include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {
 
@@ -26,7 +30,9 @@ std::vector<float> GetWindow(const std::string &window_type,
                              float blackman_coeff /*= 0.42*/) {
   std::vector<float> window(window_size);
   int32_t frame_length = window_size;
-  KNF_CHECK_GT(frame_length, 0);
+  if (frame_length <= 0) {
+    throw std::invalid_argument("frame_length must be > 0");
+  }
 
   float *window_data = window.data();
 
@@ -39,7 +45,7 @@ std::vector<float> GetWindow(const std::string &window_type,
 
   for (int32_t i = 0; i < frame_length; i++) {
     double i_fl = static_cast<double>(i);
-    if (window_type == "hanning") {
+    if (window_type == "hanning" || window_type == "hann") {
       window_data[i] = 0.5 - 0.5 * cos(a * i_fl);
     } else if (window_type == "sine") {
       // when you are checking ws wikipedia, please
@@ -47,8 +53,6 @@ std::vector<float> GetWindow(const std::string &window_type,
       window_data[i] = sin(0.5 * a * i_fl);
     } else if (window_type == "hamming") {
       window_data[i] = 0.54 - 0.46 * cos(a * i_fl);
-    } else if (window_type == "hann") {
-      window_data[i] = 0.50 - 0.50 * cos(a * i_fl);
     } else if (window_type == "povey") {
       // like hamming but goes to zero at edges.
       window_data[i] = pow(0.5 - 0.5 * cos(a * i_fl), 0.85);
@@ -58,8 +62,8 @@ std::vector<float> GetWindow(const std::string &window_type,
       window_data[i] = blackman_coeff - 0.5 * cos(a * i_fl) +
                        (0.5 - blackman_coeff) * cos(2 * a * i_fl);
     } else {
-      fprintf(stderr, "Invalid window type '%s'\n", window_type.c_str());
-      exit(-1);
+      KNF_LOGE("Invalid window type '%s'", window_type.c_str());
+      throw std::invalid_argument("invalid window type: " + window_type);
     }
   }
 
@@ -147,7 +151,10 @@ void ExtractWindow(int64_t sample_offset, const std::vector<float> &wave,
                    const FeatureWindowFunction &window_function,
                    std::vector<float> *window,
                    float *log_energy_pre_window /*= nullptr*/) {
-  KNF_CHECK(sample_offset >= 0 && wave.size() != 0);
+  if (sample_offset < 0 || wave.empty()) {
+    throw std::invalid_argument(
+        "sample_offset must be >= 0 and wave must not be empty");
+  }
 
   int32_t frame_length = opts.WindowSize();
   int32_t frame_length_padded = opts.PaddedWindowSize();
@@ -157,9 +164,13 @@ void ExtractWindow(int64_t sample_offset, const std::vector<float> &wave,
   int64_t end_sample = start_sample + frame_length;
 
   if (opts.snip_edges) {
-    KNF_CHECK(start_sample >= sample_offset && end_sample <= num_samples);
+    if (!(start_sample >= sample_offset && end_sample <= num_samples)) {
+      throw std::invalid_argument("frame does not fit inside the waveform");
+    }
   } else {
-    KNF_CHECK(sample_offset == 0 || start_sample >= sample_offset);
+    if (!(sample_offset == 0 || start_sample >= sample_offset)) {
+      throw std::invalid_argument("bad sample_offset for this frame");
+    }
   }
 
   if (window->size() != frame_length_padded) {
@@ -168,7 +179,7 @@ void ExtractWindow(int64_t sample_offset, const std::vector<float> &wave,
 
   // wave_start and wave_end are start and end indexes into 'wave', for the
   // piece of wave that we're trying to extract.
-  int32_t wave_start = int32_t(start_sample - sample_offset);
+  int32_t wave_start = static_cast<int32_t>(start_sample - sample_offset);
   int32_t wave_end = wave_start + frame_length;
 
   if (wave_start >= 0 && wave_end <= wave.size()) {
@@ -221,7 +232,7 @@ float InnerProduct(const float *a, const float *b, int32_t n) {
   return sum;
 }
 
-void Dither(float *d, int32_t n, float dither_value) {
+static void Dither(float *d, int32_t n, float dither_value) {
   if (dither_value == 0.0) {
     return;
   }
@@ -237,7 +248,9 @@ static void Preemphasize(float *d, int32_t n, float preemph_coeff) {
     return;
   }
 
-  KNF_CHECK(preemph_coeff >= 0.0 && preemph_coeff <= 1.0);
+  if (!(preemph_coeff >= 0.0 && preemph_coeff <= 1.0)) {
+    throw std::invalid_argument("preemph_coeff must be in [0, 1]");
+  }
 
   for (int32_t i = n - 1; i > 0; --i) {
     d[i] -= preemph_coeff * d[i - 1];
@@ -258,7 +271,7 @@ void ProcessWindow(const FrameExtractionOptions &opts,
     RemoveDcOffset(window, frame_length);
   }
 
-  if (log_energy_pre_window != NULL) {
+  if (log_energy_pre_window != nullptr) {
     float energy = std::max<float>(InnerProduct(window, window, frame_length),
                                    std::numeric_limits<float>::epsilon());
     *log_energy_pre_window = std::log(energy);

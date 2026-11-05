@@ -1,0 +1,55 @@
+name: style_check
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: style_check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpplint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Check style with cpplint
+        shell: bash
+        run: ./scripts/check_style_cpplint.sh
+
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install clang-format
+        shell: bash
+        run: |
+          python3 -m pip install -U pip
+          python3 -m pip install clang-format==21.1.2
+
+      - name: Check style with clang-format
+        shell: bash
+        run: ./scripts/check_style_clang_format.sh

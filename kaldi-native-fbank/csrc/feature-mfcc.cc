@@ -1,5 +1,9 @@
 /**
+ * Copyright 2009-2011  Karel Vesely;  Petr Motlicek
+ *                2016  Johns Hopkins University (author: Daniel Povey)
  * Copyright (c)  2022  Xiaomi Corporation (authors: Fangjun Kuang)
+ *
+ * This file is copied/modified from kaldi/src/feat/feature-mfcc.cc
  *
  * See LICENSE for clarification regarding multiple authors
  *
@@ -16,20 +20,21 @@
  * limitations under the License.
  */
 
-// This file is copied/modified from kaldi/src/feat/feature-mfcc.cc
 //
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <limits>
+#include <sstream>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -78,10 +83,13 @@ MfccComputer::MfccComputer(const MfccOptions &opts)
 
   int32_t num_bins = opts.mel_opts.num_bins;
 
-  KNF_CHECK_LE(opts.num_ceps, num_bins)
-      << "num-ceps cannot be larger than num-mel-bins."
-      << " It should be smaller or equal. You provided num-ceps: "
-      << opts.num_ceps << "  and num-mel-bins: " << num_bins;
+  if (opts.num_ceps > num_bins) {
+    std::ostringstream os;
+    os << "num-ceps cannot be larger than num-mel-bins."
+       << " It should be smaller or equal. You provided num-ceps: "
+       << opts.num_ceps << "  and num-mel-bins: " << num_bins;
+    throw std::invalid_argument(os.str());
+  }
 
   dct_matrix_ = ComputeDctMatrix(opts.num_ceps, num_bins);
 
@@ -93,8 +101,9 @@ MfccComputer::MfccComputer(const MfccOptions &opts)
 }
 
 MfccComputer::~MfccComputer() {
-  for (auto iter = mel_banks_.begin(); iter != mel_banks_.end(); ++iter)
-    delete iter->second;
+  for (auto &kv : mel_banks_) {
+    delete kv.second;
+  }
 }
 
 const MelBanks *MfccComputer::GetMelBanks(float vtln_warp) {
@@ -115,7 +124,10 @@ void MfccComputer::Compute(float signal_raw_log_energy, float vtln_warp,
                            std::vector<float> *signal_frame, float *feature) {
   const MelBanks &mel_banks = *(GetMelBanks(vtln_warp));
 
-  KNF_CHECK_EQ(signal_frame->size(), opts_.frame_opts.PaddedWindowSize());
+  if (signal_frame->size() !=
+      static_cast<size_t>(opts_.frame_opts.PaddedWindowSize())) {
+    throw std::runtime_error("signal_frame has an unexpected size");
+  }
 
   // Compute energy after window function (not the raw one).
   if (opts_.use_energy && !opts_.raw_energy) {

@@ -17,14 +17,14 @@
  */
 #include "kaldi-native-fbank/csrc/istft.h"
 
-#include <algorithm>
 #include <cmath>
-#include <sstream>
+#include <cstdint>
 #include <string>
 #include <utility>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/rfft.h"
+#include "kaldi-native-fbank/csrc/stft.h"
 
 namespace knf {
 

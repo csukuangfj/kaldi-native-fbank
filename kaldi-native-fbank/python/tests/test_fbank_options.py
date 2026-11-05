@@ -5,8 +5,19 @@
 
 import pickle
 
-import kaldi_native_fbank as knf
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 def test_default():
     opts = knf.FbankOptions()
