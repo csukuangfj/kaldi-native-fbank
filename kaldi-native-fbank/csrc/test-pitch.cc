@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "Eigen/Core"
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
 #include "kaldi-native-fbank/csrc/feature-pitch.h"

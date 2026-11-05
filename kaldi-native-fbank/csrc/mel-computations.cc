@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {

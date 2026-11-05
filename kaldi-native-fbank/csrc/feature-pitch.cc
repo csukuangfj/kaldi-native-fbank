@@ -18,12 +18,13 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstdint>
+#include <cstddef>
 #include <memory>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 
+#include "Eigen/Core"
 #include "kaldi-native-fbank/csrc/feature-delta.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/macros.h"
@@ -106,7 +107,7 @@ float NccfToPovFeature(float n) {
 // database as a function of the NCCF; see kaldi's comment on NccfToPov in
 // kaldi/src/feat/pitch-functions.cc.)
 float NccfToPov(float n) {
-  float ndash = fabs(n);
+  float ndash = fabsf(n);
   if (ndash > 1.0) ndash = 1.0;  // just in case it was slightly outside [-1, 1]
 
   float r = -5.2 + 5.4 * Exp(7.5 * (ndash - 1.0)) + 4.8 * ndash -
@@ -942,8 +943,8 @@ void OnlinePitchFeatureImpl::RecomputeBacktraces() {
     NccfInfo &nccf_info = *nccf_info_[frame];
     float old_mean_square = nccf_info_[frame]->mean_square_energy,
           avg_norm_prod = nccf_info_[frame]->avg_norm_prod,
-          old_nccf_ballast =
-              pow(old_mean_square * basic_frame_length, 2) * opts_.nccf_ballast,
+          old_nccf_ballast = powf(old_mean_square * basic_frame_length, 2) *
+                             opts_.nccf_ballast,
           nccf_scale = pow((old_nccf_ballast + avg_norm_prod) /
                                (new_nccf_ballast + avg_norm_prod),
                            static_cast<float>(0.5));

@@ -9,6 +9,7 @@
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 
 #include <cmath>
+#include <mutex>  // NOLINT
 
 namespace knf {
 

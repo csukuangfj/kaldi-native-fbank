@@ -17,7 +17,6 @@
  */
 #include "kaldi-native-fbank/csrc/istft.h"
 
-#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <string>

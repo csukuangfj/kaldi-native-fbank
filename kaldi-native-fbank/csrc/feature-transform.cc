@@ -10,7 +10,6 @@
 
 #include "kaldi-native-fbank/csrc/feature-transform.h"
 
-#include <algorithm>
 #include <cstddef>
 #include <fstream>
 #include <iterator>

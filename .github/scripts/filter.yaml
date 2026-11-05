@@ -5,6 +5,12 @@ remove_lines:
   # code, never from project sources directly
   - "^#include <new>"
   - "^#include <type_traits>"
+  # Never remove these: <mutex> is used only on platforms that define
+  # _POSIX_THREAD_SAFE_FUNCTIONS (termux/bionic does; the Ubuntu IWYU run
+  # sees the other branch), and kaldi-math.h carries the M_PI/M_2PI/M_SQRT2
+  # fallback defines that MSVC needs (IWYU does not track macros).
+  - "^- #include <mutex>"
+  - "^- #include \"kaldi-native-fbank/csrc/kaldi-math.h\""
   # ignore pybind11
   - "^(- )?#include <pybind11/"
   - "^(- )?#include [<\"]pybind11/"

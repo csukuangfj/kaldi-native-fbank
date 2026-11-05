@@ -65,7 +65,7 @@ int64_t LinearResample::GetNumOutputSamples(int64_t input_num_samp,
     // largest integer in the interval [ 0, 2 - 0.9 ) are the same (both one).
     // So when we're subtracting the window-width we can ignore the fractional
     // part.
-    int32_t window_width_ticks = floor(window_width * tick_freq);
+    int32_t window_width_ticks = floorf(window_width * tick_freq);
     // The time-period of the output that we can sample gets reduced
     // by the window-width (which is actually the distance from the
     // center to the edge of the windowing function) if we're not
@@ -95,7 +95,8 @@ void LinearResample::SetIndexesAndWeights() {
 
   for (int32_t i = 0; i < output_samples_in_unit_; i++) {
     double output_t = i / static_cast<double>(samp_rate_out_);
-    double min_t = output_t - window_width, max_t = output_t + window_width;
+    double min_t = output_t - window_width;
+    double max_t = output_t + window_width;
     // we do ceil on the min and floor on the max, because if we did it
     // the other way around we would unnecessarily include indexes just
     // outside the window, with zero coefficients.  It's possible
@@ -103,15 +104,15 @@ void LinearResample::SetIndexesAndWeights() {
     // (e.g. if filter_cutoff_ has an exact ratio with the sample rates),
     // that we unnecessarily include something with a zero coefficient,
     // but this is only a slight efficiency issue.
-    int32_t min_input_index = ceil(min_t * samp_rate_in_),
-            max_input_index = floor(max_t * samp_rate_in_),
-            num_indices = max_input_index - min_input_index + 1;
+    int32_t min_input_index = ceil(min_t * samp_rate_in_);
+    int32_t max_input_index = floor(max_t * samp_rate_in_);
+    int32_t num_indices = max_input_index - min_input_index + 1;
     first_index_[i] = min_input_index;
     weights_[i].resize(num_indices);
     for (int32_t j = 0; j < num_indices; j++) {
       int32_t input_index = min_input_index + j;
-      double input_t = input_index / static_cast<double>(samp_rate_in_),
-             delta_t = input_t - output_t;
+      double input_t = input_index / static_cast<double>(samp_rate_in_);
+      double delta_t = input_t - output_t;
       // sign of delta_t doesn't matter.
       weights_[i](j) = FilterFunc(delta_t) / samp_rate_in_;
     }
@@ -134,8 +135,8 @@ void LinearResample::GetIndexes(int64_t samp_out, int64_t *first_samp_in,
 void LinearResample::Resample(const VectorF &input, bool flush,
                               VectorF *output) {
   int32_t input_dim = static_cast<int32_t>(input.size());
-  int64_t tot_input_samp = input_sample_offset_ + input_dim,
-          tot_output_samp = GetNumOutputSamples(tot_input_samp, flush);
+  int64_t tot_input_samp = input_sample_offset_ + input_dim;
+  int64_t tot_output_samp = GetNumOutputSamples(tot_input_samp, flush);
 
   if (tot_output_samp < output_sample_offset_) {
     throw std::runtime_error(
@@ -205,7 +206,7 @@ void LinearResample::SetRemainder(const VectorF &input) {
   // that are "in the past" relative to the beginning of the latest
   // input... anyway, storing more remainder than needed is not harmful.
   int32_t max_remainder_needed =
-      ceil(samp_rate_in_ * num_zeros_ / filter_cutoff_);
+      ceilf(samp_rate_in_ * num_zeros_ / filter_cutoff_);
   input_remainder_.resize(max_remainder_needed);
   for (int32_t index = -input_remainder_.size(); index < 0; index++) {
     // we interpret "index" as an offset from the end of "input" and
@@ -231,7 +232,7 @@ float LinearResample::FilterFunc(float t) const {
   float window = 0.0;
   // sinc filter function
   float filter = 0.0;
-  if (fabs(t) < num_zeros_ / (2.0 * filter_cutoff_))
+  if (fabsf(t) < num_zeros_ / (2.0 * filter_cutoff_))
     window = 0.5 * (1 + cos(M_2PI * filter_cutoff_ / num_zeros_ * t));
   else
     window = 0.0;  // outside support of window function
@@ -297,10 +298,11 @@ void ArbitraryResample::SetIndexes(const std::vector<float> &sample_points) {
   float filter_width = num_zeros_ / (2.0 * filter_cutoff_);
   for (int32_t i = 0; i < num_samples; i++) {
     // the t values are in seconds.
-    float t = sample_points[i], t_min = t - filter_width,
-          t_max = t + filter_width;
-    int32_t index_min = ceil(samp_rate_in_ * t_min),
-            index_max = floor(samp_rate_in_ * t_max);
+    float t = sample_points[i];
+    float t_min = t - filter_width;
+    float t_max = t + filter_width;
+    int32_t index_min = ceilf(samp_rate_in_ * t_min);
+    int32_t index_max = floorf(samp_rate_in_ * t_max);
     // the ceil on index min and the floor on index_max are because there
     // is no point using indices just outside the window (coeffs would be zero).
     if (index_min < 0) index_min = 0;
@@ -327,7 +329,7 @@ float ArbitraryResample::FilterFunc(float t) const {
   float window = 0.0;
   // sinc filter function
   float filter = 0.0;
-  if (fabs(t) < num_zeros_ / (2.0 * filter_cutoff_))
+  if (fabsf(t) < num_zeros_ / (2.0 * filter_cutoff_))
     window = 0.5 * (1 + cos(M_2PI * filter_cutoff_ / num_zeros_ * t));
   else
     window = 0.0;  // outside support of window function
