@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-      - more-feat
   pull_request:
     branches:
       - master
-      - more-feat
   workflow_dispatch:
 
 concurrency:

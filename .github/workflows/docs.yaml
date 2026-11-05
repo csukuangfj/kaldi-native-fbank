@@ -75,9 +75,18 @@ jobs:
           path: docs/build/latex/kaldi-native-fbank.pdf
 
       - name: Attach PDF to release
+        # PR builds have a read-only token and must not touch releases.
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: doc
+          name: Documentation
+          body: >
+            PDF of the C++ and Python API documentation, built from
+            ${{ github.sha }}.  Rebuilt and overwritten by every docs build.
           files: docs/build/latex/kaldi-native-fbank.pdf
+          overwrite_files: true
+          fail_on_unmatched_files: true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
