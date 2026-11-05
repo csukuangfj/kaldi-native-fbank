@@ -148,7 +148,8 @@ jobs:
           cd build
           ctest --output-on-failure
 
-  # termux: build and run the tests inside termux/termux-docker (4 ABIs).
+  # termux: build and run the tests inside termux/termux-docker (3 ABIs;
+  # i686 is skipped: the termux i686 package mirror is unreliable).
   termux:
     name: termux-${{ matrix.abi }}
     runs-on: ${{ matrix.os }}
@@ -161,8 +162,6 @@ jobs:
           - abi: arm
             os: ubuntu-24.04-arm
           - abi: x86_64
-            os: ubuntu-latest
-          - abi: i686
             os: ubuntu-latest
 
     steps:

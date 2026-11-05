@@ -11,5 +11,6 @@ Full doxygen reference (auto-generated from the headers):
    delta
    mfcc
    fbank
+   pitch
    splice
    transform

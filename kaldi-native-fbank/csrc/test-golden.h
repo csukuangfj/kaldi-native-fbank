@@ -66,8 +66,12 @@ inline bool LoadNpy(const std::string &path, MatrixD *out) {
   int32_t rows = 0;
   int32_t cols = 0;
   if (shape.find(',') != std::string::npos) {
+    std::string col_part = shape.substr(shape.find(',') + 1);
     rows = std::stoi(shape.substr(0, shape.find(',')));
-    cols = std::stoi(shape.substr(shape.find(',') + 1));
+    // 1-D arrays have shape "(N,)", i.e. an empty column part.
+    cols = col_part.find_first_not_of(" \t") == std::string::npos
+               ? 1
+               : std::stoi(col_part);
   } else {
     rows = std::stoi(shape);
     cols = 1;
@@ -77,6 +81,15 @@ inline bool LoadNpy(const std::string &path, MatrixD *out) {
     for (int32_t r = 0; r < rows; ++r) {
       is.read(reinterpret_cast<char *>((*out).row(r).data()),
               cols * sizeof(double));
+    }
+  } else if (descr == "<i2") {
+    // int16 (e.g. raw wav samples stored as .npy).
+    std::vector<int16_t> tmp(cols);
+    for (int32_t r = 0; r < rows; ++r) {
+      is.read(reinterpret_cast<char *>(tmp.data()), cols * sizeof(int16_t));
+      for (int32_t c = 0; c < cols; ++c) {
+        (*out)(r, c) = tmp[c];
+      }
     }
   } else {
     std::vector<float> tmp(cols);
@@ -116,6 +129,18 @@ inline double MaxAbsDiff(const MatrixF &a, const MatrixD &b) {
   }
   return max_diff;
 }
+
+/// Comparison tolerance for golden matrices whose kaldi reference was
+/// produced by matrix multiplications or long dot products (the LDA
+/// transform-feats outputs and the pitch NCCF): kaldi's BLAS and Eigen
+/// accumulate the sums in different orders, which gives per-platform float
+/// noise of up to a few 1e-5.  Observed maxima for the LDA goldens:
+/// 1.5e-5 (linux-arm32), 1.1e-5 (windows-x64), 2.7e-5 (windows-arm64);
+/// the golden-generating platform agrees at <= 1e-5.  1e-4 leaves headroom
+/// while still catching real implementation differences (>= 1e-3).
+/// Pipelines of sequential reductions (cmvn/delta/splice) compare at the
+/// tighter 1e-5 instead.
+constexpr double kGoldenDotProductTol = 1e-4;
 
 }  // namespace knf
 

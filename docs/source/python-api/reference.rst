@@ -228,6 +228,93 @@ See :doc:`cmvn` for formulas and kaldi command mapping
     (``n == input_dim + 1``).
   * ``apply(feats)`` — ``y = x M^T``; affine form appends the offset.
 
+Pitch
+-----
+
+See :doc:`pitch` for the algorithm and usage.  kaldi counterpart:
+:kaldi:`pitch-functions.h <src/feat/pitch-functions.h>`.
+
+``PitchExtractionOptions``
+  Raw pitch extraction (kaldi ``compute-kaldi-pitch-feats``).
+
+  * ``samp_freq: float = 16000`` — sample rate in Hz.
+    *kaldi*: ``--sample-frequency``.
+  * ``frame_shift_ms: float = 10`` — frame shift in ms.  *kaldi*: ``--frame-shift``.
+  * ``frame_length_ms: float = 25`` — frame length in ms.  *kaldi*: ``--frame-length``.
+  * ``preemph_coeff: float = 0`` — preemphasis (deprecated in kaldi).
+    *kaldi*: ``--preemphasis-coefficient``.
+  * ``min_f0: float = 50`` / ``max_f0: float = 400`` — F0 search range (Hz).
+    *kaldi*: ``--min-f0`` / ``--max-f0``.
+  * ``soft_min_f0: float = 10`` — soft minimum f0, must not exceed ``min_f0``.
+    *kaldi*: ``--soft-min-f0``.
+  * ``penalty_factor: float = 0.1`` — cost factor for F0 change.
+    *kaldi*: ``--penalty-factor``.
+  * ``lowpass_cutoff: float = 1000`` — low-pass filter cutoff (Hz).
+    *kaldi*: ``--lowpass-cutoff``.
+  * ``resample_freq: float = 4000`` — downsample rate (> 2 * ``lowpass_cutoff``).
+    *kaldi*: ``--resample-frequency``.
+  * ``delta_pitch: float = 0.005`` — pitch tolerance in pruning lags.
+    *kaldi*: ``--delta-pitch``.
+  * ``nccf_ballast: float = 7000`` — reduces NCCF for quiet frames.
+    *kaldi*: ``--nccf-ballast``.
+  * ``lowpass_filter_width: int = 1`` / ``upsample_filter_width: int = 5`` —
+    filter widths.  *kaldi*: ``--lowpass-filter-width`` /
+    ``--upsample-filter-width``.
+  * ``max_frames_latency: int = 0`` — max latency allowed for pitch tracking.
+    *kaldi*: ``--max-frames-latency``.
+  * ``frames_per_chunk: int = 0`` — batch chunk size (0 = whole utterance).
+    *kaldi*: ``--frames-per-chunk``.
+  * ``simulate_first_pass_online: bool = False`` — emit first-pass online
+    features (batch mode).  *kaldi*: ``--simulate-first-pass-online``.
+  * ``recompute_frame: int = 500`` — frame at which online NCCF
+    recomputation happens.  *kaldi*: ``--recompute-frame``.
+  * ``nccf_ballast_online: bool = False`` — debug flag for ballast
+    computation.  *kaldi*: ``--nccf-ballast-online``.
+  * ``snip_edges: bool = True`` — if False, incomplete end frames are not
+    snipped.  *kaldi*: ``--snip-edges`` (kaldi's pitch default is True).
+  * ``nccf_window_size`` / ``nccf_window_shift`` — read-only: NCCF window
+    size/shift in resampled samples.
+
+``ProcessPitchOptions``
+  Post-processing (kaldi ``compute-and-process-kaldi-pitch-feats``); at
+  least one ``add_*`` feature must be enabled.
+
+  * ``pitch_scale: float = 2`` — scaling of the normalized log-pitch.
+    *kaldi*: ``--pitch-scale``.
+  * ``pov_scale: float = 2`` / ``pov_offset: float = 0`` — POV scaling and
+    offset.  *kaldi*: ``--pov-scale`` / ``--pov-offset``.
+  * ``delta_pitch_scale: float = 10`` — scaling of the delta log-pitch.
+    *kaldi*: ``--delta-pitch-scale``.
+  * ``delta_pitch_noise_stddev: float = 0.005`` — noise added to the delta
+    log-pitch; drawn from a deterministic stream, so features are
+    reproducible.  *kaldi*: ``--delta-pitch-noise-stddev``.
+  * ``normalization_left_context: int = 75`` /
+    ``normalization_right_context: int = 75`` — log-pitch normalization
+    window (frames).  *kaldi*: ``--normalization-left-context`` /
+    ``--normalization-right-context``.
+  * ``delta_window: int = 2`` — frames on each side for the delta window.
+    *kaldi*: ``--delta-window``.
+  * ``delay: int = 0`` — frames by which the pitch is delayed.
+    *kaldi*: ``--delay``.
+  * ``add_pov_feature: bool = True`` — add the warped NCCF (1 dim).
+    *kaldi*: ``--add-pov-feature``.
+  * ``add_normalized_log_pitch: bool = True`` — add the POV-weighted
+    mean-subtracted log-pitch (1 dim).  *kaldi*:
+    ``--add-normalized-log-pitch``.
+  * ``add_delta_pitch: bool = True`` — add the delta log-pitch (1 dim).
+    *kaldi*: ``--add-delta-pitch``.
+  * ``add_raw_log_pitch: bool = False`` — add log(pitch) (1 dim).
+    *kaldi*: ``--add-raw-log-pitch``.
+  * ``dim`` — read-only output dimension implied by the ``add_*`` flags.
+
+``OnlinePitch(pitch_opts, process_opts=ProcessPitchOptions())``
+  Streaming extractor with the interface of *Streaming extractors* above
+  (without ``pop()``): ``accept_waveform(rate, samples)``,
+  ``input_finished()``, ``num_frames_ready``, ``get_frame(i) ->
+  numpy.ndarray``, ``is_last_frame(i)``, ``dim``,
+  ``frame_shift_in_seconds``.  kaldi counterpart:
+  :kaldi:`OnlinePitchFeature + OnlineProcessPitch <src/feat/pitch-functions.h>`.
+
 Module functions
 ----------------
 
@@ -248,3 +335,9 @@ Module functions
   are replicated, so the frame count stays the same and the dimension becomes
   ``dim * (1 + left_context + right_context)``.  *kaldi*: ``splice-feats``
   (:kaldi:`SpliceFrames <src/feat/feature-functions.cc>`).
+* ``knf.compute_and_process_kaldi_pitch(pitch_opts, process_opts, wave) ->
+  numpy.ndarray`` — processed pitch features of shape
+  ``(num_frames, process_opts.dim)`` for a whole utterance (POV,
+  normalized-log-pitch, delta-pitch by default).  *kaldi*:
+  ``compute-and-process-kaldi-pitch-feats``
+  (:kaldi:`ComputeAndProcessKaldiPitch <src/feat/pitch-functions.cc>`).

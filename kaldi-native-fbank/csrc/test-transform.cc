@@ -67,7 +67,7 @@ TEST(FeatureTransform, GoldenAishell3Typical) {
       LoadNpy(GoldenDir() + "/golden/aishell3_typical/lda.utt.npy", &ref));
   ASSERT_EQ(out.rows(), ref.rows());
   ASSERT_EQ(out.cols(), ref.cols());
-  EXPECT_LT(MaxAbsDiff(out, ref), 1e-5);
+  EXPECT_LT(MaxAbsDiff(out, ref), kGoldenDotProductTol);
 }
 
 TEST(FeatureTransform, GoldenEnglishMfaTypical) {
@@ -85,7 +85,7 @@ TEST(FeatureTransform, GoldenEnglishMfaTypical) {
       LoadNpy(GoldenDir() + "/golden/english_mfa_typical/lda.utt.npy", &ref));
   ASSERT_EQ(out.rows(), ref.rows());
   ASSERT_EQ(out.cols(), ref.cols());
-  EXPECT_LT(MaxAbsDiff(out, ref), 1e-5);
+  EXPECT_LT(MaxAbsDiff(out, ref), kGoldenDotProductTol);
 }
 
 TEST(FeatureTransform, GoldenMandarinMfaPitch) {
@@ -103,7 +103,7 @@ TEST(FeatureTransform, GoldenMandarinMfaPitch) {
       LoadNpy(GoldenDir() + "/golden/mandarin_mfa_pitch/lda.utt.npy", &ref));
   ASSERT_EQ(out.rows(), ref.rows());
   ASSERT_EQ(out.cols(), ref.cols());
-  EXPECT_LT(MaxAbsDiff(out, ref), 1e-5);
+  EXPECT_LT(MaxAbsDiff(out, ref), kGoldenDotProductTol);
 }
 
 TEST(FeatureTransform, GoldenEdgeShort2f) {
@@ -121,7 +121,7 @@ TEST(FeatureTransform, GoldenEdgeShort2f) {
       LoadNpy(GoldenDir() + "/golden/edge_cases/short_2f.lda.utt.npy", &ref));
   ASSERT_EQ(out.rows(), ref.rows());
   ASSERT_EQ(out.cols(), ref.cols());
-  EXPECT_LT(MaxAbsDiff(out, ref), 1e-5);
+  EXPECT_LT(MaxAbsDiff(out, ref), kGoldenDotProductTol);
 }
 
 TEST(FeatureTransform, HandCaseLinear) {

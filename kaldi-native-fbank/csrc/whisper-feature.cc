@@ -55,8 +55,8 @@ static void dft(const std::vector<float> &in, std::vector<float> *out) {
 
     for (int32_t n = 0; n < N; ++n) {
       float angle = M_2PI_over_N * k * n;
-      re += in[n] * cos(angle);
-      im -= in[n] * sin(angle);
+      re += in[n] * cosf(angle);
+      im -= in[n] * sinf(angle);
     }
 
     (*out)[k * 2 + 0] = re;
@@ -109,8 +109,8 @@ static void fft(const std::vector<float> &in, std::vector<float> *out) {
   for (int32_t k = 0; k < N / 2; ++k) {
     float theta = M_2PI * k / N;
 
-    float re = cos(theta);
-    float im = -sin(theta);
+    float re = cosf(theta);
+    float im = -sinf(theta);
 
     float re_odd = odd_fft[2 * k + 0];
     float im_odd = odd_fft[2 * k + 1];

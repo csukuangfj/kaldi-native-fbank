@@ -71,3 +71,18 @@ Value-by-value agreement (tolerance <= 1e-5) with dither=0 and identical paramet
 Any larger deviation is an implementation difference and must be investigated.
 (The pitch delta carries a small noise term in kaldi itself; if a comparison exceeds
 tolerance, localize the component before adjusting tolerance.)
+
+Localized deviations (investigated; tolerance adjusted):
+
+* **LDA (`lda.utt.npy`) and pitch (`pitch.utt.npy`) comparisons use 1e-4**
+  (`kGoldenDotProductTol` in `kaldi-native-fbank/csrc/test-golden.h`): their
+  kaldi references are produced by matrix multiplications / long dot
+  products (>= 91 terms for LDA, >= 100 for the pitch NCCF), and kaldi's
+  BLAS and Eigen accumulate the sums in different orders.  This is plain
+  float summation-order noise: observed maxima per platform are 1.5e-5
+  (linux-arm32), 1.1e-5 (windows-x64), 2.7e-5 (windows-arm64), while the
+  golden-generating platform agrees at <= 1e-5.  1e-4 leaves headroom but
+  still catches real implementation differences (>= 1e-3).
+* The pitch delta noise is reproduced deterministically in knf
+  (see `feature-pitch.cc`), so it does not contribute deviation at all.
+* Sequential-reduction pipelines (cmvn/delta/splice) stay at 1e-5.

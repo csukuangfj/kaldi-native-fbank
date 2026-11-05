@@ -20,11 +20,12 @@ Quick start
 Main entry points
 -----------------
 Streaming extractors: OnlineFbank, OnlineMfcc, OnlineWhisperFbank,
-    OnlineNemoFbank, OnlineRawAudioSamples
+    OnlineNemoFbank, OnlineRawAudioSamples, OnlinePitch
 Options: FbankOptions, MfccOptions, FrameExtractionOptions, MelBanksOptions,
     WhisperFeatureOptions, NemoFbankOptions, RawAudioSamplesOptions,
-    StftConfig, CmvnOptions
+    StftConfig, CmvnOptions, PitchExtractionOptions, ProcessPitchOptions
 CMVN: compute_cmvn_stats, apply_cmvn, apply_cmvn_, CmvnAccumulator
+Pitch: compute_and_process_kaldi_pitch
 Transforms: Stft, IStft, Rfft, MelBanks, FeatureWindowFunction
 
 Every option class constructor takes all fields as keyword arguments with
@@ -39,6 +40,7 @@ from kaldi_native_fbank.lib._kaldi_native_fbank import (
     DeltaOptions,
     FeatureTransform,
     compute_cmvn_stats,
+    compute_and_process_kaldi_pitch,
     compute_deltas,
     transform_features,
     splice_frames,
@@ -53,8 +55,11 @@ from kaldi_native_fbank.lib._kaldi_native_fbank import (
     OnlineFbank,
     OnlineMfcc,
     OnlineNemoFbank,
+    OnlinePitch,
     OnlineRawAudioSamples,
     OnlineWhisperFbank,
+    PitchExtractionOptions,
+    ProcessPitchOptions,
     RawAudioSamplesOptions,
     Rfft,
     SpliceOptions,
@@ -80,8 +85,11 @@ __all__ = [
     "OnlineFbank",
     "OnlineMfcc",
     "OnlineNemoFbank",
+    "OnlinePitch",
     "OnlineRawAudioSamples",
     "OnlineWhisperFbank",
+    "PitchExtractionOptions",
+    "ProcessPitchOptions",
     "RawAudioSamplesOptions",
     "SpliceOptions",
     "Rfft",
@@ -92,6 +100,7 @@ __all__ = [
     "apply_cmvn",
     "apply_cmvn_",
     "compute_cmvn_stats",
+    "compute_and_process_kaldi_pitch",
     "compute_deltas",
     "transform_features",
     "splice_frames",

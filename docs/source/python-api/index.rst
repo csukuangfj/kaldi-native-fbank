@@ -15,5 +15,6 @@ Python API
    transform
    cmvn
    delta
+   pitch
    reference
    splice

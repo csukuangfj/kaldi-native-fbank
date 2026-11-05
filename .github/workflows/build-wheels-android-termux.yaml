@@ -56,7 +56,8 @@ name: build-wheels-android-termux
 #
 # 5. CONTAINER / RUNNER SETUP (piper-phonemize build-wheel-android.yaml).
 #    - the termux-docker images are native binaries per architecture: aarch64
-#      and arm run on ubuntu-24.04-arm, x86_64 and i686 on ubuntu-latest.
+#      and arm run on ubuntu-24.04-arm, x86_64 on ubuntu-latest (i686 is
+#      skipped: its package mirror is unreliable).
 #    - run the container with --user 0:0 and chmod -R a+w the workspace on the
 #      host first; pre-create build/ dist/ wheelhouse/ because the container
 #      cannot create directories here. Do not call sudo or su inside it.
@@ -90,6 +91,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # i686 is skipped: the termux i686 package mirror is unreliable
+          # (its container cannot install patchelf/zip/pip).
           - abi: aarch64
             os: ubuntu-24.04-arm
             plat: android_24_arm64_v8a
@@ -99,9 +102,6 @@ jobs:
           - abi: x86_64
             os: ubuntu-latest
             plat: android_24_x86_64
-          - abi: i686
-            os: ubuntu-latest
-            plat: android_24_x86
 
     steps:
       - uses: actions/checkout@v4
@@ -202,8 +202,6 @@ jobs:
           - abi: arm
             os: ubuntu-24.04-arm
           - abi: x86_64
-            os: ubuntu-latest
-          - abi: i686
             os: ubuntu-latest
 
     steps:

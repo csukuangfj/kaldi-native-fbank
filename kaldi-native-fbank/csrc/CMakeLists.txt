@@ -6,6 +6,7 @@ set(sources
   feature-fbank.cc
   feature-functions.cc
   feature-mfcc.cc
+  feature-pitch.cc
   feature-raw-audio-samples.cc
   feature-splice.cc
   feature-transform.cc
@@ -15,6 +16,7 @@ set(sources
   mel-computations.cc
   online-feature.cc
   online-nemo-fbank.cc
+  resample.cc
   rfft.cc
   stft.cc
   whisper-feature.cc
@@ -27,6 +29,12 @@ set_target_properties(kaldi-native-fbank-core PROPERTIES
   POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(kaldi-native-fbank-core kissfft)
 target_link_libraries(kaldi-native-fbank-core Eigen3::Eigen)
+
+if(ANDROID)
+  # macros.h logs via __android_log_print (android/log.h) on Android,
+  # which lives in liblog.
+  target_link_libraries(kaldi-native-fbank-core log)
+endif()
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   add_executable(test-online-fbank test-online-fbank.cc)
@@ -58,6 +66,7 @@ set(test_srcs
   test-delta.cc
   test-fbank-eps.cc
   test-online-nemo-fbank.cc
+  test-pitch.cc
   test-rfft.cc
   test-splice.cc
   test-transform.cc

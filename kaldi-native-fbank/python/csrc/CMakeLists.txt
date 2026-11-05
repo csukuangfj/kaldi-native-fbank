@@ -6,6 +6,7 @@ pybind11_add_module(_kaldi_native_fbank
   feature-splice.cc
   feature-transform.cc
   feature-mfcc.cc
+  feature-pitch.cc
   feature-window.cc
   istft.cc
   kaldi-native-fbank.cc

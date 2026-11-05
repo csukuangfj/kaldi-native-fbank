@@ -20,11 +20,12 @@ Quick start
 Main entry points
 -----------------
 Streaming extractors: OnlineFbank, OnlineMfcc, OnlineWhisperFbank,
-    OnlineNemoFbank, OnlineRawAudioSamples
+    OnlineNemoFbank, OnlineRawAudioSamples, OnlinePitch
 Options: FbankOptions, MfccOptions, FrameExtractionOptions, MelBanksOptions,
     WhisperFeatureOptions, NemoFbankOptions, RawAudioSamplesOptions,
-    StftConfig, CmvnOptions
+    StftConfig, CmvnOptions, PitchExtractionOptions, ProcessPitchOptions
 CMVN: compute_cmvn_stats, apply_cmvn, apply_cmvn_, CmvnAccumulator
+Pitch: compute_and_process_kaldi_pitch
 Transforms: Stft, IStft, Rfft, MelBanks, FeatureWindowFunction
 
 Every option class constructor takes all fields as keyword arguments with
@@ -34,6 +35,7 @@ from __future__ import annotations
 import collections.abc
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn_
+from kaldi_native_fbank.lib._kaldi_native_fbank import compute_and_process_kaldi_pitch
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_cmvn_stats
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_deltas
 from kaldi_native_fbank.lib._kaldi_native_fbank import splice_frames
@@ -42,7 +44,7 @@ import numpy
 import numpy.typing
 import typing
 from . import lib
-__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FeatureTransform', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'transform_features', 'splice_frames']
+__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FeatureTransform', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_and_process_kaldi_pitch', 'compute_deltas', 'transform_features', 'splice_frames']
 class CmvnAccumulator:
     """
     Incremental accumulator for speaker-level / streaming cmvn.
@@ -1254,6 +1256,79 @@ class OnlineNemoFbank:
         """
         Buffered samples that do not make up a whole hop.
         """
+class OnlinePitch:
+    """
+    Streaming pitch extraction with post-processing.
+    
+    This is the streaming interface of kaldi's
+    `compute-and-process-kaldi-pitch-feats
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc>`_
+    (kaldi's ``OnlinePitchFeature`` + ``OnlineProcessPitch``): it consumes
+    waveform chunks and produces the processed pitch features — by default the
+    3-dimensional (POV, normalized-log-pitch, delta-pitch).
+    
+    Usage mirrors :class:`kaldi_native_fbank.OnlineMfcc`: feed the waveform with
+    :meth:`accept_waveform`, call :meth:`input_finished` when no more data is
+    coming, then read frames with :meth:`get_frame`.
+    
+    .. seealso:: :class:`PitchExtractionOptions`, :class:`ProcessPitchOptions`,
+       :func:`compute_and_process_kaldi_pitch`
+    """
+    def __init__(self, opts: PitchExtractionOptions, popts: ProcessPitchOptions = ...) -> None:
+        """
+        Construct with the given extraction and post-processing options.
+        
+        :param opts: Raw pitch extraction options; see :class:`PitchExtractionOptions`.
+        :param popts: Post-processing options; see :class:`ProcessPitchOptions`.
+           At least one of the ``add_*`` features must be enabled.
+        """
+    def accept_waveform(self, sampling_rate: typing.SupportsFloat, waveform: collections.abc.Sequence[typing.SupportsFloat]) -> None:
+        """
+        Add more waveform samples.
+        
+        :param sampling_rate: The sampling rate of ``waveform``; must match
+           ``opts.samp_freq``.
+        :param waveform: 1-D float32 samples (kaldi semantics: raw WAV magnitudes,
+           not divided by 32768).
+        """
+    def get_frame(self, frame: typing.SupportsInt) -> numpy.typing.NDArray[numpy.float32]:
+        """
+        Return the ``frame``-th feature vector.
+        
+        :param frame: Frame index, must be less than ``num_frames_ready``.
+        :return: np.ndarray of shape ``(dim,)`` and dtype float32.
+        """
+    def input_finished(self) -> None:
+        """
+        Tell the extractor that no more waveform will be added.
+        
+        This flushes out the last frames and fixes the features of all frames.
+        """
+    def is_last_frame(self, frame: typing.SupportsInt) -> bool:
+        """
+        Return true if ``frame`` is the last frame.
+        
+        Note: this can only return true after :meth:`input_finished` has been
+        called.
+        
+        :param frame: Frame index.
+        :return: True if the frame is the last one.
+        """
+    @property
+    def dim(self) -> int:
+        """
+        The dimension of the output features (3 by default).
+        """
+    @property
+    def frame_shift_in_seconds(self) -> float:
+        """
+        The frame shift in seconds.
+        """
+    @property
+    def num_frames_ready(self) -> int:
+        """
+        The number of frames that have already been computed.
+        """
 class OnlineRawAudioSamples:
     """
     """
@@ -1382,6 +1457,383 @@ class OnlineWhisperFbank:
         """
         The number of frames that have already been computed.
         """
+class PitchExtractionOptions:
+    """
+    Options for the raw pitch extraction stage.
+    
+    Mirrors the flags of kaldi's `compute-kaldi-pitch-feats
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-kaldi-pitch-feats.cc>`_
+    and kaldi's `PitchExtractionOptions
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h>`_.
+    
+    .. seealso:: :class:`ProcessPitchOptions`, :class:`OnlinePitch`,
+       :func:`compute_and_process_kaldi_pitch`
+    """
+    def __init__(self, samp_freq: typing.SupportsFloat = 16000, frame_shift_ms: typing.SupportsFloat = 10.0, frame_length_ms: typing.SupportsFloat = 25.0, preemph_coeff: typing.SupportsFloat = 0.0, min_f0: typing.SupportsFloat = 50, max_f0: typing.SupportsFloat = 400, soft_min_f0: typing.SupportsFloat = 10.0, penalty_factor: typing.SupportsFloat = 0.1, lowpass_cutoff: typing.SupportsFloat = 1000, resample_freq: typing.SupportsFloat = 4000, delta_pitch: typing.SupportsFloat = 0.005, nccf_ballast: typing.SupportsFloat = 7000, lowpass_filter_width: typing.SupportsInt = 1, upsample_filter_width: typing.SupportsInt = 5, max_frames_latency: typing.SupportsInt = 0, frames_per_chunk: typing.SupportsInt = 0, simulate_first_pass_online: bool = False, recompute_frame: typing.SupportsInt = 500, nccf_ballast_online: bool = False, snip_edges: bool = True) -> None:
+        """
+        Construct with the given options.
+        
+        All fields are optional keyword arguments; the defaults are shown in the
+        signature (they are kaldi's defaults).
+        
+        :param samp_freq: Waveform sample frequency in Hz (kaldi ``--sample-frequency``).
+        :param frame_shift_ms: Frame shift in milliseconds (kaldi ``--frame-shift``).
+        :param frame_length_ms: Frame length in milliseconds (kaldi ``--frame-length``).
+        :param preemph_coeff: Preemphasis coefficient; deprecated in kaldi
+           (kaldi ``--preemphasis-coefficient``).
+        :param min_f0: Min F0 to search for, in Hz (kaldi ``--min-f0``).
+        :param max_f0: Max F0 to search for, in Hz (kaldi ``--max-f0``).
+        :param soft_min_f0: Minimum f0 applied in a soft way; must not exceed
+           ``min_f0`` (kaldi ``--soft-min-f0``).
+        :param penalty_factor: Cost factor for F0 change (kaldi ``--penalty-factor``).
+        :param lowpass_cutoff: Low-pass filter cutoff in Hz (kaldi ``--lowpass-cutoff``).
+        :param resample_freq: Frequency the signal is downsampled to; must be more
+           than twice ``lowpass_cutoff`` (kaldi ``--resample-frequency``).
+        :param delta_pitch: The pitch tolerance in pruning lags (kaldi ``--delta-pitch``).
+        :param nccf_ballast: Reduces NCCF for quiet frames when increased
+           (kaldi ``--nccf-ballast``).
+        :param lowpass_filter_width: Low-pass filter width (kaldi ``--lowpass-filter-width``).
+        :param upsample_filter_width: NCCF upsampling filter width
+           (kaldi ``--upsample-filter-width``).
+        :param max_frames_latency: Maximum frames of latency allowed for pitch
+           tracking (kaldi ``--max-frames-latency``).
+        :param frames_per_chunk: Chunk size for :func:`compute_and_process_kaldi_pitch`
+           (kaldi ``--frames-per-chunk``).
+        :param simulate_first_pass_online: Output first-pass online features in
+           :func:`compute_and_process_kaldi_pitch`
+           (kaldi ``--simulate-first-pass-online``).
+        :param recompute_frame: Frame at which online NCCF recomputation happens
+           (kaldi ``--recompute-frame``).
+        :param nccf_ballast_online: Debug flag for how the NCCF ballast is computed
+           (kaldi ``--nccf-ballast-online``).
+        :param snip_edges: If false, incomplete frames near the ending edge are not
+           snipped (kaldi ``--snip-edges``).  Note: unlike other feature types,
+           kaldi's pitch extractor defaults this to true.
+        """
+    @property
+    def delta_pitch(self) -> float:
+        """
+        The pitch tolerance in pruning lags.
+        """
+    @delta_pitch.setter
+    def delta_pitch(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def frame_length_ms(self) -> float:
+        """
+        Frame length in milliseconds.
+        """
+    @frame_length_ms.setter
+    def frame_length_ms(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def frame_shift_ms(self) -> float:
+        """
+        Frame shift in milliseconds.
+        """
+    @frame_shift_ms.setter
+    def frame_shift_ms(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def frames_per_chunk(self) -> int:
+        """
+        Chunk size for :func:`compute_and_process_kaldi_pitch`.
+        """
+    @frames_per_chunk.setter
+    def frames_per_chunk(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def lowpass_cutoff(self) -> float:
+        """
+        Low-pass filter cutoff in Hz.
+        """
+    @lowpass_cutoff.setter
+    def lowpass_cutoff(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def lowpass_filter_width(self) -> int:
+        """
+        Low-pass filter width.
+        """
+    @lowpass_filter_width.setter
+    def lowpass_filter_width(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def max_f0(self) -> float:
+        """
+        Max F0 to search for, in Hz.
+        """
+    @max_f0.setter
+    def max_f0(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def max_frames_latency(self) -> int:
+        """
+        Maximum frames of latency allowed for pitch tracking.
+        """
+    @max_frames_latency.setter
+    def max_frames_latency(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def min_f0(self) -> float:
+        """
+        Min F0 to search for, in Hz.
+        """
+    @min_f0.setter
+    def min_f0(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def nccf_ballast(self) -> float:
+        """
+        Reduces NCCF for quiet frames when increased.
+        """
+    @nccf_ballast.setter
+    def nccf_ballast(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def nccf_ballast_online(self) -> bool:
+        """
+        Debug flag for how the NCCF ballast is computed.
+        """
+    @nccf_ballast_online.setter
+    def nccf_ballast_online(self, arg0: bool) -> None:
+        ...
+    @property
+    def nccf_window_shift(self) -> int:
+        """
+        The NCCF window shift in samples after resampling.
+        """
+    @property
+    def nccf_window_size(self) -> int:
+        """
+        The NCCF window size in samples after resampling.
+        """
+    @property
+    def penalty_factor(self) -> float:
+        """
+        Cost factor for F0 change.
+        """
+    @penalty_factor.setter
+    def penalty_factor(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def preemph_coeff(self) -> float:
+        """
+        Preemphasis coefficient (deprecated in kaldi).
+        """
+    @preemph_coeff.setter
+    def preemph_coeff(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def recompute_frame(self) -> int:
+        """
+        Frame at which online NCCF recomputation happens.
+        """
+    @recompute_frame.setter
+    def recompute_frame(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def resample_freq(self) -> float:
+        """
+        Frequency the signal is downsampled to.
+        """
+    @resample_freq.setter
+    def resample_freq(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def samp_freq(self) -> float:
+        """
+        Waveform sample frequency in Hz.
+        """
+    @samp_freq.setter
+    def samp_freq(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def simulate_first_pass_online(self) -> bool:
+        """
+        Output first-pass online features (batch mode only).
+        """
+    @simulate_first_pass_online.setter
+    def simulate_first_pass_online(self, arg0: bool) -> None:
+        ...
+    @property
+    def snip_edges(self) -> bool:
+        """
+        If false, incomplete frames near the ending edge are not snipped.
+        """
+    @snip_edges.setter
+    def snip_edges(self, arg0: bool) -> None:
+        ...
+    @property
+    def soft_min_f0(self) -> float:
+        """
+        Minimum f0 applied in a soft way.
+        """
+    @soft_min_f0.setter
+    def soft_min_f0(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def upsample_filter_width(self) -> int:
+        """
+        NCCF upsampling filter width.
+        """
+    @upsample_filter_width.setter
+    def upsample_filter_width(self, arg0: typing.SupportsInt) -> None:
+        ...
+class ProcessPitchOptions:
+    """
+    Options for the pitch post-processing stage.
+    
+    Determines which features are produced from the raw (NCCF, pitch) pair.
+    With the defaults each frame is the 3-dimensional
+    (POV-feature, normalized-log-pitch, delta-log-pitch) output of kaldi's
+    `compute-and-process-kaldi-pitch-feats
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc>`_;
+    see kaldi's `ProcessPitchOptions
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h>`_.
+    
+    .. seealso:: :class:`PitchExtractionOptions`, :class:`OnlinePitch`
+    """
+    def __init__(self, pitch_scale: typing.SupportsFloat = 2.0, pov_scale: typing.SupportsFloat = 2.0, pov_offset: typing.SupportsFloat = 0.0, delta_pitch_scale: typing.SupportsFloat = 10.0, delta_pitch_noise_stddev: typing.SupportsFloat = 0.005, normalization_left_context: typing.SupportsInt = 75, normalization_right_context: typing.SupportsInt = 75, delta_window: typing.SupportsInt = 2, delay: typing.SupportsInt = 0, add_pov_feature: bool = True, add_normalized_log_pitch: bool = True, add_delta_pitch: bool = True, add_raw_log_pitch: bool = False) -> None:
+        """
+        Construct with the given options.
+        
+        All fields are optional keyword arguments; the defaults are shown in the
+        signature (they are kaldi's defaults).
+        
+        :param pitch_scale: Scaling of the normalized log-pitch feature
+           (kaldi ``--pitch-scale``).
+        :param pov_scale: Scaling of the POV feature (kaldi ``--pov-scale``).
+        :param pov_offset: Offset added to the POV feature (kaldi ``--pov-offset``).
+        :param delta_pitch_scale: Scaling of the delta log-pitch feature
+           (kaldi ``--delta-pitch-scale``).
+        :param delta_pitch_noise_stddev: Stddev of the noise added to the delta
+           log-pitch (kaldi ``--delta-pitch-noise-stddev``).
+        :param normalization_left_context: Left context (frames) for log-pitch
+           normalization (kaldi ``--normalization-left-context``).
+        :param normalization_right_context: Right context (frames) for log-pitch
+           normalization (kaldi ``--normalization-right-context``).
+        :param delta_window: Frames on each side used for the delta window
+           (kaldi ``--delta-window``).
+        :param delay: Frames by which the pitch information is delayed
+           (kaldi ``--delay``).
+        :param add_pov_feature: Add the warped NCCF to the output (1 dim).
+        :param add_normalized_log_pitch: Add the mean-subtracted log-pitch (1 dim).
+        :param add_delta_pitch: Add the time derivative of log-pitch (1 dim).
+        :param add_raw_log_pitch: Add log(pitch) (1 dim).
+        """
+    @property
+    def add_delta_pitch(self) -> bool:
+        """
+        Add the time derivative of log-pitch (1 dim).
+        """
+    @add_delta_pitch.setter
+    def add_delta_pitch(self, arg0: bool) -> None:
+        ...
+    @property
+    def add_normalized_log_pitch(self) -> bool:
+        """
+        Add the mean-subtracted log-pitch (1 dim).
+        """
+    @add_normalized_log_pitch.setter
+    def add_normalized_log_pitch(self, arg0: bool) -> None:
+        ...
+    @property
+    def add_pov_feature(self) -> bool:
+        """
+        Add the warped NCCF to the output (1 dim).
+        """
+    @add_pov_feature.setter
+    def add_pov_feature(self, arg0: bool) -> None:
+        ...
+    @property
+    def add_raw_log_pitch(self) -> bool:
+        """
+        Add log(pitch) (1 dim).
+        """
+    @add_raw_log_pitch.setter
+    def add_raw_log_pitch(self, arg0: bool) -> None:
+        ...
+    @property
+    def delay(self) -> int:
+        """
+        Frames by which the pitch information is delayed.
+        """
+    @delay.setter
+    def delay(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def delta_pitch_noise_stddev(self) -> float:
+        """
+        Stddev of the noise added to the delta log-pitch.
+        
+        The noise is drawn from a deterministic stream, so the features are
+        reproducible on every platform.
+        """
+    @delta_pitch_noise_stddev.setter
+    def delta_pitch_noise_stddev(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def delta_pitch_scale(self) -> float:
+        """
+        Scaling of the delta log-pitch feature.
+        """
+    @delta_pitch_scale.setter
+    def delta_pitch_scale(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def delta_window(self) -> int:
+        """
+        Frames on each side used for the delta window.
+        """
+    @delta_window.setter
+    def delta_window(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def dim(self) -> int:
+        """
+        The output feature dimension.
+        """
+    @property
+    def normalization_left_context(self) -> int:
+        """
+        Left context (frames) for log-pitch normalization.
+        """
+    @normalization_left_context.setter
+    def normalization_left_context(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def normalization_right_context(self) -> int:
+        """
+        Right context (frames) for log-pitch normalization.
+        """
+    @normalization_right_context.setter
+    def normalization_right_context(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def pitch_scale(self) -> float:
+        """
+        Scaling of the normalized log-pitch feature.
+        """
+    @pitch_scale.setter
+    def pitch_scale(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def pov_offset(self) -> float:
+        """
+        Offset added to the POV feature.
+        """
+    @pov_offset.setter
+    def pov_offset(self, arg0: typing.SupportsFloat) -> None:
+        ...
+    @property
+    def pov_scale(self) -> float:
+        """
+        Scaling of the POV feature.
+        """
+    @pov_scale.setter
+    def pov_scale(self, arg0: typing.SupportsFloat) -> None:
+        ...
 class RawAudioSamplesOptions:
     """
     Options for framing raw audio samples without any processing.

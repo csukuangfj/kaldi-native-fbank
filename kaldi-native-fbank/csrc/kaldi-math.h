@@ -34,8 +34,63 @@
 
 namespace knf {
 
-/// @brief Natural logarithm of x.
+/// @brief Natural logarithm of x (float overload; matches kaldi's Log).
 inline float Log(float x) { return logf(x); }
+
+/// @brief Natural logarithm of x (double overload; matches kaldi's Log).
+inline double Log(double x) { return log(x); }
+
+/// @brief Exponential of x (float overload; matches kaldi's Exp).
+inline float Exp(float x) { return expf(x); }
+
+/// @brief Exponential of x (double overload; matches kaldi's Exp).
+inline double Exp(double x) { return exp(x); }
+
+/// @brief Greatest common divisor of two integers.
+///
+/// Euclid's algorithm; both arguments must be >= 0 and not both zero.
+/// Mirrors kaldi's `Gcd` in @kfile{src/base/kaldi-math.h}.
+///
+/// @param [in] m  First integer.
+/// @param [in] n  Second integer.
+/// @return  The greatest common divisor of `m` and `n`.
+template <typename I>
+inline I Gcd(I m, I n) {
+  while (n != 0) {
+    I tmp = m % n;
+    m = n;
+    n = tmp;
+  }
+  return m;
+}
+
+/// @brief Least common multiple of two integers.
+///
+/// Mirrors kaldi's `Lcm` in @kfile{src/base/kaldi-math.h}.
+///
+/// @param [in] m  First integer.
+/// @param [in] n  Second integer.
+/// @return  The least common multiple of `m` and `n` (0 if either is 0).
+template <typename I>
+inline I Lcm(I m, I n) {
+  I tmp = Gcd(m, n);
+  return tmp == 0 ? 0 : (m / tmp * n);
+}
+
+/// @brief Approximate floating-point equality test.
+///
+/// Returns true if `a` and `b` are equal to a relative tolerance `tol`:
+/// \f[ |a - b| \le \mathrm{tol} \cdot (|a| + |b|) \f]
+/// Mirrors kaldi's `ApproxEqual` in @kfile{src/base/kaldi-math.h}.
+///
+/// @param [in] a   First value.
+/// @param [in] b   Second value.
+/// @param [in] tol Relative tolerance (default 0.01).
+/// @return  True if `a` and `b` are approximately equal.
+template <typename Real>
+inline bool ApproxEqual(Real a, Real b, Real tol = 0.01) {
+  return (std::abs(a - b) <= tol * (std::abs(a) + std::abs(b)));
+}
 
 /// @brief Return a random integer between 0 and RAND_MAX, inclusive.
 int Rand(struct RandomState *state = nullptr);

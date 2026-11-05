@@ -49,7 +49,8 @@ ctest            # use the real ctest binary, see gotchas below
   `macos-15-intel`.
 - Platform wheel builds follow sherpa-onnx's per-platform layout: linux
   (x64, arm64, arm32, **x86/i686**), macos (x64, arm64, **universal2**),
-  windows (x86, x64, arm64), termux (4 ABIs: aarch64/arm/x86_64/i686).
+  windows (x86, x64, arm64), termux (3 ABIs: aarch64/arm/x86_64; the i686
+  ABI is skipped — its termux package mirror is unreliable).
 - `build-test.yaml` builds AND runs the tests on all those platforms:
   native runners for linux/macos/windows (including macos universal2 via
   `CMAKE_OSX_ARCHITECTURES=arm64;x86_64` and windows-arm64 on

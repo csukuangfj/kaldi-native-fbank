@@ -2,6 +2,7 @@
 Python wrapper for kaldi native fbank
 """
 from __future__ import annotations
+import collections.abc
 import kaldi_native_fbank
 from kaldi_native_fbank import CmvnAccumulator
 from kaldi_native_fbank import CmvnOptions
@@ -18,8 +19,11 @@ from kaldi_native_fbank import NemoFbankOptions
 from kaldi_native_fbank import OnlineFbank
 from kaldi_native_fbank import OnlineMfcc
 from kaldi_native_fbank import OnlineNemoFbank
+from kaldi_native_fbank import OnlinePitch
 from kaldi_native_fbank import OnlineRawAudioSamples
 from kaldi_native_fbank import OnlineWhisperFbank
+from kaldi_native_fbank import PitchExtractionOptions
+from kaldi_native_fbank import ProcessPitchOptions
 from kaldi_native_fbank import RawAudioSamplesOptions
 from kaldi_native_fbank import Rfft
 from kaldi_native_fbank import SpliceOptions
@@ -30,7 +34,7 @@ from kaldi_native_fbank import WhisperFeatureOptions
 import numpy
 import numpy.typing
 import typing
-__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureTransform', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames', 'transform_features']
+__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureTransform', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_and_process_kaldi_pitch', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames', 'transform_features']
 def apply_cmvn(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], opts: kaldi_native_fbank.CmvnOptions, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
     """
     Apply cmvn to features and return the normalized copy.
@@ -102,6 +106,60 @@ def apply_cmvn_(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "
     
     .. seealso:: :func:`apply_cmvn`
        For the normalization formulas.
+    """
+def compute_and_process_kaldi_pitch(pitch_opts: kaldi_native_fbank.PitchExtractionOptions, process_opts: kaldi_native_fbank.ProcessPitchOptions, wave: collections.abc.Sequence[typing.SupportsFloat]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
+    """
+    Compute processed pitch features for a whole utterance.
+    
+    This is kaldi's
+    `compute-and-process-kaldi-pitch-feats
+    <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc>`_
+    (same arithmetic): the raw (NCCF, pitch) extraction of
+    `Ghahremani et al., ICASSP 2014
+    <https://www.danielpovey.com/files/icassp2014_pitch.pdf>`_ followed by
+    post-processing into the configured features (by default
+    POV, normalized-log-pitch, delta-pitch).  The output equals the kaldi
+    binary's output value-by-value for the same input and options.
+    
+    It is sensitive to the variables in ``pitch_opts`` that relate to online
+    processing, i.e. ``max_frames_latency``, ``frames_per_chunk``,
+    ``simulate_first_pass_online``, ``recompute_frame``.
+    
+    The noise added to the delta-pitch feature (``process_opts.delta_pitch_noise_stddev``)
+    is drawn from a deterministic stream that reproduces the reference kaldi
+    realization, so the result is identical on every platform.
+    
+    :param pitch_opts: Raw pitch extraction options.
+    :param process_opts: Post-processing options.
+    :param wave: 1-D float32 samples (kaldi semantics: raw WAV magnitudes, not
+       divided by 32768).
+    :type wave: numpy.ndarray
+    :return: Feature matrix of shape ``(num_frames, process_opts.dim)``,
+       float32.
+    :rtype: numpy.ndarray
+    
+    Example
+    -------
+    
+    .. code-block:: python
+    
+       import wave
+       import numpy as np
+       import kaldi_native_fbank as knf
+    
+       with wave.open("zh0_1s.wav") as f:
+           samples = np.frombuffer(f.readframes(f.getnframes()), dtype=np.int16)
+       samples = samples.astype(np.float32)  # raw magnitudes, no /32768
+    
+       pitch_opts = knf.PitchExtractionOptions(min_f0=50, max_f0=500,
+                                               snip_edges=True)
+       feats = knf.compute_and_process_kaldi_pitch(pitch_opts,
+                                                   knf.ProcessPitchOptions(),
+                                                   samples)
+       # feats.shape == (num_frames, 3): POV, norm-log-pitch, delta-pitch
+    
+    .. seealso:: :class:`OnlinePitch`, :class:`PitchExtractionOptions`,
+       :class:`ProcessPitchOptions`
     """
 def compute_cmvn_stats(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float64], "[m, n]"]:
     """
