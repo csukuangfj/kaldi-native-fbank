@@ -199,6 +199,15 @@ See :doc:`cmvn` for formulas and kaldi command mapping
     kaldi ``cmvn.ark`` layout (``row0 = [sum_1..sum_D, count]``,
     ``row1 = [sumsq_1..sumsq_D, unused]``).
 
+``SpliceOptions(left_context=3, right_context=3)``
+  Contexts for :func:`splice_frames`.  kaldi counterpart:
+  :kaldi:`splice-feats <src/featbin/splice-feats.cc>`.
+
+  * ``left_context: int = 3`` — number of preceding frames to append.
+    *kaldi*: ``splice-feats --left-context``.
+  * ``right_context: int = 3`` — number of following frames to append.
+    *kaldi*: ``splice-feats --right-context``.
+
 Module functions
 ----------------
 
@@ -207,3 +216,8 @@ Module functions
 * ``knf.apply_cmvn(stats, opts, feats) -> numpy.ndarray`` — normalized copy
   (*kaldi*: ``apply-cmvn``).
 * ``knf.apply_cmvn_(stats, opts, feats)`` — in-place variant.
+* ``knf.splice_frames(feats, opts=SpliceOptions()) -> numpy.ndarray`` —
+  concatenate each frame with its left/right context neighbors; edge frames
+  are replicated, so the frame count stays the same and the dimension becomes
+  ``dim * (1 + left_context + right_context)``.  *kaldi*: ``splice-feats``
+  (:kaldi:`SpliceFrames <src/feat/feature-functions.cc>`).

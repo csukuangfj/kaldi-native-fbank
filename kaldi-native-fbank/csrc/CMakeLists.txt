@@ -6,6 +6,7 @@ set(sources
   feature-functions.cc
   feature-mfcc.cc
   feature-raw-audio-samples.cc
+  feature-splice.cc
   feature-window.cc
   istft.cc
   kaldi-math.cc
@@ -70,6 +71,7 @@ set(test_srcs
   test-log.cc
   test-online-nemo-fbank.cc
   test-rfft.cc
+  test-splice.cc
 )
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)

@@ -35,11 +35,12 @@ import collections.abc
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn_
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_cmvn_stats
+from kaldi_native_fbank.lib._kaldi_native_fbank import splice_frames
 import numpy
 import numpy.typing
 import typing
 from . import lib
-__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats']
+__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'splice_frames']
 class CmvnAccumulator:
     """
     Incremental accumulator for speaker-level / streaming cmvn.
@@ -1335,6 +1336,46 @@ class Rfft:
         :param d: 1-D list of n floats.
         :return: The packed spectrum, a 1-D list of n floats.
         """
+class SpliceOptions:
+    """
+    Options for :func:`splice_frames`.
+    
+    Mirrors the flags of kaldi's `splice-feats <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc>`_.
+    
+    .. seealso:: :func:`splice_frames`
+    """
+    def __init__(self, left_context: typing.SupportsInt = 3, right_context: typing.SupportsInt = 3) -> None:
+        """
+        Construct with the given contexts.
+        
+        All fields are optional keyword arguments; the defaults are shown in the
+        signature.
+        
+        :param left_context: Number of preceding frames to append
+           (kaldi ``splice-feats --left-context``).
+        :param right_context: Number of following frames to append
+           (kaldi ``splice-feats --right-context``).
+        """
+    @property
+    def left_context(self) -> int:
+        """
+        Number of preceding frames to append.
+        
+        Same as kaldi ``splice-feats --left-context``.
+        """
+    @left_context.setter
+    def left_context(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def right_context(self) -> int:
+        """
+        Number of following frames to append.
+        
+        Same as kaldi ``splice-feats --right-context``.
+        """
+    @right_context.setter
+    def right_context(self, arg0: typing.SupportsInt) -> None:
+        ...
 class Stft:
     """
     Compute the short-time Fourier transform of a waveform.

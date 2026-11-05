@@ -20,6 +20,7 @@ from kaldi_native_fbank import OnlineRawAudioSamples
 from kaldi_native_fbank import OnlineWhisperFbank
 from kaldi_native_fbank import RawAudioSamplesOptions
 from kaldi_native_fbank import Rfft
+from kaldi_native_fbank import SpliceOptions
 from kaldi_native_fbank import Stft
 from kaldi_native_fbank import StftConfig
 from kaldi_native_fbank import StftResult
@@ -27,7 +28,7 @@ from kaldi_native_fbank import WhisperFeatureOptions
 import numpy
 import numpy.typing
 import typing
-__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats']
+__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'splice_frames']
 def apply_cmvn(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], opts: kaldi_native_fbank.CmvnOptions, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
     """
     Apply cmvn to features and return the normalized copy.
@@ -133,4 +134,38 @@ def compute_cmvn_stats(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.flo
           Apply these stats to features.
        :class:`CmvnAccumulator`
           Incremental version of this computation.
+    """
+def splice_frames(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"], opts: kaldi_native_fbank.SpliceOptions = ...) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
+    """
+    Splice each frame with its left/right context neighbors.
+    
+    This is kaldi's `splice-feats <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc>`_
+    (same arithmetic): for every frame index :math:`t` the output row is
+    
+    .. math::
+    
+       y_t = [ x_{\\max(0, t-L)}, \\ldots, x_{\\min(T-1, t+R)} ]
+    
+    where :math:`L` is ``opts.left_context``, :math:`R` is
+    ``opts.right_context`` and :math:`T` is the number of input frames.  Edge
+    frames are replicated: out-of-range indices clamp to the first/last frame.
+    The output therefore has the same number of frames as the input and
+    ``dim * (1 + L + R)`` dimensions.
+    
+    :param feats: Feature matrix of shape ``(num_frames, dim)``, float32.
+    :type feats: numpy.ndarray
+    :param opts: Contexts; see :class:`SpliceOptions`.
+    :return: The spliced matrix of shape ``(num_frames, dim * (1 + L + R))``,
+       float32.
+    :rtype: numpy.ndarray
+    
+    Example
+    -------
+    
+    .. code-block:: python
+    
+       opts = knf.SpliceOptions(left_context=3, right_context=3)
+       spliced = knf.splice_frames(feats, opts)  # (T, 7 * dim)
+    
+    .. seealso:: :class:`SpliceOptions`
     """

@@ -14,3 +14,4 @@ Python API
    stft
    cmvn
    reference
+   splice

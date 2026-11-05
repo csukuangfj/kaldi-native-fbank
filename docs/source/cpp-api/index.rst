@@ -10,3 +10,4 @@ Full doxygen reference (auto-generated from the headers):
    cmvn
    mfcc
    fbank
+   splice

@@ -32,6 +32,7 @@ set(py_test_files
   test_online_raw_audio_samples.py
   test_online_whisper_fbank.py
   test_rfft.py
+  test_splice.py
   test_stft.py
   test_vocos_istft.py
 )
