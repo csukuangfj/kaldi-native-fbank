@@ -78,8 +78,14 @@ jobs:
           python3 -m pip install -U pip
           # numpy<2 keeps compatibility with the torch wheels available for
           # these interpreters; tests skip themselves when a dependency is
-          # unavailable on the platform.
-          python3 -m pip install "numpy<2"
+          # unavailable on the platform.  windows-arm64 has no numpy<2 wheels
+          # at all (numpy 1.x never shipped win_arm64), so it only tests the
+          # numpy>=2 pass.
+          if [[ "${{ runner.os }}" == "Windows" && "${{ runner.arch }}" == "ARM64" ]]; then
+            python3 -m pip install "numpy>=2"
+          else
+            python3 -m pip install "numpy<2"
+          fi
           # PyPI has no windows-arm64 torch wheels; torch 2.10.0+cpu is on the
           # pytorch wheel index (this runner's python is 3.12). Other platforms
           # install plain torch from PyPI (macos x64 resolves to 2.2.x, the last
@@ -117,19 +123,25 @@ jobs:
         shell: bash
         run: |
           cd build
-          # pass 1: numpy < 2 (installed above)
-          ctest --output-on-failure -C Release
+          if [[ "${{ runner.os }}" == "Windows" && "${{ runner.arch }}" == "ARM64" ]]; then
+            # windows-arm64 has no numpy<2 wheels; its single pass runs all
+            # tests against numpy >= 2.
+            ctest --output-on-failure -C Release
+          else
+            # pass 1: numpy < 2 (installed above)
+            ctest --output-on-failure -C Release
 
-          # pass 2: numpy >= 2 — the library must work with both numpy majors
-          python3 -m pip install -U "numpy>=2"
-          # torch < 2.3 was built against the numpy 1.x C-API, so its
-          # tensor.numpy()/torch.from_numpy bridge cannot run under numpy 2.
-          # Drop it in this pass so the torch-based reference tests self-skip
-          # instead of failing; those combinations are covered by pass 1.
-          if python3 -c "import torch, sys; v = tuple(int(x) for x in torch.__version__.split('+')[0].split('.')[:2]); sys.exit(0 if v < (2, 3) else 1)" 2>/dev/null; then
-            python3 -m pip uninstall -y torch
+            # pass 2: numpy >= 2 — the library must work with both numpy majors
+            python3 -m pip install -U "numpy>=2"
+            # torch < 2.3 was built against the numpy 1.x C-API, so its
+            # tensor.numpy()/torch.from_numpy bridge cannot run under numpy 2.
+            # Drop it in this pass so the torch-based reference tests self-skip
+            # instead of failing; those combinations are covered by pass 1.
+            if python3 -c "import torch, sys; v = tuple(int(x) for x in torch.__version__.split('+')[0].split('.')[:2]); sys.exit(0 if v < (2, 3) else 1)" 2>/dev/null; then
+              python3 -m pip uninstall -y torch
+            fi
+            ctest --output-on-failure -C Release -R _py
           fi
-          ctest --output-on-failure -C Release -R _py
 
   # linux arm32: cross-compile on an arm64 runner; the arm64 kernel runs the
   # armhf binaries natively once the 32-bit runtime is installed, so no qemu

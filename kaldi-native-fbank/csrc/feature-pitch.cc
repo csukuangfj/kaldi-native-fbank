@@ -954,7 +954,7 @@ void OnlinePitchFeatureImpl::RecomputeBacktraces() {
     float avg_norm_prod = nccf_info_[frame]->avg_norm_prod;
     float old_nccf_ballast =
         powf(old_mean_square * basic_frame_length, 2) * opts_.nccf_ballast;
-    float nccf_scale = pow(
+    float nccf_scale = powf(
         (old_nccf_ballast + avg_norm_prod) / (new_nccf_ballast + avg_norm_prod),
         static_cast<float>(0.5));
     // The "nccf_scale" is an estimate of the scaling factor by which the NCCF

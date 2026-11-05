@@ -74,7 +74,6 @@ on:
     branches:
       - wheel
       - master
-      - more-feat
     tags:
       - '*'
   workflow_dispatch:

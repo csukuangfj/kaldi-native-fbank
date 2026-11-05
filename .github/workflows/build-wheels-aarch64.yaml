@@ -6,7 +6,6 @@ on:
       - wheel
       - fix-wheel-2
       - master
-      - more-feat
     tags:
       - '*'
   workflow_dispatch:

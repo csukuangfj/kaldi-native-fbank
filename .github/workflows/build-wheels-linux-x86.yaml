@@ -31,19 +31,28 @@ jobs:
       # see https://cibuildwheel.readthedocs.io/en/stable/changelog/
       # for a list of versions
 
-      # The manylinux2014 i686 container has no working DNS on the hosted
-      # runners ("Name or service not known"): the host resolves through
-      # systemd-resolved's loopback stub, which means nothing inside the
-      # container, and public resolvers (8.8.8.8) are not reachable from it.
-      # Discover the host's real upstream resolver(s) and keep the first
-      # candidate that resolves pypi.org from inside the container.  This must
-      # run before both cibuildwheel steps below.
+      # The manylinux2014 i686 container has no working DNS egress at all on
+      # the hosted runners: every resolver probe fails inside the docker
+      # bridge ("DNS FAIL: 168.63.129.16 / 8.8.8.8 / 1.1.1.1").  Run
+      # cibuildwheel's containers with host networking (a docker shim injects
+      # --network host) so they share the runner's working network stack, then
+      # point the container at the host's resolver (systemd-resolved stub).
+      # This must run before both cibuildwheel steps below.
       - name: Fix DNS inside the manylinux container
         shell: bash
         run: |
+          mkdir -p "$HOME/docker-shim"
+          printf '%s\n' '#!/bin/bash' \
+            'if [ "$1" = "run" ] || [ "$1" = "create" ]; then' \
+            '  cmd="$1"; shift' \
+            '  exec /usr/bin/docker "$cmd" --network host "$@"' \
+            'fi' \
+            'exec /usr/bin/docker "$@"' > "$HOME/docker-shim/docker"
+          chmod +x "$HOME/docker-shim/docker"
+          echo "$HOME/docker-shim" >> $GITHUB_PATH
           DNS_SERVERS=$( (resolvectl dns 2>/dev/null; grep nameserver /etc/resolv.conf) \
             | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | grep -v '^127\.' | sort -u | tr '\n' ' ')
-          echo "CIBW_BEFORE_ALL=for d in ${DNS_SERVERS}8.8.8.8 1.1.1.1; do echo \"nameserver \$d\" > /etc/resolv.conf; if getent hosts pypi.org >/dev/null 2>&1; then echo \"DNS OK: \$d\"; break; else echo \"DNS FAIL: \$d\"; fi; done" >> $GITHUB_ENV
+          echo "CIBW_BEFORE_ALL=for d in 127.0.0.53 ${DNS_SERVERS}8.8.8.8 1.1.1.1; do echo \"nameserver \$d\" > /etc/resolv.conf; if getent hosts pypi.org >/dev/null 2>&1; then echo \"DNS OK: \$d\"; break; else echo \"DNS FAIL: \$d\"; fi; done" >> $GITHUB_ENV
           echo "CIBW_ENVIRONMENT=PIP_RETRIES=10 PIP_TIMEOUT=60" >> $GITHUB_ENV
 
       # CPython 3.8 is EOL and has been dropped upstream: the manylinux images
