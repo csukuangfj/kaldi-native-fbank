@@ -217,6 +217,17 @@ See :doc:`cmvn` for formulas and kaldi command mapping
   * ``window: int = 2`` — regression window; the regression spans
     ``2 * window + 1`` frames.  *kaldi*: ``add-deltas --delta-window``.
 
+``FeatureTransform``
+  Linear/affine transforms (e.g. LDA).  kaldi counterpart:
+  :kaldi:`transform-feats <src/featbin/transform-feats.cc>`.
+
+  * ``FeatureTransform.read(filename)`` — read a kaldi matrix file
+    (binary ``FM``/``DM`` or text ``[ ... ]``).
+  * ``input_dim`` / ``output_dim`` — shape of the stored matrix.
+  * ``is_affine(input_dim)`` — true if the matrix has one offset column
+    (``n == input_dim + 1``).
+  * ``apply(feats)`` — ``y = x M^T``; affine form appends the offset.
+
 Module functions
 ----------------
 
@@ -225,6 +236,9 @@ Module functions
 * ``knf.apply_cmvn(stats, opts, feats) -> numpy.ndarray`` — normalized copy
   (*kaldi*: ``apply-cmvn``).
 * ``knf.apply_cmvn_(stats, opts, feats)`` — in-place variant.
+* ``knf.transform_features(feats, transform) -> numpy.ndarray`` — apply a
+  linear/affine transform (shorthand for ``transform.apply(feats)``).
+  *kaldi*: ``transform-feats``.
 * ``knf.compute_deltas(opts, feats) -> numpy.ndarray`` — regression delta
   features ``[x, delta, delta-delta, ...]``, dimension ``dim * (order + 1)``;
   edge frames are replicated.  *kaldi*: ``add-deltas``

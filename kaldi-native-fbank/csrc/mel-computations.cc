@@ -28,7 +28,6 @@
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -72,8 +71,12 @@ float MelBanks::VtlnWarpFreq(
     return freq;  // in case this gets called
   // for out-of-range frequencies, just return the freq.
 
-  KNF_CHECK_GT(vtln_low_cutoff, low_freq);
-  KNF_CHECK_LT(vtln_high_cutoff, high_freq);
+  if (vtln_low_cutoff <= low_freq) {
+    throw std::invalid_argument("vtln_low_cutoff must be > low_freq");
+  }
+  if (vtln_high_cutoff >= high_freq) {
+    throw std::invalid_argument("vtln_high_cutoff must be < high_freq");
+  }
 
   float one = 1.0f;
   float l = vtln_low_cutoff * std::max(one, vtln_warp_factor);
@@ -81,7 +84,9 @@ float MelBanks::VtlnWarpFreq(
   float scale = 1.0f / vtln_warp_factor;
   float Fl = scale * l;  // F(l);
   float Fh = scale * h;  // F(h);
-  KNF_CHECK(l > low_freq && h < high_freq);
+  if (!(l > low_freq && h < high_freq)) {
+    throw std::invalid_argument("bad VTLN warp range for the mel bins");
+  }
   // slope of left part of the 3-piece linear function
   float scale_left = (Fl - low_freq) / (l - low_freq);
   // [slope of center part is just "scale"]
@@ -125,12 +130,14 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
   htk_mode_ = opts.htk_mode;
   int32_t num_bins = opts.num_bins;
   if (num_bins < 3) {
-    KNF_LOG(FATAL) << "Must have at least 3 mel bins";
+    throw std::invalid_argument("Must have at least 3 mel bins");
   }
 
   float sample_freq = frame_opts.samp_freq;
   int32_t window_length_padded = frame_opts.PaddedWindowSize();
-  KNF_CHECK_EQ(window_length_padded % 2, 0);
+  if (window_length_padded % 2 != 0) {
+    throw std::invalid_argument("PaddedWindowSize() must be even");
+  }
 
   int32_t num_fft_bins = window_length_padded / 2;
   float nyquist = 0.5f * sample_freq;
@@ -145,9 +152,10 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
 
   if (low_freq < 0.0f || low_freq >= nyquist || high_freq <= 0.0f ||
       high_freq > nyquist || high_freq <= low_freq) {
-    KNF_LOG(FATAL) << "Bad values in options: low-freq " << low_freq
-                   << " and high-freq " << high_freq << " vs. nyquist "
-                   << nyquist;
+    std::ostringstream os;
+    os << "Bad values in options: low-freq " << low_freq << " and high-freq "
+       << high_freq << " vs. nyquist " << nyquist;
+    throw std::invalid_argument(os.str());
   }
 
   float fft_bin_width = sample_freq / window_length_padded;
@@ -171,9 +179,11 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
   if (vtln_warp_factor != 1.0f &&
       (vtln_low < 0.0f || vtln_low <= low_freq || vtln_low >= high_freq ||
        vtln_high <= 0.0f || vtln_high >= high_freq || vtln_high <= vtln_low)) {
-    KNF_LOG(FATAL) << "Bad values in options: vtln-low " << vtln_low
-                   << " and vtln-high " << vtln_high << ", versus "
-                   << "low-freq " << low_freq << " and high-freq " << high_freq;
+    std::ostringstream os;
+    os << "Bad values in options: vtln-low " << vtln_low << " and vtln-high "
+       << vtln_high << ", versus low-freq " << low_freq << " and high-freq "
+       << high_freq;
+    throw std::invalid_argument(os.str());
   }
 
   bins_.resize(num_bins);
@@ -216,8 +226,9 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
         last_index = i;
       }
     }
-    KNF_CHECK(first_index != -1 && last_index >= first_index &&
-              "You may have set num_mel_bins too large.");
+    if (first_index == -1 || last_index < first_index) {
+      throw std::invalid_argument("You may have set num_mel_bins too large.");
+    }
 
     bins_[bin].first = first_index;
     int32_t size = last_index + 1 - first_index;
@@ -238,7 +249,7 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
       for (auto k : bins_[i].second) os << k << ", ";
       os << "\n";
     }
-    KNF_LOG(INFO) << os.str();
+    std::fprintf(stderr, "%s", os.str().c_str());
   }
 }
 
@@ -248,12 +259,14 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
   htk_mode_ = opts.htk_mode;
   int32_t num_bins = opts.num_bins;
   if (num_bins < 3) {
-    KNF_LOG(FATAL) << "Must have at least 3 mel bins";
+    throw std::invalid_argument("Must have at least 3 mel bins");
   }
 
   float sample_freq = frame_opts.samp_freq;
   int32_t window_length_padded = frame_opts.PaddedWindowSize();
-  KNF_CHECK_EQ(window_length_padded % 2, 0);
+  if (window_length_padded % 2 != 0) {
+    throw std::invalid_argument("PaddedWindowSize() must be even");
+  }
 
   int32_t num_fft_bins = window_length_padded / 2;
   float nyquist = 0.5f * sample_freq;
@@ -268,9 +281,10 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 
   if (low_freq < 0.0f || low_freq >= nyquist || high_freq <= 0.0f ||
       high_freq > nyquist || high_freq <= low_freq) {
-    KNF_LOG(FATAL) << "Bad values in options: low-freq " << low_freq
-                   << " and high-freq " << high_freq << " vs. nyquist "
-                   << nyquist;
+    std::ostringstream os;
+    os << "Bad values in options: low-freq " << low_freq << " and high-freq "
+       << high_freq << " vs. nyquist " << nyquist;
+    throw std::invalid_argument(os.str());
   }
 
   float fft_bin_width = sample_freq / window_length_padded;
@@ -295,7 +309,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
   bool slaney_norm = false;
   if (!opts.norm.empty()) {
     if (opts.norm != "slaney") {
-      KNF_LOG(FATAL) << "Unsupported norm: " << opts.norm;
+      throw std::invalid_argument("Unsupported norm: " + opts.norm);
     }
     slaney_norm = true;
   }
@@ -369,8 +383,9 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
       }
     }  // for (int32_t i = 0; i < num_fft_bins + 1; ++i)
 
-    KNF_CHECK(first_index != -1 && last_index >= first_index &&
-              "You may have set num_mel_bins too large.");
+    if (first_index == -1 || last_index < first_index) {
+      throw std::invalid_argument("You may have set num_mel_bins too large.");
+    }
 
     bins_[bin].first = first_index;
     int32_t size = last_index + 1 - first_index;
@@ -407,8 +422,9 @@ MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols)
       last_index = i;
     }
 
-    KNF_CHECK(first_index != -1 && last_index >= first_index &&
-              "You have an incorrect weight matrix.");
+    if (first_index == -1 || last_index < first_index) {
+      throw std::invalid_argument("You have an incorrect weight matrix.");
+    }
 
     bins_[bin].first = first_index;
     int32_t size = last_index + 1 - first_index;
@@ -441,7 +457,9 @@ void MelBanks::Compute(const float *power_spectrum,
     // The following assert was added due to a problem with OpenBlas that
     // we had at one point (it was a bug in that library).  Just to detect
     // it early.
-    KNF_CHECK_EQ(energy, energy);  // check that energy is not nan
+    if (energy != energy) {  // check that energy is not nan
+      throw std::runtime_error("mel energy is nan");
+    }
   }
 
   if (debug_) {

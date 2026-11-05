@@ -30,24 +30,31 @@ jobs:
         include:
           - name: linux-x64
             os: ubuntu-latest
-            full-tests: 1
+            python-version: "3.10"
           - name: linux-arm64
             os: ubuntu-24.04-arm
+            python-version: "3.10"
           - name: macos-x64
             os: macos-15-intel
+            python-version: "3.10"
           - name: macos-arm64
             os: macos-latest
-            full-tests: 1
+            python-version: "3.10"
           - name: macos-universal2
             os: macos-latest
-            cmake-args: "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+            python-version: "3.10"
+            cmake-args: "'-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64'"
           - name: windows-x64
             os: windows-latest
+            python-version: "3.10"
           - name: windows-x86
             os: windows-latest
-            cmake-args: "-A Win32"
+            python-version: "3.10"
+            # no 32-bit CPython on the runners; skip the extension module
+            cmake-args: "'-A' 'Win32' '-DKALDI_NATIVE_FBANK_BUILD_PYTHON=OFF'"
           - name: windows-arm64
             os: windows-11-arm
+            python-version: "3.12"
 
     steps:
       - uses: actions/checkout@v4
@@ -57,9 +64,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
 
       - name: ccache
+        if: runner.os != 'Windows'
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ matrix.name }}
@@ -68,20 +76,25 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install -U pip
-          # Best effort: tests skip with a warning when a dependency is
+          # numpy<2 keeps compatibility with the torch wheels available for
+          # these interpreters; tests skip themselves when a dependency is
           # unavailable on the platform.
-          python3 -m pip install numpy torch || true
+          python3 -m pip install "numpy<2" torch || true
 
       - name: Configure
         shell: bash
         run: |
           mkdir build
           cd build
-          cmake -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DPYTHON_EXECUTABLE=$(which python3) \
-            ${{ matrix.cmake-args }} ..
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            cmake -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake-args }} ..
+          else
+            cmake -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -DPYTHON_EXECUTABLE=$(which python3) \
+              ${{ matrix.cmake-args }} ..
+          fi
 
       - name: Build
         shell: bash
@@ -96,8 +109,8 @@ jobs:
           ctest --output-on-failure -C Release
 
   # linux arm32: cross-compile on an arm64 runner; the arm64 kernel runs the
-  # armhf binaries natively (libc6:armhf provides the 32-bit loader), so no
-  # qemu is needed.
+  # armhf binaries natively once the 32-bit runtime is installed, so no qemu
+  # is needed.
   linux-arm32:
     runs-on: ubuntu-24.04-arm
     steps:
@@ -114,7 +127,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture armhf
           sudo apt-get update
-          sudo apt-get install -y g++-arm-linux-gnueabihf libc6:armhf
+          sudo apt-get install -y g++-arm-linux-gnueabihf libc6:armhf libstdc++6:armhf
 
       - name: Configure
         run: |
@@ -168,8 +181,9 @@ jobs:
             termux/termux-docker:${{ matrix.abi }} \
           bash -c '
             set -e
-            apt update -y
-            apt install -y cmake make git libc++ python3
+            # the termux mirrors can be flaky; retry before giving up
+            for i in 1 2 3 4 5; do apt update -y && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y cmake make git libc++ python3 && break || sleep 10; done
             cd /knf/build-termux
             cmake -DCMAKE_BUILD_TYPE=Release \
               -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON \

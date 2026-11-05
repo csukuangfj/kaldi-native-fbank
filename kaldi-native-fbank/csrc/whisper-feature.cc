@@ -19,10 +19,11 @@
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 
 #include <cmath>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-#include "kaldi-native-fbank/csrc/log.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
 #ifndef M_2PI
@@ -148,7 +149,10 @@ void WhisperFeatureComputer::Compute(float /*signal_raw_log_energy*/,
                                      float /*vtln_warp*/,
                                      std::vector<float> *signal_frame,
                                      float *feature) {
-  KNF_CHECK_EQ(signal_frame->size(), frame_opts_.PaddedWindowSize());
+  if (signal_frame->size() !=
+      static_cast<size_t>(opts_.frame_opts.PaddedWindowSize())) {
+    throw std::runtime_error("signal_frame has an unexpected size");
+  }
   // we have already applied window function to signal_frame before
   // calling this method
   std::vector<float> fft_out;

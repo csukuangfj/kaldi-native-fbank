@@ -20,10 +20,9 @@
 
 #include <cstdint>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
-
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -32,7 +31,9 @@ namespace knf {
 /// Copied from @kfile{src/base/kaldi-math.cc}.
 inline int32_t RoundUpToNearestPowerOfTwo(int32_t n) {
   // copied from kaldi/src/base/kaldi-math.cc
-  KNF_CHECK_GT(n, 0);
+  if (n <= 0) {
+    throw std::invalid_argument("n must be > 0");
+  }
   n--;
   n |= n >> 1;
   n |= n >> 2;

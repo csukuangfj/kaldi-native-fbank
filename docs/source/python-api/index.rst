@@ -12,6 +12,7 @@ Python API
    window
    mel
    stft
+   transform
    cmvn
    delta
    reference

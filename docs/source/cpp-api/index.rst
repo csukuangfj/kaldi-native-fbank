@@ -12,3 +12,4 @@ Full doxygen reference (auto-generated from the headers):
    mfcc
    fbank
    splice
+   transform

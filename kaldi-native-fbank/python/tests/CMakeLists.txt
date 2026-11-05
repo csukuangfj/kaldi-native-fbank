@@ -41,6 +41,7 @@ set(py_test_files
   test_delta.py
   test_splice.py
   test_stft.py
+  test_transform.py
   test_vocos_istft.py
 )
 

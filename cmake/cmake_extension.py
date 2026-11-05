@@ -71,6 +71,7 @@ class BuildExtension(build_ext):
 
         extra_cmake_args = f" -DCMAKE_INSTALL_PREFIX={install_dir} "
         extra_cmake_args += " -DKALDI_NATIVE_FBANK_BUILD_TESTS=OFF "
+        extra_cmake_args += " -DKALDI_NATIVE_FBANK_INSTALL_CORE_LIB=OFF "
 
         if "PYTHON_EXECUTABLE" not in cmake_args:
             print(f"Setting PYTHON_EXECUTABLE to {sys.executable}")

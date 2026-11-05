@@ -23,7 +23,6 @@
 #include <memory>
 #include <vector>
 
-#include "kaldi-native-fbank/csrc/log.h"
 #include "kiss_fftr.h"  // NOLINT(build/include_subdir)
 
 namespace knf {

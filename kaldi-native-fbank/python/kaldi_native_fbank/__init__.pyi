@@ -37,11 +37,12 @@ from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn_
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_cmvn_stats
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_deltas
 from kaldi_native_fbank.lib._kaldi_native_fbank import splice_frames
+from kaldi_native_fbank.lib._kaldi_native_fbank import transform_features
 import numpy
 import numpy.typing
 import typing
 from . import lib
-__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames']
+__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FeatureTransform', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'transform_features', 'splice_frames']
 class CmvnAccumulator:
     """
     Incremental accumulator for speaker-level / streaming cmvn.
@@ -182,6 +183,91 @@ class DeltaOptions:
     @window.setter
     def window(self, arg0: typing.SupportsInt) -> None:
         ...
+class FeatureTransform:
+    """
+    A linear (or affine) feature transform, e.g. an LDA matrix.
+    
+    This is kaldi's `transform-feats <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc>`_
+    (same semantics).  The transform is a matrix :math:`M` of shape
+    :math:`(D_{out} \\times n)`:
+    
+    * if :math:`n` equals the input feature dimension, the transform is
+      linear: :math:`y = x\\, M^{T}`;
+    * if :math:`n` is one larger, the transform is affine and the last column
+      of :math:`M` is the offset:
+      :math:`y = x\\, M_{[:,\\,0:n-1]}^{T} + M_{[:,\\,n-1]}`;
+    * otherwise :meth:`apply` raises an exception.
+    
+    Example
+    -------
+    
+    .. code-block:: python
+    
+       lda = knf.FeatureTransform.read("lda.mat")
+       out = lda.apply(feats)            # (T, lda.output_dim)
+       out = knf.transform_features(feats, lda)
+    
+    .. seealso:: :func:`transform_features`
+    """
+    @staticmethod
+    def read(filename: str) -> FeatureTransform:
+        """
+        Read a transform matrix from a kaldi matrix file.
+        
+        Supports the kaldi binary format (``"FM"``/``"DM"``, as written by kaldi's
+        ``Matrix::Write``) and the kaldi text format (``[ ... ]``).
+        
+        :param filename: Path of the matrix file, e.g. ``lda.mat``.
+        :return: The transform.
+        """
+    def __init__(self, mat: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> None:
+        """
+        Construct a transform from a matrix directly.
+        
+        :param mat: The transform matrix of shape ``(output_dim, input_dim)``, or
+           one column wider for an affine transform (the last column is the
+           offset).
+        """
+    def apply(self, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
+        """
+        Apply the transform to a feature matrix.
+        
+        kaldi ``transform-feats`` semantics (rows = frames): if the transform has
+        ``feats.shape[1]`` columns the output is :math:`Y = X M^{T}` (linear); if it
+        has one column more, the transform is affine and the last column is the
+        offset.  Otherwise an exception is raised.
+        
+        :param feats: Feature matrix of shape ``(num_frames, dim)``, float32.
+        :type feats: numpy.ndarray
+        :return: The transformed matrix of shape ``(num_frames, output_dim)``,
+           float32.
+        :rtype: numpy.ndarray
+        """
+    def is_affine(self, input_dim: typing.SupportsInt) -> bool:
+        """
+        Whether the transform is affine for inputs of dimension ``input_dim``.
+        
+        The matrix alone cannot record the intended input dimension, so the rule
+        is the one kaldi's ``transform-feats`` applies: the transform is affine iff
+        it has one column more than the feature dimension (the extra column is the
+        offset).
+        
+        :param input_dim: The input feature dimension.
+        :return: True for an affine transform.
+        """
+    @property
+    def input_dim(self) -> int:
+        """
+        Number of columns of the stored matrix.
+        
+        This is the feature dimension in the linear form; an affine transform
+        consumes ``input_dim - 1`` features plus the implicit 1.0.
+        """
+    @property
+    def output_dim(self) -> int:
+        """
+        Number of rows of the stored matrix (the output dimension).
+        """
 class FbankOptions:
     """
     Options for computing filter-bank features.

@@ -38,7 +38,6 @@ jobs:
           mkdir build
           cd build
           cmake -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON \
-            -DKALDI_NATIVE_FBANK_ENABLE_CHECK=ON \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
             -DPYTHON_EXECUTABLE=$(which python3) ..
 

@@ -8,6 +8,7 @@ set(sources
   feature-mfcc.cc
   feature-raw-audio-samples.cc
   feature-splice.cc
+  feature-transform.cc
   feature-window.cc
   istft.cc
   kaldi-math.cc
@@ -19,27 +20,11 @@ set(sources
   whisper-feature.cc
 )
 
-if(KALDI_NATIVE_FBANK_ENABLE_CHECK)
-  list(APPEND sources log.cc)
-endif()
-
 add_library(kaldi-native-fbank-core STATIC ${sources})
-if(KALDI_NATIVE_FBANK_ENABLE_CHECK)
-  target_compile_definitions(kaldi-native-fbank-core PUBLIC KNF_ENABLE_CHECK=1)
-
-  if(KNF_HAVE_EXECINFO_H)
-    target_compile_definitions(kaldi-native-fbank-core PRIVATE KNF_HAVE_EXECINFO_H=1)
-  endif()
-
-  if(KNF_HAVE_CXXABI_H)
-    target_compile_definitions(kaldi-native-fbank-core PRIVATE KNF_HAVE_CXXABI_H=1)
-  endif()
-endif()
-
-# We are using std::call_once() in log.h,which requires us to link with -pthread
-if(NOT WIN32 AND KALDI_NATIVE_FBANK_ENABLE_CHECK)
-  target_link_libraries(kaldi-native-fbank-core -pthread)
-endif()
+# The static core is linked into the shared python module, so it must be
+# position independent (required on Linux).
+set_target_properties(kaldi-native-fbank-core PROPERTIES
+  POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(kaldi-native-fbank-core kissfft)
 target_link_libraries(kaldi-native-fbank-core Eigen3::Eigen)
 
@@ -72,10 +57,10 @@ set(test_srcs
   test-cmvn.cc
   test-delta.cc
   test-fbank-eps.cc
-  test-log.cc
   test-online-nemo-fbank.cc
   test-rfft.cc
   test-splice.cc
+  test-transform.cc
 )
 
 if(KALDI_NATIVE_FBANK_BUILD_TESTS)
@@ -84,9 +69,15 @@ if(KALDI_NATIVE_FBANK_BUILD_TESTS)
   endforeach()
 endif()
 
-install(TARGETS kaldi-native-fbank-core
-  DESTINATION lib
-)
+# The core static lib is for the C++ SDK; keep it out of the python
+# package (a .a file inside the wheel breaks delocate).
+option(KALDI_NATIVE_FBANK_INSTALL_CORE_LIB
+       "Install the core static library (for the C++ SDK)" ON)
+if(KALDI_NATIVE_FBANK_INSTALL_CORE_LIB)
+  install(TARGETS kaldi-native-fbank-core
+    DESTINATION lib
+  )
+endif()
 
 # ---- clang-tidy (top-level project only) ------------------------------------
 # Sources to lint with `make check` (clang-tidy).  Keep this list in sync
@@ -126,7 +117,8 @@ add_custom_target(
 add_custom_target(check DEPENDS clang-tidy-check)
 
 endif()  # top-level project only
-if(KALDI_NATIVE_FBANK_BUILD_PYTHON AND WIN32)
+if(KALDI_NATIVE_FBANK_INSTALL_CORE_LIB AND KALDI_NATIVE_FBANK_BUILD_PYTHON
+   AND WIN32)
   install(TARGETS kaldi-native-fbank-core
     DESTINATION ..
   )

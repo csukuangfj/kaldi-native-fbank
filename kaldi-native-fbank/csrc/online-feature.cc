@@ -29,7 +29,6 @@
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -38,12 +37,12 @@ RecyclingVector::RecyclingVector(int32_t items_to_hold)
 
 const float *RecyclingVector::At(int32_t index) const {
   if (index < first_available_index_) {
-    KNF_LOG(FATAL) << "Attempted to retrieve feature vector that was "
-                      "already removed by the RecyclingVector (index = "
-                   << index << "; "
-                   << "first_available_index = " << first_available_index_
-                   << "; "
-                   << "size = " << Size() << ")";
+    std::ostringstream os;
+    os << "Attempted to retrieve feature vector that was already removed by "
+       << "the RecyclingVector (index = " << index
+       << "; first_available_index = " << first_available_index_
+       << "; size = " << Size() << ")";
+    throw std::runtime_error(os.str());
   }
   // 'at' does size checking.
   return items_.at(index - first_available_index_).data();
@@ -84,10 +83,13 @@ void OnlineGenericBaseFeature<C>::AcceptWaveform(float sampling_rate,
   }
 
   if (input_finished_) {
-    KNF_LOG(FATAL) << "AcceptWaveform called after InputFinished() was called.";
+    throw std::runtime_error(
+        "AcceptWaveform called after InputFinished() was called.");
   }
 
-  KNF_CHECK_EQ(sampling_rate, computer_.GetFrameOptions().samp_freq);
+  if (sampling_rate != computer_.GetFrameOptions().samp_freq) {
+    throw std::invalid_argument("sampling_rate does not match the options");
+  }
 
   waveform_remainder_.insert(waveform_remainder_.end(), waveform, waveform + n);
 
@@ -111,7 +113,9 @@ void OnlineGenericBaseFeature<C>::ComputeFeatures() {
   int32_t num_frames_new =
       NumFrames(num_samples_total, frame_opts, input_finished_);
 
-  KNF_CHECK_GE(num_frames_new, num_frames_old);
+  if (num_frames_new < num_frames_old) {
+    throw std::runtime_error("the number of frames decreased");
+  }
 
   // note: this online feature-extraction code does not support VTLN.
   float vtln_warp = 1.0;

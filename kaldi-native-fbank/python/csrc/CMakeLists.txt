@@ -4,6 +4,7 @@ pybind11_add_module(_kaldi_native_fbank
   feature-fbank.cc
   feature-raw-audio-samples.cc
   feature-splice.cc
+  feature-transform.cc
   feature-mfcc.cc
   feature-window.cc
   istft.cc

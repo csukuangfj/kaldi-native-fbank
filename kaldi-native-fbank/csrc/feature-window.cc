@@ -29,7 +29,9 @@ std::vector<float> GetWindow(const std::string &window_type,
                              float blackman_coeff /*= 0.42*/) {
   std::vector<float> window(window_size);
   int32_t frame_length = window_size;
-  KNF_CHECK_GT(frame_length, 0);
+  if (frame_length <= 0) {
+    throw std::invalid_argument("frame_length must be > 0");
+  }
 
   float *window_data = window.data();
 
@@ -148,7 +150,10 @@ void ExtractWindow(int64_t sample_offset, const std::vector<float> &wave,
                    const FeatureWindowFunction &window_function,
                    std::vector<float> *window,
                    float *log_energy_pre_window /*= nullptr*/) {
-  KNF_CHECK(sample_offset >= 0 && wave.size() != 0);
+  if (sample_offset < 0 || wave.empty()) {
+    throw std::invalid_argument(
+        "sample_offset must be >= 0 and wave must not be empty");
+  }
 
   int32_t frame_length = opts.WindowSize();
   int32_t frame_length_padded = opts.PaddedWindowSize();
@@ -157,12 +162,14 @@ void ExtractWindow(int64_t sample_offset, const std::vector<float> &wave,
   int64_t start_sample = FirstSampleOfFrame(f, opts);
   int64_t end_sample = start_sample + frame_length;
 
-  // The two branches run different KNF_CHECK conditions.
-  // NOLINTNEXTLINE
   if (opts.snip_edges) {
-    KNF_CHECK(start_sample >= sample_offset && end_sample <= num_samples);
+    if (!(start_sample >= sample_offset && end_sample <= num_samples)) {
+      throw std::invalid_argument("frame does not fit inside the waveform");
+    }
   } else {
-    KNF_CHECK(sample_offset == 0 || start_sample >= sample_offset);
+    if (!(sample_offset == 0 || start_sample >= sample_offset)) {
+      throw std::invalid_argument("bad sample_offset for this frame");
+    }
   }
 
   if (window->size() != frame_length_padded) {
@@ -240,7 +247,9 @@ static void Preemphasize(float *d, int32_t n, float preemph_coeff) {
     return;
   }
 
-  KNF_CHECK(preemph_coeff >= 0.0 && preemph_coeff <= 1.0);
+  if (!(preemph_coeff >= 0.0 && preemph_coeff <= 1.0)) {
+    throw std::invalid_argument("preemph_coeff must be in [0, 1]");
+  }
 
   for (int32_t i = n - 1; i > 0; --i) {
     d[i] -= preemph_coeff * d[i - 1];

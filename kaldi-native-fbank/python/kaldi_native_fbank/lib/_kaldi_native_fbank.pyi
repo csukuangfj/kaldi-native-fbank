@@ -7,6 +7,7 @@ from kaldi_native_fbank import CmvnAccumulator
 from kaldi_native_fbank import CmvnOptions
 from kaldi_native_fbank import DeltaOptions
 from kaldi_native_fbank import FbankOptions
+from kaldi_native_fbank import FeatureTransform
 from kaldi_native_fbank import FeatureWindowFunction
 from kaldi_native_fbank import FrameExtractionOptions
 from kaldi_native_fbank import IStft
@@ -29,7 +30,7 @@ from kaldi_native_fbank import WhisperFeatureOptions
 import numpy
 import numpy.typing
 import typing
-__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames']
+__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureTransform', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames', 'transform_features']
 def apply_cmvn(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], opts: kaldi_native_fbank.CmvnOptions, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
     """
     Apply cmvn to features and return the normalized copy.
@@ -399,4 +400,19 @@ def splice_frames(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32,
        spliced = knf.splice_frames(feats, opts)  # (T, 7 * dim)
     
     .. seealso:: :class:`SpliceOptions`
+    """
+def transform_features(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"], transform: kaldi_native_fbank.FeatureTransform) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
+    """
+    Apply a transform to features and return the result.
+    
+    Shorthand for ``transform.apply(feats)``; matches kaldi's
+    `transform-feats <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc>`_.
+    
+    :param feats: Feature matrix of shape ``(num_frames, dim)``, float32.
+    :type feats: numpy.ndarray
+    :param transform: The transform; see :class:`FeatureTransform`.
+    :return: The transformed matrix of shape ``(num_frames, transform.output_dim)``.
+    :rtype: numpy.ndarray
+    
+    .. seealso:: :class:`FeatureTransform`
     """

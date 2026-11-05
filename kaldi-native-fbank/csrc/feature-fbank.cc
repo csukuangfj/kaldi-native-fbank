@@ -30,7 +30,6 @@
 
 #include "kaldi-native-fbank/csrc/feature-functions.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
-#include "kaldi-native-fbank/csrc/log.h"
 
 namespace knf {
 
@@ -74,7 +73,10 @@ void FbankComputer::Compute(float signal_raw_log_energy, float vtln_warp,
                             std::vector<float> *signal_frame, float *feature) {
   const MelBanks &mel_banks = *(GetMelBanks(vtln_warp));
 
-  KNF_CHECK_EQ(signal_frame->size(), opts_.frame_opts.PaddedWindowSize());
+  if (signal_frame->size() !=
+      static_cast<size_t>(opts_.frame_opts.PaddedWindowSize())) {
+    throw std::runtime_error("signal_frame has an unexpected size");
+  }
 
   // Compute energy after window function (not the raw one).
   if (opts_.use_energy && !opts_.raw_energy) {

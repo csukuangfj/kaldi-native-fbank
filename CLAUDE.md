@@ -59,8 +59,7 @@ ctest            # use the real ctest binary, see gotchas below
   (`hendrikmuhs/ccache-action`) is enabled everywhere except windows.
 - `style_check.yaml` runs cpplint + clang-format; `clang-tidy.yaml`
   configures with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-  -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON -DKALDI_NATIVE_FBANK_ENABLE_CHECK=ON`
-  and runs `make check`.
+  -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON` and runs `make check`.
 
 ## Documentation is the first priority — spend time on it
 
@@ -142,6 +141,9 @@ Three documentation layers, all must stay in sync:
   `select()`, range-for over coefficients is fine) — no raw pointer or index
   loops in Eigen-context code (feature-matrix types).
 - Keep function/file names and semantics aligned with kaldi.
+- No logging framework (log.h was removed): report errors by **throwing
+  exceptions** (`std::invalid_argument` for bad arguments,
+  `std::runtime_error` for invalid state).
 
 ## Testing discipline
 

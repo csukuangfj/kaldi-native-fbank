@@ -119,15 +119,15 @@ jobs:
           bash -c '
             set -e
 
-            apt update -y
-            apt install -y cmake make git python python-pip clang libc++
-            apt install -y android-liblog || true
-            apt install -y libandroid-dev || true
-            apt install -y android-libandroid || true
+            for i in 1 2 3 4 5; do apt update -y && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y cmake make git python python-pip clang libc++ \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-liblog || true \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y libandroid-dev || true \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-libandroid || true \&\& break || sleep 10; done
             # patchelf + zip/unzip are for the RPATH fixup below -- see point 4
             # in the header. Same unzip / patch / re-zip step as sherpa-onnx
             # build-wheels-android-*.yaml.
-            apt install -y patchelf zip unzip
+            for i in 1 2 3 4 5; do apt install -y patchelf zip unzip \&\& break || sleep 10; done
 
             pip install --upgrade pip setuptools wheel
 
@@ -227,12 +227,12 @@ jobs:
           bash -c '
             set -e
 
-            apt update -y
-            apt install -y python python-pip libc++ clang
-            apt install -y android-liblog || true
-            apt install -y libandroid-dev || true
-            apt install -y android-libandroid || true
-            apt install -y python-numpy || true
+            for i in 1 2 3 4 5; do apt update -y && break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y python python-pip libc++ clang \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-liblog || true \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y libandroid-dev || true \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y android-libandroid || true \&\& break || sleep 10; done
+            for i in 1 2 3 4 5; do apt install -y python-numpy || true \&\& break || sleep 10; done
 
             pip install --upgrade pip setuptools wheel
 
