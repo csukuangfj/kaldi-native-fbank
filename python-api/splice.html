@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Splice frames &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+  <title>Splice frames &mdash; kaldi-native-fbank 1.23.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/documentation_options.js?v=b8112b1c"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -177,7 +177,7 @@ signature.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaldi_native_fbank.splice_frames">
-<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">splice_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">feats:</span> <span class="pre">typing.Annotated[numpy.typing.ArrayLike,</span> <span class="pre">numpy.float32,</span> <span class="pre">&quot;[m,</span> <span class="pre">n]&quot;],</span> <span class="pre">opts:</span> <span class="pre">kaldi_native_fbank.SpliceOptions</span> <span class="pre">=</span> <span class="pre">&lt;kaldi_native_fbank.SpliceOptions</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x77d72c80db70&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.splice_frames" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">splice_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">feats:</span> <span class="pre">typing.Annotated[numpy.typing.ArrayLike,</span> <span class="pre">numpy.float32,</span> <span class="pre">&quot;[m,</span> <span class="pre">n]&quot;],</span> <span class="pre">opts:</span> <span class="pre">kaldi_native_fbank.SpliceOptions</span> <span class="pre">=</span> <span class="pre">&lt;kaldi_native_fbank.SpliceOptions</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7879e4425ef0&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.splice_frames" title="Link to this definition"></a></dt>
 <dd><p>Splice each frame with its left/right context neighbors.</p>
 <p>This is kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc">splice-feats</a>
 (same arithmetic): for every frame index <span class="math notranslate nohighlight">\(t\)</span> the output row is</p>
