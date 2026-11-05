@@ -50,8 +50,8 @@ namespace knf {
 /// @see WhisperFeatureComputer
 struct WhisperFeatureOptions {
   /// Construct with the given frame options and number of mel bins.
-  WhisperFeatureOptions(const FrameExtractionOptions &frame_opts = {},
-                        int32_t dim = 80)
+  explicit WhisperFeatureOptions(const FrameExtractionOptions &frame_opts = {},
+                                 int32_t dim = 80)
       : frame_opts(frame_opts), dim(dim) {}
 
   /// Frame-extraction options. Note: most fields are ignored and reset
@@ -81,7 +81,8 @@ class WhisperFeatureComputer {
   /// Construct from the given options.
   ///
   /// note: opts.frame_opts is ignored and we reset it inside.
-  explicit WhisperFeatureComputer(const WhisperFeatureOptions &opts = {});
+  explicit WhisperFeatureComputer(
+      const WhisperFeatureOptions &opts = WhisperFeatureOptions());
 
   /// Return the number of mel bins.
   int32_t Dim() const { return opts_.dim; }

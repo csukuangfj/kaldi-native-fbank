@@ -316,7 +316,8 @@ class Voidifier {
 /// Swallow streamed values when checks are disabled at compile time.
 template <typename T>
 const Voidifier &operator<<(const Voidifier &v, T &&) {
-  return v;
+  // Stream idiom: the reference is only used to chain << calls.
+  return v;  // NOLINT
 }
 #endif
 

@@ -26,7 +26,7 @@
 
 namespace knf {
 
-void PybindStftConfig(py::module *m) {
+static void PybindStftConfig(py::module *m) {
   using PyClass = StftConfig;
   auto cls_StftConfig = py::class_<PyClass>(
       *m, "StftConfig",
@@ -77,7 +77,7 @@ signature.
       .def("__str__", &PyClass::ToString, "Return the config as a string.");
 }
 
-void PybindStftResult(py::module *m) {
+static void PybindStftResult(py::module *m) {
   using PyClass = StftResult;
   auto cls_StftResult = py::class_<PyClass>(
       *m, "StftResult",

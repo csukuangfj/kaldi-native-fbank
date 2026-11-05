@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/log.h"
@@ -59,13 +60,15 @@ class Rfft::RfftImpl {
 
  private:
   void Forward(float *in_out) const {
-    kiss_fftr_cfg cfg = kiss_fftr_alloc(n_, 0, nullptr, nullptr);
+    // kiss_fftr_free is the deallocator matching kiss_fftr_alloc; lifetime
+    // is managed by the unique_ptr below (RAII).
+    auto free_cfg = [](kiss_fftr_cfg p) { kiss_fftr_free(p); };  // NOLINT
+    std::unique_ptr<std::remove_pointer_t<kiss_fftr_cfg>, decltype(free_cfg)>
+        cfg(kiss_fftr_alloc(n_, 0, nullptr, nullptr), free_cfg);
 
     std::vector<kiss_fft_cpx> out(n_ / 2 + 1);
 
-    kiss_fftr(cfg, in_out, out.data());
-
-    kiss_fftr_free(cfg);
+    kiss_fftr(cfg.get(), in_out, out.data());
 
     in_out[0] = out[0].r;
     in_out[1] = out[n_ / 2].r;
@@ -89,11 +92,13 @@ class Rfft::RfftImpl {
       out[i].i = in_out[2 * i + 1];
     }
 
-    kiss_fftr_cfg cfg = kiss_fftr_alloc(n_, 1, nullptr, nullptr);
+    // kiss_fftr_free is the deallocator matching kiss_fftr_alloc; lifetime
+    // is managed by the unique_ptr below (RAII).
+    auto free_cfg = [](kiss_fftr_cfg p) { kiss_fftr_free(p); };  // NOLINT
+    std::unique_ptr<std::remove_pointer_t<kiss_fftr_cfg>, decltype(free_cfg)>
+        cfg(kiss_fftr_alloc(n_, 1, nullptr, nullptr), free_cfg);
 
-    kiss_fftri(cfg, out.data(), in_out);
-
-    kiss_fftr_free(cfg);
+    kiss_fftri(cfg.get(), out.data(), in_out);
   }
 
  private:

@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - iwyu-2
+      - more-feat
   pull_request:
     branches:
       - master

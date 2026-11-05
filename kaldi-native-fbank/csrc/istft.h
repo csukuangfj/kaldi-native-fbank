@@ -28,9 +28,7 @@
 #ifndef KALDI_NATIVE_FBANK_CSRC_ISTFT_H_
 #define KALDI_NATIVE_FBANK_CSRC_ISTFT_H_
 
-#include <cstdint>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/stft.h"

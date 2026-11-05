@@ -36,8 +36,6 @@
 
 #include <stdint.h>
 
-#include <vector>
-
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
 
 namespace knf {

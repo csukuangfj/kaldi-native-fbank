@@ -15,6 +15,12 @@ function(kaldi_native_fbank_add_py_test source)
   set_property(TEST ${name}
     PROPERTY ENVIRONMENT "PYTHONPATH=${kaldi_native_fbank_path}:$<TARGET_FILE_DIR:_kaldi_native_fbank>:$ENV{PYTHONPATH}"
   )
+
+  # A test script exits with 77 when a dependency (numpy/torch/the module)
+  # is unavailable; ctest reports it as skipped instead of failed.
+  set_property(TEST ${name}
+    PROPERTY SKIP_RETURN_CODE 77
+  )
 endfunction()
 
 # please sort the files in alphabetic order
@@ -32,6 +38,7 @@ set(py_test_files
   test_online_raw_audio_samples.py
   test_online_whisper_fbank.py
   test_rfft.py
+  test_delta.py
   test_splice.py
   test_stft.py
   test_vocos_istft.py

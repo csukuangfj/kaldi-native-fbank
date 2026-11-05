@@ -13,5 +13,6 @@ Python API
    mel
    stft
    cmvn
+   delta
    reference
    splice

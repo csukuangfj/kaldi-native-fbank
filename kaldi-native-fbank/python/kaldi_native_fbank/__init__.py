@@ -36,7 +36,9 @@ from kaldi_native_fbank.lib._kaldi_native_fbank import (
     apply_cmvn_,
     CmvnAccumulator,
     CmvnOptions,
+    DeltaOptions,
     compute_cmvn_stats,
+    compute_deltas,
     splice_frames,
     FbankOptions,
     FeatureWindowFunction,
@@ -63,6 +65,7 @@ from kaldi_native_fbank.lib._kaldi_native_fbank import (
 __all__ = [
     "CmvnAccumulator",
     "CmvnOptions",
+    "DeltaOptions",
     "FbankOptions",
     "FeatureWindowFunction",
     "FrameExtractionOptions",
@@ -86,5 +89,6 @@ __all__ = [
     "apply_cmvn",
     "apply_cmvn_",
     "compute_cmvn_stats",
+    "compute_deltas",
     "splice_frames",
 ]

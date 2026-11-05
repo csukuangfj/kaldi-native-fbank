@@ -51,8 +51,9 @@ FbankComputer::FbankComputer(const FbankOptions &opts)
 }
 
 FbankComputer::~FbankComputer() {
-  for (auto iter = mel_banks_.begin(); iter != mel_banks_.end(); ++iter)
-    delete iter->second;
+  for (auto &kv : mel_banks_) {
+    delete kv.second;
+  }
 }
 
 const MelBanks *FbankComputer::GetMelBanks(float vtln_warp) {

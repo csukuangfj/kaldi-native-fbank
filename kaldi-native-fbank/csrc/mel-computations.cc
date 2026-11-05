@@ -21,9 +21,8 @@
 
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 
-#include <stdio.h>
-
 #include <algorithm>
+#include <cstdio>
 #include <sstream>
 #include <vector>
 
@@ -137,7 +136,7 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
   float nyquist = 0.5f * sample_freq;
 
   float low_freq = opts.low_freq;
-  float high_freq;
+  float high_freq = 0.0f;
   if (opts.high_freq > 0.0f) {
     high_freq = opts.high_freq;
   } else {
@@ -204,7 +203,7 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
                                          // bin.
       float mel = MelScale(freq);
       if (mel > left_mel && mel < right_mel) {
-        float weight;
+        float weight = 0.0f;
         if (mel <= center_mel) {
           weight = (mel - left_mel) / (center_mel - left_mel);
         } else {
@@ -260,7 +259,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
   float nyquist = 0.5f * sample_freq;
 
   float low_freq = opts.low_freq;
-  float high_freq;
+  float high_freq = 0.0f;
   if (opts.high_freq > 0.0f) {
     high_freq = opts.high_freq;
   } else {
@@ -276,8 +275,8 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 
   float fft_bin_width = sample_freq / window_length_padded;
 
-  float mel_low_freq;
-  float mel_high_freq;
+  float mel_low_freq = 0.0f;
+  float mel_high_freq = 0.0f;
 
   if (opts.use_slaney_mel_scale) {
     mel_low_freq = MelScaleSlaney(low_freq);
@@ -307,9 +306,9 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
     float center_mel = mel_low_freq + (bin + 1) * mel_freq_delta;
     float right_mel = mel_low_freq + (bin + 2) * mel_freq_delta;
 
-    float left_hz;
-    float center_hz;
-    float right_hz;
+    float left_hz = 0.0f;
+    float center_hz = 0.0f;
+    float right_hz = 0.0f;
 
     if (opts.use_slaney_mel_scale) {
       left_hz = InverseMelScaleSlaney(left_mel);
@@ -341,7 +340,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
     int32_t first_index = -1;
     int32_t last_index = -1;
     for (int32_t i = 0; i < num_fft_bins + 1; ++i) {
-      float hz;  // Center frequency of this fft bin.
+      float hz = 0.0f;  // Center frequency of this fft bin.
 
       if (opts.floor_to_int_bin) {
         hz = i;
@@ -350,7 +349,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
       }
 
       if (hz > left_hz && hz < right_hz) {
-        float weight;
+        float weight = 0.0f;
         if (hz <= center_hz) {
           weight = (hz - left_hz) / (center_hz - left_hz);
         } else {
@@ -392,7 +391,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
 }
 
 MelBanks::MelBanks(const float *weights, int32_t num_rows, int32_t num_cols)
-    : debug_(false), htk_mode_(false), num_fft_bins_((num_cols - 1) * 2) {
+    : num_fft_bins_((num_cols - 1) * 2) {
   bins_.resize(num_rows);
   for (int32_t bin = 0; bin < num_rows; ++bin) {
     const float *this_bin = weights + bin * num_cols;

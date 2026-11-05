@@ -90,7 +90,7 @@ class RecyclingVector {
  private:
   std::deque<std::vector<float>> items_;  ///< The stored feature vectors.
   int32_t items_to_hold_;  ///< Max number of items to keep; -1 means all.
-  int32_t first_available_index_;  ///< Index of the oldest item still kept.
+  int32_t first_available_index_ = 0;  ///< Index of the oldest item still kept.
 };
 
 /// This is a templated class for online feature extraction;
@@ -171,11 +171,12 @@ class OnlineGenericBaseFeature {
   /// The features we have already computed.
   RecyclingVector features_;
 
-  bool input_finished_;  ///< True if the user has called "InputFinished()".
+  bool input_finished_ =
+      false;  ///< True if the user has called "InputFinished()".
 
   /// Number of samples of waveform we have already discarded, i.e. that were
   /// prior to 'waveform_remainder_'.
-  int64_t waveform_offset_;
+  int64_t waveform_offset_ = 0;
 
   /// A short piece of waveform that we may need to keep after extracting all
   /// the whole frames we can (whatever length of feature will be required for

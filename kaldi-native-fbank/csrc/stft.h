@@ -39,14 +39,14 @@ namespace knf {
 /// @see Stft, IStft
 struct StftConfig {
   /// FFT size; should be a power of two.
-  int32_t n_fft;
+  int32_t n_fft = 0;
 
   /// Number of samples between successive frames.
-  int32_t hop_length;
+  int32_t hop_length = 0;
 
   /// Window size in samples; must be <= n_fft. The window is zero-padded to
   /// n_fft.
-  int32_t win_length;
+  int32_t win_length = 0;
 
   /// Window type; see GetWindow() in feature-window.h for the supported
   /// types and their formulas.
@@ -82,7 +82,7 @@ struct StftResult {
   std::vector<float> imag;
 
   /// Number of frames in real/imag.
-  int32_t num_frames;
+  int32_t num_frames = 0;
 };
 
 /// @brief Compute the short-time Fourier transform of a waveform.

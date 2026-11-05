@@ -25,9 +25,42 @@ ctest            # use the real ctest binary, see gotchas below
 - Python tests live in `kaldi-native-fbank/python/tests/test_*.py`; C++ gtests
   in `kaldi-native-fbank/csrc/test-*.cc` (registered via `test_srcs` in
   `kaldi-native-fbank/csrc/CMakeLists.txt`).
-- Style gate (must pass before done): `clang-format -i <files>` with the
-  repo's `.clang-format`, then `python3 build/cpplint-1.5.4/cpplint.py <files>`
-  (cpplint is downloaded by `scripts/check_style_cpplint.sh`).
+- Python tests are self-skipping: when a dependency (numpy/torch/the built
+  module) is unavailable they print a WARNING and `exit(77)`; ctest marks
+  them skipped via `SKIP_RETURN_CODE 77`.  Never exclude them with
+  `ctest -E _py` — run the full suite everywhere.
+- Style gate (must pass before done):
+  - `./scripts/check_style_cpplint.sh 2` (cpplint; downloaded on first run)
+  - `./scripts/check_style_clang_format.sh` (clang-format, whole project)
+  - `make check` in the build dir (clang-tidy over the compiled sources;
+    needs `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, which is set at the top level
+    and generates `build/compile_commands.json`).  The repo-root
+    `.clang-tidy` mirrors sherpa-onnx's check set (`WarningsAsErrors: '*'`,
+    `HeaderFilterRegex` limited to our code).  Where a finding is a
+    deliberate kaldi-parity choice or a third-party idiom, use a bare
+    `// NOLINT` with a reason comment (category-suffixed NOLINT fails
+    cpplint's readability/nolint).  On macOS the `check` target passes the
+    SDK path automatically; CI runs it on ubuntu.
+
+## CI (`.github/workflows/`)
+
+- Triggers: push/PR on `master` and `more-feat`.
+- Runner preference: **never use `macos-13`** — for macOS x64 use
+  `macos-15-intel`.
+- Platform wheel builds follow sherpa-onnx's per-platform layout: linux
+  (x64, arm64, arm32, **x86/i686**), macos (x64, arm64, **universal2**),
+  windows (x86, x64, arm64), termux (4 ABIs: aarch64/arm/x86_64/i686).
+- `build-test.yaml` builds AND runs the tests on all those platforms:
+  native runners for linux/macos/windows (including macos universal2 via
+  `CMAKE_OSX_ARCHITECTURES=arm64;x86_64` and windows-arm64 on
+  `windows-11-arm`), arm32 cross-compiled on an **ubuntu arm64 runner**
+  (the arm64 kernel runs armhf binaries natively via `libc6:armhf` — no
+  qemu), and termux inside `termux/termux-docker:<abi>` containers.  ccache
+  (`hendrikmuhs/ccache-action`) is enabled everywhere except windows.
+- `style_check.yaml` runs cpplint + clang-format; `clang-tidy.yaml`
+  configures with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON -DKALDI_NATIVE_FBANK_ENABLE_CHECK=ON`
+  and runs `make check`.
 
 ## Documentation is the first priority — spend time on it
 

@@ -3,9 +3,25 @@
 
 import pickle
 
-import kaldi_native_fbank as knf
-import numpy as np
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
+try:
+    import numpy as np
+except ImportError:  # pragma: no cover
+    np = None
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if np is None:
+    _missing.append("numpy")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 def test_options():
     opts = knf.NemoFbankOptions()

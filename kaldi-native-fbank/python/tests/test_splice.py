@@ -18,14 +18,30 @@
 import unittest
 from pathlib import Path
 
-import numpy as np
+try:
+    import numpy as np
+except ImportError:  # pragma: no cover
+    np = None
 
-import kaldi_native_fbank as knf
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
 
 GOLDEN = (
     Path(__file__).resolve().parents[3] / "tests" / "data" / "feat_golden" / "golden"
 )
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if np is None:
+    _missing.append("numpy")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 class TestSplice(unittest.TestCase):
     def _load(self, *parts):

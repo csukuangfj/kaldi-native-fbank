@@ -8,9 +8,25 @@ except:
     print("Please install kaldifeat first")
     sys.exit(0)
 
-import kaldi_native_fbank as knf
-import torch
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
+try:
+    import torch
+except ImportError:  # pragma: no cover
+    torch = None
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if torch is None:
+    _missing.append("torch")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 def main():
     sampling_rate = 16000

@@ -35,12 +35,13 @@ import collections.abc
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn
 from kaldi_native_fbank.lib._kaldi_native_fbank import apply_cmvn_
 from kaldi_native_fbank.lib._kaldi_native_fbank import compute_cmvn_stats
+from kaldi_native_fbank.lib._kaldi_native_fbank import compute_deltas
 from kaldi_native_fbank.lib._kaldi_native_fbank import splice_frames
 import numpy
 import numpy.typing
 import typing
 from . import lib
-__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'splice_frames']
+__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames']
 class CmvnAccumulator:
     """
     Incremental accumulator for speaker-level / streaming cmvn.
@@ -140,6 +141,46 @@ class CmvnOptions:
         """
     @reverse.setter
     def reverse(self, arg0: bool) -> None:
+        ...
+class DeltaOptions:
+    """
+    Options for :func:`compute_deltas`.
+    
+    Mirrors the flags of kaldi's `add-deltas <https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/add-deltas.cc>`_.
+    
+    .. seealso:: :func:`compute_deltas`
+    """
+    def __init__(self, order: typing.SupportsInt = 2, window: typing.SupportsInt = 2) -> None:
+        """
+        Construct with the given order and window.
+        
+        All fields are optional keyword arguments; the defaults are shown in the
+        signature.
+        
+        :param order: Order of the delta computation (kaldi ``add-deltas --delta-order``).
+        :param window: Delta regression window (kaldi ``add-deltas --delta-window``).
+        """
+    @property
+    def order(self) -> int:
+        """
+        Order of the delta computation.
+        
+        Same as kaldi ``add-deltas --delta-order``.  2 gives ``[x, delta,
+        delta-delta]``.
+        """
+    @order.setter
+    def order(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def window(self) -> int:
+        """
+        Delta regression window.
+        
+        Same as kaldi ``add-deltas --delta-window``.  The actual regression spans
+        ``2 * window + 1`` frames.
+        """
+    @window.setter
+    def window(self, arg0: typing.SupportsInt) -> None:
         ...
 class FbankOptions:
     """

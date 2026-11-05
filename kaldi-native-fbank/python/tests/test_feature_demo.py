@@ -2,8 +2,14 @@
 
 # see also https://colab.research.google.com/drive/1NxiyngCA4lDRy5BxqTVDLGDPudWKRwEs?usp=sharing
 
-import kaldi_native_fbank as knf
-import numpy as np
+try:
+    import kaldi_native_fbank as knf
+except (ImportError, OSError):  # pragma: no cover
+    knf = None
+try:
+    import numpy as np
+except ImportError:  # pragma: no cover
+    np = None
 
 sample_rate = 16000
 num_seconds = 1
@@ -14,6 +20,16 @@ frame_shift_ms = 10
 frame_length = int(frame_length_ms * sample_rate / 1000)
 frame_shift = int(frame_shift_ms * sample_rate / 1000)
 
+
+_missing = []
+if knf is None:
+    _missing.append("kaldi_native_fbank")
+if np is None:
+    _missing.append("numpy")
+if _missing:
+    print("WARNING: %s not installed; skipping %s"
+          % (", ".join(_missing), __file__))
+    raise SystemExit(77)
 
 def remove_dc_offset(samples):
     mean = np.mean(samples)

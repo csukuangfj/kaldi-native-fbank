@@ -34,8 +34,7 @@
 namespace knf {
 
 RecyclingVector::RecyclingVector(int32_t items_to_hold)
-    : items_to_hold_(items_to_hold == 0 ? -1 : items_to_hold),
-      first_available_index_(0) {}
+    : items_to_hold_(items_to_hold == 0 ? -1 : items_to_hold) {}
 
 const float *RecyclingVector::At(int32_t index) const {
   if (index < first_available_index_) {
@@ -74,10 +73,7 @@ void RecyclingVector::Pop(int32_t n) {
 template <class C>
 OnlineGenericBaseFeature<C>::OnlineGenericBaseFeature(
     const typename C::Options &opts)
-    : computer_(opts),
-      window_function_(computer_.GetFrameOptions()),
-      input_finished_(false),
-      waveform_offset_(0) {}
+    : computer_(opts), window_function_(computer_.GetFrameOptions()) {}
 
 template <class C>
 void OnlineGenericBaseFeature<C>::AcceptWaveform(float sampling_rate,

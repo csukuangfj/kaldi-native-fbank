@@ -6,87 +6,16 @@
 //
 // See ../../LICENSE for more information
 
-#include <stdint.h>
-
 #include <cmath>
-#include <fstream>
+#include <cstdint>
 #include <string>
-#include <vector>
 
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-cmvn.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
+#include "kaldi-native-fbank/csrc/test-golden.h"
 
 namespace knf {
-
-namespace {
-
-// Minimal .npy (v1, C-order, float32/float64) reader for golden files.
-bool LoadNpy(const std::string &path, MatrixD *out) {
-  std::ifstream is(path, std::ios::binary);
-  if (!is) {
-    return false;
-  }
-  char magic[6];
-  is.read(magic, 6);
-  if (std::string(magic, 6) != "\x93NUMPY") {
-    return false;
-  }
-  char ver[2];
-  is.read(ver, 2);
-  uint32_t hlen = 0;
-  if (ver[0] == 1) {
-    uint16_t h16 = 0;
-    is.read(reinterpret_cast<char *>(&h16), 2);
-    hlen = h16;
-  } else {
-    is.read(reinterpret_cast<char *>(&hlen), 4);
-  }
-  std::string header(hlen, '\0');
-  is.read(&header[0], hlen);
-
-  auto dp = header.find("'descr': '") + 10;
-  std::string descr = header.substr(dp, 3);
-  auto sp = header.find("'shape': (") + 10;
-  auto ep = header.find(')', sp);
-  std::string shape = header.substr(sp, ep - sp);
-  int32_t rows = 0;
-  int32_t cols = 0;
-  if (shape.find(',') != std::string::npos) {
-    rows = std::stoi(shape.substr(0, shape.find(',')));
-    cols = std::stoi(shape.substr(shape.find(',') + 1));
-  } else {
-    rows = std::stoi(shape);
-    cols = 1;
-  }
-  *out = MatrixD(rows, cols);
-  if (descr == "<f8") {
-    for (int32_t r = 0; r < rows; ++r) {
-      is.read(reinterpret_cast<char *>((*out).row(r).data()),
-              cols * sizeof(double));
-    }
-  } else {
-    std::vector<float> tmp(cols);
-    for (int32_t r = 0; r < rows; ++r) {
-      is.read(reinterpret_cast<char *>(tmp.data()), cols * sizeof(float));
-      for (int32_t c = 0; c < cols; ++c) {
-        (*out)(r, c) = tmp[c];
-      }
-    }
-  }
-  return true;
-}
-
-std::string GoldenDir() {
-  // Locate tests/data/feat_golden relative to this source file, without
-  // std::filesystem (it is not portable).
-  std::string dir = __FILE__;
-  std::string::size_type pos = dir.find_last_of("/\\");
-  dir = (pos == std::string::npos) ? std::string(".") : dir.substr(0, pos);
-  return dir + "/../../tests/data/feat_golden";
-}
-
-}  // namespace
 
 TEST(Cmvn, InitAndAccumulate) {
   MatrixD stats;

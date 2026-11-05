@@ -1,0 +1,179 @@
+name: build-test
+
+on:
+  push:
+    branches:
+      - master
+      - more-feat
+  pull_request:
+    branches:
+      - master
+      - more-feat
+  workflow_dispatch:
+
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Native builds + tests: linux (x64, arm64), macos (x64, arm64,
+  # universal2), windows (x86, x64, arm64).
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-x64
+            os: ubuntu-latest
+            full-tests: 1
+          - name: linux-arm64
+            os: ubuntu-24.04-arm
+          - name: macos-x64
+            os: macos-15-intel
+          - name: macos-arm64
+            os: macos-latest
+            full-tests: 1
+          - name: macos-universal2
+            os: macos-latest
+            cmake-args: "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+          - name: windows-x64
+            os: windows-latest
+          - name: windows-x86
+            os: windows-latest
+            cmake-args: "-A Win32"
+          - name: windows-arm64
+            os: windows-11-arm
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ matrix.name }}
+
+      - name: Install Python test dependencies
+        shell: bash
+        run: |
+          python3 -m pip install -U pip
+          # Best effort: tests skip with a warning when a dependency is
+          # unavailable on the platform.
+          python3 -m pip install numpy torch || true
+
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            ${{ matrix.cmake-args }} ..
+
+      - name: Build
+        shell: bash
+        run: |
+          cd build
+          cmake --build . --config Release -j 2
+
+      - name: Run tests
+        shell: bash
+        run: |
+          cd build
+          ctest --output-on-failure -C Release
+
+  # linux arm32: cross-compile on an arm64 runner; the arm64 kernel runs the
+  # armhf binaries natively (libc6:armhf provides the 32-bit loader), so no
+  # qemu is needed.
+  linux-arm32:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: linux-arm32
+
+      - name: Install armhf toolchain and 32-bit runtime
+        run: |
+          sudo dpkg --add-architecture armhf
+          sudo apt-get update
+          sudo apt-get install -y g++-arm-linux-gnueabihf libc6:armhf
+
+      - name: Configure
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_TOOLCHAIN_FILE=../toolchains/arm-linux-gnueabihf.toolchain.cmake \
+            -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON ..
+
+      - name: Build
+        run: |
+          cmake --build build -j 2
+
+      - name: Run tests
+        run: |
+          cd build
+          ctest --output-on-failure
+
+  # termux: build and run the tests inside termux/termux-docker (4 ABIs).
+  termux:
+    name: termux-${{ matrix.abi }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: aarch64
+            os: ubuntu-24.04-arm
+          - abi: arm
+            os: ubuntu-24.04-arm
+          - abi: x86_64
+            os: ubuntu-latest
+          - abi: i686
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build and test inside termux-docker
+        shell: bash
+        run: |
+          mkdir -p build-termux
+          chmod 777 build-termux
+          docker run --rm \
+            --user 0:0 \
+            --volume ${{ github.workspace }}/:/knf \
+            termux/termux-docker:${{ matrix.abi }} \
+          bash -c '
+            set -e
+            apt update -y
+            apt install -y cmake make git libc++ python3
+            cd /knf/build-termux
+            cmake -DCMAKE_BUILD_TYPE=Release \
+              -DKALDI_NATIVE_FBANK_BUILD_TESTS=ON \
+              -DKALDI_NATIVE_FBANK_BUILD_PYTHON=OFF ..
+            make -j2
+            ctest --output-on-failure
+          '

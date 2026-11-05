@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - more-feat
     paths:
       - 'docs/**'
       - 'kaldi-native-fbank/csrc/**'

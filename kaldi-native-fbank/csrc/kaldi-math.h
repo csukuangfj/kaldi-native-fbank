@@ -38,7 +38,7 @@ namespace knf {
 inline float Log(float x) { return logf(x); }
 
 /// @brief Return a random integer between 0 and RAND_MAX, inclusive.
-int Rand(struct RandomState *state = NULL);
+int Rand(struct RandomState *state = nullptr);
 
 /// @brief State for the thread-safe random number generator.
 struct RandomState {
@@ -51,7 +51,7 @@ struct RandomState {
 /// Returns a random number strictly between 0 and 1.
 ///
 /// @see Rand, RandGauss, RandomState
-inline float RandUniform(struct RandomState *state = NULL) {
+inline float RandUniform(struct RandomState *state = nullptr) {
   return static_cast<float>((Rand(state) + 1.0) / (RAND_MAX + 2.0));
 }
 
@@ -62,7 +62,7 @@ inline float RandUniform(struct RandomState *state = NULL) {
 /// with \f$ U_1, U_2 \f$ drawn uniformly from (0, 1).
 ///
 /// @see RandUniform, RandomState
-inline float RandGauss(struct RandomState *state = NULL) {
+inline float RandGauss(struct RandomState *state = nullptr) {
   return static_cast<float>(sqrtf(-2 * Log(RandUniform(state))) *
                             cosf(2 * M_PI * RandUniform(state)));
 }

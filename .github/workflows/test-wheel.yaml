@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - test-wheel
+      - master
+      - more-feat
 
   workflow_dispatch:
 

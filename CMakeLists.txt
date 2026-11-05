@@ -29,6 +29,12 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(kaldi-native-fbank CXX C)
 
+# Export compile_commands.json for clang-tidy.  Only do this when we are
+# the top-level project; as a sub-project the parent decides.
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE BOOL "" FORCE)
+endif()
+
 set(KALDI_NATIVE_FBANK_VERSION "1.22.5")
 
 # Disable warning about

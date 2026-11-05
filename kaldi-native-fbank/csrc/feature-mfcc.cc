@@ -96,8 +96,9 @@ MfccComputer::MfccComputer(const MfccOptions &opts)
 }
 
 MfccComputer::~MfccComputer() {
-  for (auto iter = mel_banks_.begin(); iter != mel_banks_.end(); ++iter)
-    delete iter->second;
+  for (auto &kv : mel_banks_) {
+    delete kv.second;
+  }
 }
 
 const MelBanks *MfccComputer::GetMelBanks(float vtln_warp) {

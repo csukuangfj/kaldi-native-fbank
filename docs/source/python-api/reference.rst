@@ -208,6 +208,15 @@ See :doc:`cmvn` for formulas and kaldi command mapping
   * ``right_context: int = 3`` — number of following frames to append.
     *kaldi*: ``splice-feats --right-context``.
 
+``DeltaOptions(order=2, window=2)``
+  Regression window for :func:`compute_deltas`.  kaldi counterpart:
+  :kaldi:`add-deltas <src/featbin/add-deltas.cc>`.
+
+  * ``order: int = 2`` — order of the delta computation.
+    *kaldi*: ``add-deltas --delta-order``.
+  * ``window: int = 2`` — regression window; the regression spans
+    ``2 * window + 1`` frames.  *kaldi*: ``add-deltas --delta-window``.
+
 Module functions
 ----------------
 
@@ -216,6 +225,10 @@ Module functions
 * ``knf.apply_cmvn(stats, opts, feats) -> numpy.ndarray`` — normalized copy
   (*kaldi*: ``apply-cmvn``).
 * ``knf.apply_cmvn_(stats, opts, feats)`` — in-place variant.
+* ``knf.compute_deltas(opts, feats) -> numpy.ndarray`` — regression delta
+  features ``[x, delta, delta-delta, ...]``, dimension ``dim * (order + 1)``;
+  edge frames are replicated.  *kaldi*: ``add-deltas``
+  (:kaldi:`DeltaFeatures <src/feat/feature-functions.cc>`).
 * ``knf.splice_frames(feats, opts=SpliceOptions()) -> numpy.ndarray`` —
   concatenate each frame with its left/right context neighbors; edge frames
   are replicated, so the frame count stays the same and the dimension becomes
