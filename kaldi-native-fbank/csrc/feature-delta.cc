@@ -11,10 +11,12 @@
 //
 // See ../../LICENSE for more information
 
+#include "kaldi-native-fbank/csrc/feature-delta.h"
+
 #include <stdexcept>
 #include <vector>
 
-#include "kaldi-native-fbank/csrc/feature-delta.h"
+#include "Eigen/Core"
 
 namespace knf {
 

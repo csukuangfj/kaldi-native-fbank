@@ -8,13 +8,15 @@
 //
 // See ../../LICENSE for more information
 
-#include <cstdint>
+#include "kaldi-native-fbank/csrc/feature-transform.h"
+
+#include <algorithm>
+#include <cstddef>
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <vector>
-
-#include "kaldi-native-fbank/csrc/feature-transform.h"
 
 namespace knf {
 

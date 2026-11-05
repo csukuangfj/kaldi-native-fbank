@@ -20,10 +20,15 @@
 
 #include <pybind11/eigen.h>
 
-#include <string>
+#include <cstdint>
 
+#include "Eigen/Core"
 #include "kaldi-native-fbank/csrc/feature-delta.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
+
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
 
 namespace knf {
 

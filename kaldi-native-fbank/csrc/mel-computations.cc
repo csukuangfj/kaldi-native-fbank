@@ -19,15 +19,15 @@
  * limitations under the License.
  */
 
+#include "kaldi-native-fbank/csrc/mel-computations.h"
+
 #include <algorithm>
 #include <cstdio>
 #include <sstream>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
-#include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
-#include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {

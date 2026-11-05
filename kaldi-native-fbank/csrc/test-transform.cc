@@ -7,10 +7,12 @@
 // See ../../LICENSE for more information
 
 #include <cmath>
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
+#include "Eigen/Core"
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
 #include "kaldi-native-fbank/csrc/feature-transform.h"

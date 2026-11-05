@@ -25,6 +25,7 @@
 #include "kaldi-native-fbank/csrc/feature-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-mfcc.h"
 #include "kaldi-native-fbank/csrc/feature-raw-audio-samples.h"
+#include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/online-feature.h"
 #include "kaldi-native-fbank/csrc/whisper-feature.h"
 #include "kaldi-native-fbank/python/csrc/utils.h"

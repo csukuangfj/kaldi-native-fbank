@@ -16,14 +16,16 @@
  * limitations under the License.
  */
 
-#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <vector>
-#include <stdexcept>
-
 #include "kaldi-native-fbank/csrc/rfft.h"
+
+#include <algorithm>
+#include <memory>
+#include <stdexcept>
+#include <type_traits>
+#include <vector>
+
 #include "kaldi-native-fbank/csrc/macros.h"
+#include "kiss_fft.h"  // NOLINT(build/include_subdir)
 #include "kiss_fftr.h"  // NOLINT(build/include_subdir)
 
 namespace knf {

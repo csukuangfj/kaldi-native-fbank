@@ -6,10 +6,9 @@
 //
 // This file is an excerpt from kaldi/src/base/kaldi-math.cc
 
-#include <mutex>  // NOLINT
-#include <cmath>
-
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
+
+#include <cmath>
 
 namespace knf {
 

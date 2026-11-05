@@ -19,11 +19,18 @@
 #include "kaldi-native-fbank/python/csrc/mel-computations.h"
 
 #include <algorithm>
+#include <cstdint>
+#include <sstream>
 #include <string>
 #include <vector>
 
+#include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
 #include "kaldi-native-fbank/python/csrc/utils.h"
+
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
 
 #define C_CONTIGUOUS py::detail::npy_api::constants::NPY_ARRAY_C_CONTIGUOUS_
 

@@ -6,10 +6,10 @@
 //
 // See ../../LICENSE for more information
 
-#include <cstdint>
 #include <stdexcept>
 #include <string>
 
+#include "Eigen/Core"
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-delta.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"

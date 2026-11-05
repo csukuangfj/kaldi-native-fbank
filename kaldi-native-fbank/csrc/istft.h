@@ -34,6 +34,8 @@
 #include "kaldi-native-fbank/csrc/stft.h"
 
 namespace knf {
+struct StftConfig;
+struct StftResult;
 
 /// @brief Reconstruct a waveform from Stft results.
 ///
@@ -60,6 +62,7 @@ class IStft {
 
  private:
   class Impl;
+
   std::unique_ptr<Impl> impl_;
 };
 

@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
+#include "kaldi-native-fbank/csrc/online-nemo-fbank.h"
+
 #include <cmath>
+#include <cstddef>
 #include <sstream>
 #include <stdexcept>
 
-#include "kaldi-native-fbank/csrc/online-nemo-fbank.h"
 #include "kaldi-native-fbank/csrc/feature-window.h"
 
 namespace knf {

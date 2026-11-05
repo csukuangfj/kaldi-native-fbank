@@ -11,9 +11,11 @@
 //
 // See ../../LICENSE for more information
 
+#include "kaldi-native-fbank/csrc/feature-splice.h"
+
 #include <stdexcept>
 
-#include "kaldi-native-fbank/csrc/feature-splice.h"
+#include "Eigen/Core"
 
 namespace knf {
 

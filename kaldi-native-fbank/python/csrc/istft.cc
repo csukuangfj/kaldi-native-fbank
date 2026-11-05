@@ -18,13 +18,14 @@
 
 #include "kaldi-native-fbank/python/csrc/istft.h"
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
 #include "kaldi-native-fbank/csrc/istft.h"
 
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
+
 namespace knf {
+struct StftConfig;
 
 void PybindIStft(py::module *m) {
   using PyClass = IStft;

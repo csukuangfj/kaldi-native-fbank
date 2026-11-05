@@ -24,6 +24,10 @@
 
 #include "kaldi-native-fbank/python/csrc/stft.h"
 
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
+
 namespace knf {
 
 static void PybindStftConfig(py::module *m) {

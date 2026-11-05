@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <string>
 
+#include "Eigen/Core"
 #include "gtest/gtest.h"
 #include "kaldi-native-fbank/csrc/feature-cmvn.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"

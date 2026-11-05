@@ -7,14 +7,14 @@
 //
 // This file is copied/modified from kaldi/src/feat/feature-window.cc
 
+#include "kaldi-native-fbank/csrc/feature-window.h"
+
 #include <algorithm>
 #include <cmath>
-#include <cstddef>
 #include <limits>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
-#include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
 #include "kaldi-native-fbank/csrc/macros.h"
 

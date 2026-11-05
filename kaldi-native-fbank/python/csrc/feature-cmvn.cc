@@ -20,11 +20,18 @@
 
 #include <pybind11/eigen.h>
 
+#include <cstdint>
+#include <sstream>
 #include <string>
 #include <vector>
 
+#include "Eigen/Core"
 #include "kaldi-native-fbank/csrc/feature-cmvn.h"
 #include "kaldi-native-fbank/csrc/feature-matrix.h"
+
+namespace pybind11 {
+class gil_scoped_release;
+}  // namespace pybind11
 
 namespace knf {
 
