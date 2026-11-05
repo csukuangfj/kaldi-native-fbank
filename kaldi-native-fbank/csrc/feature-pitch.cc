@@ -177,7 +177,8 @@ void ComputeNccf(const VectorF &inner_prod, const VectorF &norm_prod,
 // with ratio 1 + d.
 void SelectLags(const PitchExtractionOptions &opts, VectorF *lags) {
   // choose lags relative to acceptable pitch tolerance
-  float min_lag = 1.0 / opts.max_f0, max_lag = 1.0 / opts.min_f0;
+  float min_lag = 1.0 / opts.max_f0;
+  float max_lag = 1.0 / opts.min_f0;
 
   std::vector<float> tmp_lags;
   // The float accumulation reproduces kaldi's exact log-spaced lag sequence.
@@ -320,8 +321,8 @@ void PitchFrameInfo::ComputeBacktraces(
   VectorF local_cost(num_states);
   ComputeLocalCost(nccf_pitch, lags, opts, &local_cost);
 
-  const float delta_pitch_sq = pow(Log(1.0 + opts.delta_pitch), 2.0),
-              inter_frame_factor = delta_pitch_sq * opts.penalty_factor;
+  const float delta_pitch_sq = pow(Log(1.0 + opts.delta_pitch), 2.0);
+  const float inter_frame_factor = delta_pitch_sq * opts.penalty_factor;
 
   // The cost-vector accesses below are the very inner loop of the pitch
   // tracker (a lot of time is taken here), so we use plain indexed access
@@ -376,14 +377,15 @@ void PitchFrameInfo::ComputeBacktraces(
     if (iter % 2 == 0) {  // go backwards through the states
       last_backpointer = num_states - 1;
       for (int32_t i = num_states - 1; i >= 0; i--) {
-        int32_t lower_bound = bounds[i].first,
-                upper_bound = std::min(last_backpointer, bounds[i].second);
+        int32_t lower_bound = bounds[i].first;
+        int32_t upper_bound = std::min(last_backpointer, bounds[i].second);
         if (upper_bound == lower_bound) {
           last_backpointer = lower_bound;
           continue;
         }
         float best_cost = this_forward_cost[i];
-        int32_t best_j = state_info_[i].backpointer, initial_best_j = best_j;
+        int32_t best_j = state_info_[i].backpointer;
+        int32_t initial_best_j = best_j;
 
         if (best_j == upper_bound) {
           // if best_j already equals upper bound, don't bother tightening the
@@ -419,14 +421,15 @@ void PitchFrameInfo::ComputeBacktraces(
     } else {  // go forwards through the states.
       last_backpointer = 0;
       for (int32_t i = 0; i < num_states; i++) {
-        int32_t lower_bound = std::max(last_backpointer, bounds[i].first),
-                upper_bound = bounds[i].second;
+        int32_t lower_bound = std::max(last_backpointer, bounds[i].first);
+        int32_t upper_bound = bounds[i].second;
         if (upper_bound == lower_bound) {
           last_backpointer = lower_bound;
           continue;
         }
         float best_cost = this_forward_cost[i];
-        int32_t best_j = state_info_[i].backpointer, initial_best_j = best_j;
+        int32_t best_j = state_info_[i].backpointer;
+        int32_t initial_best_j = best_j;
 
         if (best_j == lower_bound) {
           // if best_j already equals lower bound, we don't bother tightening
@@ -504,7 +507,8 @@ int32_t PitchFrameInfo::ComputeLatency(int32_t max_latency) {
   // a static member function, except we do use "this" right at the beginning.
   // This function is called only on the most recent PitchFrameInfo object.
   int32_t num_states = state_info_.size();
-  int32_t min_living_state = 0, max_living_state = num_states - 1;
+  int32_t min_living_state = 0;
+  int32_t max_living_state = num_states - 1;
   PitchFrameInfo *this_info = this;  // it will change in the loop.
 
   for (; this_info != nullptr && latency < max_latency;) {
@@ -732,8 +736,8 @@ OnlinePitchFeatureImpl::OnlinePitchFeatureImpl(
 
 int32_t OnlinePitchFeatureImpl::NumFramesAvailable(
     int64_t num_downsampled_samples, bool snip_edges) const {
-  int32_t frame_shift = opts_.NccfWindowShift(),
-          frame_length = opts_.NccfWindowSize();
+  int32_t frame_shift = opts_.NccfWindowShift();
+  int32_t frame_length = opts_.NccfWindowSize();
   // Use the "full frame length" to compute the number
   // of frames only if the input is not finished.
   if (!input_finished_) frame_length += nccf_last_lag_;
@@ -762,9 +766,10 @@ void OnlinePitchFeatureImpl::UpdateRemainder(
     const VectorF &downsampled_wave_part) {
   // frame_info_ has an extra element at frame-1, so subtract
   // one from the length.
-  int64_t num_frames = static_cast<int64_t>(frame_info_.size()) - 1,
-          next_frame = num_frames, frame_shift = opts_.NccfWindowShift(),
-          next_frame_sample = frame_shift * next_frame;
+  int64_t num_frames = static_cast<int64_t>(frame_info_.size()) - 1;
+  int64_t next_frame = num_frames;
+  int64_t frame_shift = opts_.NccfWindowShift();
+  int64_t next_frame_sample = frame_shift * next_frame;
 
   signal_sumsq_ += downsampled_wave_part.dot(downsampled_wave_part);
   signal_sum_ += downsampled_wave_part.sum();
@@ -850,7 +855,8 @@ void OnlinePitchFeatureImpl::ExtractFrame(const VectorF &downsampled_wave_part,
     assert(offset + full_frame_length > 0);  // or we should have processed
                                              // this frame last time.
 
-    int32_t old_length = -offset, new_length = offset + full_frame_length;
+    int32_t old_length = -offset;
+    int32_t new_length = offset + full_frame_length;
     window.head(old_length) =
         downsampled_signal_remainder_.segment(remainder_offset, old_length);
     window.segment(old_length, new_length) =
@@ -875,7 +881,8 @@ float OnlinePitchFeatureImpl::FrameShiftInSeconds() const {
 }
 
 int32_t OnlinePitchFeatureImpl::NumFramesReady() const {
-  int32_t num_frames = lag_nccf_.size(), latency = frames_latency_;
+  int32_t num_frames = lag_nccf_.size();
+  int32_t latency = frames_latency_;
   assert(latency <= num_frames);
   return num_frames - latency;
 }
@@ -908,8 +915,10 @@ void OnlinePitchFeatureImpl::RecomputeBacktraces() {
   assert(num_frames <= opts_.recompute_frame);
   assert(nccf_info_.size() == static_cast<size_t>(num_frames));
   if (num_frames == 0) return;
-  double num_samp = downsampled_samples_processed_, sum = signal_sum_,
-         sumsq = signal_sumsq_, mean = sum / num_samp;
+  double num_samp = downsampled_samples_processed_;
+  double sum = signal_sum_;
+  double sumsq = signal_sumsq_;
+  double mean = sum / num_samp;
   float mean_square = sumsq / num_samp - mean * mean;
 
   bool must_recompute = false;
@@ -927,8 +936,8 @@ void OnlinePitchFeatureImpl::RecomputeBacktraces() {
     return;
   }
 
-  int32_t num_states = forward_cost_.size(),
-          basic_frame_length = opts_.NccfWindowSize();
+  int32_t num_states = forward_cost_.size();
+  int32_t basic_frame_length = opts_.NccfWindowSize();
 
   float new_nccf_ballast =
       pow(mean_square * basic_frame_length, 2) * opts_.nccf_ballast;
@@ -941,13 +950,13 @@ void OnlinePitchFeatureImpl::RecomputeBacktraces() {
 
   for (int32_t frame = 0; frame < num_frames; frame++) {
     NccfInfo &nccf_info = *nccf_info_[frame];
-    float old_mean_square = nccf_info_[frame]->mean_square_energy,
-          avg_norm_prod = nccf_info_[frame]->avg_norm_prod,
-          old_nccf_ballast = powf(old_mean_square * basic_frame_length, 2) *
-                             opts_.nccf_ballast,
-          nccf_scale = pow((old_nccf_ballast + avg_norm_prod) /
-                               (new_nccf_ballast + avg_norm_prod),
-                           static_cast<float>(0.5));
+    float old_mean_square = nccf_info_[frame]->mean_square_energy;
+    float avg_norm_prod = nccf_info_[frame]->avg_norm_prod;
+    float old_nccf_ballast =
+        powf(old_mean_square * basic_frame_length, 2) * opts_.nccf_ballast;
+    float nccf_scale = pow(
+        (old_nccf_ballast + avg_norm_prod) / (new_nccf_ballast + avg_norm_prod),
+        static_cast<float>(0.5));
     // The "nccf_scale" is an estimate of the scaling factor by which the NCCF
     // would change on this frame, on average, by changing the ballast term
     // from "old_nccf_ballast" to "new_nccf_ballast".  It's not exact because
@@ -1005,9 +1014,10 @@ void OnlinePitchFeatureImpl::AcceptWaveform(float sampling_rate,
 
   // these variables will be used to compute the root-mean-square value of the
   // signal for the ballast term.
-  double cur_sumsq = signal_sumsq_, cur_sum = signal_sum_;
-  int64_t cur_num_samp = downsampled_samples_processed_,
-          prev_frame_end_sample = 0;
+  double cur_sumsq = signal_sumsq_;
+  double cur_sum = signal_sum_;
+  int64_t cur_num_samp = downsampled_samples_processed_;
+  int64_t prev_frame_end_sample = 0;
   if (!opts_.nccf_ballast_online) {
     cur_sumsq += downsampled_wave.dot(downsampled_wave);
     cur_sum += downsampled_wave.sum();
@@ -1020,8 +1030,8 @@ void OnlinePitchFeatureImpl::AcceptWaveform(float sampling_rate,
       downsampled_samples_processed_ + downsampled_wave.size(),
       opts_.snip_edges);
   // "start_frame" is the first frame-index we process
-  int32_t start_frame = frame_info_.size() - 1,
-          num_new_frames = end_frame - start_frame;
+  int32_t start_frame = frame_info_.size() - 1;
+  int32_t num_new_frames = end_frame - start_frame;
 
   if (num_new_frames == 0) {
     UpdateRemainder(downsampled_wave);
@@ -1031,16 +1041,17 @@ void OnlinePitchFeatureImpl::AcceptWaveform(float sampling_rate,
     // anyway is a waste of time.
   }
 
-  int32_t num_measured_lags = nccf_last_lag_ + 1 - nccf_first_lag_,
-          num_resampled_lags = lags_.size(),
-          frame_shift = opts_.NccfWindowShift(),
-          basic_frame_length = opts_.NccfWindowSize(),
-          full_frame_length = basic_frame_length + nccf_last_lag_;
+  int32_t num_measured_lags = nccf_last_lag_ + 1 - nccf_first_lag_;
+  int32_t num_resampled_lags = lags_.size();
+  int32_t frame_shift = opts_.NccfWindowShift();
+  int32_t basic_frame_length = opts_.NccfWindowSize();
+  int32_t full_frame_length = basic_frame_length + nccf_last_lag_;
 
-  VectorF window(full_frame_length), inner_prod(num_measured_lags),
-      norm_prod(num_measured_lags);
-  MatrixF nccf_pitch(num_new_frames, num_measured_lags),
-      nccf_pov(num_new_frames, num_measured_lags);
+  VectorF window(full_frame_length);
+  VectorF inner_prod(num_measured_lags);
+  VectorF norm_prod(num_measured_lags);
+  MatrixF nccf_pitch(num_new_frames, num_measured_lags);
+  MatrixF nccf_pov(num_new_frames, num_measured_lags);
 
   VectorF cur_forward_cost(num_resampled_lags);
 
@@ -1088,10 +1099,10 @@ void OnlinePitchFeatureImpl::AcceptWaveform(float sampling_rate,
 
     ComputeCorrelation(window, nccf_first_lag_, nccf_last_lag_,
                        basic_frame_length, &inner_prod, &norm_prod);
-    double nccf_ballast_pov = 0.0,
-           nccf_ballast_pitch =
-               pow(mean_square * basic_frame_length, 2) * opts_.nccf_ballast,
-           avg_norm_prod = norm_prod.sum() / norm_prod.size();
+    double nccf_ballast_pov = 0.0;
+    double nccf_ballast_pitch =
+        pow(mean_square * basic_frame_length, 2) * opts_.nccf_ballast;
+    double avg_norm_prod = norm_prod.sum() / norm_prod.size();
     VectorF nccf_pitch_row(num_measured_lags);
     ComputeNccf(inner_prod, norm_prod, nccf_ballast_pitch, &nccf_pitch_row);
     nccf_pitch.row(frame - start_frame) = nccf_pitch_row.transpose();
@@ -1241,9 +1252,9 @@ class OnlineProcessPitch {
     // we do it this way is to ensure that the end effects (at file
     // beginning and end) are handled in a consistent way.
     int32_t context = opts_.delta_window;
-    int32_t start_frame = std::max(0, frame - context),
-            end_frame = std::min(frame + context + 1, src_->NumFramesReady()),
-            frames_in_window = end_frame - start_frame;
+    int32_t start_frame = std::max(0, frame - context);
+    int32_t end_frame = std::min(frame + context + 1, src_->NumFramesReady());
+    int32_t frames_in_window = end_frame - start_frame;
     MatrixF feats(frames_in_window, 1);
 
     for (int32_t f = start_frame; f < end_frame; f++)
@@ -1276,10 +1287,10 @@ class OnlineProcessPitch {
   /// frame.  Called from GetFrame().
   float GetNormalizedLogPitchFeature(int32_t frame) {
     UpdateNormalizationStats(frame);
-    float log_pitch = GetRawLogPitchFeature(frame),
-          avg_log_pitch = normalization_stats_[frame].sum_log_pitch_pov /
-                          normalization_stats_[frame].sum_pov,
-          normalized_log_pitch = log_pitch - avg_log_pitch;
+    float log_pitch = GetRawLogPitchFeature(frame);
+    float avg_log_pitch = normalization_stats_[frame].sum_log_pitch_pov /
+                          normalization_stats_[frame].sum_pov;
+    float normalized_log_pitch = log_pitch - avg_log_pitch;
     return normalized_log_pitch * opts_.pitch_scale;
   }
 
@@ -1339,7 +1350,8 @@ class OnlineProcessPitch {
           assert(this_window_begin == prev_window_begin + 1);
           VectorF tmp(kRawFeatureDim);
           src_->GetFrame(prev_window_begin, &tmp);
-          float accurate_pov = NccfToPov(tmp(0)), log_pitch = Log(tmp(1));
+          float accurate_pov = NccfToPov(tmp(0));
+          float log_pitch = Log(tmp(1));
           this_stats.sum_pov -= accurate_pov;
           this_stats.sum_log_pitch_pov -= accurate_pov * log_pitch;
         }
@@ -1347,7 +1359,8 @@ class OnlineProcessPitch {
           assert(this_window_end == prev_window_end + 1);
           VectorF tmp(kRawFeatureDim);
           src_->GetFrame(prev_window_end, &tmp);
-          float accurate_pov = NccfToPov(tmp(0)), log_pitch = Log(tmp(1));
+          float accurate_pov = NccfToPov(tmp(0));
+          float log_pitch = Log(tmp(1));
           this_stats.sum_pov += accurate_pov;
           this_stats.sum_log_pitch_pov += accurate_pov * log_pitch;
         }
@@ -1365,7 +1378,8 @@ class OnlineProcessPitch {
     VectorF tmp(kRawFeatureDim);
     for (int32_t f = this_window_begin; f < this_window_end; f++) {
       src_->GetFrame(f, &tmp);
-      float accurate_pov = NccfToPov(tmp(0)), log_pitch = Log(tmp(1));
+      float accurate_pov = NccfToPov(tmp(0));
+      float log_pitch = Log(tmp(1));
       this_stats.sum_pov += accurate_pov;
       this_stats.sum_log_pitch_pov += accurate_pov * log_pitch;
     }
@@ -1450,8 +1464,9 @@ MatrixF ComputeAndProcessKaldiPitch(const PitchExtractionOptions &pitch_opts,
   int32_t cur_rows = 100;
   MatrixF feats(cur_rows, pitch.Dim());
 
-  int32_t cur_offset = 0, cur_frame = 0,
-          samp_per_chunk = pitch_opts.frames_per_chunk * pitch_opts.samp_freq *
+  int32_t cur_offset = 0;
+  int32_t cur_frame = 0;
+  int32_t samp_per_chunk = pitch_opts.frames_per_chunk * pitch_opts.samp_freq *
                            pitch_opts.frame_shift_ms / 1000.0f;
 
   // We request the first-pass features as soon as they are available,

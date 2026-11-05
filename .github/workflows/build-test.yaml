@@ -79,7 +79,18 @@ jobs:
           # numpy<2 keeps compatibility with the torch wheels available for
           # these interpreters; tests skip themselves when a dependency is
           # unavailable on the platform.
-          python3 -m pip install "numpy<2" torch || true
+          python3 -m pip install "numpy<2"
+          # PyPI has no windows-arm64 torch wheels; torch 2.10.0+cpu is on the
+          # pytorch wheel index (this runner's python is 3.12). Other platforms
+          # install plain torch from PyPI (macos x64 resolves to 2.2.x, the last
+          # x86_64 build; platforms without any torch keep skipping the torch
+          # tests).
+          if [[ "${{ runner.os }}" == "Windows" && "${{ runner.arch }}" == "ARM64" ]]; then
+            python3 -m pip install "torch==2.10.0+cpu" \
+              --find-links https://download.pytorch.org/whl/torch
+          else
+            python3 -m pip install torch || true
+          fi
 
       - name: Configure
         shell: bash
@@ -106,7 +117,19 @@ jobs:
         shell: bash
         run: |
           cd build
+          # pass 1: numpy < 2 (installed above)
           ctest --output-on-failure -C Release
+
+          # pass 2: numpy >= 2 — the library must work with both numpy majors
+          python3 -m pip install -U "numpy>=2"
+          # torch < 2.3 was built against the numpy 1.x C-API, so its
+          # tensor.numpy()/torch.from_numpy bridge cannot run under numpy 2.
+          # Drop it in this pass so the torch-based reference tests self-skip
+          # instead of failing; those combinations are covered by pass 1.
+          if python3 -c "import torch, sys; v = tuple(int(x) for x in torch.__version__.split('+')[0].split('.')[:2]); sys.exit(0 if v < (2, 3) else 1)" 2>/dev/null; then
+            python3 -m pip uninstall -y torch
+          fi
+          ctest --output-on-failure -C Release -R _py
 
   # linux arm32: cross-compile on an arm64 runner; the arm64 kernel runs the
   # armhf binaries natively once the 32-bit runtime is installed, so no qemu

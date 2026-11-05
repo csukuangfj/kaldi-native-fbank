@@ -76,13 +76,11 @@ jobs:
           path: docs/build/latex/kaldi-native-fbank.pdf
 
       - name: Attach PDF to release
-        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           files: docs/build/latex/kaldi-native-fbank.pdf
 
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

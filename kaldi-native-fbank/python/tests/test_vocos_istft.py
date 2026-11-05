@@ -4,9 +4,9 @@
 
 try:
     import torch
+    import torch.nn as nn
 except ImportError:  # pragma: no cover
     torch = None
-import torch.nn as nn
 try:
     import kaldi_native_fbank as knf
 except (ImportError, OSError):  # pragma: no cover
