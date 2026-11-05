@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raw audio framing &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Window &amp; frame extraction" href="window.html" />
+    <link rel="prev" title="NeMo filter bank" href="nemo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Raw audio framing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions"><code class="docutils literal notranslate"><span class="pre">RawAudioSamplesOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples"><code class="docutils literal notranslate"><span class="pre">OnlineRawAudioSamples</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Raw audio framing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/raw-audio.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="raw-audio-framing">
+<h1>Raw audio framing<a class="headerlink" href="#raw-audio-framing" title="Link to this heading"></a></h1>
+<p>Frame raw waveform samples <strong>without any processing</strong> — no dithering,
+preemphasis, DC offset removal or windowing
+(<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-raw-audio-samples.h">kaldi-native-fbank/csrc/feature-raw-audio-samples.h</a>).  This is useful
+for models that consume raw waveform chunks and want the same streaming
+interface as the feature extractors.  There is no kaldi counterpart.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">RawAudioSamplesOptions</span><span class="p">()</span>
+<span class="n">framer</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineRawAudioSamples</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+
+<span class="n">framer</span><span class="o">.</span><span class="n">accept_waveform</span><span class="p">(</span><span class="mi">16000</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>
+<span class="n">framer</span><span class="o">.</span><span class="n">input_finished</span><span class="p">()</span>
+<span class="n">chunk</span> <span class="o">=</span> <span class="n">framer</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (dim,) raw samples of the first frame</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.RawAudioSamplesOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">RawAudioSamplesOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">RawAudioSamplesOptions().frame_opts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for framing raw audio samples without any processing.</p>
+<p>The default <code class="docutils literal notranslate"><span class="pre">frame_opts</span></code> performs no processing on the samples:
+rectangular window, no dithering, no preemphasis, no DC offset removal, no
+zero-padding.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></code></a></p>
+</div>
+<p>Construct; <code class="docutils literal notranslate"><span class="pre">frame_opts</span></code> defaults to un-processed framing.</p>
+<p>The default is a rectangular window with no dithering, preemphasis, DC
+offset removal or zero-padding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame_opts</strong> -- Frame-extraction options; see
+<a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">FrameExtractionOptions</span></code></a>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.RawAudioSamplesOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">RawAudioSamplesOptions().frame_opts</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.RawAudioSamplesOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct; <code class="docutils literal notranslate"><span class="pre">frame_opts</span></code> defaults to un-processed framing.</p>
+<p>The default is a rectangular window with no dithering, preemphasis, DC
+offset removal or zero-padding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame_opts</strong> -- Frame-extraction options; see
+<a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">FrameExtractionOptions</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.RawAudioSamplesOptions.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#kaldi_native_fbank.RawAudioSamplesOptions.as_dict" title="Link to this definition"></a></dt>
+<dd><p>Return the options as a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.RawAudioSamplesOptions.frame_opts">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_opts</span></span><a class="headerlink" href="#kaldi_native_fbank.RawAudioSamplesOptions.frame_opts" title="Link to this definition"></a></dt>
+<dd><p>Frame-extraction options; see <a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">FrameExtractionOptions</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.RawAudioSamplesOptions.from_dict">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></span><a class="headerlink" href="#kaldi_native_fbank.RawAudioSamplesOptions.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Build options from a dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">OnlineRawAudioSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="Link to this definition"></a></dt>
+<dd><p>Construct from the options of the wrapped feature computer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Options of the computer, e.g. <a class="reference internal" href="fbank.html#kaldi_native_fbank.FbankOptions" title="kaldi_native_fbank.FbankOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">FbankOptions</span></code></a> for
+<a class="reference internal" href="fbank.html#kaldi_native_fbank.OnlineFbank" title="kaldi_native_fbank.OnlineFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineFbank</span></code></a>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.RawAudioSamplesOptions" title="kaldi_native_fbank.RawAudioSamplesOptions"><span class="pre">kaldi_native_fbank.RawAudioSamplesOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct from the options of the wrapped feature computer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Options of the computer, e.g. <a class="reference internal" href="fbank.html#kaldi_native_fbank.FbankOptions" title="kaldi_native_fbank.FbankOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">FbankOptions</span></code></a> for
+<a class="reference internal" href="fbank.html#kaldi_native_fbank.OnlineFbank" title="kaldi_native_fbank.OnlineFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineFbank</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.accept_waveform">
+<span class="sig-name descname"><span class="pre">accept_waveform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waveform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.accept_waveform" title="Link to this definition"></a></dt>
+<dd><p>Add more waveform samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampling_rate</strong> -- The sampling rate of <code class="docutils literal notranslate"><span class="pre">waveform</span></code>; must match the
+rate in the options.</p></li>
+<li><p><strong>waveform</strong> -- 1-D float32 samples.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.dim" title="Link to this definition"></a></dt>
+<dd><p>The dimension of the output features.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.frame_shift_in_seconds">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_in_seconds</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.frame_shift_in_seconds" title="Link to this definition"></a></dt>
+<dd><p>The frame shift in seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.get_frame">
+<span class="sig-name descname"><span class="pre">get_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.get_frame" title="Link to this definition"></a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">frame</span></code>-th feature vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> -- Frame index.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray of shape <code class="docutils literal notranslate"><span class="pre">(dim,)</span></code> and dtype float32.  The buffer is
+owned by the extractor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.input_finished">
+<span class="sig-name descname"><span class="pre">input_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.input_finished" title="Link to this definition"></a></dt>
+<dd><p>Tell the extractor that no more waveform will be added.</p>
+<p>This flushes out the last frame or two when <code class="docutils literal notranslate"><span class="pre">snip_edges</span></code> is False and
+also affects the return value of <a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples.is_last_frame" title="kaldi_native_fbank.OnlineRawAudioSamples.is_last_frame"><code class="xref py py-meth docutils literal notranslate"><span class="pre">is_last_frame()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.is_last_frame">
+<span class="sig-name descname"><span class="pre">is_last_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.is_last_frame" title="Link to this definition"></a></dt>
+<dd><p>Return true if <code class="docutils literal notranslate"><span class="pre">frame</span></code> is the last frame.</p>
+<p>Note: this can only return true after <a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples.input_finished" title="kaldi_native_fbank.OnlineRawAudioSamples.input_finished"><code class="xref py py-meth docutils literal notranslate"><span class="pre">input_finished()</span></code></a> has been
+called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> -- Frame index.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the frame is the last one.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.num_frames_ready">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_frames_ready</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.num_frames_ready" title="Link to this definition"></a></dt>
+<dd><p>The number of frames that have already been computed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineRawAudioSamples.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineRawAudioSamples" title="kaldi_native_fbank.OnlineRawAudioSamples"><span class="pre">kaldi_native_fbank.OnlineRawAudioSamples</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineRawAudioSamples.pop" title="Link to this definition"></a></dt>
+<dd><p>Discard the first <code class="docutils literal notranslate"><span class="pre">n</span></code> frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> -- Number of frames to discard.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nemo.html" class="btn btn-neutral float-left" title="NeMo filter bank" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="window.html" class="btn btn-neutral float-right" title="Window &amp; frame extraction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

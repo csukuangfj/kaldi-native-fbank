@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fbank &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pitch" href="pitch.html" />
+    <link rel="prev" title="MFCC" href="mfcc.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fbank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf12FbankOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::FbankOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf11OnlineFbankE"><code class="docutils literal notranslate"><span class="pre">OnlineFbank</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">Fbank</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/fbank.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fbank">
+<h1>Fbank<a class="headerlink" href="#fbank" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-fbank.h">kaldi-native-fbank/csrc/feature-fbank.h</a> — kaldi-compatible
+filter-bank features (equal to kaldi's
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-fbank-feats.cc">compute-fbank-feats</a>).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">FbankOptions</span><span class="w"> </span><span class="n">opts</span><span class="p">;</span>
+<span class="n">opts</span><span class="p">.</span><span class="n">mel_opts</span><span class="p">.</span><span class="n">num_bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">23</span><span class="p">;</span>
+
+<span class="n">knf</span><span class="o">::</span><span class="n">OnlineFbank</span><span class="w"> </span><span class="nf">fbank</span><span class="p">(</span><span class="n">opts</span><span class="p">);</span>
+<span class="n">fbank</span><span class="p">.</span><span class="n">AcceptWaveform</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">,</span><span class="w"> </span><span class="n">samples</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">samples</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="n">fbank</span><span class="p">.</span><span class="n">InputFinished</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fbank</span><span class="p">.</span><span class="n">GetFrame</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../python-api/fbank.html"><span class="doc">Fbank</span></a> for the kaldi flag mapping table.</p>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptionsE">
+<span id="_CPPv3N3knf12FbankOptionsE"></span><span id="_CPPv2N3knf12FbankOptionsE"></span><span id="knf::FbankOptions"></span><span class="target" id="structknf_1_1FbankOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FbankOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for computing filter-bank features. </p>
+<p>This is kaldi's <a class="reference internal" href="#structknf_1_1FbankOptions"><span class="std std-ref">FbankOptions</span></a> (<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-fbank.h">src/feat/feature-fbank.h</a>). It only includes things that can be done in a &quot;stateless&quot; way, i.e. it does not include energy max-normalization and it does not include delta computation.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>FbankComputer, FrameExtractionOptions, MelBanksOptions</p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions12FbankOptionsEv">
+<span id="_CPPv3N3knf12FbankOptions12FbankOptionsEv"></span><span id="_CPPv2N3knf12FbankOptions12FbankOptionsEv"></span><span id="knf::FbankOptions::FbankOptions"></span><span class="target" id="structknf_1_1FbankOptions_1a4db435352b614a34add11c3f03812236"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FbankOptions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions12FbankOptionsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct with the default options: 23 mel bins. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf12FbankOptions8ToStringEv">
+<span id="_CPPv3NK3knf12FbankOptions8ToStringEv"></span><span id="_CPPv2NK3knf12FbankOptions8ToStringEv"></span><span id="knf::FbankOptions::ToStringC"></span><span class="target" id="structknf_1_1FbankOptions_1aa2332eb5fba177b176cf48e7187e0cf7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToString</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf12FbankOptions8ToStringEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the options as a string. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions10frame_optsE">
+<span id="_CPPv3N3knf12FbankOptions10frame_optsE"></span><span id="_CPPv2N3knf12FbankOptions10frame_optsE"></span><span id="knf::FbankOptions::frame_opts__FrameExtractionOptions"></span><span class="target" id="structknf_1_1FbankOptions_1ab7ee8d74ca489689793c6f0ac2d5b8b2"></span><span class="n"><span class="pre">FrameExtractionOptions</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frame_opts</span></span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions10frame_optsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for frame extraction; see FrameExtractionOptions. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions8mel_optsE">
+<span id="_CPPv3N3knf12FbankOptions8mel_optsE"></span><span id="_CPPv2N3knf12FbankOptions8mel_optsE"></span><span id="knf::FbankOptions::mel_opts__MelBanksOptions"></span><span class="target" id="structknf_1_1FbankOptions_1a5a10e440baa2c6b5c9a832806ea174e7"></span><span class="n"><span class="pre">MelBanksOptions</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mel_opts</span></span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions8mel_optsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for the mel filter banks; see MelBanksOptions. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions10use_energyE">
+<span id="_CPPv3N3knf12FbankOptions10use_energyE"></span><span id="_CPPv2N3knf12FbankOptions10use_energyE"></span><span id="knf::FbankOptions::use_energy__b"></span><span class="target" id="structknf_1_1FbankOptions_1aa0da98d67e5913d9f3ccf132c70a2820"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">use_energy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions10use_energyE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, append an extra dimension with energy to the filter banks. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions12energy_floorE">
+<span id="_CPPv3N3knf12FbankOptions12energy_floorE"></span><span id="_CPPv2N3knf12FbankOptions12energy_floorE"></span><span id="knf::FbankOptions::energy_floor__float"></span><span class="target" id="structknf_1_1FbankOptions_1adee9bfb07357566cb4fee5836183855a"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy_floor</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0f</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions12energy_floorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Floor on energy (absolute, not relative) in fbank computation. </p>
+<p>Only makes a difference if use_energy is true; only necessary if frame_opts.dither is 0.0. Suggested values: 0.1 or 1.0. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions10raw_energyE">
+<span id="_CPPv3N3knf12FbankOptions10raw_energyE"></span><span id="_CPPv2N3knf12FbankOptions10raw_energyE"></span><span id="knf::FbankOptions::raw_energy__b"></span><span class="target" id="structknf_1_1FbankOptions_1a96d4fe928e80832712f1ff5f788ec792"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">raw_energy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions10raw_energyE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, compute log energy before preemphasis and windowing; if false, compute it after preemphasis and windowing. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions10htk_compatE">
+<span id="_CPPv3N3knf12FbankOptions10htk_compatE"></span><span id="_CPPv2N3knf12FbankOptions10htk_compatE"></span><span id="knf::FbankOptions::htk_compat__b"></span><span class="target" id="structknf_1_1FbankOptions_1a0016b6506391eefa5dedf34a2526e5b7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">htk_compat</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions10htk_compatE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, put energy last (if using energy); if false, put energy first. </p>
+<p>Warning: not sufficient to get HTK compatible features (need to change other parameters). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions13use_log_fbankE">
+<span id="_CPPv3N3knf12FbankOptions13use_log_fbankE"></span><span id="_CPPv2N3knf12FbankOptions13use_log_fbankE"></span><span id="knf::FbankOptions::use_log_fbank__b"></span><span class="target" id="structknf_1_1FbankOptions_1ace68bb4c794abf479c31b54324a30e2d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">use_log_fbank</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions13use_log_fbankE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true (default), produce log-filterbank; else linear. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions13use_log_floorE">
+<span id="_CPPv3N3knf12FbankOptions13use_log_floorE"></span><span id="_CPPv2N3knf12FbankOptions13use_log_floorE"></span><span id="knf::FbankOptions::use_log_floor__b"></span><span class="target" id="structknf_1_1FbankOptions_1af222c9138914d2f78cfdce9f2ba93173"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">use_log_floor</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions13use_log_floorE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true (default), use Kaldi's hard floor before the log, i.e. </p>
+<p><span class="math notranslate nohighlight">\( \log(\max(e, \epsilon)) \)</span>. If false, use the additive guard <span class="math notranslate nohighlight">\( \log(e + \epsilon) \)</span>, where <span class="math notranslate nohighlight">\( e \)</span> is the mel energy. NeMo models use the additive guard with eps = FLT_EPSILON / 2 (2^-24). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions3epsE">
+<span id="_CPPv3N3knf12FbankOptions3epsE"></span><span id="_CPPv2N3knf12FbankOptions3epsE"></span><span id="knf::FbankOptions::eps__float"></span><span class="target" id="structknf_1_1FbankOptions_1ace6c5ccaa1e05237fd9d4a0906a6c7c1"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eps</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">numeric_limits</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions3epsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Value used by the log-zero guard selected by use_log_floor. </p>
+<p>It defaults to FLT_EPSILON; NeMo models use FLT_EPSILON / 2 (2^-24, 5.9604644775390625e-08). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12FbankOptions9use_powerE">
+<span id="_CPPv3N3knf12FbankOptions9use_powerE"></span><span id="_CPPv2N3knf12FbankOptions9use_powerE"></span><span id="knf::FbankOptions::use_power__b"></span><span class="target" id="structknf_1_1FbankOptions_1ab76de644a26e3db7b4f43a7655ce1303"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">use_power</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf12FbankOptions9use_powerE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true (default), use power in filterbank analysis; else magnitude. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11OnlineFbankE">
+<span id="_CPPv3N3knf11OnlineFbankE"></span><span id="_CPPv2N3knf11OnlineFbankE"></span><span class="target" id="namespaceknf_1a75eb3ac573f14d0024d92533859d719d"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">OnlineFbank</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">OnlineGenericBaseFeature</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">FbankComputer</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N3knf11OnlineFbankE" title="Link to this definition"></a><br /></dt>
+<dd><p>Streaming filter-bank features; see FbankComputer. </p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mfcc.html" class="btn btn-neutral float-left" title="MFCC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pitch.html" class="btn btn-neutral float-right" title="Pitch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

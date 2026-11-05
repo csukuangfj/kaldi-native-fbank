@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transform &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Splice" href="splice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Transform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf16FeatureTransformE"><code class="docutils literal notranslate"><span class="pre">knf::FeatureTransform</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">Transform</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/transform.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="transform">
+<h1>Transform<a class="headerlink" href="#transform" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-transform.h">kaldi-native-fbank/csrc/feature-transform.h</a> — the equivalent
+of kaldi's <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">transform-feats</a>).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">FeatureTransform</span><span class="w"> </span><span class="n">lda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">FeatureTransform</span><span class="o">::</span><span class="n">Read</span><span class="p">(</span><span class="s">"lda.mat"</span><span class="p">);</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">MatrixF</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lda</span><span class="p">.</span><span class="n">Apply</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span><span class="w">   </span><span class="c1">// (T, lda.OutputDim())</span>
+</pre></div>
+</div>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf16FeatureTransformE">
+<span id="_CPPv3N3knf16FeatureTransformE"></span><span id="_CPPv2N3knf16FeatureTransformE"></span><span id="knf::FeatureTransform"></span><span class="target" id="classknf_1_1FeatureTransform"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FeatureTransform</span></span></span><a class="headerlink" href="#_CPPv4N3knf16FeatureTransformE" title="Link to this definition"></a><br /></dt>
+<dd><p>A linear (or affine) feature transform, e.g. </p>
+<p>an LDA matrix.</p>
+<p>The transform is a matrix <span class="math notranslate nohighlight">\( M \)</span> of shape <span class="math notranslate nohighlight">\( (D_{out} \times n) \)</span>; see the file description for the exact semantics, which follow kaldi's <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> (<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">src/featbin/transform-feats.cc</a>):</p>
+<p>if <span class="math notranslate nohighlight">\( n = D_{in} \)</span> (the input feature dimension), the transform is linear: <span class="math notranslate nohighlight">\( y = x\, M^{T} \)</span>; if <span class="math notranslate nohighlight">\( n = D_{in} + 1 \)</span>, the transform is affine: the input features get an implicit 1.0 appended, so <span class="math notranslate nohighlight">\( y = x\, M_{[:,\,0:n-1]}^{T} + M_{[:,\,n-1]} \)</span>; otherwise <a class="reference internal" href="#classknf_1_1FeatureTransform_1aec6068af86a5018726c51ad085be4753"><span class="std std-ref">Apply()</span></a> throws.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">FeatureTransform</span> <span class="n">lda</span> <span class="o">=</span> <span class="n">knf</span><span class="p">::</span><span class="n">FeatureTransform</span><span class="p">::</span><span class="n">Read</span><span class="p">(</span><span class="s2">"lda.mat"</span><span class="p">);</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">MatrixF</span> <span class="n">out</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">Apply</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classknf_1_1FeatureTransform_1a7b9505345e17e3049fb7d529aef2a3bc"><span class="std std-ref">Read</span></a>, <a class="reference internal" href="#classknf_1_1FeatureTransform_1aec6068af86a5018726c51ad085be4753"><span class="std std-ref">Apply</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Used by:</strong></dt><dd><p>Pipelines that reduce/rotate features (mfcc -&gt; cmvn -&gt; splice -&gt; lda).</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf16FeatureTransform16FeatureTransformERK7MatrixF">
+<span id="_CPPv3N3knf16FeatureTransform16FeatureTransformERK7MatrixF"></span><span id="_CPPv2N3knf16FeatureTransform16FeatureTransformERK7MatrixF"></span><span id="knf::FeatureTransform::FeatureTransform__MatrixFCR"></span><span class="target" id="classknf_1_1FeatureTransform_1a7ea90e03cb5cb5d390a28302b0fff536"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FeatureTransform</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf16FeatureTransform16FeatureTransformERK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct a transform from a matrix directly. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mat</strong> -- <strong>[in]</strong> The transform matrix of shape (<a class="reference internal" href="#classknf_1_1FeatureTransform_1aff7e613ee00f83a495f801d96b3b5717"><span class="std std-ref">OutputDim()</span></a> x <a class="reference internal" href="#classknf_1_1FeatureTransform_1a255c939e1c135adaa597fc542812f944"><span class="std std-ref">InputDim()</span></a>), or one column wider for an affine transform (the last column is the offset). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf16FeatureTransform8InputDimEv">
+<span id="_CPPv3NK3knf16FeatureTransform8InputDimEv"></span><span id="_CPPv2NK3knf16FeatureTransform8InputDimEv"></span><span id="knf::FeatureTransform::InputDimC"></span><span class="target" id="classknf_1_1FeatureTransform_1a255c939e1c135adaa597fc542812f944"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputDim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf16FeatureTransform8InputDimEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of columns of the stored matrix. </p>
+<p>This is the feature dimension in the linear form; an affine transform consumes <a class="reference internal" href="#classknf_1_1FeatureTransform_1a255c939e1c135adaa597fc542812f944"><span class="std std-ref">InputDim()</span></a>-1 features plus the implicit 1.0. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf16FeatureTransform9OutputDimEv">
+<span id="_CPPv3NK3knf16FeatureTransform9OutputDimEv"></span><span id="_CPPv2NK3knf16FeatureTransform9OutputDimEv"></span><span id="knf::FeatureTransform::OutputDimC"></span><span class="target" id="classknf_1_1FeatureTransform_1aff7e613ee00f83a495f801d96b3b5717"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OutputDim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf16FeatureTransform9OutputDimEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of rows of the stored matrix (the output dimension). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf16FeatureTransform8IsAffineE7int32_t">
+<span id="_CPPv3NK3knf16FeatureTransform8IsAffineE7int32_t"></span><span id="_CPPv2NK3knf16FeatureTransform8IsAffineE7int32_t"></span><span id="knf::FeatureTransform::IsAffine__int32_tC"></span><span class="target" id="classknf_1_1FeatureTransform_1ac9c815912d3d40d0d8ef919986036512"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsAffine</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_dim</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf16FeatureTransform8IsAffineE7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>True if the transform is affine for inputs of dimension <code class="docutils literal notranslate"><span class="pre">input_dim</span></code>. </p>
+<p>The matrix alone cannot record the intended input dimension, so the rule is the one kaldi's <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> applies: the transform is affine iff it has one column more than the feature dimension ( <span class="math notranslate nohighlight">\( n = D_{in} + 1 \)</span>), the extra column being the offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_dim</strong> -- <strong>[in]</strong> The input feature dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf16FeatureTransform5ApplyERK7MatrixF">
+<span id="_CPPv3NK3knf16FeatureTransform5ApplyERK7MatrixF"></span><span id="_CPPv2NK3knf16FeatureTransform5ApplyERK7MatrixF"></span><span id="knf::FeatureTransform::Apply__MatrixFCRC"></span><span class="target" id="classknf_1_1FeatureTransform_1aec6068af86a5018726c51ad085be4753"></span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Apply</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf16FeatureTransform5ApplyERK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Apply the transform to a feature matrix. </p>
+<p>kaldi <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> semantics (rows = frames):</p>
+<p>if the transform has <code class="docutils literal notranslate"><span class="pre">feats.cols()</span></code> columns, the output is <span class="math notranslate nohighlight">\( Y = X M^{T} \)</span> (linear); if it has <code class="docutils literal notranslate"><span class="pre">feats.cols()</span> <span class="pre">+</span> <span class="pre">1</span></code> columns, the transform is affine and the last column is the offset: <span class="math notranslate nohighlight">\( Y = X M_{[:,\,0:n-1]}^{T} + \mathbf{1} b^{T} \)</span>; otherwise an exception is thrown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feats</strong> -- <strong>[in]</strong> Feature matrix of size T x D, float32. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed matrix of size T x <a class="reference internal" href="#classknf_1_1FeatureTransform_1aff7e613ee00f83a495f801d96b3b5717"><span class="std std-ref">OutputDim()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf16FeatureTransform5ApplyEPKf7int32_tPf">
+<span id="_CPPv3NK3knf16FeatureTransform5ApplyEPKf7int32_tPf"></span><span id="_CPPv2NK3knf16FeatureTransform5ApplyEPKf7int32_tPf"></span><span id="knf::FeatureTransform::Apply__floatCP.int32_t.floatPC"></span><span class="target" id="classknf_1_1FeatureTransform_1a65bb3e756194d840b8264ba9ba1d9be4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Apply</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">feat</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf16FeatureTransform5ApplyEPKf7int32_tPf" title="Link to this definition"></a><br /></dt>
+<dd><p>Apply the transform to a single feature frame. </p>
+<p>Same semantics as the matrix version of <a class="reference internal" href="#classknf_1_1FeatureTransform_1aec6068af86a5018726c51ad085be4753"><span class="std std-ref">Apply()</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feat</strong> -- <strong>[in]</strong> Pointer to one frame of dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code>. </p></li>
+<li><p><strong>dim</strong> -- <strong>[in]</strong> Dimension of the frame. </p></li>
+<li><p><strong>out</strong> -- <strong>[out]</strong> Pointer to an array of <a class="reference internal" href="#classknf_1_1FeatureTransform_1aff7e613ee00f83a495f801d96b3b5717"><span class="std std-ref">OutputDim()</span></a> floats; the caller must pre-allocate it. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf16FeatureTransform4ReadERKNSt6stringE">
+<span id="_CPPv3N3knf16FeatureTransform4ReadERKNSt6stringE"></span><span id="_CPPv2N3knf16FeatureTransform4ReadERKNSt6stringE"></span><span id="knf::FeatureTransform::Read__ssCR"></span><span class="target" id="classknf_1_1FeatureTransform_1a7b9505345e17e3049fb7d529aef2a3bc"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf16FeatureTransformE" title="knf::FeatureTransform"><span class="n"><span class="pre">FeatureTransform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Read</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf16FeatureTransform4ReadERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Read a transform matrix from a kaldi matrix file. </p>
+<p>Supports the kaldi binary format (&quot;\0B&quot; + &quot;FM&quot;/&quot;DM&quot; + dims + data, as written by kaldi's <code class="docutils literal notranslate"><span class="pre">Matrix::Write</span></code>) and the kaldi text format (<code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">...</span> <span class="pre">]</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- <strong>[in]</strong> Path of the matrix file, e.g. <code class="docutils literal notranslate"><span class="pre">lda.mat</span></code>. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transform. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="splice.html" class="btn btn-neutral float-left" title="Splice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Window &amp; frame extraction &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mel filter banks" href="mel.html" />
+    <link rel="prev" title="Raw audio framing" href="raw-audio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Window &amp; frame extraction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions"><code class="docutils literal notranslate"><span class="pre">FrameExtractionOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.FeatureWindowFunction"><code class="docutils literal notranslate"><span class="pre">FeatureWindowFunction</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Window &amp; frame extraction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/window.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="window-frame-extraction">
+<h1>Window &amp; frame extraction<a class="headerlink" href="#window-frame-extraction" title="Link to this heading"></a></h1>
+<p>Splitting a waveform into overlapping frames and pre-processing each frame
+(dithering, DC offset removal, preemphasis, windowing) before the FFT
+(<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-window.h">kaldi-native-fbank/csrc/feature-window.h</a>).
+kaldi counterpart: <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-window.h">FrameExtractionOptions</a>.
+See <a class="reference internal" href="reference.html"><span class="doc">Python API reference</span></a> for the full field-by-field mapping to kaldi options.</p>
+<p>Every feature extractor accepts these settings via its <code class="docutils literal notranslate"><span class="pre">frame_opts</span></code> field.
+The window formulas for each <code class="docutils literal notranslate"><span class="pre">window_type</span></code> are documented on
+<a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">kaldi_native_fbank.FrameExtractionOptions()</span></code></a> (and in the C++ docs).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FrameExtractionOptions</span><span class="p">()</span>
+<span class="n">opts</span><span class="o">.</span><span class="n">samp_freq</span> <span class="o">=</span> <span class="mi">16000</span>
+<span class="n">opts</span><span class="o">.</span><span class="n">dither</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># deterministic output</span>
+
+<span class="n">window</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FeatureWindowFunction</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">window</span><span class="p">)</span>  <span class="c1"># one frame of window_size</span>
+<span class="n">windowed</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">FrameExtractionOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.00003</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.97</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_dc_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'povey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_to_power_of_two</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blackman_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snip_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for extracting frames from a waveform.</p>
+<p>This is the equivalent of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-window.h">FrameExtractionOptions</a>.  It controls
+how a waveform is split into overlapping frames and how each frame is
+pre-processed (dithering, DC offset removal, preemphasis, windowing) before
+the FFT.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#kaldi_native_fbank.FeatureWindowFunction" title="kaldi_native_fbank.FeatureWindowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureWindowFunction</span></code></a></dt><dd><p>The windowing function implied by these options.</p>
+</dd>
+<dt><a class="reference internal" href="fbank.html#kaldi_native_fbank.OnlineFbank" title="kaldi_native_fbank.OnlineFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineFbank</span></code></a></dt><dd><p>Streaming extractors that accept these options via <code class="docutils literal notranslate"><span class="pre">frame_opts</span></code>.</p>
+</dd>
+</dl>
+</div>
+<p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency in Hz (must match the waveform).</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds.</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds.</p></li>
+<li><p><strong>dither</strong> -- Amount of dithering; 0.0 disables it.  The default 0.00003 is equivalent to kaldi's 1.0.</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient.</p></li>
+<li><p><strong>remove_dc_offset</strong> -- Subtract the mean of the waveform before the FFT.</p></li>
+<li><p><strong>window_type</strong> -- Window type, e.g. &quot;povey&quot;; see <a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions.window_type" title="kaldi_native_fbank.FrameExtractionOptions.window_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">window_type</span></code></a> for the formulas of each type.</p></li>
+<li><p><strong>round_to_power_of_two</strong> -- If True, round the FFT window size up to a power of two.</p></li>
+<li><p><strong>blackman_coeff</strong> -- Constant coefficient for the generalized Blackman window.</p></li>
+<li><p><strong>snip_edges</strong> -- If True, emit only frames that completely fit in the file; if False, reflect at the edges.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dither</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.00003</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.97</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_dc_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'povey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_to_power_of_two</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blackman_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snip_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency in Hz (must match the waveform).</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds.</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds.</p></li>
+<li><p><strong>dither</strong> -- Amount of dithering; 0.0 disables it.  The default 0.00003 is equivalent to kaldi's 1.0.</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient.</p></li>
+<li><p><strong>remove_dc_offset</strong> -- Subtract the mean of the waveform before the FFT.</p></li>
+<li><p><strong>window_type</strong> -- Window type, e.g. &quot;povey&quot;; see <a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions.window_type" title="kaldi_native_fbank.FrameExtractionOptions.window_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">window_type</span></code></a> for the formulas of each type.</p></li>
+<li><p><strong>round_to_power_of_two</strong> -- If True, round the FFT window size up to a power of two.</p></li>
+<li><p><strong>blackman_coeff</strong> -- Constant coefficient for the generalized Blackman window.</p></li>
+<li><p><strong>snip_edges</strong> -- If True, emit only frames that completely fit in the file; if False, reflect at the edges.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.as_dict" title="Link to this definition"></a></dt>
+<dd><p>Return the options as a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.blackman_coeff">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">blackman_coeff</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.blackman_coeff" title="Link to this definition"></a></dt>
+<dd><p>Constant coefficient for the generalized Blackman window.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.dither">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dither</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.dither" title="Link to this definition"></a></dt>
+<dd><p>Amount of dithering; 0.0 means no dither.  The default 0.00003 is equivalent to dither=1.0 in kaldi.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.frame_length_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_length_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.frame_length_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame length in milliseconds.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.frame_shift_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.frame_shift_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame shift in milliseconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.from_dict">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Build options from a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.preemph_coeff">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">preemph_coeff</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.preemph_coeff" title="Link to this definition"></a></dt>
+<dd><p>Preemphasis coefficient.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.remove_dc_offset">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">remove_dc_offset</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.remove_dc_offset" title="Link to this definition"></a></dt>
+<dd><p>Subtract mean of the waveform before the FFT.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.round_to_power_of_two">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">round_to_power_of_two</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.round_to_power_of_two" title="Link to this definition"></a></dt>
+<dd><p>If True, round the window size to a power of two by zero-padding the FFT input.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.samp_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">samp_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.samp_freq" title="Link to this definition"></a></dt>
+<dd><p>Waveform data sample frequency (must match the waveform).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.snip_edges">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">snip_edges</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.snip_edges" title="Link to this definition"></a></dt>
+<dd><p>If True, output only frames that completely fit in the file (the frame count depends on the frame length).  If False, the frame count depends only on the frame shift and the data is reflected at the edges.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FrameExtractionOptions.window_type">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">window_type</span></span><a class="headerlink" href="#kaldi_native_fbank.FrameExtractionOptions.window_type" title="Link to this definition"></a></dt>
+<dd><p>Window type: one of <code class="docutils literal notranslate"><span class="pre">&quot;hanning&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;hann&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sine&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;hamming&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;povey&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rectangular&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;blackman&quot;</span></code>.</p>
+<p>Let <span class="math notranslate nohighlight">\(N\)</span> be the window size, <span class="math notranslate nohighlight">\(n = 0, \ldots, N-1\)</span> the sample index, and <span class="math notranslate nohighlight">\(a = 2\pi/(N-1)\)</span>.  The formulas are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;hanning&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = 0.5 - 0.5 \cos(a n)\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;hann&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = 0.5 - 0.5 \cos(a n)\)</span> with <span class="math notranslate nohighlight">\(a = 2\pi/N\)</span>
+(periodic variant; see the hann_window docs of PyTorch)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;sine&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = \sin(0.5\,a\,n) = \sin(\pi n/(N-1))\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;hamming&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = 0.54 - 0.46 \cos(a n)\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;povey&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = (0.5 - 0.5 \cos(a n))^{0.85}\)</span>
+(like hamming but goes to zero at the edges)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;rectangular&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = 1\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;blackman&quot;</span></code>: <span class="math notranslate nohighlight">\(w[n] = c - 0.5 \cos(a n) + (0.5 - c) \cos(2 a n)\)</span>
+where <span class="math notranslate nohighlight">\(c\)</span> is <code class="docutils literal notranslate"><span class="pre">blackman_coeff</span></code>.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureWindowFunction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">FeatureWindowFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureWindowFunction" title="kaldi_native_fbank.FeatureWindowFunction"><span class="pre">kaldi_native_fbank.FeatureWindowFunction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.FeatureWindowFunction" title="Link to this definition"></a></dt>
+<dd><p>Stores the windowing coefficients and applies them to a frame.</p>
+<p>Construct the windowing function implied by <code class="docutils literal notranslate"><span class="pre">opts.window_type</span></code>.</p>
+<p>The window has <code class="docutils literal notranslate"><span class="pre">opts.WindowSize()</span></code> samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Frame-extraction options selecting the window type and size.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureWindowFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureWindowFunction" title="kaldi_native_fbank.FeatureWindowFunction"><span class="pre">kaldi_native_fbank.FeatureWindowFunction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureWindowFunction.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct the windowing function implied by <code class="docutils literal notranslate"><span class="pre">opts.window_type</span></code>.</p>
+<p>The window has <code class="docutils literal notranslate"><span class="pre">opts.WindowSize()</span></code> samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Frame-extraction options selecting the window type and size.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureWindowFunction.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureWindowFunction" title="kaldi_native_fbank.FeatureWindowFunction"><span class="pre">kaldi_native_fbank.FeatureWindowFunction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureWindowFunction.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the window to a frame, in place.</p>
+<p><code class="docutils literal notranslate"><span class="pre">wave[i]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">wave[i]</span> <span class="pre">*</span> <span class="pre">window[i]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wave</strong> -- One frame of <code class="docutils literal notranslate"><span class="pre">window_size</span></code> samples.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The windowed frame (the same list, modified in place).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureWindowFunction.window">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">window</span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureWindowFunction.window" title="Link to this definition"></a></dt>
+<dd><p>The window coefficients, a list of <code class="docutils literal notranslate"><span class="pre">window_size</span></code> floats.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="raw-audio.html" class="btn btn-neutral float-left" title="Raw audio framing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mel.html" class="btn btn-neutral float-right" title="Mel filter banks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

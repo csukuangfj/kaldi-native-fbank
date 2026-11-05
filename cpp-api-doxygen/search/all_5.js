@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['fbank_20c_20api_0',['kaldi-native-fbank C++ API',['../index.html',1,'']]],
+  ['fbankcomputer_1',['FbankComputer',['../classknf_1_1FbankComputer.html',1,'knf::FbankComputer'],['../classknf_1_1FbankComputer.html#a474708483dbb5e042cbf16c826f55458',1,'knf::FbankComputer::FbankComputer()']]],
+  ['fbankoptions_2',['FbankOptions',['../structknf_1_1FbankOptions.html',1,'knf::FbankOptions'],['../structknf_1_1FbankOptions.html#a4db435352b614a34add11c3f03812236',1,'knf::FbankOptions::FbankOptions()']]],
+  ['feature_2dcmvn_2eh_3',['feature-cmvn.h',['../feature-cmvn_8h.html',1,'']]],
+  ['feature_2ddelta_2eh_4',['feature-delta.h',['../feature-delta_8h.html',1,'']]],
+  ['feature_2dfbank_2eh_5',['feature-fbank.h',['../feature-fbank_8h.html',1,'']]],
+  ['feature_2dfunctions_2eh_6',['feature-functions.h',['../feature-functions_8h.html',1,'']]],
+  ['feature_2dmatrix_2eh_7',['feature-matrix.h',['../feature-matrix_8h.html',1,'']]],
+  ['feature_2dmfcc_2eh_8',['feature-mfcc.h',['../feature-mfcc_8h.html',1,'']]],
+  ['feature_2dpitch_2eh_9',['feature-pitch.h',['../feature-pitch_8h.html',1,'']]],
+  ['feature_2draw_2daudio_2dsamples_2eh_10',['feature-raw-audio-samples.h',['../feature-raw-audio-samples_8h.html',1,'']]],
+  ['feature_2dsplice_2eh_11',['feature-splice.h',['../feature-splice_8h.html',1,'']]],
+  ['feature_2dtransform_2eh_12',['feature-transform.h',['../feature-transform_8h.html',1,'']]],
+  ['feature_2dwindow_2eh_13',['feature-window.h',['../feature-window_8h.html',1,'']]],
+  ['featuretransform_14',['FeatureTransform',['../classknf_1_1FeatureTransform.html',1,'knf::FeatureTransform'],['../classknf_1_1FeatureTransform.html#a7ea90e03cb5cb5d390a28302b0fff536',1,'knf::FeatureTransform::FeatureTransform()']]],
+  ['featurewindowfunction_15',['FeatureWindowFunction',['../classknf_1_1FeatureWindowFunction.html',1,'knf::FeatureWindowFunction'],['../classknf_1_1FeatureWindowFunction.html#a45b2cb1260eb307701f7f4fcbd9bdd05',1,'knf::FeatureWindowFunction::FeatureWindowFunction()=default'],['../classknf_1_1FeatureWindowFunction.html#a17a4c2108be2ceae8d17abdf62bec601',1,'knf::FeatureWindowFunction::FeatureWindowFunction(const FrameExtractionOptions &amp;opts)'],['../classknf_1_1FeatureWindowFunction.html#a3650cb39dcb241f86fc251718d4c5dbb',1,'knf::FeatureWindowFunction::FeatureWindowFunction(const std::string &amp;window_type, int32_t window_size, float blackman_coeff=0.42)'],['../classknf_1_1FeatureWindowFunction.html#a7140903c5549a56ff905a434596c4efa',1,'knf::FeatureWindowFunction::FeatureWindowFunction(const std::vector&lt; float &gt; &amp;window)']]],
+  ['firstsampleofframe_16',['FirstSampleOfFrame',['../namespaceknf.html#a848b66e0037a075f9cc11d1e293404df',1,'knf']]],
+  ['floor_5fto_5fint_5fbin_17',['floor_to_int_bin',['../structknf_1_1MelBanksOptions.html#a21d159a5e8542929c5387c4e500c18aa',1,'knf::MelBanksOptions']]],
+  ['frame_5flength_5fms_18',['frame_length_ms',['../structknf_1_1PitchExtractionOptions.html#a42fd79c36b5c9ec490bfa6be4993d923',1,'knf::PitchExtractionOptions::frame_length_ms'],['../structknf_1_1FrameExtractionOptions.html#abbf4fcd918b91c99deafb8a1809f924c',1,'knf::FrameExtractionOptions::frame_length_ms'],['../structknf_1_1NemoFbankOptions.html#a898a79b1757f1c43ce969ec515252ff7',1,'knf::NemoFbankOptions::frame_length_ms']]],
+  ['frame_5fopts_19',['frame_opts',['../structknf_1_1FbankOptions.html#ab7ee8d74ca489689793c6f0ac2d5b8b2',1,'knf::FbankOptions::frame_opts'],['../structknf_1_1MfccOptions.html#ad0c30d1689b9df0e33f4e92d01a18de9',1,'knf::MfccOptions::frame_opts'],['../structknf_1_1RawAudioSamplesOptions.html#a65f3c3ab5a510d2fc833b36fada8a43e',1,'knf::RawAudioSamplesOptions::frame_opts'],['../structknf_1_1WhisperFeatureOptions.html#a56d213ed3ef75a1ddbde0083b215e629',1,'knf::WhisperFeatureOptions::frame_opts']]],
+  ['frame_5fshift_5fms_20',['frame_shift_ms',['../structknf_1_1PitchExtractionOptions.html#a9e7aef5f5df68319543047bd45a8d4a3',1,'knf::PitchExtractionOptions::frame_shift_ms'],['../structknf_1_1FrameExtractionOptions.html#a658e111359eae3b08615ab2722019ce4',1,'knf::FrameExtractionOptions::frame_shift_ms'],['../structknf_1_1NemoFbankOptions.html#adf14dbc16189c1f6ce74a63df229608e',1,'knf::NemoFbankOptions::frame_shift_ms']]],
+  ['frameextractionoptions_21',['FrameExtractionOptions',['../structknf_1_1FrameExtractionOptions.html',1,'knf']]],
+  ['frames_5fper_5fchunk_22',['frames_per_chunk',['../structknf_1_1PitchExtractionOptions.html#a47f11d91a836afae3ff0dcc66aa80c8f',1,'knf::PitchExtractionOptions']]],
+  ['frameshiftinseconds_23',['FrameShiftInSeconds',['../classknf_1_1OnlinePitch.html#a2173c3cd082ae7c4452577ff0e7b22e2',1,'knf::OnlinePitch::FrameShiftInSeconds()'],['../classknf_1_1OnlineGenericBaseFeature.html#ac7d8b48e0743c6c8db55ad9104397ee5',1,'knf::OnlineGenericBaseFeature::FrameShiftInSeconds()'],['../classknf_1_1OnlineNemoFbank.html#a77b52a263e17d900980555d8912457fb',1,'knf::OnlineNemoFbank::FrameShiftInSeconds()']]]
+];

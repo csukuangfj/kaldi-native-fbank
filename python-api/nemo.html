@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeMo filter bank &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Raw audio framing" href="raw-audio.html" />
+    <link rel="prev" title="Whisper Fbank" href="whisper.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">NeMo filter bank</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions"><code class="docutils literal notranslate"><span class="pre">NemoFbankOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank"><code class="docutils literal notranslate"><span class="pre">OnlineNemoFbank</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">NeMo filter bank</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/nemo.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nemo-filter-bank">
+<h1>NeMo filter bank<a class="headerlink" href="#nemo-filter-bank" title="Link to this heading"></a></h1>
+<p>NeMo-compatible buffered streaming filter-bank features
+(<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/online-nemo-fbank.h">kaldi-native-fbank/csrc/online-nemo-fbank.h</a>).  NeMo buffered
+streaming re-featurizes each requested audio window: preemphasis, then a
+centered constant-zero-padded STFT, a symmetric Hann window, Slaney mel
+filters and <span class="math notranslate nohighlight">\(\log(\mathrm{mel} + 2^{-24})\)</span>.</p>
+<p>Input samples are floats in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>; the class does not resample or
+normalize.  There is no direct kaldi binary counterpart — this reproduces
+NeMo's streaming feature extraction.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">NemoFbankOptions</span><span class="p">(</span><span class="n">num_mel_bins</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="n">fbank</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineNemoFbank</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+
+<span class="n">fbank</span><span class="o">.</span><span class="n">accept_waveform</span><span class="p">(</span><span class="mi">16000</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>   <span class="c1"># samples in [-1, 1]</span>
+<span class="n">fbank</span><span class="o">.</span><span class="n">input_finished</span><span class="p">()</span>
+<span class="n">frames</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">fbank</span><span class="o">.</span><span class="n">get_frames</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fbank</span><span class="o">.</span><span class="n">num_frames_ready</span><span class="p">,</span> <span class="n">is_final</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">NemoFbankOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_mel_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.97</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffered_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for <a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineNemoFbank</span></code></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineNemoFbank</span></code></a></p>
+</div>
+<p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency.</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds.</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds.</p></li>
+<li><p><strong>num_mel_bins</strong> -- Number of mel bins.</p></li>
+<li><p><strong>low_freq</strong> -- Lower frequency cutoff for the mel bins.</p></li>
+<li><p><strong>high_freq</strong> -- Upper cutoff; non-positive values are offsets from Nyquist.</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient.</p></li>
+<li><p><strong>buffered_capacity</strong> -- Full-buffer length in frames; 0 disables the final sample-length cap.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_mel_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.97</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffered_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency.</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds.</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds.</p></li>
+<li><p><strong>num_mel_bins</strong> -- Number of mel bins.</p></li>
+<li><p><strong>low_freq</strong> -- Lower frequency cutoff for the mel bins.</p></li>
+<li><p><strong>high_freq</strong> -- Upper cutoff; non-positive values are offsets from Nyquist.</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient.</p></li>
+<li><p><strong>buffered_capacity</strong> -- Full-buffer length in frames; 0 disables the final sample-length cap.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.as_dict" title="Link to this definition"></a></dt>
+<dd><p>Return the options as a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.buffered_capacity">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">buffered_capacity</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.buffered_capacity" title="Link to this definition"></a></dt>
+<dd><p>Full-buffer length in frames.  0 disables the final sample-length cap.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.frame_length_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_length_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.frame_length_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame length in milliseconds.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.frame_shift_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.frame_shift_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame shift in milliseconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.from_dict">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Build options from a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.high_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">high_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.high_freq" title="Link to this definition"></a></dt>
+<dd><p>Upper frequency cutoff; non-positive values are offsets from Nyquist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.low_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">low_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.low_freq" title="Link to this definition"></a></dt>
+<dd><p>Lower frequency cutoff for the mel bins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.num_mel_bins">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_mel_bins</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.num_mel_bins" title="Link to this definition"></a></dt>
+<dd><p>Number of mel bins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.preemph_coeff">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">preemph_coeff</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.preemph_coeff" title="Link to this definition"></a></dt>
+<dd><p>Preemphasis coefficient.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.NemoFbankOptions.samp_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">samp_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.NemoFbankOptions.samp_freq" title="Link to this definition"></a></dt>
+<dd><p>Waveform sample frequency.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">OnlineNemoFbank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank" title="Link to this definition"></a></dt>
+<dd><p>NeMo-compatible buffered streaming filter-bank features.</p>
+<p>NeMo buffered streaming re-featurizes each requested audio window:
+preemphasis over that window, then a centered, constant-zero-padded STFT, a
+symmetric Hann window, Slaney mel filters, and
+<span class="math notranslate nohighlight">\(\log(\mathrm{mel} + 2^{-24})\)</span>.  Input samples are floats in
+<code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>.  This class does not resample or normalize.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">NemoFbankOptions</span></code></a>, <a class="reference internal" href="fbank.html#kaldi_native_fbank.OnlineFbank" title="kaldi_native_fbank.OnlineFbank"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineFbank</span></code></a></p>
+</div>
+<p>Construct from the given options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Options; see <a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">NemoFbankOptions</span></code></a>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><span class="pre">kaldi_native_fbank.NemoFbankOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct from the given options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opts</strong> -- Options; see <a class="reference internal" href="#kaldi_native_fbank.NemoFbankOptions" title="kaldi_native_fbank.NemoFbankOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">NemoFbankOptions</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.accept_waveform">
+<span class="sig-name descname"><span class="pre">accept_waveform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waveform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.accept_waveform" title="Link to this definition"></a></dt>
+<dd><p>Add more waveform samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampling_rate</strong> -- The sampling rate of <code class="docutils literal notranslate"><span class="pre">waveform</span></code>; must match
+<code class="docutils literal notranslate"><span class="pre">opts.samp_freq</span></code>.</p></li>
+<li><p><strong>waveform</strong> -- 1-D float32 samples in <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.dim" title="Link to this definition"></a></dt>
+<dd><p>The feature dimension (number of mel bins).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.frame_shift_in_seconds">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_in_seconds</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.frame_shift_in_seconds" title="Link to this definition"></a></dt>
+<dd><p>The frame shift in seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.get_frames">
+<span class="sig-name descname"><span class="pre">get_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_final</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.get_frames" title="Link to this definition"></a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">n</span></code> frames starting at the absolute <code class="docutils literal notranslate"><span class="pre">frame_index</span></code>.</p>
+<p>Samples preceding the requested window are discarded; later calls cannot
+rewind.  If <code class="docutils literal notranslate"><span class="pre">is_final</span></code> reaches the last ready frame after
+<a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank.input_finished" title="kaldi_native_fbank.OnlineNemoFbank.input_finished"><code class="xref py py-meth docutils literal notranslate"><span class="pre">input_finished()</span></code></a>, the partial hop is included.  When <code class="docutils literal notranslate"><span class="pre">n</span></code> equals
+<code class="docutils literal notranslate"><span class="pre">buffered_capacity</span></code>, the window is capped at <code class="docutils literal notranslate"><span class="pre">n</span></code> hops by shifting its
+start by the remainder; that shift (in samples) is reported as the second
+element of the returned tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame_index</strong> -- Absolute index of the first frame to return.</p></li>
+<li><p><strong>n</strong> -- Number of frames.</p></li>
+<li><p><strong>is_final</strong> -- True if this is the final request.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">start_sample_offset)</span></code> where <code class="docutils literal notranslate"><span class="pre">frames</span></code> is a
+float32 array of shape <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">dim)</span></code> and <code class="docutils literal notranslate"><span class="pre">start_sample_offset</span></code> is 0
+unless the buffer cap shifted the window.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.input_finished">
+<span class="sig-name descname"><span class="pre">input_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.input_finished" title="Link to this definition"></a></dt>
+<dd><p>Tell the extractor that no more waveform will be added.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.is_last_frame">
+<span class="sig-name descname"><span class="pre">is_last_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlineNemoFbank" title="kaldi_native_fbank.OnlineNemoFbank"><span class="pre">kaldi_native_fbank.OnlineNemoFbank</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.is_last_frame" title="Link to this definition"></a></dt>
+<dd><p>Return true if frame is the last frame; only after input_finished().</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.num_frames_ready">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_frames_ready</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.num_frames_ready" title="Link to this definition"></a></dt>
+<dd><p>The number of whole frames that are ready.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlineNemoFbank.num_trailing_samples">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_trailing_samples</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlineNemoFbank.num_trailing_samples" title="Link to this definition"></a></dt>
+<dd><p>Buffered samples that do not make up a whole hop.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="whisper.html" class="btn btn-neutral float-left" title="Whisper Fbank" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="raw-audio.html" class="btn btn-neutral float-right" title="Raw audio framing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

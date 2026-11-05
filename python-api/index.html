@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fbank" href="fbank.html" />
+    <link rel="prev" title="Installation" href="../install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api">
+<h1>Python API<a class="headerlink" href="#python-api" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fbank.html">Fbank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html#equivalent-in-kaldi">Equivalent in kaldi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mfcc.html">MFCC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html#equivalent-in-kaldi">Equivalent in kaldi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="whisper.html">Whisper Fbank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nemo.html">NeMo filter bank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="raw-audio.html">Raw audio framing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="window.html">Window &amp; frame extraction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="window.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mel.html">Mel filter banks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mel.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stft.html">STFT / iSTFT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stft.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transform.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cmvn.html">CMVN</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#formulas">Formulas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#equivalent-in-kaldi">Equivalent in kaldi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#api-reference">API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#speaker-level-cmvn-kaldi-s-utt2spk">Speaker-level CMVN (kaldi's utt2spk)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#saving-results-as-kaldi-ark-scp-kaldi-native-io">Saving results as kaldi ark/scp (kaldi-native-io)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html#golden-tests">Golden tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="delta.html">Delta features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="delta.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pitch.html">Pitch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html#api-reference">API reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Python API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#frameextractionoptions">FrameExtractionOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#melbanksoptions">MelBanksOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#mfccoptions">MfccOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#fbankoptions">FbankOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#whisperfeatureoptions">WhisperFeatureOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#rawaudiosamplesoptions">RawAudioSamplesOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#stftconfig">StftConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#streaming-extractors">Streaming extractors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#dsp-building-blocks">DSP building blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#cmvn">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#pitch">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#module-functions">Module functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="splice.html">Splice frames</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="splice.html#api-reference">API reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fbank.html" class="btn btn-neutral float-right" title="Fbank" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

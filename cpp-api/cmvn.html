@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMVN &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Delta" href="delta.html" />
+    <link rel="prev" title="C++ API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CMVN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf11CmvnOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::CmvnOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf15CmvnAccumulatorE"><code class="docutils literal notranslate"><span class="pre">knf::CmvnAccumulator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf13InitCmvnStatsE7int32_tP7MatrixD"><code class="docutils literal notranslate"><span class="pre">InitCmvnStats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf12AccCmvnStatsEPKf7int32_tfP7MatrixD"><code class="docutils literal notranslate"><span class="pre">AccCmvnStats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf12AccCmvnStatsERK7MatrixFP7MatrixD"><code class="docutils literal notranslate"><span class="pre">AccCmvnStats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf16ComputeCmvnStatsERK7MatrixF"><code class="docutils literal notranslate"><span class="pre">ComputeCmvnStats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsP7MatrixF"><code class="docutils literal notranslate"><span class="pre">ApplyCmvn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsRK7MatrixF"><code class="docutils literal notranslate"><span class="pre">ApplyCmvn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">CMVN</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/cmvn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cmvn">
+<h1>CMVN<a class="headerlink" href="#cmvn" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-cmvn.h">kaldi-native-fbank/csrc/feature-cmvn.h</a></p>
+<p>Semantics follow kaldi's <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/transform/cmvn.cc">transform/cmvn.cc</a> exactly (same arithmetic and
+stats layout).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">MatrixF</span><span class="w"> </span><span class="n">feats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w">  </span><span class="c1">// rows = frames</span>
+
+<span class="c1">// full 2-row stats: row0 = [sums, count], row1 = [sumsq, (unused)]</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">MatrixD</span><span class="w"> </span><span class="n">stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">ComputeCmvnStats</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span>
+
+<span class="n">knf</span><span class="o">::</span><span class="n">CmvnOptions</span><span class="w"> </span><span class="n">opts</span><span class="p">;</span><span class="w">          </span><span class="c1">// norm_vars=false, reverse=false</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">MatrixF</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">ApplyCmvn</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="n">feats</span><span class="p">);</span>
+
+<span class="c1">// incremental</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">CmvnAccumulator</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="n">feats</span><span class="p">.</span><span class="n">cols</span><span class="p">());</span>
+<span class="n">acc</span><span class="p">.</span><span class="n">Accumulate</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">MatrixD</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acc</span><span class="p">.</span><span class="n">Stats</span><span class="p">();</span>
+</pre></div>
+</div>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11CmvnOptionsE">
+<span id="_CPPv3N3knf11CmvnOptionsE"></span><span id="_CPPv2N3knf11CmvnOptionsE"></span><span id="knf::CmvnOptions"></span><span class="target" id="structknf_1_1CmvnOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CmvnOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf11CmvnOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options matching kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/apply-cmvn.cc">apply-cmvn</a> flags. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn</span></a>, <a class="reference internal" href="#namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"><span class="std std-ref">ComputeCmvnStats</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Used by:</strong></dt><dd><p><a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a>.</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11CmvnOptions9norm_varsE">
+<span id="_CPPv3N3knf11CmvnOptions9norm_varsE"></span><span id="_CPPv2N3knf11CmvnOptions9norm_varsE"></span><span id="knf::CmvnOptions::norm_vars__b"></span><span class="target" id="structknf_1_1CmvnOptions_1af0522a445337d96c69f98dd4eb8fdf0a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">norm_vars</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf11CmvnOptions9norm_varsE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, normalize the variances as well: after subtracting the mean, each dimension is divided by its standard deviation. </p>
+<p>Requires 2-row stats (kaldi <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/apply-cmvn.cc">apply-cmvn</a> <code class="docutils literal notranslate"><span class="pre">--norm-vars</span></code>). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11CmvnOptions7reverseE">
+<span id="_CPPv3N3knf11CmvnOptions7reverseE"></span><span id="_CPPv2N3knf11CmvnOptions7reverseE"></span><span id="knf::CmvnOptions::reverse__b"></span><span class="target" id="structknf_1_1CmvnOptions_1aa4a230b1e2b712b2a3f81721bfd0327f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reverse</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf11CmvnOptions7reverseE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, undo cmvn instead of applying it: the mean is added back and, if norm_vars is true, the standard deviation is multiplied back (kaldi <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/apply-cmvn.cc">apply-cmvn</a> <code class="docutils literal notranslate"><span class="pre">--reverse</span></code>). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15CmvnAccumulatorE">
+<span id="_CPPv3N3knf15CmvnAccumulatorE"></span><span id="_CPPv2N3knf15CmvnAccumulatorE"></span><span id="knf::CmvnAccumulator"></span><span class="target" id="classknf_1_1CmvnAccumulator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CmvnAccumulator</span></span></span><a class="headerlink" href="#_CPPv4N3knf15CmvnAccumulatorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Incremental accumulator for speaker-level / streaming cmvn. </p>
+<p>It always keeps the full 2-row layout (see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a>) and adds up weighted frames one by one, so stats can be collected over many utterances of the same speaker and normalized later with <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a>.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Used by:</strong></dt><dd><p>Pipelines that collect speaker-level stats incrementally (e.g. accumulate all utterances of a speaker, then normalize).</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15CmvnAccumulator15CmvnAccumulatorE7int32_t">
+<span id="_CPPv3N3knf15CmvnAccumulator15CmvnAccumulatorE7int32_t"></span><span id="_CPPv2N3knf15CmvnAccumulator15CmvnAccumulatorE7int32_t"></span><span id="knf::CmvnAccumulator::CmvnAccumulator__int32_t"></span><span class="target" id="classknf_1_1CmvnAccumulator_1a02624de1e5ae2be0ab077ce851b1b268"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CmvnAccumulator</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf15CmvnAccumulator15CmvnAccumulatorE7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct an accumulator for features of dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> -- Feature dimension; 0 (the default) creates an empty accumulator whose stats are grown by the first <a class="reference internal" href="#classknf_1_1CmvnAccumulator_1a25af626d651dbaad3295ba6821486248"><span class="std std-ref">Add()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15CmvnAccumulator10AccumulateERK7MatrixF">
+<span id="_CPPv3N3knf15CmvnAccumulator10AccumulateERK7MatrixF"></span><span id="_CPPv2N3knf15CmvnAccumulator10AccumulateERK7MatrixF"></span><span id="knf::CmvnAccumulator::Accumulate__MatrixFCR"></span><span class="target" id="classknf_1_1CmvnAccumulator_1a71b7fdd5722085d39056a40d16fa5028"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Accumulate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf15CmvnAccumulator10AccumulateERK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Accumulate stats for a feature matrix (rows = frames); equivalent to calling <a class="reference internal" href="#classknf_1_1CmvnAccumulator_1a25af626d651dbaad3295ba6821486248"><span class="std std-ref">Add()</span></a> for each row with weight 1.0. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15CmvnAccumulator3AddE7int32_tPKff">
+<span id="_CPPv3N3knf15CmvnAccumulator3AddE7int32_tPKff"></span><span id="_CPPv2N3knf15CmvnAccumulator3AddE7int32_tPKff"></span><span id="knf::CmvnAccumulator::Add__int32_t.floatCP.float"></span><span class="target" id="classknf_1_1CmvnAccumulator_1a25af626d651dbaad3295ba6821486248"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Add</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">frame</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">weight</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.0f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf15CmvnAccumulator3AddE7int32_tPKff" title="Link to this definition"></a><br /></dt>
+<dd><p>Accumulate stats for one frame of dimension <code class="docutils literal notranslate"><span class="pre">dim</span></code>, applying the same updates as the free function <a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats()</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> -- Feature dimension; must match the dimension given to the constructor. </p></li>
+<li><p><strong>frame</strong> -- Pointer to one frame, a 1-D array of size dim. </p></li>
+<li><p><strong>weight</strong> -- Weight of this frame, e.g. 1.0. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf15CmvnAccumulator5StatsEv">
+<span id="_CPPv3NK3knf15CmvnAccumulator5StatsEv"></span><span id="_CPPv2NK3knf15CmvnAccumulator5StatsEv"></span><span id="knf::CmvnAccumulator::StatsC"></span><span class="target" id="classknf_1_1CmvnAccumulator_1ab0abe5b7f297f063247c82b6a93541ca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">Stats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf15CmvnAccumulator5StatsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the accumulated 2-row stats: row 0 = [sums, count], row 1 = [sumsq, (unused)]; see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a> for the layout. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf13InitCmvnStatsE7int32_tP7MatrixD">
+<span id="_CPPv3N3knf13InitCmvnStatsE7int32_tP7MatrixD"></span><span id="_CPPv2N3knf13InitCmvnStatsE7int32_tP7MatrixD"></span><span id="knf::InitCmvnStats__int32_t.MatrixDP"></span><span class="target" id="namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">InitCmvnStats</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf13InitCmvnStatsE7int32_tP7MatrixD" title="Link to this definition"></a><br /></dt>
+<dd><p>Initialize cmvn stats to zeros in the FULL 2-row layout. </p>
+<p>The output matrix <code class="docutils literal notranslate"><span class="pre">stats</span></code> is resized to 2 x (dim+1) and set to zero. Its layout matches kaldi's cmvn.ark format exactly:     <div class="math notranslate nohighlight">
+\[\begin{split} \mathrm{stats} =
+    \left( \begin{array}{cccc|c}
+      S_1 &amp; S_2 &amp; \cdots &amp; S_D &amp; c \\
+      Q_1 &amp; Q_2 &amp; \cdots &amp; Q_D &amp; -
+    \end{array} \right) \end{split}\]</div>
+</p>
+<p>Row 0 (above): columns 0 .. dim-1 hold the sums <span class="math notranslate nohighlight">\( S_d = \sum_t x_t(d) \)</span> of each feature dimension; the last column <span class="math notranslate nohighlight">\( c \)</span> holds the frame count (sum of weights).</p>
+<p>Row 1 (below): columns 0 .. dim-1 hold the sums of squares <span class="math notranslate nohighlight">\( Q_d = \sum_t x_t(d)^2 \)</span>; the last column is unused.</p>
+<p>This is the form produced/consumed by <a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats()</span></a>, <a class="reference internal" href="#namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"><span class="std std-ref">ComputeCmvnStats()</span></a> and <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a> with norm_vars=true.</p>
+<p>Note: <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a> also accepts 1-row (mean-only) stats, where only row 0 above is present; this function, however, only produces the 2-row form used for accumulating both mean and variance.</p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">MatrixD</span> <span class="n">stats</span><span class="p">;</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">InitCmvnStats</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stats</span><span class="p">);</span>  <span class="o">//</span> <span class="n">stats</span><span class="p">:</span> <span class="mi">2</span> <span class="n">x</span> <span class="mi">40</span><span class="p">,</span> <span class="nb">all</span> <span class="n">zeros</span>
+</pre></div>
+</div>
+</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"><span class="std std-ref">ComputeCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> -- <strong>[in]</strong> Feature dimension of the frames that will be accumulated, e.g. 39 for 39-dim MFCC. </p></li>
+<li><p><strong>stats</strong> -- <strong>[out]</strong> The output stats matrix, resized to 2 x (dim+1).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12AccCmvnStatsEPKf7int32_tfP7MatrixD">
+<span id="_CPPv3N3knf12AccCmvnStatsEPKf7int32_tfP7MatrixD"></span><span id="_CPPv2N3knf12AccCmvnStatsEPKf7int32_tfP7MatrixD"></span><span id="knf::AccCmvnStats__floatCP.int32_t.float.MatrixDP"></span><span class="target" id="namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">AccCmvnStats</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">feat</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">weight</span></span>, <span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf12AccCmvnStatsEPKf7int32_tfP7MatrixD" title="Link to this definition"></a><br /></dt>
+<dd><p>Accumulate stats for one frame (kaldi <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/transform/cmvn.cc">AccCmvnStats</a>, same op order). </p>
+<p>The following updates are applied to <code class="docutils literal notranslate"><span class="pre">stats</span></code>, which must use the full 2-row layout (see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a>); with <span class="math notranslate nohighlight">\( w = \)</span> <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <span class="math notranslate nohighlight">\( x_d = \)</span> <code class="docutils literal notranslate"><span class="pre">feat[d]</span></code>:    <div class="math notranslate nohighlight">
+\[ c \mathrel{+}= w, \qquad
+    S_d \mathrel{+}= x_d\, w, \qquad
+    Q_d \mathrel{+}= x_d^2\, w
+    \qquad (0 \le d &lt; \mathrm{dim}) \]</div>
+</p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">MatrixD</span> <span class="n">stats</span><span class="p">;</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">InitCmvnStats</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stats</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">int32_t</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">num_frames</span><span class="p">;</span> <span class="o">++</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">AccCmvnStats</span><span class="p">(</span><span class="n">feats</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">dim</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">stats</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"><span class="std std-ref">ComputeCmvnStats</span></a>, <a class="reference internal" href="#classknf_1_1CmvnAccumulator_1a25af626d651dbaad3295ba6821486248"><span class="std std-ref">CmvnAccumulator::Add</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feat</strong> -- <strong>[in]</strong> Pointer to one frame, a 1-D array of size dim. </p></li>
+<li><p><strong>dim</strong> -- <strong>[in]</strong> Feature dimension of the frame; must equal stats-&gt;cols() - 1. </p></li>
+<li><p><strong>weight</strong> -- <strong>[in]</strong> Weight of this frame, e.g. 1.0. </p></li>
+<li><p><strong>stats</strong> -- <strong>[inout]</strong> Stats to update; must use the full 2-row layout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12AccCmvnStatsERK7MatrixFP7MatrixD">
+<span id="_CPPv3N3knf12AccCmvnStatsERK7MatrixFP7MatrixD"></span><span id="_CPPv2N3knf12AccCmvnStatsERK7MatrixFP7MatrixD"></span><span id="knf::AccCmvnStats__MatrixFCR.MatrixDP"></span><span class="target" id="namespaceknf_1af391bc78aa69bac82731cbab2deb8f18"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">AccCmvnStats</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span>, <span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf12AccCmvnStatsERK7MatrixFP7MatrixD" title="Link to this definition"></a><br /></dt>
+<dd><p>Accumulate stats for a feature matrix (rows = frames). </p>
+<p>This is equivalent to calling the single-frame <a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats()</span></a> above for every row of <code class="docutils literal notranslate"><span class="pre">feats</span></code>, with weight 1.0.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats</span></a>, <a class="reference internal" href="#classknf_1_1CmvnAccumulator_1a71b7fdd5722085d39056a40d16fa5028"><span class="std std-ref">CmvnAccumulator::Accumulate</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feats</strong> -- <strong>[in]</strong> Feature matrix of size num_frames x dim. </p></li>
+<li><p><strong>stats</strong> -- <strong>[inout]</strong> Stats to update; must use the full 2-row layout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf16ComputeCmvnStatsERK7MatrixF">
+<span id="_CPPv3N3knf16ComputeCmvnStatsERK7MatrixF"></span><span id="_CPPv2N3knf16ComputeCmvnStatsERK7MatrixF"></span><span id="knf::ComputeCmvnStats__MatrixFCR"></span><span class="target" id="namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"></span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ComputeCmvnStats</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf16ComputeCmvnStatsERK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Compute full 2-row cmvn stats for a whole matrix. </p>
+<p>Equivalent to <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a> followed by <a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats()</span></a> over all rows.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1ae14f5af93ca1f37c7492b5ec9f8bde91"><span class="std std-ref">AccCmvnStats</span></a>, <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feats</strong> -- <strong>[in]</strong> Feature matrix of size num_frames x dim. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stats matrix of size 2 x (dim+1); see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a> for the layout. The frame count in stats(0, dim) is num_frames.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsP7MatrixF">
+<span id="_CPPv3N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsP7MatrixF"></span><span id="_CPPv2N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsP7MatrixF"></span><span id="knf::ApplyCmvn__MatrixDCR.CmvnOptionsCR.MatrixFP"></span><span class="target" id="namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ApplyCmvn</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">stats</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf11CmvnOptionsE" title="knf::CmvnOptions"><span class="n"><span class="pre">CmvnOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span>, <span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsP7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Apply cmvn to feats in place (kaldi <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/transform/cmvn.cc">ApplyCmvn</a> / <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/transform/cmvn.cc">ApplyCmvnReverse</a>). </p>
+<p>Let <span class="math notranslate nohighlight">\( c = \mathrm{stats}(0, \mathrm{dim}) \)</span> be the frame count, <span class="math notranslate nohighlight">\( \mu_d = \mathrm{stats}(0, d) / c \)</span> the mean and, when norm_vars is true, <span class="math notranslate nohighlight">\( \sigma_d^2 = \mathrm{stats}(1, d) / c - \mu_d^2 \)</span> the variance of dimension <span class="math notranslate nohighlight">\( d \)</span>.</p>
+<p>Forward (opts.reverse == false), applied to every frame <span class="math notranslate nohighlight">\( x \)</span>: <div class="math notranslate nohighlight">
+\[ x_d \leftarrow x_d - \mu_d \]</div>
+ and, if opts.norm_vars: <div class="math notranslate nohighlight">
+\[ x_d \leftarrow (x_d - \mu_d) / \sigma_d \]</div>
+</p>
+<p>Reverse (opts.reverse == true) undoes the normalization: <div class="math notranslate nohighlight">
+\[ x_d \leftarrow x_d + \mu_d \]</div>
+ and, if opts.norm_vars: <div class="math notranslate nohighlight">
+\[ x_d \leftarrow x_d \cdot \sigma_d + \mu_d \]</div>
+</p>
+<p>Accepts 1-row (mean-only) or 2-row stats; requesting norm_vars with 1-row stats is an error (same as kaldi).</p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">MatrixD</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">knf</span><span class="p">::</span><span class="n">ComputeCmvnStats</span><span class="p">(</span><span class="n">feats</span><span class="p">);</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">CmvnOptions</span> <span class="n">opts</span><span class="p">;</span>  <span class="o">//</span> <span class="n">norm_vars</span><span class="o">=</span><span class="n">false</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="n">false</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">ApplyCmvn</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">feats</span><span class="p">);</span>  <span class="o">//</span> <span class="n">feats</span> <span class="n">normalized</span> <span class="ow">in</span> <span class="n">place</span>
+</pre></div>
+</div>
+</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1a9139e0d043bf8879ced177a4e00a1fea"><span class="std std-ref">ComputeCmvnStats</span></a>, <a class="reference internal" href="#structknf_1_1CmvnOptions"><span class="std std-ref">CmvnOptions</span></a>, <a class="reference internal" href="#classknf_1_1CmvnAccumulator"><span class="std std-ref">CmvnAccumulator</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stats</strong> -- <strong>[in]</strong> 1-row or 2-row cmvn stats; see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a>. </p></li>
+<li><p><strong>opts</strong> -- <strong>[in]</strong> Options: norm_vars (normalize variances), reverse (undo cmvn). </p></li>
+<li><p><strong>feats</strong> -- <strong>[inout]</strong> Feature matrix of size num_frames x dim; each row is normalized in place.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsRK7MatrixF">
+<span id="_CPPv3N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsRK7MatrixF"></span><span id="_CPPv2N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsRK7MatrixF"></span><span id="knf::ApplyCmvn__MatrixDCR.CmvnOptionsCR.MatrixFCR"></span><span class="target" id="namespaceknf_1a2d7ee01fc4190cee8ed56ed77640d493"></span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ApplyCmvn</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">stats</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf11CmvnOptionsE" title="knf::CmvnOptions"><span class="n"><span class="pre">CmvnOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf9ApplyCmvnERK7MatrixDRK11CmvnOptionsRK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Convenience version of <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a>: returns the normalized copy. </p>
+<p>Same semantics as the in-place <a class="reference internal" href="#namespaceknf_1a48ae773e1abf93767c24adeaf36b372e"><span class="std std-ref">ApplyCmvn()</span></a> above, but <code class="docutils literal notranslate"><span class="pre">feats</span></code> is left unchanged and a normalized copy is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stats</strong> -- <strong>[in]</strong> 1-row or 2-row cmvn stats; see <a class="reference internal" href="#namespaceknf_1a191a8826bf01f4caa3b9b54e5a04559f"><span class="std std-ref">InitCmvnStats()</span></a>. </p></li>
+<li><p><strong>opts</strong> -- <strong>[in]</strong> Options: norm_vars (normalize variances), reverse (undo cmvn). </p></li>
+<li><p><strong>feats</strong> -- <strong>[in]</strong> Feature matrix of size num_frames x dim. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A copy of feats with cmvn applied. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="C++ API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="delta.html" class="btn btn-neutral float-right" title="Delta" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

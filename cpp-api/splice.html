@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Splice &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Transform" href="transform.html" />
+    <link rel="prev" title="Pitch" href="pitch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Splice</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf13SpliceOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::SpliceOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf12SpliceFramesERK7MatrixFRK13SpliceOptions"><code class="docutils literal notranslate"><span class="pre">SpliceFrames()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">Splice</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/splice.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="splice">
+<h1>Splice<a class="headerlink" href="#splice" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-splice.h">kaldi-native-fbank/csrc/feature-splice.h</a> — the equivalent of
+kaldi's <code class="docutils literal notranslate"><span class="pre">splice-feats</span></code> (<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">SpliceFrames</a>).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">SpliceOptions</span><span class="w"> </span><span class="n">opts</span><span class="p">;</span><span class="w">       </span><span class="c1">// left_context=3, right_context=3</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">MatrixF</span><span class="w"> </span><span class="n">spliced</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">SpliceFrames</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p">);</span>
+</pre></div>
+</div>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf13SpliceOptionsE">
+<span id="_CPPv3N3knf13SpliceOptionsE"></span><span id="_CPPv2N3knf13SpliceOptionsE"></span><span id="knf::SpliceOptions"></span><span class="target" id="structknf_1_1SpliceOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SpliceOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf13SpliceOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for <a class="reference internal" href="#namespaceknf_1ac5bb60728a5ba136b57260da4b4c9ba9"><span class="std std-ref">SpliceFrames()</span></a>; mirrors kaldi's splice-feats flags. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#namespaceknf_1ac5bb60728a5ba136b57260da4b4c9ba9"><span class="std std-ref">SpliceFrames</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf13SpliceOptions12left_contextE">
+<span id="_CPPv3N3knf13SpliceOptions12left_contextE"></span><span id="_CPPv2N3knf13SpliceOptions12left_contextE"></span><span id="knf::SpliceOptions::left_context__int32_t"></span><span class="target" id="structknf_1_1SpliceOptions_1aef4904ddb5c75d16d676589ccd2e6248"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">left_context</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><a class="headerlink" href="#_CPPv4N3knf13SpliceOptions12left_contextE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of preceding frames to append (kaldi splice-feats <code class="docutils literal notranslate"><span class="pre">--left-context</span></code>). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf13SpliceOptions13right_contextE">
+<span id="_CPPv3N3knf13SpliceOptions13right_contextE"></span><span id="_CPPv2N3knf13SpliceOptions13right_contextE"></span><span id="knf::SpliceOptions::right_context__int32_t"></span><span class="target" id="structknf_1_1SpliceOptions_1af6517c66d485e5a0d79b69aacc74b139"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right_context</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><a class="headerlink" href="#_CPPv4N3knf13SpliceOptions13right_contextE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of following frames to append (kaldi splice-feats <code class="docutils literal notranslate"><span class="pre">--right-context</span></code>). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf12SpliceFramesERK7MatrixFRK13SpliceOptions">
+<span id="_CPPv3N3knf12SpliceFramesERK7MatrixFRK13SpliceOptions"></span><span id="_CPPv2N3knf12SpliceFramesERK7MatrixFRK13SpliceOptions"></span><span id="knf::SpliceFrames__MatrixFCR.SpliceOptionsCR"></span><span class="target" id="namespaceknf_1ac5bb60728a5ba136b57260da4b4c9ba9"></span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">SpliceFrames</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf13SpliceOptionsE" title="knf::SpliceOptions"><span class="n"><span class="pre">SpliceOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf12SpliceFramesERK7MatrixFRK13SpliceOptions" title="Link to this definition"></a><br /></dt>
+<dd><p>Concatenate each frame with its left/right context neighbors. </p>
+<p>This is kaldi's <code class="docutils literal notranslate"><span class="pre">splice-feats</span></code> (kaldi <code class="docutils literal notranslate"><a class="reference internal" href="#namespaceknf_1ac5bb60728a5ba136b57260da4b4c9ba9"><span class="std std-ref"><span class="pre">SpliceFrames</span></span></a></code> in <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">src/feat/feature-functions.cc</a>), same arithmetic: for every frame index <span class="math notranslate nohighlight">\( t \)</span> the output row is</p>
+<p><div class="math notranslate nohighlight">
+\[ y_t = [ x_{\max(0, t-L)}, \ldots, x_{\min(T-1, t+R)} ] \]</div>
+</p>
+<p>where <span class="math notranslate nohighlight">\( L = \)</span> <code class="docutils literal notranslate"><span class="pre">opts.left_context</span></code>, <span class="math notranslate nohighlight">\( R = \)</span> <code class="docutils literal notranslate"><span class="pre">opts.right_context</span></code> and <span class="math notranslate nohighlight">\( T \)</span> is the number of input frames. Edge frames are replicated: out-of-range indices clamp to the first/last frame. The output therefore has the same number of frames as the input and <code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">L</span> <span class="pre">+</span> <span class="pre">R)</span></code> dimensions.</p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">SpliceOptions</span> <span class="n">opts</span><span class="p">;</span>  <span class="o">//</span> <span class="n">left</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">3</span> <span class="o">-&gt;</span> <span class="mi">7</span><span class="o">*</span><span class="n">D</span> <span class="n">dims</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">MatrixF</span> <span class="n">spliced</span> <span class="o">=</span> <span class="n">knf</span><span class="p">::</span><span class="n">SpliceFrames</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">opts</span><span class="p">);</span>
+</pre></div>
+</div>
+</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structknf_1_1SpliceOptions"><span class="std std-ref">SpliceOptions</span></a></p>
+</div>
+<dl class="simple">
+<dt><strong>Used by:</strong></dt><dd><p>Pipelines that build xvector/MFA-style features (mfcc -&gt; cmvn -&gt; splice -&gt; lda).</p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feats</strong> -- <strong>[in]</strong> Feature matrix of size T x D (T &gt; 0, D &gt; 0). </p></li>
+<li><p><strong>opts</strong> -- <strong>[in]</strong> Contexts; see <a class="reference internal" href="#structknf_1_1SpliceOptions"><span class="std std-ref">SpliceOptions</span></a>. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The spliced matrix of size T x (D * (1 + L + R)).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pitch.html" class="btn btn-neutral float-left" title="Pitch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="transform.html" class="btn btn-neutral float-right" title="Transform" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

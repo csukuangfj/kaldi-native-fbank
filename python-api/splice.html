@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Splice frames &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="C++ API" href="../cpp-api/index.html" />
+    <link rel="prev" title="Python API reference" href="reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Splice frames</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.SpliceOptions"><code class="docutils literal notranslate"><span class="pre">SpliceOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.splice_frames"><code class="docutils literal notranslate"><span class="pre">splice_frames()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Splice frames</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/splice.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="splice-frames">
+<h1>Splice frames<a class="headerlink" href="#splice-frames" title="Link to this heading"></a></h1>
+<p>Concatenate each frame with its left/right context neighbors — the
+equivalent of kaldi's <code class="docutils literal notranslate"><span class="pre">splice-feats</span></code>
+(<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-splice.h">kaldi-native-fbank/csrc/feature-splice.h</a>,
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">SpliceFrames</a>).</p>
+<p>Edge frames are replicated (out-of-range indices clamp to the first/last
+frame), so the output keeps the same number of frames and has
+<code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">left</span> <span class="pre">+</span> <span class="pre">right)</span></code> dimensions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">SpliceOptions</span><span class="p">(</span><span class="n">left_context</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">right_context</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">spliced</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">splice_frames</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>  <span class="c1"># (T, 7 * dim)</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.SpliceOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">SpliceOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.SpliceOptions" title="kaldi_native_fbank.SpliceOptions"><span class="pre">kaldi_native_fbank.SpliceOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.SpliceOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for <a class="reference internal" href="#kaldi_native_fbank.splice_frames" title="kaldi_native_fbank.splice_frames"><code class="xref py py-func docutils literal notranslate"><span class="pre">splice_frames()</span></code></a>.</p>
+<p>Mirrors the flags of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc">splice-feats</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.splice_frames" title="kaldi_native_fbank.splice_frames"><code class="xref py py-func docutils literal notranslate"><span class="pre">splice_frames()</span></code></a></p>
+</div>
+<p>Construct with the given contexts.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left_context</strong> -- Number of preceding frames to append
+(kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--left-context</span></code>).</p></li>
+<li><p><strong>right_context</strong> -- Number of following frames to append
+(kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--right-context</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.SpliceOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.SpliceOptions" title="kaldi_native_fbank.SpliceOptions"><span class="pre">kaldi_native_fbank.SpliceOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.SpliceOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given contexts.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left_context</strong> -- Number of preceding frames to append
+(kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--left-context</span></code>).</p></li>
+<li><p><strong>right_context</strong> -- Number of following frames to append
+(kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--right-context</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.SpliceOptions.left_context">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">left_context</span></span><a class="headerlink" href="#kaldi_native_fbank.SpliceOptions.left_context" title="Link to this definition"></a></dt>
+<dd><p>Number of preceding frames to append.</p>
+<p>Same as kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--left-context</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.SpliceOptions.right_context">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">right_context</span></span><a class="headerlink" href="#kaldi_native_fbank.SpliceOptions.right_context" title="Link to this definition"></a></dt>
+<dd><p>Number of following frames to append.</p>
+<p>Same as kaldi <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--right-context</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaldi_native_fbank.splice_frames">
+<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">splice_frames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">feats:</span> <span class="pre">typing.Annotated[numpy.typing.ArrayLike,</span> <span class="pre">numpy.float32,</span> <span class="pre">&quot;[m,</span> <span class="pre">n]&quot;],</span> <span class="pre">opts:</span> <span class="pre">kaldi_native_fbank.SpliceOptions</span> <span class="pre">=</span> <span class="pre">&lt;kaldi_native_fbank.SpliceOptions</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x77d72c80db70&gt;</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.splice_frames" title="Link to this definition"></a></dt>
+<dd><p>Splice each frame with its left/right context neighbors.</p>
+<p>This is kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc">splice-feats</a>
+(same arithmetic): for every frame index <span class="math notranslate nohighlight">\(t\)</span> the output row is</p>
+<div class="math notranslate nohighlight">
+\[y_t = [ x_{\max(0, t-L)}, \ldots, x_{\min(T-1, t+R)} ]\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is <code class="docutils literal notranslate"><span class="pre">opts.left_context</span></code>, <span class="math notranslate nohighlight">\(R\)</span> is
+<code class="docutils literal notranslate"><span class="pre">opts.right_context</span></code> and <span class="math notranslate nohighlight">\(T\)</span> is the number of input frames.  Edge
+frames are replicated: out-of-range indices clamp to the first/last frame.
+The output therefore has the same number of frames as the input and
+<code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">L</span> <span class="pre">+</span> <span class="pre">R)</span></code> dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feats</strong> (<em>numpy.ndarray</em>) -- Feature matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim)</span></code>, float32.</p></li>
+<li><p><strong>opts</strong> -- Contexts; see <a class="reference internal" href="#kaldi_native_fbank.SpliceOptions" title="kaldi_native_fbank.SpliceOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpliceOptions</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The spliced matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">L</span> <span class="pre">+</span> <span class="pre">R))</span></code>,
+float32.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">SpliceOptions</span><span class="p">(</span><span class="n">left_context</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">right_context</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">spliced</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">splice_frames</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>  <span class="c1"># (T, 7 * dim)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.SpliceOptions" title="kaldi_native_fbank.SpliceOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpliceOptions</span></code></a></p>
+</div>
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="reference.html" class="btn btn-neutral float-left" title="Python API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../cpp-api/index.html" class="btn btn-neutral float-right" title="C++ API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

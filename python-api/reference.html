@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API reference &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Splice frames" href="splice.html" />
+    <link rel="prev" title="Pitch" href="pitch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Python API reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#frameextractionoptions">FrameExtractionOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#melbanksoptions">MelBanksOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mfccoptions">MfccOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fbankoptions">FbankOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#whisperfeatureoptions">WhisperFeatureOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rawaudiosamplesoptions">RawAudioSamplesOptions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stftconfig">StftConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaming-extractors">Streaming extractors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dsp-building-blocks">DSP building blocks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmvn">CMVN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pitch">Pitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-functions">Module functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Python API reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api-reference">
+<h1>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading"></a></h1>
+<p>Every class and every field, with the kaldi counterpart of each item.
+Option classes support <code class="docutils literal notranslate"><span class="pre">as_dict()</span></code> / <code class="docutils literal notranslate"><span class="pre">from_dict()</span></code>.</p>
+<section id="frameextractionoptions">
+<h2>FrameExtractionOptions<a class="headerlink" href="#frameextractionoptions" title="Link to this heading"></a></h2>
+<p>Windowing/frame extraction.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-window.h">FrameExtractionOptions</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">samp_freq:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">16000</span></code> — sample rate of the waveform in Hz.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--sample-frequency</span></code> / <code class="docutils literal notranslate"><span class="pre">FrameExtractionOptions::samp_freq</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_shift_ms:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></code> — frame shift in milliseconds; frames are
+emitted every <code class="docutils literal notranslate"><span class="pre">samp_freq</span> <span class="pre">*</span> <span class="pre">frame_shift_ms</span> <span class="pre">/</span> <span class="pre">1000</span></code> samples.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--frame-shift</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_length_ms:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">25</span></code> — window length in milliseconds.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--frame-length</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dither:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.00003</span></code> — amplitude of random dither added to samples
+before analysis (applied per call).  <strong>0 disables dithering</strong> — use 0 for
+deterministic output.  NOTE: knf's scale differs from kaldi's; the knf
+default 0.00003 is equivalent to kaldi's default 1.0.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--dither</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preemph_coeff:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.97</span></code> — preemphasis coefficient
+<span class="math notranslate nohighlight">\(x[i] \leftarrow x[i] - c\,x[i-1]\)</span>.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--preemphasis-coefficient</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">remove_dc_offset:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — subtract the mean of the frame before
+windowing.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--remove-dc-offset</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">window_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;povey&quot;</span></code> — window shape; one of <code class="docutils literal notranslate"><span class="pre">&quot;povey&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;hanning&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;hamming&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sine&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;blackman&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rectangular&quot;</span></code>.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--window-type</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">round_to_power_of_two:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — round the FFT size up to a power of
+two (faster FFTs).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--round-to-power-of-two</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blackman_coeff:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.42</span></code> — coefficient of the generalized Blackman
+window (only for <code class="docutils literal notranslate"><span class="pre">window_type=&quot;blackman&quot;</span></code>).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--blackman-coeff</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snip_edges:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — if True, drop frames that would extend beyond
+the waveform (num_frames = (n - window)/shift + 1); if False, pad edges and
+center windows on the whole signal.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--snip-edges</span></code>.</p></li>
+</ul>
+</section>
+<section id="melbanksoptions">
+<h2>MelBanksOptions<a class="headerlink" href="#melbanksoptions" title="Link to this heading"></a></h2>
+<p>Mel filter-bank construction.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/mel-computations.h">MelBanksOptions</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">num_bins:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">25</span></code> — number of mel bins (output dim of <code class="docutils literal notranslate"><span class="pre">MelBanks</span></code>).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--num-mel-bins</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">low_freq:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">20</span></code> — lower cut-off (Hz) of the mel filters.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--low-freq</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">high_freq:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></code> — upper cut-off (Hz); <strong>0 means Nyquist</strong>
+(samp_freq/2).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--high-freq</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vtln_low:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100</span></code> / <code class="docutils literal notranslate"><span class="pre">vtln_high:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">-500</span></code> — VTLN warp range
+(<code class="docutils literal notranslate"><span class="pre">vtln_high</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> means Nyquist).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--vtln-low</span></code> / <code class="docutils literal notranslate"><span class="pre">--vtln-high</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">htk_mode:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — match HTK's filter scaling exactly (HtkMelScale).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--htk-mode</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_slaney_mel_scale:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — use the Slaney mel scale
+(kaldi's <code class="docutils literal notranslate"><span class="pre">MelScaleSlaney</span></code>).  <strong>knf defaults to True; kaldi defaults to
+False.</strong>  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--use-slaney-mel-scale</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">norm:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;slaney&quot;</span></code> — filter area normalization: <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;slaney&quot;</span></code>.  <strong>knf defaults to &quot;slaney&quot;; kaldi defaults to &quot;none&quot;.</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">debug_mel:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> / <code class="docutils literal notranslate"><span class="pre">floor_to_int_bin:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> /
+<code class="docutils literal notranslate"><span class="pre">is_librosa:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — special modes (debug dump / integer bin
+flooring / librosa-compatible scaling).</p></li>
+</ul>
+</section>
+<section id="mfccoptions">
+<h2>MfccOptions<a class="headerlink" href="#mfccoptions" title="Link to this heading"></a></h2>
+<p>MFCC computation.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-mfcc.h">MfccOptions</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_opts:</span> <span class="pre">FrameExtractionOptions</span></code> / <code class="docutils literal notranslate"><span class="pre">mel_opts:</span> <span class="pre">MelBanksOptions</span></code> —
+sub-options; note <code class="docutils literal notranslate"><span class="pre">mel_opts.num_bins</span></code> is the number of mel filters
+(typically 23), <code class="docutils literal notranslate"><span class="pre">num_ceps</span></code> is the output dim.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_ceps:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">13</span></code> — number of cepstral coefficients (output dim).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--num-ceps</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_energy:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — replace C0 with the (log) frame energy.
+<strong>knf defaults to True; kaldi's compute-mfcc-feats defaults to false.</strong>
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--use-energy</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">energy_floor:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></code> — floor on energy before log (0 = off).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--energy-floor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">raw_energy:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — compute energy from the raw (pre-preemphasis)
+frame.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--raw-energy</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cepstral_lifter:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">22</span></code> — liftering coefficient applied to the
+cepstra.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--cepstral-lifter</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">htk_compat:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — HTK-compatible scaling of the final output.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--htk-compat</span></code>.</p></li>
+</ul>
+</section>
+<section id="fbankoptions">
+<h2>FbankOptions<a class="headerlink" href="#fbankoptions" title="Link to this heading"></a></h2>
+<p>Filter-bank features.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-fbank.h">FbankOptions</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_opts</span></code> / <code class="docutils literal notranslate"><span class="pre">mel_opts</span></code> — as above.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_energy:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — use frame energy instead of mel energies.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--use-energy</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">energy_floor:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></code> — energy floor (with <code class="docutils literal notranslate"><span class="pre">use_energy</span></code>).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--energy-floor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">raw_energy:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — energy from the raw (pre-preemphasis) frame.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--raw-energy</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_log_fbank:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — take log of the filter energies
+(turn off for cepstral-style pipelines).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--use-log-fbank</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_power:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — use power spectrum (vs magnitude).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--use-power</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">htk_compat:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — HTK-compatible scaling.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--htk-compat</span></code>.</p></li>
+</ul>
+</section>
+<section id="whisperfeatureoptions">
+<h2>WhisperFeatureOptions<a class="headerlink" href="#whisperfeatureoptions" title="Link to this heading"></a></h2>
+<p>Whisper-style log-mel features.  No kaldi counterpart (OpenAI Whisper
+front-end).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_opts:</span> <span class="pre">FrameExtractionOptions</span></code> — window settings.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">80</span></code> — number of mel bins (output dim).</p></li>
+</ul>
+</section>
+<section id="rawaudiosamplesoptions">
+<h2>RawAudioSamplesOptions<a class="headerlink" href="#rawaudiosamplesoptions" title="Link to this heading"></a></h2>
+<p>Raw audio frame output.  kaldi counterpart: kaldi's <code class="docutils literal notranslate"><span class="pre">OnlineRawAudioSamples</span></code>
+(used e.g. for pitch input).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_opts:</span> <span class="pre">FrameExtractionOptions</span></code> — window settings.</p></li>
+</ul>
+</section>
+<section id="stftconfig">
+<h2>StftConfig<a class="headerlink" href="#stftconfig" title="Link to this heading"></a></h2>
+<p>STFT configuration (no direct kaldi binary counterpart; kaldi implements
+STFT inside feature extraction).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_fft:</span> <span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">win_length:</span> <span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">hop_length:</span> <span class="pre">int</span></code> — FFT / window /
+hop sizes in samples.  <em>kaldi</em>: the FFT size is
+<code class="docutils literal notranslate"><span class="pre">frame_opts.PaddedWindowSize()</span></code>; hop = <code class="docutils literal notranslate"><span class="pre">samp_freq*frame_shift_ms/1000</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">window_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></code> — window shape (empty = rectangular default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">center:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — pad the signal so frames are centered.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pad_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&quot;reflect&quot;</span></code> — padding mode when <code class="docutils literal notranslate"><span class="pre">center=True</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalized:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — unitary normalization.</p></li>
+</ul>
+</section>
+<section id="streaming-extractors">
+<h2>Streaming extractors<a class="headerlink" href="#streaming-extractors" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">OnlineMfcc</span></code> / <code class="docutils literal notranslate"><span class="pre">OnlineFbank</span></code> / <code class="docutils literal notranslate"><span class="pre">OnlineWhisperFbank</span></code> /
+<code class="docutils literal notranslate"><span class="pre">OnlineRawAudioSamples</span></code> share one interface
+(kaldi counterpart: <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/itf/online-feature-itf.h">OnlineFeatureInterface</a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ext</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineMfcc</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">accept_waveform</span><span class="p">(</span><span class="n">sample_rate</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>  <span class="c1"># 1-D float32, RAW int16 amplitude</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">input_finished</span><span class="p">()</span>                      <span class="c1"># signal: no more audio</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">num_frames_ready</span>                      <span class="c1"># frames available now</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">ext</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>                  <span class="c1"># list[float], len == ext.dim</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">ext</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>                         <span class="c1"># consume the oldest frame</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">is_last_frame</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>                      <span class="c1"># True for the final frame</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">dim</span>                                   <span class="c1"># output dimension</span>
+<span class="n">ext</span><span class="o">.</span><span class="n">frame_shift_in_seconds</span>                <span class="c1"># e.g. 0.01</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">accept_waveform(sample_rate,</span> <span class="pre">samples)</span></code> — push audio
+(kaldi <code class="docutils literal notranslate"><span class="pre">OnlineFeatureItf::AcceptWaveform</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input_finished()</span></code> — flush the tail (kaldi <code class="docutils literal notranslate"><span class="pre">InputFinished</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_frame(i)</span></code> / <code class="docutils literal notranslate"><span class="pre">pop()</span></code> — random / sequential frame access
+(kaldi <code class="docutils literal notranslate"><span class="pre">GetFrame</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code> — feature dim: MFCC <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">num_ceps</span></code>; Fbank <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">mel_opts.num_bins</span></code>
+(<code class="docutils literal notranslate"><span class="pre">+1</span></code> with <code class="docutils literal notranslate"><span class="pre">use_energy</span></code>); Whisper <code class="docutils literal notranslate"><span class="pre">=</span> <span class="pre">dim</span></code>.</p></li>
+</ul>
+<p><strong>Sample scale</strong>: feed samples at raw int16 amplitude (do not divide by
+32768); kaldi's wav reader keeps raw magnitudes.</p>
+</section>
+<section id="dsp-building-blocks">
+<h2>DSP building blocks<a class="headerlink" href="#dsp-building-blocks" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MelBanks(opts)</span></code> — mel filter bank; <code class="docutils literal notranslate"><span class="pre">dim()</span></code>, <code class="docutils literal notranslate"><span class="pre">compute(spectrum)</span> <span class="pre">-&gt;</span>
+<span class="pre">mel_energies</span></code>, <code class="docutils literal notranslate"><span class="pre">get_matrix()</span></code>, <code class="docutils literal notranslate"><span class="pre">mel_scale</span></code> / <code class="docutils literal notranslate"><span class="pre">inverse_mel_scale</span></code> /
+<code class="docutils literal notranslate"><span class="pre">mel_scale_slaney</span></code> / <code class="docutils literal notranslate"><span class="pre">inverse_mel_scale_slaney</span></code>
+(kaldi <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/mel-computations.h">MelBanks</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FeatureWindowFunction(frame_opts,</span> <span class="pre">n)</span></code> — window; <code class="docutils literal notranslate"><span class="pre">apply(window,</span> <span class="pre">frame)</span></code>
+(kaldi <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-window.h">FeatureWindowFunction</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Rfft(n,</span> <span class="pre">inverse=False)</span></code> — in-place real FFT; <code class="docutils literal notranslate"><span class="pre">compute(data)</span></code>
+(wraps kissfft).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Stft(config)</span></code> — <code class="docutils literal notranslate"><span class="pre">compute(samples)</span> <span class="pre">-&gt;</span> <span class="pre">StftResult</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IStft(config)</span></code> — <code class="docutils literal notranslate"><span class="pre">compute(spec)</span> <span class="pre">-&gt;</span> <span class="pre">samples</span></code> (overlap-add).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">StftResult</span></code> — <code class="docutils literal notranslate"><span class="pre">real</span></code>, <code class="docutils literal notranslate"><span class="pre">imag</span></code> (2-D arrays), <code class="docutils literal notranslate"><span class="pre">num_frames</span></code>.</p></li>
+</ul>
+</section>
+<section id="cmvn">
+<h2>CMVN<a class="headerlink" href="#cmvn" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="cmvn.html"><span class="doc">CMVN</span></a> for formulas and kaldi command mapping
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/transform/cmvn.cc">transform/cmvn.cc</a>).</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">CmvnOptions</span></code></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">norm_vars:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — variance normalization.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">apply-cmvn</span> <span class="pre">--norm-vars</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reverse:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — undo cmvn.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">apply-cmvn</span> <span class="pre">--reverse</span></code>.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CmvnAccumulator(dim=0)</span></code></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">accumulate(feats)</span></code> — accumulate a <code class="docutils literal notranslate"><span class="pre">(frames,</span> <span class="pre">dim)</span></code> matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add(dim,</span> <span class="pre">frame,</span> <span class="pre">weight=1.0)</span></code> — accumulate one frame with weight
+(kaldi <code class="docutils literal notranslate"><span class="pre">AccCmvnStats</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stats</span></code> — property: accumulated <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">dim+1)</span></code> float64 matrix,
+kaldi <code class="docutils literal notranslate"><span class="pre">cmvn.ark</span></code> layout (<code class="docutils literal notranslate"><span class="pre">row0</span> <span class="pre">=</span> <span class="pre">[sum_1..sum_D,</span> <span class="pre">count]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">row1</span> <span class="pre">=</span> <span class="pre">[sumsq_1..sumsq_D,</span> <span class="pre">unused]</span></code>).</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SpliceOptions(left_context=3,</span> <span class="pre">right_context=3)</span></code></dt><dd><p>Contexts for <code class="xref py py-func docutils literal notranslate"><span class="pre">splice_frames()</span></code>.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/splice-feats.cc">splice-feats</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">left_context:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3</span></code> — number of preceding frames to append.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--left-context</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">right_context:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3</span></code> — number of following frames to append.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">splice-feats</span> <span class="pre">--right-context</span></code>.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DeltaOptions(order=2,</span> <span class="pre">window=2)</span></code></dt><dd><p>Regression window for <code class="xref py py-func docutils literal notranslate"><span class="pre">compute_deltas()</span></code>.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/add-deltas.cc">add-deltas</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">order:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></code> — order of the delta computation.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-order</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">window:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></code> — regression window; the regression spans
+<code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">window</span> <span class="pre">+</span> <span class="pre">1</span></code> frames.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-window</span></code>.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">FeatureTransform</span></code></dt><dd><p>Linear/affine transforms (e.g. LDA).  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">transform-feats</a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FeatureTransform.read(filename)</span></code> — read a kaldi matrix file
+(binary <code class="docutils literal notranslate"><span class="pre">FM</span></code>/<code class="docutils literal notranslate"><span class="pre">DM</span></code> or text <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">...</span> <span class="pre">]</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input_dim</span></code> / <code class="docutils literal notranslate"><span class="pre">output_dim</span></code> — shape of the stored matrix.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_affine(input_dim)</span></code> — true if the matrix has one offset column
+(<code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">==</span> <span class="pre">input_dim</span> <span class="pre">+</span> <span class="pre">1</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apply(feats)</span></code> — <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">M^T</span></code>; affine form appends the offset.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="pitch">
+<h2>Pitch<a class="headerlink" href="#pitch" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="pitch.html"><span class="doc">Pitch</span></a> for the algorithm and usage.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">pitch-functions.h</a>.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></dt><dd><p>Raw pitch extraction (kaldi <code class="docutils literal notranslate"><span class="pre">compute-kaldi-pitch-feats</span></code>).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">samp_freq:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">16000</span></code> — sample rate in Hz.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--sample-frequency</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_shift_ms:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></code> — frame shift in ms.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--frame-shift</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_length_ms:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">25</span></code> — frame length in ms.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--frame-length</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preemph_coeff:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></code> — preemphasis (deprecated in kaldi).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--preemphasis-coefficient</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_f0:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">50</span></code> / <code class="docutils literal notranslate"><span class="pre">max_f0:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">400</span></code> — F0 search range (Hz).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--min-f0</span></code> / <code class="docutils literal notranslate"><span class="pre">--max-f0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">soft_min_f0:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></code> — soft minimum f0, must not exceed <code class="docutils literal notranslate"><span class="pre">min_f0</span></code>.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--soft-min-f0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">penalty_factor:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1</span></code> — cost factor for F0 change.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--penalty-factor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lowpass_cutoff:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1000</span></code> — low-pass filter cutoff (Hz).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--lowpass-cutoff</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resample_freq:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">4000</span></code> — downsample rate (&gt; 2 * <code class="docutils literal notranslate"><span class="pre">lowpass_cutoff</span></code>).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--resample-frequency</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta_pitch:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.005</span></code> — pitch tolerance in pruning lags.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--delta-pitch</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nccf_ballast:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">7000</span></code> — reduces NCCF for quiet frames.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--nccf-ballast</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lowpass_filter_width:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></code> / <code class="docutils literal notranslate"><span class="pre">upsample_filter_width:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">5</span></code> —
+filter widths.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--lowpass-filter-width</span></code> /
+<code class="docutils literal notranslate"><span class="pre">--upsample-filter-width</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_frames_latency:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></code> — max latency allowed for pitch tracking.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--max-frames-latency</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frames_per_chunk:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></code> — batch chunk size (0 = whole utterance).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--frames-per-chunk</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">simulate_first_pass_online:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — emit first-pass online
+features (batch mode).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--simulate-first-pass-online</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">recompute_frame:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">500</span></code> — frame at which online NCCF
+recomputation happens.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--recompute-frame</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nccf_ballast_online:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — debug flag for ballast
+computation.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--nccf-ballast-online</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">snip_edges:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — if False, incomplete end frames are not
+snipped.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--snip-edges</span></code> (kaldi's pitch default is True).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nccf_window_size</span></code> / <code class="docutils literal notranslate"><span class="pre">nccf_window_shift</span></code> — read-only: NCCF window
+size/shift in resampled samples.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></dt><dd><p>Post-processing (kaldi <code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>); at
+least one <code class="docutils literal notranslate"><span class="pre">add_*</span></code> feature must be enabled.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pitch_scale:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2</span></code> — scaling of the normalized log-pitch.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--pitch-scale</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pov_scale:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">2</span></code> / <code class="docutils literal notranslate"><span class="pre">pov_offset:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0</span></code> — POV scaling and
+offset.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--pov-scale</span></code> / <code class="docutils literal notranslate"><span class="pre">--pov-offset</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta_pitch_scale:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">10</span></code> — scaling of the delta log-pitch.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--delta-pitch-scale</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta_pitch_noise_stddev:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.005</span></code> — noise added to the delta
+log-pitch; drawn from a deterministic stream, so features are
+reproducible.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--delta-pitch-noise-stddev</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normalization_left_context:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">75</span></code> /
+<code class="docutils literal notranslate"><span class="pre">normalization_right_context:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">75</span></code> — log-pitch normalization
+window (frames).  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--normalization-left-context</span></code> /
+<code class="docutils literal notranslate"><span class="pre">--normalization-right-context</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta_window:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></code> — frames on each side for the delta window.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--delta-window</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delay:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></code> — frames by which the pitch is delayed.
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--delay</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_pov_feature:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — add the warped NCCF (1 dim).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--add-pov-feature</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_normalized_log_pitch:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — add the POV-weighted
+mean-subtracted log-pitch (1 dim).  <em>kaldi</em>:
+<code class="docutils literal notranslate"><span class="pre">--add-normalized-log-pitch</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_delta_pitch:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></code> — add the delta log-pitch (1 dim).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--add-delta-pitch</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_raw_log_pitch:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></code> — add log(pitch) (1 dim).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">--add-raw-log-pitch</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dim</span></code> — read-only output dimension implied by the <code class="docutils literal notranslate"><span class="pre">add_*</span></code> flags.</p></li>
+</ul>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OnlinePitch(pitch_opts,</span> <span class="pre">process_opts=ProcessPitchOptions())</span></code></dt><dd><p>Streaming extractor with the interface of <em>Streaming extractors</em> above
+(without <code class="docutils literal notranslate"><span class="pre">pop()</span></code>): <code class="docutils literal notranslate"><span class="pre">accept_waveform(rate,</span> <span class="pre">samples)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">input_finished()</span></code>, <code class="docutils literal notranslate"><span class="pre">num_frames_ready</span></code>, <code class="docutils literal notranslate"><span class="pre">get_frame(i)</span> <span class="pre">-&gt;</span>
+<span class="pre">numpy.ndarray</span></code>, <code class="docutils literal notranslate"><span class="pre">is_last_frame(i)</span></code>, <code class="docutils literal notranslate"><span class="pre">dim</span></code>,
+<code class="docutils literal notranslate"><span class="pre">frame_shift_in_seconds</span></code>.  kaldi counterpart:
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">OnlinePitchFeature + OnlineProcessPitch</a>.</p>
+</dd>
+</dl>
+</section>
+<section id="module-functions">
+<h2>Module functions<a class="headerlink" href="#module-functions" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.compute_cmvn_stats(feats)</span> <span class="pre">-&gt;</span> <span class="pre">numpy.ndarray</span></code> — full 2-row stats
+(<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">compute-cmvn-stats</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.apply_cmvn(stats,</span> <span class="pre">opts,</span> <span class="pre">feats)</span> <span class="pre">-&gt;</span> <span class="pre">numpy.ndarray</span></code> — normalized copy
+(<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">apply-cmvn</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.apply_cmvn_(stats,</span> <span class="pre">opts,</span> <span class="pre">feats)</span></code> — in-place variant.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.transform_features(feats,</span> <span class="pre">transform)</span> <span class="pre">-&gt;</span> <span class="pre">numpy.ndarray</span></code> — apply a
+linear/affine transform (shorthand for <code class="docutils literal notranslate"><span class="pre">transform.apply(feats)</span></code>).
+<em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.compute_deltas(opts,</span> <span class="pre">feats)</span> <span class="pre">-&gt;</span> <span class="pre">numpy.ndarray</span></code> — regression delta
+features <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">delta,</span> <span class="pre">delta-delta,</span> <span class="pre">...]</span></code>, dimension <code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(order</span> <span class="pre">+</span> <span class="pre">1)</span></code>;
+edge frames are replicated.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">add-deltas</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">DeltaFeatures</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.splice_frames(feats,</span> <span class="pre">opts=SpliceOptions())</span> <span class="pre">-&gt;</span> <span class="pre">numpy.ndarray</span></code> —
+concatenate each frame with its left/right context neighbors; edge frames
+are replicated, so the frame count stays the same and the dimension becomes
+<code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">left_context</span> <span class="pre">+</span> <span class="pre">right_context)</span></code>.  <em>kaldi</em>: <code class="docutils literal notranslate"><span class="pre">splice-feats</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">SpliceFrames</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">knf.compute_and_process_kaldi_pitch(pitch_opts,</span> <span class="pre">process_opts,</span> <span class="pre">wave)</span> <span class="pre">-&gt;</span>
+<span class="pre">numpy.ndarray</span></code> — processed pitch features of shape
+<code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">process_opts.dim)</span></code> for a whole utterance (POV,
+normalized-log-pitch, delta-pitch by default).  <em>kaldi</em>:
+<code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.cc">ComputeAndProcessKaldiPitch</a>).</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pitch.html" class="btn btn-neutral float-left" title="Pitch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="splice.html" class="btn btn-neutral float-right" title="Splice frames" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+digraph "/home/runner/work/kaldi-native-fbank/kaldi-native-fbank/kaldi-native-fbank/csrc/feature-window.h"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/feature-window.h",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Waveform windowing and frame extraction."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/feature-fbank.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$feature-fbank_8h.html",tooltip="Copyright 2009-2012 Karel Vesely 2016 Johns Hopkins University (author: Daniel Povey) Copyright (c) 2..."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/online-feature.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$online-feature_8h.html",tooltip="Copyright 2013 Johns Hopkins University (author: Daniel Povey) 2014 Yanqing Sun, Junjie Wang,..."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/feature-mfcc.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$feature-mfcc_8h.html",tooltip="Copyright 2009-2011 Karel Vesely; Petr Motlicek; Saarland University 2014-2016 Johns Hopkins Universi..."];
+  Node4 -> Node3 [id="edge4_Node000004_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node5 [id="edge5_Node000001_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/feature-raw-audio-samples.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$feature-raw-audio-samples_8h.html",tooltip="Copyright (c) 2025 Xiaomi Corporation (authors: Fangjun Kuang)."];
+  Node5 -> Node3 [id="edge6_Node000005_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node6 [id="edge7_Node000001_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/mel-computations.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$mel-computations_8h.html",tooltip="Copyright 2009-2011 Phonexia s.r.o.; Microsoft Corporation 2016 Johns Hopkins University (author: Dan..."];
+  Node6 -> Node2 [id="edge8_Node000006_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 -> Node4 [id="edge9_Node000006_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 -> Node7 [id="edge10_Node000006_Node000007",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/online-nemo-fbank.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$online-nemo-fbank_8h.html",tooltip="Copyright (c) 2026 Julian Pscheid."];
+  Node6 -> Node8 [id="edge11_Node000006_Node000008",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="/home/runner/work/kaldi\l-native-fbank/kaldi-native\l-fbank/kaldi-native-fbank\l/csrc/whisper-feature.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$whisper-feature_8h.html",tooltip="Copyright (c) 2023 Xiaomi Corporation (authors: Fangjun Kuang)."];
+  Node8 -> Node3 [id="edge12_Node000008_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node3 [id="edge13_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node8 [id="edge14_Node000001_Node000008",dir="back",color="steelblue1",style="solid",tooltip=" "];
+}

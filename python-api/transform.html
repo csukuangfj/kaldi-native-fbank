@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature transforms (LDA) &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMVN" href="cmvn.html" />
+    <link rel="prev" title="STFT / iSTFT" href="stft.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Feature transforms (LDA)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform"><code class="docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.transform_features"><code class="docutils literal notranslate"><span class="pre">transform_features()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Feature transforms (LDA)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/transform.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feature-transforms-lda">
+<h1>Feature transforms (LDA)<a class="headerlink" href="#feature-transforms-lda" title="Link to this heading"></a></h1>
+<p>Linear/affine feature transforms — the equivalent of kaldi's
+<code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> (<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-transform.h">kaldi-native-fbank/csrc/feature-transform.h</a>,
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">transform-feats</a>).  This is how an
+LDA matrix is applied after the splice stage.</p>
+<p>The transform is a matrix <span class="math notranslate nohighlight">\(M\)</span> of shape <code class="docutils literal notranslate"><span class="pre">(output_dim,</span> <span class="pre">n)</span></code>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span> = input dim → linear: <span class="math notranslate nohighlight">\(y = x\, M^{T}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> = input dim + 1 → affine: the last column of <span class="math notranslate nohighlight">\(M\)</span> is the
+offset, <span class="math notranslate nohighlight">\(y = x\, M_{[:,\,0:n-1]}^{T} + M_{[:,\,n-1]}\)</span></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">lda</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FeatureTransform</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"lda.mat"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>                       <span class="c1"># (T, lda.output_dim)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">transform_features</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">lda</span><span class="p">)</span>     <span class="c1"># same thing</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform" title="Link to this definition"></a></dt>
+<dd><p>A linear (or affine) feature transform, e.g. an LDA matrix.</p>
+<p>This is kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">transform-feats</a>
+(same semantics).  The transform is a matrix <span class="math notranslate nohighlight">\(M\)</span> of shape
+<span class="math notranslate nohighlight">\((D_{out} \times n)\)</span>:</p>
+<ul class="simple">
+<li><p>if <span class="math notranslate nohighlight">\(n\)</span> equals the input feature dimension, the transform is
+linear: <span class="math notranslate nohighlight">\(y = x\, M^{T}\)</span>;</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(n\)</span> is one larger, the transform is affine and the last column
+of <span class="math notranslate nohighlight">\(M\)</span> is the offset:
+<span class="math notranslate nohighlight">\(y = x\, M_{[:,\,0:n-1]}^{T} + M_{[:,\,n-1]}\)</span>;</p></li>
+<li><p>otherwise <a class="reference internal" href="#kaldi_native_fbank.FeatureTransform.apply" title="kaldi_native_fbank.FeatureTransform.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code></a> raises an exception.</p></li>
+</ul>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FeatureTransform</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"lda.mat"</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>            <span class="c1"># (T, lda.output_dim)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">transform_features</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">lda</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.transform_features" title="kaldi_native_fbank.transform_features"><code class="xref py py-func docutils literal notranslate"><span class="pre">transform_features()</span></code></a></p>
+</div>
+<p>Construct a transform from a matrix directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param mat<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The transform matrix of shape <code class="docutils literal notranslate"><span class="pre">(output_dim,</span> <span class="pre">input_dim)</span></code>, or
+one column wider for an affine transform (the last column is the
+offset).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct a transform from a matrix directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mat</strong> -- The transform matrix of shape <code class="docutils literal notranslate"><span class="pre">(output_dim,</span> <span class="pre">input_dim)</span></code>, or
+one column wider for an affine transform (the last column is the
+offset).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">feats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the transform to a feature matrix.</p>
+<p>kaldi <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> semantics (rows = frames): if the transform has
+<code class="docutils literal notranslate"><span class="pre">feats.shape[1]</span></code> columns the output is <span class="math notranslate nohighlight">\(Y = X M^{T}\)</span> (linear); if it
+has one column more, the transform is affine and the last column is the
+offset.  Otherwise an exception is raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feats</strong> (<em>numpy.ndarray</em>) -- Feature matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim)</span></code>, float32.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">output_dim)</span></code>,
+float32.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.input_dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">input_dim</span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.input_dim" title="Link to this definition"></a></dt>
+<dd><p>Number of columns of the stored matrix.</p>
+<p>This is the feature dimension in the linear form; an affine transform
+consumes <code class="docutils literal notranslate"><span class="pre">input_dim</span> <span class="pre">-</span> <span class="pre">1</span></code> features plus the implicit 1.0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.is_affine">
+<span class="sig-name descname"><span class="pre">is_affine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.is_affine" title="Link to this definition"></a></dt>
+<dd><p>Whether the transform is affine for inputs of dimension <code class="docutils literal notranslate"><span class="pre">input_dim</span></code>.</p>
+<p>The matrix alone cannot record the intended input dimension, so the rule
+is the one kaldi's <code class="docutils literal notranslate"><span class="pre">transform-feats</span></code> applies: the transform is affine iff
+it has one column more than the feature dimension (the extra column is the
+offset).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_dim</strong> -- The input feature dimension.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True for an affine transform.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.output_dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">output_dim</span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.output_dim" title="Link to this definition"></a></dt>
+<dd><p>Number of rows of the stored matrix (the output dimension).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.FeatureTransform.read">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></span><a class="headerlink" href="#kaldi_native_fbank.FeatureTransform.read" title="Link to this definition"></a></dt>
+<dd><p>Read a transform matrix from a kaldi matrix file.</p>
+<p>Supports the kaldi binary format (<code class="docutils literal notranslate"><span class="pre">&quot;FM&quot;</span></code>/<code class="docutils literal notranslate"><span class="pre">&quot;DM&quot;</span></code>, as written by kaldi's
+<code class="docutils literal notranslate"><span class="pre">Matrix::Write</span></code>) and the kaldi text format (<code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">...</span> <span class="pre">]</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- Path of the matrix file, e.g. <code class="docutils literal notranslate"><span class="pre">lda.mat</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transform.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaldi_native_fbank.transform_features">
+<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">transform_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><span class="pre">kaldi_native_fbank.FeatureTransform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.transform_features" title="Link to this definition"></a></dt>
+<dd><p>Apply a transform to features and return the result.</p>
+<p>Shorthand for <code class="docutils literal notranslate"><span class="pre">transform.apply(feats)</span></code>; matches kaldi's
+<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/transform-feats.cc">transform-feats</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feats</strong> (<em>numpy.ndarray</em>) -- Feature matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim)</span></code>, float32.</p></li>
+<li><p><strong>transform</strong> -- The transform; see <a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">transform.output_dim)</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.FeatureTransform" title="kaldi_native_fbank.FeatureTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="stft.html" class="btn btn-neutral float-left" title="STFT / iSTFT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cmvn.html" class="btn btn-neutral float-right" title="CMVN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['dim_0',['Dim',['../classknf_1_1FbankComputer.html#aad4672003ea9d506baed330a8891eb0e',1,'knf::FbankComputer::Dim()'],['../classknf_1_1MfccComputer.html#abfcafba90f70c0e80e02c29ec9c84c50',1,'knf::MfccComputer::Dim()'],['../structknf_1_1ProcessPitchOptions.html#a4f28281379056539ea7a51c988ee5db0',1,'knf::ProcessPitchOptions::Dim()'],['../classknf_1_1OnlinePitch.html#aa669ac638105151cff0f2d5243c722ee',1,'knf::OnlinePitch::Dim()'],['../classknf_1_1RawAudioSamplesComputer.html#aaa3c4f03c828cc59292931e804a387a5',1,'knf::RawAudioSamplesComputer::Dim()'],['../classknf_1_1OnlineGenericBaseFeature.html#aff724167e00b5ed648adf7f3997bb667',1,'knf::OnlineGenericBaseFeature::Dim()'],['../classknf_1_1OnlineNemoFbank.html#a2d4e5c7ff0e188dfe822111ee166e1c8',1,'knf::OnlineNemoFbank::Dim()'],['../classknf_1_1WhisperFeatureComputer.html#a05e0c13c8e37fdc772f11b92100ebcd7',1,'knf::WhisperFeatureComputer::Dim()']]]
+];

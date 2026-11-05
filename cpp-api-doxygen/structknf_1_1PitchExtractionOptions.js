@@ -1,0 +1,25 @@
+var structknf_1_1PitchExtractionOptions =
+[
+    [ "NccfWindowShift", "structknf_1_1PitchExtractionOptions.html#a000eaa0197714bf151f88621e4c2f8db", null ],
+    [ "NccfWindowSize", "structknf_1_1PitchExtractionOptions.html#a0049d48f2b74f261fa8122084aa8e525", null ],
+    [ "delta_pitch", "structknf_1_1PitchExtractionOptions.html#a0e0f3767a60bcf85dc6b84d43719bf85", null ],
+    [ "frame_length_ms", "structknf_1_1PitchExtractionOptions.html#a42fd79c36b5c9ec490bfa6be4993d923", null ],
+    [ "frame_shift_ms", "structknf_1_1PitchExtractionOptions.html#a9e7aef5f5df68319543047bd45a8d4a3", null ],
+    [ "frames_per_chunk", "structknf_1_1PitchExtractionOptions.html#a47f11d91a836afae3ff0dcc66aa80c8f", null ],
+    [ "lowpass_cutoff", "structknf_1_1PitchExtractionOptions.html#a09479abdbc24763e2c1f38dc64a7c734", null ],
+    [ "lowpass_filter_width", "structknf_1_1PitchExtractionOptions.html#a718a08848f1b7186578eb01ad85a70ed", null ],
+    [ "max_f0", "structknf_1_1PitchExtractionOptions.html#ac72dcd375118ac195417512593ffa300", null ],
+    [ "max_frames_latency", "structknf_1_1PitchExtractionOptions.html#a61516287cc1919b81387c1559f8a17d0", null ],
+    [ "min_f0", "structknf_1_1PitchExtractionOptions.html#a909759e0f422bc77ad269a227d880ade", null ],
+    [ "nccf_ballast", "structknf_1_1PitchExtractionOptions.html#aab6fcaecadefd914d935e03bdc4a6732", null ],
+    [ "nccf_ballast_online", "structknf_1_1PitchExtractionOptions.html#a29afca4b8a01249c4e6baa32d4dc87e6", null ],
+    [ "penalty_factor", "structknf_1_1PitchExtractionOptions.html#aa2717f4f630de192dcc0e1c62f82539e", null ],
+    [ "preemph_coeff", "structknf_1_1PitchExtractionOptions.html#ae53e0774394d72a1bc0b3efc8785de61", null ],
+    [ "recompute_frame", "structknf_1_1PitchExtractionOptions.html#af17a2b95e1ddd09ffac7b28501b4f277", null ],
+    [ "resample_freq", "structknf_1_1PitchExtractionOptions.html#a864c45cbbff1c16d3f69843c0e7270ea", null ],
+    [ "samp_freq", "structknf_1_1PitchExtractionOptions.html#afa0602aa7aa2ffdabf230c0ad7aebef3", null ],
+    [ "simulate_first_pass_online", "structknf_1_1PitchExtractionOptions.html#aa116efc64cca728e5459450a48ab20f7", null ],
+    [ "snip_edges", "structknf_1_1PitchExtractionOptions.html#ab37bfb5464b620c79da2df7e98ef4de8", null ],
+    [ "soft_min_f0", "structknf_1_1PitchExtractionOptions.html#aec14c3ea363deae5b71528860fd91f27", null ],
+    [ "upsample_filter_width", "structknf_1_1PitchExtractionOptions.html#acfd35eb19ca8f32e6bd03225ebe15818", null ]
+];

@@ -1,0 +1,37 @@
+var annotated_dup =
+[
+    [ "knf", "namespaceknf.html", [
+      [ "CmvnOptions", "structknf_1_1CmvnOptions.html", "structknf_1_1CmvnOptions" ],
+      [ "CmvnAccumulator", "classknf_1_1CmvnAccumulator.html", "classknf_1_1CmvnAccumulator" ],
+      [ "DeltaOptions", "structknf_1_1DeltaOptions.html", "structknf_1_1DeltaOptions" ],
+      [ "FbankOptions", "structknf_1_1FbankOptions.html", "structknf_1_1FbankOptions" ],
+      [ "FbankComputer", "classknf_1_1FbankComputer.html", "classknf_1_1FbankComputer" ],
+      [ "MfccOptions", "structknf_1_1MfccOptions.html", "structknf_1_1MfccOptions" ],
+      [ "MfccComputer", "classknf_1_1MfccComputer.html", "classknf_1_1MfccComputer" ],
+      [ "PitchExtractionOptions", "structknf_1_1PitchExtractionOptions.html", "structknf_1_1PitchExtractionOptions" ],
+      [ "ProcessPitchOptions", "structknf_1_1ProcessPitchOptions.html", "structknf_1_1ProcessPitchOptions" ],
+      [ "OnlinePitch", "classknf_1_1OnlinePitch.html", "classknf_1_1OnlinePitch" ],
+      [ "RawAudioSamplesOptions", "structknf_1_1RawAudioSamplesOptions.html", "structknf_1_1RawAudioSamplesOptions" ],
+      [ "RawAudioSamplesComputer", "classknf_1_1RawAudioSamplesComputer.html", "classknf_1_1RawAudioSamplesComputer" ],
+      [ "SpliceOptions", "structknf_1_1SpliceOptions.html", "structknf_1_1SpliceOptions" ],
+      [ "FeatureTransform", "classknf_1_1FeatureTransform.html", "classknf_1_1FeatureTransform" ],
+      [ "FrameExtractionOptions", "structknf_1_1FrameExtractionOptions.html", "structknf_1_1FrameExtractionOptions" ],
+      [ "FeatureWindowFunction", "classknf_1_1FeatureWindowFunction.html", "classknf_1_1FeatureWindowFunction" ],
+      [ "IStft", "classknf_1_1IStft.html", "classknf_1_1IStft" ],
+      [ "RandomState", "structknf_1_1RandomState.html", "structknf_1_1RandomState" ],
+      [ "MelBanksOptions", "structknf_1_1MelBanksOptions.html", "structknf_1_1MelBanksOptions" ],
+      [ "MelBanks", "classknf_1_1MelBanks.html", "classknf_1_1MelBanks" ],
+      [ "RecyclingVector", "classknf_1_1RecyclingVector.html", "classknf_1_1RecyclingVector" ],
+      [ "OnlineGenericBaseFeature", "classknf_1_1OnlineGenericBaseFeature.html", "classknf_1_1OnlineGenericBaseFeature" ],
+      [ "NemoFbankOptions", "structknf_1_1NemoFbankOptions.html", "structknf_1_1NemoFbankOptions" ],
+      [ "OnlineNemoFbank", "classknf_1_1OnlineNemoFbank.html", "classknf_1_1OnlineNemoFbank" ],
+      [ "ArbitraryResample", "classknf_1_1ArbitraryResample.html", "classknf_1_1ArbitraryResample" ],
+      [ "LinearResample", "classknf_1_1LinearResample.html", "classknf_1_1LinearResample" ],
+      [ "Rfft", "classknf_1_1Rfft.html", "classknf_1_1Rfft" ],
+      [ "StftConfig", "structknf_1_1StftConfig.html", "structknf_1_1StftConfig" ],
+      [ "StftResult", "structknf_1_1StftResult.html", "structknf_1_1StftResult" ],
+      [ "Stft", "classknf_1_1Stft.html", "classknf_1_1Stft" ],
+      [ "WhisperFeatureOptions", "structknf_1_1WhisperFeatureOptions.html", "structknf_1_1WhisperFeatureOptions" ],
+      [ "WhisperFeatureComputer", "classknf_1_1WhisperFeatureComputer.html", "classknf_1_1WhisperFeatureComputer" ]
+    ] ]
+];

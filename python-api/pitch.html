@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pitch &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python API reference" href="reference.html" />
+    <link rel="prev" title="Delta features" href="delta.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pitch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions"><code class="docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions"><code class="docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch"><code class="docutils literal notranslate"><span class="pre">OnlinePitch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Pitch</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/pitch.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pitch">
+<h1>Pitch<a class="headerlink" href="#pitch" title="Link to this heading"></a></h1>
+<p>Pitch extraction — the equivalent of kaldi's
+<code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>
+(<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-pitch.h">kaldi-native-fbank/csrc/feature-pitch.h</a>,
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.cc">pitch-functions</a>), implementing
+<em>&quot;A Pitch Extraction Algorithm Tuned for Automatic Speech Recognition&quot;</em>,
+Ghahremani et al., ICASSP 2014.</p>
+<p>The extractor downsamples the waveform, evaluates the normalized
+cross-correlation function (NCCF) at log-spaced lags between
+<span class="math notranslate nohighlight">\(1/\mathrm{max\_f0}\)</span> and <span class="math notranslate nohighlight">\(1/\mathrm{min\_f0}\)</span>, picks a per-frame
+lag with a Viterbi search, and post-processes the raw
+<span class="math notranslate nohighlight">\((\mathrm{NCCF}, \mathrm{pitch})\)</span> pair into the configured features —
+by default the 3-dimensional (POV-feature, normalized-log-pitch,
+delta-log-pitch) used by kaldi.</p>
+<p>Batch usage (kaldi's <code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">pitch_opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">PitchExtractionOptions</span><span class="p">(</span><span class="n">min_f0</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_f0</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                                        <span class="n">snip_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">process_opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">ProcessPitchOptions</span><span class="p">()</span>  <span class="c1"># 3-dim output</span>
+<span class="n">feats</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_and_process_kaldi_pitch</span><span class="p">(</span><span class="n">pitch_opts</span><span class="p">,</span> <span class="n">process_opts</span><span class="p">,</span>
+                                            <span class="n">samples</span><span class="p">)</span>  <span class="c1"># (T, 3)</span>
+</pre></div>
+</div>
+<p>Streaming usage (same interface as <a class="reference internal" href="mfcc.html#kaldi_native_fbank.OnlineMfcc" title="kaldi_native_fbank.OnlineMfcc"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineMfcc</span></code></a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pitch</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlinePitch</span><span class="p">(</span><span class="n">pitch_opts</span><span class="p">,</span> <span class="n">process_opts</span><span class="p">)</span>
+<span class="n">pitch</span><span class="o">.</span><span class="n">accept_waveform</span><span class="p">(</span><span class="mi">16000</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>
+<span class="n">pitch</span><span class="o">.</span><span class="n">input_finished</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pitch</span><span class="o">.</span><span class="n">num_frames_ready</span><span class="p">):</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">pitch</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># np.ndarray of shape (3,)</span>
+</pre></div>
+</div>
+<p><strong>Sample scale</strong>: feed samples at raw int16 amplitude (do not divide by
+32768); kaldi's wav reader keeps raw magnitudes.</p>
+<p><strong>Determinism</strong>: the noise added to the delta-pitch feature
+(<code class="docutils literal notranslate"><span class="pre">delta_pitch_noise_stddev</span></code>) is drawn from a deterministic stream that
+reproduces the reference kaldi realization, so features are identical on
+every platform (and match the golden test data in
+<code class="docutils literal notranslate"><span class="pre">tests/data/feat_golden</span></code>).</p>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">PitchExtractionOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><span class="pre">kaldi_native_fbank.PitchExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_min_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nccf_ballast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass_filter_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample_filter_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_frames_latency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames_per_chunk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulate_first_pass_online</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nccf_ballast_online</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snip_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for the raw pitch extraction stage.</p>
+<p>Mirrors the flags of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-kaldi-pitch-feats.cc">compute-kaldi-pitch-feats</a>
+and kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">PitchExtractionOptions</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlinePitch</span></code></a>,
+<a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a></p>
+</div>
+<p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature (they are kaldi's defaults).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--sample-frequency</span></code>).</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds (kaldi <code class="docutils literal notranslate"><span class="pre">--frame-shift</span></code>).</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds (kaldi <code class="docutils literal notranslate"><span class="pre">--frame-length</span></code>).</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient; deprecated in kaldi
+(kaldi <code class="docutils literal notranslate"><span class="pre">--preemphasis-coefficient</span></code>).</p></li>
+<li><p><strong>min_f0</strong> -- Min F0 to search for, in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--min-f0</span></code>).</p></li>
+<li><p><strong>max_f0</strong> -- Max F0 to search for, in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--max-f0</span></code>).</p></li>
+<li><p><strong>soft_min_f0</strong> -- Minimum f0 applied in a soft way; must not exceed
+<code class="docutils literal notranslate"><span class="pre">min_f0</span></code> (kaldi <code class="docutils literal notranslate"><span class="pre">--soft-min-f0</span></code>).</p></li>
+<li><p><strong>penalty_factor</strong> -- Cost factor for F0 change (kaldi <code class="docutils literal notranslate"><span class="pre">--penalty-factor</span></code>).</p></li>
+<li><p><strong>lowpass_cutoff</strong> -- Low-pass filter cutoff in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-cutoff</span></code>).</p></li>
+<li><p><strong>resample_freq</strong> -- Frequency the signal is downsampled to; must be more
+than twice <code class="docutils literal notranslate"><span class="pre">lowpass_cutoff</span></code> (kaldi <code class="docutils literal notranslate"><span class="pre">--resample-frequency</span></code>).</p></li>
+<li><p><strong>delta_pitch</strong> -- The pitch tolerance in pruning lags (kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch</span></code>).</p></li>
+<li><p><strong>nccf_ballast</strong> -- Reduces NCCF for quiet frames when increased
+(kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast</span></code>).</p></li>
+<li><p><strong>lowpass_filter_width</strong> -- Low-pass filter width (kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-filter-width</span></code>).</p></li>
+<li><p><strong>upsample_filter_width</strong> -- NCCF upsampling filter width
+(kaldi <code class="docutils literal notranslate"><span class="pre">--upsample-filter-width</span></code>).</p></li>
+<li><p><strong>max_frames_latency</strong> -- Maximum frames of latency allowed for pitch
+tracking (kaldi <code class="docutils literal notranslate"><span class="pre">--max-frames-latency</span></code>).</p></li>
+<li><p><strong>frames_per_chunk</strong> -- Chunk size for <a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a>
+(kaldi <code class="docutils literal notranslate"><span class="pre">--frames-per-chunk</span></code>).</p></li>
+<li><p><strong>simulate_first_pass_online</strong> -- Output first-pass online features in
+<a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a>
+(kaldi <code class="docutils literal notranslate"><span class="pre">--simulate-first-pass-online</span></code>).</p></li>
+<li><p><strong>recompute_frame</strong> -- Frame at which online NCCF recomputation happens
+(kaldi <code class="docutils literal notranslate"><span class="pre">--recompute-frame</span></code>).</p></li>
+<li><p><strong>nccf_ballast_online</strong> -- Debug flag for how the NCCF ballast is computed
+(kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast-online</span></code>).</p></li>
+<li><p><strong>snip_edges</strong> -- If false, incomplete frames near the ending edge are not
+snipped (kaldi <code class="docutils literal notranslate"><span class="pre">--snip-edges</span></code>).  Note: unlike other feature types,
+kaldi's pitch extractor defaults this to true.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><span class="pre">kaldi_native_fbank.PitchExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samp_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_shift_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_length_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preemph_coeff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_min_f0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nccf_ballast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowpass_filter_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample_filter_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_frames_latency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames_per_chunk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulate_first_pass_online</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recompute_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nccf_ballast_online</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snip_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature (they are kaldi's defaults).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samp_freq</strong> -- Waveform sample frequency in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--sample-frequency</span></code>).</p></li>
+<li><p><strong>frame_shift_ms</strong> -- Frame shift in milliseconds (kaldi <code class="docutils literal notranslate"><span class="pre">--frame-shift</span></code>).</p></li>
+<li><p><strong>frame_length_ms</strong> -- Frame length in milliseconds (kaldi <code class="docutils literal notranslate"><span class="pre">--frame-length</span></code>).</p></li>
+<li><p><strong>preemph_coeff</strong> -- Preemphasis coefficient; deprecated in kaldi
+(kaldi <code class="docutils literal notranslate"><span class="pre">--preemphasis-coefficient</span></code>).</p></li>
+<li><p><strong>min_f0</strong> -- Min F0 to search for, in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--min-f0</span></code>).</p></li>
+<li><p><strong>max_f0</strong> -- Max F0 to search for, in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--max-f0</span></code>).</p></li>
+<li><p><strong>soft_min_f0</strong> -- Minimum f0 applied in a soft way; must not exceed
+<code class="docutils literal notranslate"><span class="pre">min_f0</span></code> (kaldi <code class="docutils literal notranslate"><span class="pre">--soft-min-f0</span></code>).</p></li>
+<li><p><strong>penalty_factor</strong> -- Cost factor for F0 change (kaldi <code class="docutils literal notranslate"><span class="pre">--penalty-factor</span></code>).</p></li>
+<li><p><strong>lowpass_cutoff</strong> -- Low-pass filter cutoff in Hz (kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-cutoff</span></code>).</p></li>
+<li><p><strong>resample_freq</strong> -- Frequency the signal is downsampled to; must be more
+than twice <code class="docutils literal notranslate"><span class="pre">lowpass_cutoff</span></code> (kaldi <code class="docutils literal notranslate"><span class="pre">--resample-frequency</span></code>).</p></li>
+<li><p><strong>delta_pitch</strong> -- The pitch tolerance in pruning lags (kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch</span></code>).</p></li>
+<li><p><strong>nccf_ballast</strong> -- Reduces NCCF for quiet frames when increased
+(kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast</span></code>).</p></li>
+<li><p><strong>lowpass_filter_width</strong> -- Low-pass filter width (kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-filter-width</span></code>).</p></li>
+<li><p><strong>upsample_filter_width</strong> -- NCCF upsampling filter width
+(kaldi <code class="docutils literal notranslate"><span class="pre">--upsample-filter-width</span></code>).</p></li>
+<li><p><strong>max_frames_latency</strong> -- Maximum frames of latency allowed for pitch
+tracking (kaldi <code class="docutils literal notranslate"><span class="pre">--max-frames-latency</span></code>).</p></li>
+<li><p><strong>frames_per_chunk</strong> -- Chunk size for <a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a>
+(kaldi <code class="docutils literal notranslate"><span class="pre">--frames-per-chunk</span></code>).</p></li>
+<li><p><strong>simulate_first_pass_online</strong> -- Output first-pass online features in
+<a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a>
+(kaldi <code class="docutils literal notranslate"><span class="pre">--simulate-first-pass-online</span></code>).</p></li>
+<li><p><strong>recompute_frame</strong> -- Frame at which online NCCF recomputation happens
+(kaldi <code class="docutils literal notranslate"><span class="pre">--recompute-frame</span></code>).</p></li>
+<li><p><strong>nccf_ballast_online</strong> -- Debug flag for how the NCCF ballast is computed
+(kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast-online</span></code>).</p></li>
+<li><p><strong>snip_edges</strong> -- If false, incomplete frames near the ending edge are not
+snipped (kaldi <code class="docutils literal notranslate"><span class="pre">--snip-edges</span></code>).  Note: unlike other feature types,
+kaldi's pitch extractor defaults this to true.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.delta_pitch">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delta_pitch</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.delta_pitch" title="Link to this definition"></a></dt>
+<dd><p>The pitch tolerance in pruning lags.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.frame_length_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_length_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.frame_length_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame length in milliseconds.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.frame_shift_ms">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_ms</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.frame_shift_ms" title="Link to this definition"></a></dt>
+<dd><p>Frame shift in milliseconds.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.frames_per_chunk">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frames_per_chunk</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.frames_per_chunk" title="Link to this definition"></a></dt>
+<dd><p>Chunk size for <a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.lowpass_cutoff">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lowpass_cutoff</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.lowpass_cutoff" title="Link to this definition"></a></dt>
+<dd><p>Low-pass filter cutoff in Hz.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.lowpass_filter_width">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">lowpass_filter_width</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.lowpass_filter_width" title="Link to this definition"></a></dt>
+<dd><p>Low-pass filter width.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.max_f0">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">max_f0</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.max_f0" title="Link to this definition"></a></dt>
+<dd><p>Max F0 to search for, in Hz.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.max_frames_latency">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">max_frames_latency</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.max_frames_latency" title="Link to this definition"></a></dt>
+<dd><p>Maximum frames of latency allowed for pitch tracking.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.min_f0">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">min_f0</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.min_f0" title="Link to this definition"></a></dt>
+<dd><p>Min F0 to search for, in Hz.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.nccf_ballast">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">nccf_ballast</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.nccf_ballast" title="Link to this definition"></a></dt>
+<dd><p>Reduces NCCF for quiet frames when increased.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.nccf_ballast_online">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">nccf_ballast_online</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.nccf_ballast_online" title="Link to this definition"></a></dt>
+<dd><p>Debug flag for how the NCCF ballast is computed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.nccf_window_shift">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">nccf_window_shift</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.nccf_window_shift" title="Link to this definition"></a></dt>
+<dd><p>The NCCF window shift in samples after resampling.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.nccf_window_size">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">nccf_window_size</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.nccf_window_size" title="Link to this definition"></a></dt>
+<dd><p>The NCCF window size in samples after resampling.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.penalty_factor">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">penalty_factor</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.penalty_factor" title="Link to this definition"></a></dt>
+<dd><p>Cost factor for F0 change.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.preemph_coeff">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">preemph_coeff</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.preemph_coeff" title="Link to this definition"></a></dt>
+<dd><p>Preemphasis coefficient (deprecated in kaldi).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.recompute_frame">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">recompute_frame</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.recompute_frame" title="Link to this definition"></a></dt>
+<dd><p>Frame at which online NCCF recomputation happens.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.resample_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">resample_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.resample_freq" title="Link to this definition"></a></dt>
+<dd><p>Frequency the signal is downsampled to.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.samp_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">samp_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.samp_freq" title="Link to this definition"></a></dt>
+<dd><p>Waveform sample frequency in Hz.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.simulate_first_pass_online">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">simulate_first_pass_online</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.simulate_first_pass_online" title="Link to this definition"></a></dt>
+<dd><p>Output first-pass online features (batch mode only).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.snip_edges">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">snip_edges</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.snip_edges" title="Link to this definition"></a></dt>
+<dd><p>If false, incomplete frames near the ending edge are not snipped.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.soft_min_f0">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">soft_min_f0</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.soft_min_f0" title="Link to this definition"></a></dt>
+<dd><p>Minimum f0 applied in a soft way.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.PitchExtractionOptions.upsample_filter_width">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">upsample_filter_width</span></span><a class="headerlink" href="#kaldi_native_fbank.PitchExtractionOptions.upsample_filter_width" title="Link to this definition"></a></dt>
+<dd><p>NCCF upsampling filter width.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">ProcessPitchOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><span class="pre">kaldi_native_fbank.ProcessPitchOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pov_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pov_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch_noise_stddev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_left_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_right_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_pov_feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_normalized_log_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_delta_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_raw_log_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for the pitch post-processing stage.</p>
+<p>Determines which features are produced from the raw (NCCF, pitch) pair.
+With the defaults each frame is the 3-dimensional
+(POV-feature, normalized-log-pitch, delta-log-pitch) output of kaldi's
+<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc">compute-and-process-kaldi-pitch-feats</a>;
+see kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">ProcessPitchOptions</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlinePitch</span></code></a></p>
+</div>
+<p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature (they are kaldi's defaults).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch_scale</strong> -- Scaling of the normalized log-pitch feature
+(kaldi <code class="docutils literal notranslate"><span class="pre">--pitch-scale</span></code>).</p></li>
+<li><p><strong>pov_scale</strong> -- Scaling of the POV feature (kaldi <code class="docutils literal notranslate"><span class="pre">--pov-scale</span></code>).</p></li>
+<li><p><strong>pov_offset</strong> -- Offset added to the POV feature (kaldi <code class="docutils literal notranslate"><span class="pre">--pov-offset</span></code>).</p></li>
+<li><p><strong>delta_pitch_scale</strong> -- Scaling of the delta log-pitch feature
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-scale</span></code>).</p></li>
+<li><p><strong>delta_pitch_noise_stddev</strong> -- Stddev of the noise added to the delta
+log-pitch (kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-noise-stddev</span></code>).</p></li>
+<li><p><strong>normalization_left_context</strong> -- Left context (frames) for log-pitch
+normalization (kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-left-context</span></code>).</p></li>
+<li><p><strong>normalization_right_context</strong> -- Right context (frames) for log-pitch
+normalization (kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-right-context</span></code>).</p></li>
+<li><p><strong>delta_window</strong> -- Frames on each side used for the delta window
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delta-window</span></code>).</p></li>
+<li><p><strong>delay</strong> -- Frames by which the pitch information is delayed
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delay</span></code>).</p></li>
+<li><p><strong>add_pov_feature</strong> -- Add the warped NCCF to the output (1 dim).</p></li>
+<li><p><strong>add_normalized_log_pitch</strong> -- Add the mean-subtracted log-pitch (1 dim).</p></li>
+<li><p><strong>add_delta_pitch</strong> -- Add the time derivative of log-pitch (1 dim).</p></li>
+<li><p><strong>add_raw_log_pitch</strong> -- Add log(pitch) (1 dim).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><span class="pre">kaldi_native_fbank.ProcessPitchOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pov_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pov_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_pitch_noise_stddev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_left_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_right_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_pov_feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_normalized_log_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_delta_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_raw_log_pitch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature (they are kaldi's defaults).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch_scale</strong> -- Scaling of the normalized log-pitch feature
+(kaldi <code class="docutils literal notranslate"><span class="pre">--pitch-scale</span></code>).</p></li>
+<li><p><strong>pov_scale</strong> -- Scaling of the POV feature (kaldi <code class="docutils literal notranslate"><span class="pre">--pov-scale</span></code>).</p></li>
+<li><p><strong>pov_offset</strong> -- Offset added to the POV feature (kaldi <code class="docutils literal notranslate"><span class="pre">--pov-offset</span></code>).</p></li>
+<li><p><strong>delta_pitch_scale</strong> -- Scaling of the delta log-pitch feature
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-scale</span></code>).</p></li>
+<li><p><strong>delta_pitch_noise_stddev</strong> -- Stddev of the noise added to the delta
+log-pitch (kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-noise-stddev</span></code>).</p></li>
+<li><p><strong>normalization_left_context</strong> -- Left context (frames) for log-pitch
+normalization (kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-left-context</span></code>).</p></li>
+<li><p><strong>normalization_right_context</strong> -- Right context (frames) for log-pitch
+normalization (kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-right-context</span></code>).</p></li>
+<li><p><strong>delta_window</strong> -- Frames on each side used for the delta window
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delta-window</span></code>).</p></li>
+<li><p><strong>delay</strong> -- Frames by which the pitch information is delayed
+(kaldi <code class="docutils literal notranslate"><span class="pre">--delay</span></code>).</p></li>
+<li><p><strong>add_pov_feature</strong> -- Add the warped NCCF to the output (1 dim).</p></li>
+<li><p><strong>add_normalized_log_pitch</strong> -- Add the mean-subtracted log-pitch (1 dim).</p></li>
+<li><p><strong>add_delta_pitch</strong> -- Add the time derivative of log-pitch (1 dim).</p></li>
+<li><p><strong>add_raw_log_pitch</strong> -- Add log(pitch) (1 dim).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.add_delta_pitch">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_delta_pitch</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.add_delta_pitch" title="Link to this definition"></a></dt>
+<dd><p>Add the time derivative of log-pitch (1 dim).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.add_normalized_log_pitch">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_normalized_log_pitch</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.add_normalized_log_pitch" title="Link to this definition"></a></dt>
+<dd><p>Add the mean-subtracted log-pitch (1 dim).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.add_pov_feature">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_pov_feature</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.add_pov_feature" title="Link to this definition"></a></dt>
+<dd><p>Add the warped NCCF to the output (1 dim).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.add_raw_log_pitch">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">add_raw_log_pitch</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.add_raw_log_pitch" title="Link to this definition"></a></dt>
+<dd><p>Add log(pitch) (1 dim).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.delay">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delay</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.delay" title="Link to this definition"></a></dt>
+<dd><p>Frames by which the pitch information is delayed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.delta_pitch_noise_stddev">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delta_pitch_noise_stddev</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.delta_pitch_noise_stddev" title="Link to this definition"></a></dt>
+<dd><p>Stddev of the noise added to the delta log-pitch.</p>
+<p>The noise is drawn from a deterministic stream, so the features are
+reproducible on every platform.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.delta_pitch_scale">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delta_pitch_scale</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.delta_pitch_scale" title="Link to this definition"></a></dt>
+<dd><p>Scaling of the delta log-pitch feature.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.delta_window">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">delta_window</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.delta_window" title="Link to this definition"></a></dt>
+<dd><p>Frames on each side used for the delta window.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.dim" title="Link to this definition"></a></dt>
+<dd><p>The output feature dimension.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.normalization_left_context">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">normalization_left_context</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.normalization_left_context" title="Link to this definition"></a></dt>
+<dd><p>Left context (frames) for log-pitch normalization.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.normalization_right_context">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">normalization_right_context</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.normalization_right_context" title="Link to this definition"></a></dt>
+<dd><p>Right context (frames) for log-pitch normalization.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.pitch_scale">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pitch_scale</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.pitch_scale" title="Link to this definition"></a></dt>
+<dd><p>Scaling of the normalized log-pitch feature.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.pov_offset">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pov_offset</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.pov_offset" title="Link to this definition"></a></dt>
+<dd><p>Offset added to the POV feature.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.ProcessPitchOptions.pov_scale">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">pov_scale</span></span><a class="headerlink" href="#kaldi_native_fbank.ProcessPitchOptions.pov_scale" title="Link to this definition"></a></dt>
+<dd><p>Scaling of the POV feature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">OnlinePitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><span class="pre">kaldi_native_fbank.PitchExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">popts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><span class="pre">kaldi_native_fbank.ProcessPitchOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ProcessPitchOptions()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch" title="Link to this definition"></a></dt>
+<dd><p>Streaming pitch extraction with post-processing.</p>
+<p>This is the streaming interface of kaldi's
+<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc">compute-and-process-kaldi-pitch-feats</a>
+(kaldi's <code class="docutils literal notranslate"><span class="pre">OnlinePitchFeature</span></code> + <code class="docutils literal notranslate"><span class="pre">OnlineProcessPitch</span></code>): it consumes
+waveform chunks and produces the processed pitch features — by default the
+3-dimensional (POV, normalized-log-pitch, delta-pitch).</p>
+<p>Usage mirrors <a class="reference internal" href="mfcc.html#kaldi_native_fbank.OnlineMfcc" title="kaldi_native_fbank.OnlineMfcc"><code class="xref py py-class docutils literal notranslate"><span class="pre">kaldi_native_fbank.OnlineMfcc</span></code></a>: feed the waveform with
+<a class="reference internal" href="#kaldi_native_fbank.OnlinePitch.accept_waveform" title="kaldi_native_fbank.OnlinePitch.accept_waveform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">accept_waveform()</span></code></a>, call <a class="reference internal" href="#kaldi_native_fbank.OnlinePitch.input_finished" title="kaldi_native_fbank.OnlinePitch.input_finished"><code class="xref py py-meth docutils literal notranslate"><span class="pre">input_finished()</span></code></a> when no more data is
+coming, then read frames with <a class="reference internal" href="#kaldi_native_fbank.OnlinePitch.get_frame" title="kaldi_native_fbank.OnlinePitch.get_frame"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_frame()</span></code></a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a>,
+<a class="reference internal" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="kaldi_native_fbank.compute_and_process_kaldi_pitch"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_and_process_kaldi_pitch()</span></code></a></p>
+</div>
+<p>Construct with the given extraction and post-processing options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- Raw pitch extraction options; see <a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>.</p></li>
+<li><p><strong>popts</strong> -- Post-processing options; see <a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a>.
+At least one of the <code class="docutils literal notranslate"><span class="pre">add_*</span></code> features must be enabled.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><span class="pre">kaldi_native_fbank.PitchExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">popts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><span class="pre">kaldi_native_fbank.ProcessPitchOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ProcessPitchOptions()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given extraction and post-processing options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- Raw pitch extraction options; see <a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>.</p></li>
+<li><p><strong>popts</strong> -- Post-processing options; see <a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a>.
+At least one of the <code class="docutils literal notranslate"><span class="pre">add_*</span></code> features must be enabled.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.accept_waveform">
+<span class="sig-name descname"><span class="pre">accept_waveform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waveform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.accept_waveform" title="Link to this definition"></a></dt>
+<dd><p>Add more waveform samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampling_rate</strong> -- The sampling rate of <code class="docutils literal notranslate"><span class="pre">waveform</span></code>; must match
+<code class="docutils literal notranslate"><span class="pre">opts.samp_freq</span></code>.</p></li>
+<li><p><strong>waveform</strong> -- 1-D float32 samples (kaldi semantics: raw WAV magnitudes,
+not divided by 32768).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.dim">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.dim" title="Link to this definition"></a></dt>
+<dd><p>The dimension of the output features (3 by default).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.frame_shift_in_seconds">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">frame_shift_in_seconds</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.frame_shift_in_seconds" title="Link to this definition"></a></dt>
+<dd><p>The frame shift in seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.get_frame">
+<span class="sig-name descname"><span class="pre">get_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.get_frame" title="Link to this definition"></a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">frame</span></code>-th feature vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> -- Frame index, must be less than <code class="docutils literal notranslate"><span class="pre">num_frames_ready</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray of shape <code class="docutils literal notranslate"><span class="pre">(dim,)</span></code> and dtype float32.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.input_finished">
+<span class="sig-name descname"><span class="pre">input_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.input_finished" title="Link to this definition"></a></dt>
+<dd><p>Tell the extractor that no more waveform will be added.</p>
+<p>This flushes out the last frames and fixes the features of all frames.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.is_last_frame">
+<span class="sig-name descname"><span class="pre">is_last_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><span class="pre">kaldi_native_fbank.OnlinePitch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.is_last_frame" title="Link to this definition"></a></dt>
+<dd><p>Return true if <code class="docutils literal notranslate"><span class="pre">frame</span></code> is the last frame.</p>
+<p>Note: this can only return true after <a class="reference internal" href="#kaldi_native_fbank.OnlinePitch.input_finished" title="kaldi_native_fbank.OnlinePitch.input_finished"><code class="xref py py-meth docutils literal notranslate"><span class="pre">input_finished()</span></code></a> has been
+called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> -- Frame index.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the frame is the last one.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.OnlinePitch.num_frames_ready">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_frames_ready</span></span><a class="headerlink" href="#kaldi_native_fbank.OnlinePitch.num_frames_ready" title="Link to this definition"></a></dt>
+<dd><p>The number of frames that have already been computed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaldi_native_fbank.compute_and_process_kaldi_pitch">
+<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">compute_and_process_kaldi_pitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><span class="pre">kaldi_native_fbank.PitchExtractionOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><span class="pre">kaldi_native_fbank.ProcessPitchOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wave</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.compute_and_process_kaldi_pitch" title="Link to this definition"></a></dt>
+<dd><p>Compute processed pitch features for a whole utterance.</p>
+<p>This is kaldi's
+<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc">compute-and-process-kaldi-pitch-feats</a>
+(same arithmetic): the raw (NCCF, pitch) extraction of
+<a class="reference external" href="https://www.danielpovey.com/files/icassp2014_pitch.pdf">Ghahremani et al., ICASSP 2014</a> followed by
+post-processing into the configured features (by default
+POV, normalized-log-pitch, delta-pitch).  The output equals the kaldi
+binary's output value-by-value for the same input and options.</p>
+<p>It is sensitive to the variables in <code class="docutils literal notranslate"><span class="pre">pitch_opts</span></code> that relate to online
+processing, i.e. <code class="docutils literal notranslate"><span class="pre">max_frames_latency</span></code>, <code class="docutils literal notranslate"><span class="pre">frames_per_chunk</span></code>,
+<code class="docutils literal notranslate"><span class="pre">simulate_first_pass_online</span></code>, <code class="docutils literal notranslate"><span class="pre">recompute_frame</span></code>.</p>
+<p>The noise added to the delta-pitch feature (<code class="docutils literal notranslate"><span class="pre">process_opts.delta_pitch_noise_stddev</span></code>)
+is drawn from a deterministic stream that reproduces the reference kaldi
+realization, so the result is identical on every platform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch_opts</strong> -- Raw pitch extraction options.</p></li>
+<li><p><strong>process_opts</strong> -- Post-processing options.</p></li>
+<li><p><strong>wave</strong> (<em>numpy.ndarray</em>) -- 1-D float32 samples (kaldi semantics: raw WAV magnitudes, not
+divided by 32768).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Feature matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">process_opts.dim)</span></code>,
+float32.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">wave</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="k">with</span> <span class="n">wave</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"zh0_1s.wav"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">getnframes</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  <span class="c1"># raw magnitudes, no /32768</span>
+
+<span class="n">pitch_opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">PitchExtractionOptions</span><span class="p">(</span><span class="n">min_f0</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">max_f0</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                                        <span class="n">snip_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">feats</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_and_process_kaldi_pitch</span><span class="p">(</span><span class="n">pitch_opts</span><span class="p">,</span>
+                                            <span class="n">knf</span><span class="o">.</span><span class="n">ProcessPitchOptions</span><span class="p">(),</span>
+                                            <span class="n">samples</span><span class="p">)</span>
+<span class="c1"># feats.shape == (num_frames, 3): POV, norm-log-pitch, delta-pitch</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlinePitch</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>,
+<a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a></p>
+</div>
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="delta.html" class="btn btn-neutral float-left" title="Delta features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Python API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

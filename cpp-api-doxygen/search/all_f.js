@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['rand_0',['Rand',['../namespaceknf.html#a21eb2ad72ac8368831c245c9bd0abff4',1,'knf']]],
+  ['randgauss_1',['RandGauss',['../namespaceknf.html#abfbde45dfe6d19a40df86c361a0290b1',1,'knf']]],
+  ['randomstate_2',['RandomState',['../structknf_1_1RandomState.html',1,'knf::RandomState'],['../structknf_1_1RandomState.html#a551ca22b3915c38e4e07e41700db534f',1,'knf::RandomState::RandomState()']]],
+  ['randuniform_3',['RandUniform',['../namespaceknf.html#a63b5d3b7645c767003e9e39454938e70',1,'knf']]],
+  ['raw_5fenergy_4',['raw_energy',['../structknf_1_1FbankOptions.html#a96d4fe928e80832712f1ff5f788ec792',1,'knf::FbankOptions::raw_energy'],['../structknf_1_1MfccOptions.html#a5380e8cbbb0fee7e3009fdd393b74023',1,'knf::MfccOptions::raw_energy']]],
+  ['rawaudiosamplescomputer_5',['RawAudioSamplesComputer',['../classknf_1_1RawAudioSamplesComputer.html',1,'knf::RawAudioSamplesComputer'],['../classknf_1_1RawAudioSamplesComputer.html#a9c0d31c1e8d04afa7d24d3164d69bfb9',1,'knf::RawAudioSamplesComputer::RawAudioSamplesComputer()']]],
+  ['rawaudiosamplesoptions_6',['RawAudioSamplesOptions',['../structknf_1_1RawAudioSamplesOptions.html',1,'knf::RawAudioSamplesOptions'],['../structknf_1_1RawAudioSamplesOptions.html#ac1ab89fbc92af04f2140fd2c1b1d964a',1,'knf::RawAudioSamplesOptions::RawAudioSamplesOptions()']]],
+  ['read_7',['Read',['../classknf_1_1FeatureTransform.html#a7b9505345e17e3049fb7d529aef2a3bc',1,'knf::FeatureTransform']]],
+  ['real_8',['real',['../structknf_1_1StftResult.html#a4326722d464201975be8825e93ef2f10',1,'knf::StftResult']]],
+  ['recompute_5fframe_9',['recompute_frame',['../structknf_1_1PitchExtractionOptions.html#af17a2b95e1ddd09ffac7b28501b4f277',1,'knf::PitchExtractionOptions']]],
+  ['recyclingvector_10',['RecyclingVector',['../classknf_1_1RecyclingVector.html',1,'knf::RecyclingVector'],['../classknf_1_1RecyclingVector.html#a2dd8b6c6589b05fc81b59c490e8700f6',1,'knf::RecyclingVector::RecyclingVector(int32_t items_to_hold=-1)'],['../classknf_1_1RecyclingVector.html#a864013aa275649eba400a0e6586d9ea8',1,'knf::RecyclingVector::RecyclingVector(const RecyclingVector &amp;)=delete']]],
+  ['remove_5fdc_5foffset_11',['remove_dc_offset',['../structknf_1_1FrameExtractionOptions.html#a89fd029be094f1947596d6ecfd793814',1,'knf::FrameExtractionOptions']]],
+  ['resample_12',['Resample',['../classknf_1_1ArbitraryResample.html#a8e2ea4514dce8a56eae1da14f2651c49',1,'knf::ArbitraryResample::Resample(const MatrixF &amp;input, MatrixF *output) const'],['../classknf_1_1ArbitraryResample.html#ace1f04d620d414d3e0903fae28f7684b',1,'knf::ArbitraryResample::Resample(const VectorF &amp;input, VectorF *output) const'],['../classknf_1_1LinearResample.html#a7b4d622fe8c333655604fb47ca993fb6',1,'knf::LinearResample::Resample()']]],
+  ['resample_2eh_13',['resample.h',['../resample_8h.html',1,'']]],
+  ['resample_5ffreq_14',['resample_freq',['../structknf_1_1PitchExtractionOptions.html#a864c45cbbff1c16d3f69843c0e7270ea',1,'knf::PitchExtractionOptions']]],
+  ['resamplewaveform_15',['ResampleWaveform',['../namespaceknf.html#aa523f22427b3c7cb566a30c2d7f08049',1,'knf']]],
+  ['reset_16',['Reset',['../classknf_1_1LinearResample.html#af1b02449e808a99dfea597963a7f2cf2',1,'knf::LinearResample']]],
+  ['reverse_17',['reverse',['../structknf_1_1CmvnOptions.html#aa4a230b1e2b712b2a3f81721bfd0327f',1,'knf::CmvnOptions']]],
+  ['rfft_18',['Rfft',['../classknf_1_1Rfft.html',1,'knf::Rfft'],['../classknf_1_1Rfft.html#a952b4890f2a63c2c4f2386fd3523b546',1,'knf::Rfft::Rfft()']]],
+  ['rfft_2eh_19',['rfft.h',['../rfft_8h.html',1,'']]],
+  ['right_5fcontext_20',['right_context',['../structknf_1_1SpliceOptions.html#af6517c66d485e5a0d79b69aacc74b139',1,'knf::SpliceOptions']]],
+  ['round_5fto_5fpower_5fof_5ftwo_21',['round_to_power_of_two',['../structknf_1_1FrameExtractionOptions.html#af6387d89e6429c3911192d4617e9eddc',1,'knf::FrameExtractionOptions']]],
+  ['rounduptonearestpoweroftwo_22',['RoundUpToNearestPowerOfTwo',['../namespaceknf.html#a165a3aa959ff921ee358b716a70b81bb',1,'knf']]]
+];

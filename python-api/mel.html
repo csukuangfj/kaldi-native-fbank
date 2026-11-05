@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mel filter banks &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="STFT / iSTFT" href="stft.html" />
+    <link rel="prev" title="Window &amp; frame extraction" href="window.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Mel filter banks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions"><code class="docutils literal notranslate"><span class="pre">MelBanksOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.MelBanks"><code class="docutils literal notranslate"><span class="pre">MelBanks</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Mel filter banks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/mel.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mel-filter-banks">
+<h1>Mel filter banks<a class="headerlink" href="#mel-filter-banks" title="Link to this heading"></a></h1>
+<p>Triangular mel-frequency filter banks that project FFT bin energies onto mel
+bins (<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/mel-computations.h">kaldi-native-fbank/csrc/mel-computations.h</a>).
+kaldi counterpart: <a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/mel-computations.h">MelBanksOptions</a>.</p>
+<p>Both kaldi-style and librosa-style filters are supported (<code class="docutils literal notranslate"><span class="pre">is_librosa=True</span></code>).
+The MFCC/fbank extractors use these internally via <code class="docutils literal notranslate"><span class="pre">mel_opts</span></code>; you can also
+use them directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">mel_opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">MelBanksOptions</span><span class="p">(</span><span class="n">num_bins</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">low_freq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">high_freq</span><span class="o">=</span><span class="mi">7800</span><span class="p">)</span>
+<span class="n">frame_opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FrameExtractionOptions</span><span class="p">()</span>
+<span class="n">banks</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">MelBanks</span><span class="p">(</span><span class="n">mel_opts</span><span class="p">,</span> <span class="n">frame_opts</span><span class="p">)</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="n">banks</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>          <span class="c1"># (23, num_fft_bins // 2 + 1)</span>
+<span class="n">mel</span> <span class="o">=</span> <span class="n">banks</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">power_spectrum</span><span class="p">)</span>   <span class="c1"># (23,) mel energies, not log</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">MelBanksOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_mel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">htk_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_librosa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'slaney'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_slaney_mel_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">floor_to_int_bin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for constructing triangular mel-filterbank bins.</p>
+<p>The kaldi-compatible fields correspond to kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/mel-computations.h">MelBanksOptions</a>; the
+<code class="docutils literal notranslate"><span class="pre">is_librosa</span></code>-related fields select librosa-compatible filters instead.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.MelBanks" title="kaldi_native_fbank.MelBanks"><code class="xref py py-class docutils literal notranslate"><span class="pre">MelBanks</span></code></a></p>
+</div>
+<p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bins</strong> -- Number of triangular mel-frequency bins.</p></li>
+<li><p><strong>low_freq</strong> -- Lower frequency cutoff.</p></li>
+<li><p><strong>high_freq</strong> -- Upper cutoff; 0 means none, negative values are offsets from Nyquist.</p></li>
+<li><p><strong>vtln_low</strong> -- VTLN lower cutoff of the warping function.</p></li>
+<li><p><strong>vtln_high</strong> -- VTLN upper cutoff of the warping function; negative values are offsets from Nyquist.</p></li>
+<li><p><strong>debug_mel</strong> -- Print debugging information for mel bin computation.</p></li>
+<li><p><strong>htk_mode</strong> -- Exact HTK compatibility (affects mel-energy flooring).</p></li>
+<li><p><strong>is_librosa</strong> -- Use librosa-style mel filters.</p></li>
+<li><p><strong>norm</strong> -- Librosa filter normalization (&quot;&quot; or &quot;slaney&quot;).</p></li>
+<li><p><strong>use_slaney_mel_scale</strong> -- Use the Slaney mel scale (librosa mode only).</p></li>
+<li><p><strong>floor_to_int_bin</strong> -- Floor the bin edges to integers (librosa mode only).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug_mel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">htk_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_librosa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'slaney'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_slaney_mel_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">floor_to_int_bin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given options.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_bins</strong> -- Number of triangular mel-frequency bins.</p></li>
+<li><p><strong>low_freq</strong> -- Lower frequency cutoff.</p></li>
+<li><p><strong>high_freq</strong> -- Upper cutoff; 0 means none, negative values are offsets from Nyquist.</p></li>
+<li><p><strong>vtln_low</strong> -- VTLN lower cutoff of the warping function.</p></li>
+<li><p><strong>vtln_high</strong> -- VTLN upper cutoff of the warping function; negative values are offsets from Nyquist.</p></li>
+<li><p><strong>debug_mel</strong> -- Print debugging information for mel bin computation.</p></li>
+<li><p><strong>htk_mode</strong> -- Exact HTK compatibility (affects mel-energy flooring).</p></li>
+<li><p><strong>is_librosa</strong> -- Use librosa-style mel filters.</p></li>
+<li><p><strong>norm</strong> -- Librosa filter normalization (&quot;&quot; or &quot;slaney&quot;).</p></li>
+<li><p><strong>use_slaney_mel_scale</strong> -- Use the Slaney mel scale (librosa mode only).</p></li>
+<li><p><strong>floor_to_int_bin</strong> -- Floor the bin edges to integers (librosa mode only).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.as_dict" title="Link to this definition"></a></dt>
+<dd><p>Return the options as a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.debug_mel">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">debug_mel</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.debug_mel" title="Link to this definition"></a></dt>
+<dd><p>Print debugging information for mel bin computation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.floor_to_int_bin">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">floor_to_int_bin</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.floor_to_int_bin" title="Link to this definition"></a></dt>
+<dd><p>Floor the bin edges to integers (used only when is_librosa=True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.from_dict">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Build options from a dict.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.high_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">high_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.high_freq" title="Link to this definition"></a></dt>
+<dd><p>Upper frequency cutoff; 0 means no cutoff, negative values are offsets from Nyquist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.htk_mode">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">htk_mode</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.htk_mode" title="Link to this definition"></a></dt>
+<dd><p>Enable exact HTK compatibility (affects mel-energy flooring).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.is_librosa">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_librosa</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.is_librosa" title="Link to this definition"></a></dt>
+<dd><p>Use librosa-style mel filters.</p>
+<p>If True, you probably want <a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions.low_freq" title="kaldi_native_fbank.MelBanksOptions.low_freq"><code class="xref py py-attr docutils literal notranslate"><span class="pre">low_freq</span></code></a> to be 0.  See the librosa
+mel filter documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.low_freq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">low_freq</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.low_freq" title="Link to this definition"></a></dt>
+<dd><p>Lower frequency cutoff of the mel bins.</p>
+<p>See also <a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions.high_freq" title="kaldi_native_fbank.MelBanksOptions.high_freq"><code class="xref py py-attr docutils literal notranslate"><span class="pre">high_freq</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.norm">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">norm</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.norm" title="Link to this definition"></a></dt>
+<dd><p>Librosa filter normalization: &quot;&quot; or &quot;slaney&quot; (used only when is_librosa=True).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.num_bins">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">num_bins</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.num_bins" title="Link to this definition"></a></dt>
+<dd><p>Number of triangular mel-frequency bins.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.use_slaney_mel_scale">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">use_slaney_mel_scale</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.use_slaney_mel_scale" title="Link to this definition"></a></dt>
+<dd><p>Use the Slaney mel scale (used only when is_librosa=True).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.vtln_high">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vtln_high</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.vtln_high" title="Link to this definition"></a></dt>
+<dd><p>VTLN upper cutoff of the warping function; negative values are offsets from Nyquist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanksOptions.vtln_low">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vtln_low</span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanksOptions.vtln_low" title="Link to this definition"></a></dt>
+<dd><p>VTLN lower cutoff of the warping function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">MelBanks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanks" title="kaldi_native_fbank.MelBanks"><span class="pre">kaldi_native_fbank.MelBanks</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">MelBanksOptions()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">FrameExtractionOptions()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_warp_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.MelBanks" title="Link to this definition"></a></dt>
+<dd><p>Triangular mel filter banks.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">MelBanks</span></code> object holds the weights of a set of triangular mel-frequency
+bins and can project FFT bin energies onto them.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">MelBanksOptions</span></code></a></p>
+</div>
+<p>Construct kaldi-compatible (or librosa-style) mel banks.</p>
+<p>The mel bin edges are placed uniformly on the mel scale between
+<code class="docutils literal notranslate"><span class="pre">opts.low_freq</span></code> and <code class="docutils literal notranslate"><span class="pre">opts.high_freq</span></code>; each bin is a triangle in the
+frequency domain.  If <code class="docutils literal notranslate"><span class="pre">opts.is_librosa</span></code> is true, librosa-style filters are
+computed instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- Mel-bin configuration; see <a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">MelBanksOptions</span></code></a>.</p></li>
+<li><p><strong>frame_opts</strong> -- Frame-extraction configuration (provides <code class="docutils literal notranslate"><span class="pre">samp_freq</span></code>
+and the FFT size).</p></li>
+<li><p><strong>vtln_warp_factor</strong> -- VTLN warping factor (1.0 means no warping).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanks" title="kaldi_native_fbank.MelBanks"><span class="pre">kaldi_native_fbank.MelBanks</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><span class="pre">kaldi_native_fbank.MelBanksOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">MelBanksOptions()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="window.html#kaldi_native_fbank.FrameExtractionOptions" title="kaldi_native_fbank.FrameExtractionOptions"><span class="pre">kaldi_native_fbank.FrameExtractionOptions</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">FrameExtractionOptions()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtln_warp_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct kaldi-compatible (or librosa-style) mel banks.</p>
+<p>The mel bin edges are placed uniformly on the mel scale between
+<code class="docutils literal notranslate"><span class="pre">opts.low_freq</span></code> and <code class="docutils literal notranslate"><span class="pre">opts.high_freq</span></code>; each bin is a triangle in the
+frequency domain.  If <code class="docutils literal notranslate"><span class="pre">opts.is_librosa</span></code> is true, librosa-style filters are
+computed instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- Mel-bin configuration; see <a class="reference internal" href="#kaldi_native_fbank.MelBanksOptions" title="kaldi_native_fbank.MelBanksOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">MelBanksOptions</span></code></a>.</p></li>
+<li><p><strong>frame_opts</strong> -- Frame-extraction configuration (provides <code class="docutils literal notranslate"><span class="pre">samp_freq</span></code>
+and the FFT size).</p></li>
+<li><p><strong>vtln_warp_factor</strong> -- VTLN warping factor (1.0 means no warping).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.compute">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanks" title="kaldi_native_fbank.MelBanks"><span class="pre">kaldi_native_fbank.MelBanks</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_energies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.compute" title="Link to this definition"></a></dt>
+<dd><p>Compute mel energies (note: NOT log) from a power spectrum.</p>
+<p>For each mel bin <span class="math notranslate nohighlight">\(i\)</span>, the output is the weighted sum of the FFT bin
+energies that fall into that bin:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{mel}[i] = \sum_{k} w[i][k] \cdot
+\mathrm{fft\_energies}[\mathrm{offset}[i] + k]\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathrm{offset}[i]\)</span> is the first nonzero fft bin of mel bin
+<span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(w[i]\)</span> are its triangle weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fft_energies</strong> -- 1-D float32 array of size <code class="docutils literal notranslate"><span class="pre">num_fft_bins</span> <span class="pre">//</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">1</span></code>
+holding the power spectrum (not log).  Must be C-contiguous.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1-D float32 array of size <code class="docutils literal notranslate"><span class="pre">num_mel_bins</span></code> with the mel energies.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.get_matrix">
+<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.MelBanks" title="kaldi_native_fbank.MelBanks"><span class="pre">kaldi_native_fbank.MelBanks</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.get_matrix" title="Link to this definition"></a></dt>
+<dd><p>Return the mel filter weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A float32 array of shape <code class="docutils literal notranslate"><span class="pre">(num_mel_bins,</span> <span class="pre">num_fft_bins</span> <span class="pre">//</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">1)</span></code>;
+<code class="docutils literal notranslate"><span class="pre">weights[i,</span> <span class="pre">k]</span></code> is the weight of fft bin <span class="math notranslate nohighlight">\(k\)</span> for mel bin <span class="math notranslate nohighlight">\(i\)</span>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.inverse_mel_scale">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">inverse_mel_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.inverse_mel_scale" title="Link to this definition"></a></dt>
+<dd><p>HTK mel scale: convert mel frequency to Hz.</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{Hz} = 700 \left( \exp(\mathrm{mel} / 1127) - 1 \right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mel</strong> -- Mel frequency.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The frequency in Hz.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.inverse_mel_scale_slaney">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">inverse_mel_scale_slaney</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.inverse_mel_scale_slaney" title="Link to this definition"></a></dt>
+<dd><p>Slaney mel scale: convert mel frequency to Hz.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{Hz} = \left\{ \begin{array}{ll}
+(200/3)\,\mathrm{mel} &amp; \mathrm{mel} \le 15 \\
+1000 \exp((\mathrm{mel} - 15) \log(6.4) / 27) &amp; \mathrm{otherwise}
+\end{array} \right.\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mel</strong> -- Mel frequency (Slaney scale).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The frequency in Hz.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.mel_scale">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mel_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.mel_scale" title="Link to this definition"></a></dt>
+<dd><p>HTK mel scale: convert Hz to mel frequency.</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{mel} = 1127 \log(1 + \mathrm{Hz} / 700)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hz</strong> -- The frequency in Hz.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mel frequency.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.MelBanks.mel_scale_slaney">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mel_scale_slaney</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsFloat</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#kaldi_native_fbank.MelBanks.mel_scale_slaney" title="Link to this definition"></a></dt>
+<dd><p>Slaney mel scale: convert Hz to mel frequency.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{mel} = \left\{ \begin{array}{ll}
+(3/200)\,\mathrm{Hz} &amp; \mathrm{Hz} \le 1000 \\
+15 + 27 \log(\mathrm{Hz} / 1000) / \log(6.4) &amp; \mathrm{otherwise}
+\end{array} \right.\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hz</strong> -- The frequency in Hz.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mel frequency (Slaney scale).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="window.html" class="btn btn-neutral float-left" title="Window &amp; frame extraction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="stft.html" class="btn btn-neutral float-right" title="STFT / iSTFT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

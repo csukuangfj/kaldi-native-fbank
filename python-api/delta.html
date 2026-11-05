@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delta features &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pitch" href="pitch.html" />
+    <link rel="prev" title="CMVN" href="cmvn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Delta features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.DeltaOptions"><code class="docutils literal notranslate"><span class="pre">DeltaOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kaldi_native_fbank.compute_deltas"><code class="docutils literal notranslate"><span class="pre">compute_deltas()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Delta features</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/delta.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="delta-features">
+<h1>Delta features<a class="headerlink" href="#delta-features" title="Link to this heading"></a></h1>
+<p>Regression delta (dynamic) features — the equivalent of kaldi's
+<code class="docutils literal notranslate"><span class="pre">add-deltas</span></code> (<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-delta.h">kaldi-native-fbank/csrc/feature-delta.h</a>,
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">DeltaFeatures</a>).</p>
+<p>The output concatenates the input features with their delta orders:
+<span class="math notranslate nohighlight">\([x, \Delta, \Delta^2]\)</span> for the default <code class="docutils literal notranslate"><span class="pre">order=2</span></code>, i.e.
+<code class="docutils literal notranslate"><span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(order</span> <span class="pre">+</span> <span class="pre">1)</span></code> dimensions.  Edge frames are replicated.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">DeltaOptions</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_deltas</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">feats</span><span class="p">)</span>  <span class="c1"># (T, 3 * dim)</span>
+</pre></div>
+</div>
+<section id="api-reference">
+<h2>API reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaldi_native_fbank.DeltaOptions">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">DeltaOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.DeltaOptions" title="kaldi_native_fbank.DeltaOptions"><span class="pre">kaldi_native_fbank.DeltaOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaldi_native_fbank.DeltaOptions" title="Link to this definition"></a></dt>
+<dd><p>Options for <a class="reference internal" href="#kaldi_native_fbank.compute_deltas" title="kaldi_native_fbank.compute_deltas"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_deltas()</span></code></a>.</p>
+<p>Mirrors the flags of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/add-deltas.cc">add-deltas</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.compute_deltas" title="kaldi_native_fbank.compute_deltas"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_deltas()</span></code></a></p>
+</div>
+<p>Construct with the given order and window.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> -- Order of the delta computation (kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-order</span></code>).</p></li>
+<li><p><strong>window</strong> -- Delta regression window (kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-window</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaldi_native_fbank.DeltaOptions.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.DeltaOptions" title="kaldi_native_fbank.DeltaOptions"><span class="pre">kaldi_native_fbank.DeltaOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SupportsInt</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#kaldi_native_fbank.DeltaOptions.__init__" title="Link to this definition"></a></dt>
+<dd><p>Construct with the given order and window.</p>
+<p>All fields are optional keyword arguments; the defaults are shown in the
+signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> -- Order of the delta computation (kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-order</span></code>).</p></li>
+<li><p><strong>window</strong> -- Delta regression window (kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-window</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.DeltaOptions.order">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#kaldi_native_fbank.DeltaOptions.order" title="Link to this definition"></a></dt>
+<dd><p>Order of the delta computation.</p>
+<p>Same as kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-order</span></code>.  2 gives <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">delta,</span>
+<span class="pre">delta-delta]</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="kaldi_native_fbank.DeltaOptions.window">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">window</span></span><a class="headerlink" href="#kaldi_native_fbank.DeltaOptions.window" title="Link to this definition"></a></dt>
+<dd><p>Delta regression window.</p>
+<p>Same as kaldi <code class="docutils literal notranslate"><span class="pre">add-deltas</span> <span class="pre">--delta-window</span></code>.  The actual regression spans
+<code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">window</span> <span class="pre">+</span> <span class="pre">1</span></code> frames.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaldi_native_fbank.compute_deltas">
+<span class="sig-prename descclassname"><span class="pre">kaldi_native_fbank.</span></span><span class="sig-name descname"><span class="pre">compute_deltas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#kaldi_native_fbank.DeltaOptions" title="kaldi_native_fbank.DeltaOptions"><span class="pre">kaldi_native_fbank.DeltaOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">feats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.ArrayLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[m,</span> <span class="pre">n]'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#kaldi_native_fbank.compute_deltas" title="Link to this definition"></a></dt>
+<dd><p>Compute delta (dynamic) features.</p>
+<p>This is kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/add-deltas.cc">add-deltas</a>
+(same arithmetic).  The <span class="math notranslate nohighlight">\(i\)</span>-th block of the output is the <span class="math notranslate nohighlight">\(i\)</span>-th
+order regression delta; with <span class="math notranslate nohighlight">\(N\)</span> = <code class="docutils literal notranslate"><span class="pre">opts.window</span></code>, the first-order
+delta of frame <span class="math notranslate nohighlight">\(t\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\Delta_t = \frac{\sum_{j=-N}^{N} j\, x_{\mathrm{clamp}(t+j)}}
+                {2 \sum_{j=1}^{N} j^2}\]</div>
+<p>where out-of-range frames clamp to the first/last frame (edge frames are
+replicated).  Higher orders apply the same operator recursively to the
+previous order's window.  The output rows are
+<span class="math notranslate nohighlight">\([x_t, \Delta_t, \Delta^2_t, \ldots]\)</span>, i.e. the block order is
+baseline first, then increasing delta order.</p>
+<p>The regression windows themselves are computed as follows.  With
+<span class="math notranslate nohighlight">\(N\)</span> = <code class="docutils literal notranslate"><span class="pre">opts.window</span></code>, the first-order window is</p>
+<div class="math notranslate nohighlight">
+\[w^{(1)}_j = \frac{j}{\sum_{k=-N}^{N} k^2}
+          = \frac{j}{2 \sum_{k=1}^{N} k^2},
+\qquad j = -N, \ldots, N\]</div>
+<p>and each higher-order window is the discrete convolution of the previous
+window with <span class="math notranslate nohighlight">\(w^{(1)}\)</span> (kaldi's <code class="docutils literal notranslate"><span class="pre">scales_</span></code> recursion):</p>
+<div class="math notranslate nohighlight">
+\[w^{(i)} = w^{(i-1)} * w^{(1)}, \qquad w^{(0)} = [1]\]</div>
+<p>so <span class="math notranslate nohighlight">\(w^{(i)}\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>-fold convolution of <span class="math notranslate nohighlight">\(w^{(1)}\)</span>
+(its length is <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">i</span> <span class="pre">*</span> <span class="pre">window</span></code>).</p>
+<p><strong>Motivation.</strong>  The spectrum of speech is strongly non-stationary: the
+<em>trajectory</em> of the spectrum over time carries information that the
+static spectrum does not.  Furui (1986) showed that appending the time
+derivative of the spectrum (the &quot;delta&quot;) significantly improves
+recognition.  HTK refined this into the regression-based formulation
+used here: instead of a raw difference such as
+<span class="math notranslate nohighlight">\(x_{t+1} - x_{t-1}\)</span>, the local slope of a least-squares line is
+estimated over a window of <span class="math notranslate nohighlight">\(2N+1\)</span> frames, which is less sensitive
+to noise and to isolated outliers.  kaldi's <code class="docutils literal notranslate"><span class="pre">DeltaFeatures</span></code> implements
+the same HTK formulation, so the outputs are compatible with models
+trained on HTK- or kaldi-produced features.</p>
+<p><strong>Why this definition.</strong>  The first-order window is the slope of the
+least-squares straight line fitted to the frames around <span class="math notranslate nohighlight">\(t\)</span> — the
+classic HTK regression delta that kaldi's <code class="docutils literal notranslate"><span class="pre">DeltaFeatures</span></code> implements.
+Fitting <span class="math notranslate nohighlight">\(y(j) = a + b\, j\)</span> to <span class="math notranslate nohighlight">\(x_{t+j}\)</span>,
+<span class="math notranslate nohighlight">\(j = -N, \ldots, N\)</span>, by minimizing
+<span class="math notranslate nohighlight">\(\sum_j (x_{t+j} - a - b\, j)^2\)</span>, and using
+<span class="math notranslate nohighlight">\(\sum_j j = 0\)</span> (which decouples the intercept from the slope), the
+slope estimate is</p>
+<div class="math notranslate nohighlight">
+\[b = \frac{\sum_j j\, x_{t+j}}{\sum_j j^2}
+  = \sum_j w^{(1)}_j\, x_{t+j}\]</div>
+<p>so <span class="math notranslate nohighlight">\(w^{(1)}_j = j / \sum_k k^2\)</span> is exactly the least-squares slope
+estimator: <span class="math notranslate nohighlight">\(\Delta_t = b\)</span> is the local slope of the fitted line,
+i.e. a least-squares estimate of the first derivative (in feature units
+per frame — the <span class="math notranslate nohighlight">\(\sum_j j^2\)</span> normalizer is the OLS denominator).</p>
+<p>Higher orders apply the <em>same</em> slope estimator to the previous order's
+output (<span class="math notranslate nohighlight">\(\Delta^2\)</span> is &quot;the slope of the slope&quot;).  Since the slope
+estimator is a linear filter with kernel <span class="math notranslate nohighlight">\(w^{(1)}\)</span>, filtering an
+already-filtered sequence convolves the kernels, hence
+<span class="math notranslate nohighlight">\(w^{(i)} = w^{(i-1)} * w^{(1)}\)</span> with support growing to
+<span class="math notranslate nohighlight">\(\pm i N\)</span>.  Note this is <em>recursive</em> slope-of-slope — it is not
+identical to the <span class="math notranslate nohighlight">\(i\)</span>-th derivative of a degree-<span class="math notranslate nohighlight">\(i\)</span>
+least-squares polynomial fitted over the wider <span class="math notranslate nohighlight">\(\pm iN\)</span> window.</p>
+<p>Two further details fall out of the construction:</p>
+<ul class="simple">
+<li><p>Normalizing by <span class="math notranslate nohighlight">\(\sum_j j^2\)</span> at every order keeps each block on
+the scale of a true <span class="math notranslate nohighlight">\(i\)</span>-th derivative.</p></li>
+<li><p>Edge frames replicate the first/last frame so the frame count is
+preserved and the regression &quot;sees&quot; a locally constant signal at the
+borders (instead of zero-padding, which would bias the deltas).</p></li>
+</ul>
+<p><strong>References.</strong></p>
+<ul class="simple">
+<li><p>The ported implementation: kaldi's <code class="docutils literal notranslate"><span class="pre">DeltaFeatures</span></code>
+(<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.cc">feature-functions.cc</a>,
+<a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/feature-functions.h">feature-functions.h</a>).</p></li>
+<li><p>The regression-delta formulation: <em>The HTK Book</em>, S. Young et al.,
+Cambridge University Engineering Department, 2006, chapter 5
+(&quot;Speech Input/Output&quot;), section 5.9 (&quot;Delta, Acceleration and Third
+Differential Coefficients&quot;); PDF:
+<a class="reference external" href="https://www.danielpovey.com/files/htkbook.pdf">https://www.danielpovey.com/files/htkbook.pdf</a></p></li>
+<li><p>Delta features originate from S. Furui, &quot;Speaker-independent isolated
+word recognition using dynamic features of speech spectrum&quot;, IEEE
+Trans. Acoustics, Speech, and Signal Processing, 1986,
+<a class="reference external" href="https://doi.org/10.1109/TASSP.1986.1164788">https://doi.org/10.1109/TASSP.1986.1164788</a></p></li>
+</ul>
+<p><strong>How the convolution is computed.</strong>  The discrete convolution of two
+windows <span class="math notranslate nohighlight">\(a\)</span> (indices <span class="math notranslate nohighlight">\(-A..A\)</span>) and <span class="math notranslate nohighlight">\(b\)</span> (indices
+<span class="math notranslate nohighlight">\(-B..B\)</span>) is the window <span class="math notranslate nohighlight">\(c = a * b\)</span> (indices
+<span class="math notranslate nohighlight">\(-(A+B)..A+B\)</span>) defined by</p>
+<div class="math notranslate nohighlight">
+\[c_m = \sum_{k} a_k \, b_{m-k}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_k\)</span> and <span class="math notranslate nohighlight">\(b_k\)</span> are zero outside their index ranges.
+For the second-order window this is</p>
+<div class="math notranslate nohighlight">
+\[w^{(2)}_m = \sum_{k=-N}^{N} w^{(1)}_k \, w^{(1)}_{m-k}\]</div>
+<p><strong>Window example 1 — N = 1, orders 1 to 3.</strong>
+<span class="math notranslate nohighlight">\(\sum_{k=-1}^{1} k^2 = 2\)</span>, so the first-order window is
+<span class="math notranslate nohighlight">\(w^{(1)}_j = j/2 = [-0.5, 0, 0.5]\)</span>.  The convolution
+<span class="math notranslate nohighlight">\(w^{(2)}_m = \sum_k w^{(1)}_k w^{(1)}_{m-k}\)</span> term by term:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(m = -2\)</span>: <span class="math notranslate nohighlight">\(w^{(1)}_{-1} w^{(1)}_{-1} = (-0.5)(-0.5) = 0.25\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m = -1\)</span>: <span class="math notranslate nohighlight">\(w^{(1)}_{-1} w^{(1)}_{0} + w^{(1)}_{0} w^{(1)}_{-1}
+= (-0.5)(0) + (0)(-0.5) = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m = 0\)</span>: <span class="math notranslate nohighlight">\(w^{(1)}_{-1} w^{(1)}_{1} + w^{(1)}_{0} w^{(1)}_{0}
++ w^{(1)}_{1} w^{(1)}_{-1} = (-0.5)(0.5) + 0 + (0.5)(-0.5) = -0.5\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m = 1\)</span>: <span class="math notranslate nohighlight">\(w^{(1)}_{0} w^{(1)}_{1} + w^{(1)}_{1} w^{(1)}_{0} = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(m = 2\)</span>: <span class="math notranslate nohighlight">\(w^{(1)}_{1} w^{(1)}_{1} = (0.5)(0.5) = 0.25\)</span></p></li>
+</ul>
+<p>which gives <span class="math notranslate nohighlight">\(w^{(2)} = [0.25, 0, -0.5, 0, 0.25]\)</span>.  Convolving once
+more, <span class="math notranslate nohighlight">\(w^{(3)} = w^{(2)} * w^{(1)}\)</span>; e.g.
+<span class="math notranslate nohighlight">\(w^{(3)}_{-3} = w^{(1)}_{-1} w^{(2)}_{-2} = (-0.5)(0.25) = -0.125\)</span> and
+<span class="math notranslate nohighlight">\(w^{(3)}_{-1} = w^{(1)}_{-1} w^{(2)}_{0} + w^{(1)}_{1} w^{(2)}_{-2}
+= (-0.5)(-0.5) + (0.5)(0.25) = 0.375\)</span>.  The full chain for N = 1 is:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(w^{(0)} = [1]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w^{(1)} = [-0.5, 0, 0.5]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w^{(2)} = [0.25, 0, -0.5, 0, 0.25]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w^{(3)} = [-0.125, 0, 0.375, 0, -0.375, 0, 0.125]\)</span></p></li>
+</ul>
+<p><strong>Window example 2 — N = 2.</strong>
+<span class="math notranslate nohighlight">\(\sum_{k=-2}^{2} k^2 = 10\)</span>, so
+<span class="math notranslate nohighlight">\(w^{(1)}_j = j/10 = [-0.2, -0.1, 0, 0.1, 0.2]\)</span>.  Two sample
+convolution sums for <span class="math notranslate nohighlight">\(w^{(2)} = w^{(1)} * w^{(1)}\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(w^{(2)}_{0} = \sum_k w^{(1)}_k w^{(1)}_{-k} = 2(-0.2)(0.2) +
+2(-0.1)(0.1) + (0)(0) = -0.1\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w^{(2)}_{4} = w^{(1)}_{2} w^{(1)}_{2} = (0.2)(0.2) = 0.04\)</span></p></li>
+</ul>
+<p>The full 9-tap window is
+<span class="math notranslate nohighlight">\(w^{(2)} = [0.04, 0.04, 0.01, -0.04, -0.1, -0.04, 0.01, 0.04, 0.04]\)</span>.</p>
+<p><strong>Example 1 — full derivation</strong> (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">4]</span></code>, <code class="docutils literal notranslate"><span class="pre">order=2</span></code>, <code class="docutils literal notranslate"><span class="pre">window=1</span></code>).
+With the windows derived above,
+<span class="math notranslate nohighlight">\(w^{(1)} = [-0.5, 0, 0.5]\)</span> and <span class="math notranslate nohighlight">\(w^{(2)} = [0.25, 0, -0.5, 0,
+0.25]\)</span>, i.e.</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\Delta_t = -0.5\, x_{t-1} + 0.5\, x_{t+1}\\\Delta^2_t = 0.25\, x_{t-2} - 0.5\, x_t + 0.25\, x_{t+2}\end{aligned}\end{align} \]</div>
+<p>For the 1-D input <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">4]</span></code> (out-of-range frames clamp to the
+first/last frame):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">0</span></code>: <span class="math notranslate nohighlight">\(\Delta = -0.5 \cdot 1 + 0.5 \cdot 2 = 0.5\)</span>,
+<span class="math notranslate nohighlight">\(\Delta^2 = 0.25 \cdot 1 - 0.5 \cdot 1 + 0.25 \cdot 4 = 0.75\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">1</span></code>: <span class="math notranslate nohighlight">\(\Delta = -0.5 \cdot 1 + 0.5 \cdot 4 = 1.5\)</span>,
+<span class="math notranslate nohighlight">\(\Delta^2 = 0.25 \cdot 1 - 0.5 \cdot 2 + 0.25 \cdot 4 = 0.25\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">2</span></code>: <span class="math notranslate nohighlight">\(\Delta = -0.5 \cdot 2 + 0.5 \cdot 4 = 1.0\)</span>,
+<span class="math notranslate nohighlight">\(\Delta^2 = 0.25 \cdot 1 - 0.5 \cdot 4 + 0.25 \cdot 4 = -0.75\)</span></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_deltas</span><span class="p">(</span><span class="n">knf</span><span class="o">.</span><span class="n">DeltaOptions</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="c1"># out rows [x, delta, delta2]:</span>
+<span class="c1">#   [1, 0.5,  0.75]</span>
+<span class="c1">#   [2, 1.5,  0.25]</span>
+<span class="c1">#   [4, 1.0, -0.75]</span>
+</pre></div>
+</div>
+<p><strong>Example 2 — larger window</strong> (<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">[3,</span> <span class="pre">1,</span> <span class="pre">4,</span> <span class="pre">1,</span> <span class="pre">5]</span></code>, <code class="docutils literal notranslate"><span class="pre">order=1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">window=2</span></code>).  With <span class="math notranslate nohighlight">\(N = 2\)</span>,
+<span class="math notranslate nohighlight">\(\sum_{k=-2}^{2} k^2 = 10\)</span>, so
+<span class="math notranslate nohighlight">\(w^{(1)} = [-0.2, -0.1, 0, 0.1, 0.2]\)</span> (each entry is <span class="math notranslate nohighlight">\(j/10\)</span>).
+For instance at <span class="math notranslate nohighlight">\(t = 2\)</span>:
+<span class="math notranslate nohighlight">\(\Delta = -0.2 \cdot 3 - 0.1 \cdot 1 + 0.1 \cdot 1 + 0.2 \cdot 5 = 0.4\)</span>.
+The output rows <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">delta]</span></code> are:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_deltas</span><span class="p">(</span><span class="n">knf</span><span class="o">.</span><span class="n">DeltaOptions</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="c1">#   [3,  0.0]</span>
+<span class="c1">#   [1, -0.3]</span>
+<span class="c1">#   [4,  0.4]</span>
+<span class="c1">#   [1,  0.9]</span>
+<span class="c1">#   [5,  0.6]</span>
+</pre></div>
+</div>
+<p><strong>Example 3 — two feature dimensions</strong> (<code class="docutils literal notranslate"><span class="pre">D</span> <span class="pre">=</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">order=2</span></code>,
+<code class="docutils literal notranslate"><span class="pre">window=1</span></code>).  Each dimension is processed independently and the blocks
+are laid out <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">delta,</span> <span class="pre">delta2]</span></code> with the dimensions interleaved per
+block:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">40</span><span class="p">]]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_deltas</span><span class="p">(</span><span class="n">knf</span><span class="o">.</span><span class="n">DeltaOptions</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+<span class="c1"># out rows [x1, x2, d1, d2, dd1, dd2]:</span>
+<span class="c1">#   [1, 10,  0.5,  5.0,  0.75,  7.5]</span>
+<span class="c1">#   [2, 20,  1.5, 15.0,  0.25,  2.5]</span>
+<span class="c1">#   [4, 40,  1.0, 10.0, -0.75, -7.5]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- Order/window; see <a class="reference internal" href="#kaldi_native_fbank.DeltaOptions" title="kaldi_native_fbank.DeltaOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeltaOptions</span></code></a>.</p></li>
+<li><p><strong>feats</strong> (<em>numpy.ndarray</em>) -- Feature matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim)</span></code>, float32.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The matrix of shape <code class="docutils literal notranslate"><span class="pre">(num_frames,</span> <span class="pre">dim</span> <span class="pre">*</span> <span class="pre">(order</span> <span class="pre">+</span> <span class="pre">1))</span></code>, float32.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">DeltaOptions</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_deltas</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">feats</span><span class="p">)</span>  <span class="c1"># (T, 3 * dim): [x, delta, d-delta]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#kaldi_native_fbank.DeltaOptions" title="kaldi_native_fbank.DeltaOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeltaOptions</span></code></a>, <a class="reference internal" href="splice.html#kaldi_native_fbank.splice_frames" title="kaldi_native_fbank.splice_frames"><code class="xref py py-func docutils literal notranslate"><span class="pre">splice_frames()</span></code></a></p>
+</div>
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cmvn.html" class="btn btn-neutral float-left" title="CMVN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pitch.html" class="btn btn-neutral float-right" title="Pitch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

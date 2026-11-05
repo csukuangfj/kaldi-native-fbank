@@ -1,0 +1,8 @@
+var searchData=
+[
+  ['floor_5fto_5fint_5fbin_0',['floor_to_int_bin',['../structknf_1_1MelBanksOptions.html#a21d159a5e8542929c5387c4e500c18aa',1,'knf::MelBanksOptions']]],
+  ['frame_5flength_5fms_1',['frame_length_ms',['../structknf_1_1PitchExtractionOptions.html#a42fd79c36b5c9ec490bfa6be4993d923',1,'knf::PitchExtractionOptions::frame_length_ms'],['../structknf_1_1FrameExtractionOptions.html#abbf4fcd918b91c99deafb8a1809f924c',1,'knf::FrameExtractionOptions::frame_length_ms'],['../structknf_1_1NemoFbankOptions.html#a898a79b1757f1c43ce969ec515252ff7',1,'knf::NemoFbankOptions::frame_length_ms']]],
+  ['frame_5fopts_2',['frame_opts',['../structknf_1_1FbankOptions.html#ab7ee8d74ca489689793c6f0ac2d5b8b2',1,'knf::FbankOptions::frame_opts'],['../structknf_1_1MfccOptions.html#ad0c30d1689b9df0e33f4e92d01a18de9',1,'knf::MfccOptions::frame_opts'],['../structknf_1_1RawAudioSamplesOptions.html#a65f3c3ab5a510d2fc833b36fada8a43e',1,'knf::RawAudioSamplesOptions::frame_opts'],['../structknf_1_1WhisperFeatureOptions.html#a56d213ed3ef75a1ddbde0083b215e629',1,'knf::WhisperFeatureOptions::frame_opts']]],
+  ['frame_5fshift_5fms_3',['frame_shift_ms',['../structknf_1_1PitchExtractionOptions.html#a9e7aef5f5df68319543047bd45a8d4a3',1,'knf::PitchExtractionOptions::frame_shift_ms'],['../structknf_1_1FrameExtractionOptions.html#a658e111359eae3b08615ab2722019ce4',1,'knf::FrameExtractionOptions::frame_shift_ms'],['../structknf_1_1NemoFbankOptions.html#adf14dbc16189c1f6ce74a63df229608e',1,'knf::NemoFbankOptions::frame_shift_ms']]],
+  ['frames_5fper_5fchunk_4',['frames_per_chunk',['../structknf_1_1PitchExtractionOptions.html#a47f11d91a836afae3ff0dcc66aa80c8f',1,'knf::PitchExtractionOptions']]]
+];

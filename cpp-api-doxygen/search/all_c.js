@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['n_5ffft_0',['n_fft',['../structknf_1_1StftConfig.html#afeffe55f053a600af0f538a761bf79d8',1,'knf::StftConfig']]],
+  ['native_20fbank_20c_20api_1',['kaldi-native-fbank C++ API',['../index.html',1,'']]],
+  ['nccf_5fballast_2',['nccf_ballast',['../structknf_1_1PitchExtractionOptions.html#aab6fcaecadefd914d935e03bdc4a6732',1,'knf::PitchExtractionOptions']]],
+  ['nccf_5fballast_5fonline_3',['nccf_ballast_online',['../structknf_1_1PitchExtractionOptions.html#a29afca4b8a01249c4e6baa32d4dc87e6',1,'knf::PitchExtractionOptions']]],
+  ['nccfwindowshift_4',['NccfWindowShift',['../structknf_1_1PitchExtractionOptions.html#a000eaa0197714bf151f88621e4c2f8db',1,'knf::PitchExtractionOptions']]],
+  ['nccfwindowsize_5',['NccfWindowSize',['../structknf_1_1PitchExtractionOptions.html#a0049d48f2b74f261fa8122084aa8e525',1,'knf::PitchExtractionOptions']]],
+  ['needrawlogenergy_6',['NeedRawLogEnergy',['../classknf_1_1FbankComputer.html#a21b823464c14fe475dd1884bc8b46071',1,'knf::FbankComputer::NeedRawLogEnergy()'],['../classknf_1_1MfccComputer.html#adbe6f674202cd6c583f9227bf8312f39',1,'knf::MfccComputer::NeedRawLogEnergy()'],['../classknf_1_1RawAudioSamplesComputer.html#a64b14e5ea0ab32d98cc495dd7cd7ba3c',1,'knf::RawAudioSamplesComputer::NeedRawLogEnergy()'],['../classknf_1_1WhisperFeatureComputer.html#a20d7c5b520a5c0b262db685bf7091baf',1,'knf::WhisperFeatureComputer::NeedRawLogEnergy()']]],
+  ['nemofbankoptions_7',['NemoFbankOptions',['../structknf_1_1NemoFbankOptions.html',1,'knf']]],
+  ['norm_8',['norm',['../structknf_1_1MelBanksOptions.html#a5102f6942dfb5bc7bfbcbfae73c6554f',1,'knf::MelBanksOptions']]],
+  ['norm_5fvars_9',['norm_vars',['../structknf_1_1CmvnOptions.html#af0522a445337d96c69f98dd4eb8fdf0a',1,'knf::CmvnOptions']]],
+  ['normalization_5fleft_5fcontext_10',['normalization_left_context',['../structknf_1_1ProcessPitchOptions.html#ac3c6126b8494766f9a6fb09b10cce0da',1,'knf::ProcessPitchOptions']]],
+  ['normalization_5fright_5fcontext_11',['normalization_right_context',['../structknf_1_1ProcessPitchOptions.html#ac91557daf9db76bdd629dc37699b83f2',1,'knf::ProcessPitchOptions']]],
+  ['normalized_12',['normalized',['../structknf_1_1StftConfig.html#a0e9a3cc342d961c5679ee7ec54bbfee2',1,'knf::StftConfig']]],
+  ['num_5fbins_13',['num_bins',['../structknf_1_1MelBanksOptions.html#a4abf596c78f203bfbf45b0624cd6d9bd',1,'knf::MelBanksOptions']]],
+  ['num_5fceps_14',['num_ceps',['../structknf_1_1MfccOptions.html#a78f5cc5e9348849cdbf141a586c68cb2',1,'knf::MfccOptions']]],
+  ['num_5fframes_15',['num_frames',['../structknf_1_1StftResult.html#a0298adb59e5634ed6ccecaa53e3b4f80',1,'knf::StftResult']]],
+  ['num_5fmel_5fbins_16',['num_mel_bins',['../structknf_1_1NemoFbankOptions.html#a6e80a224ed0fa29c09027b0ddc37ae42',1,'knf::NemoFbankOptions']]],
+  ['numbins_17',['NumBins',['../classknf_1_1MelBanks.html#ad92ba074c07bbf8b9f3abacc39a2a409',1,'knf::MelBanks']]],
+  ['numframes_18',['NumFrames',['../namespaceknf.html#a4f4465d91c1b120c51582d1ef911812f',1,'knf']]],
+  ['numframesready_19',['NumFramesReady',['../classknf_1_1OnlinePitch.html#a4c7325d125150d1a665948b1188cfddf',1,'knf::OnlinePitch::NumFramesReady()'],['../classknf_1_1OnlineGenericBaseFeature.html#a8eedf4fc7c830b88baf1093c06b821bf',1,'knf::OnlineGenericBaseFeature::NumFramesReady()'],['../classknf_1_1OnlineNemoFbank.html#a8f6238a3c9771441b42606c0ef202023',1,'knf::OnlineNemoFbank::NumFramesReady()']]],
+  ['numsamplesin_20',['NumSamplesIn',['../classknf_1_1ArbitraryResample.html#a0a327e486ce0d58b95c0432361708788',1,'knf::ArbitraryResample']]],
+  ['numsamplesout_21',['NumSamplesOut',['../classknf_1_1ArbitraryResample.html#a1a5e6d36c5fb598f8c5811948c944765',1,'knf::ArbitraryResample']]],
+  ['numtrailingsamples_22',['NumTrailingSamples',['../classknf_1_1OnlineNemoFbank.html#a86afabe7bfc0c6518232c25e3fc1514e',1,'knf::OnlineNemoFbank']]]
+];

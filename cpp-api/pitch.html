@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pitch &mdash; kaldi-native-fbank 1.22.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=91cdfffb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Splice" href="splice.html" />
+    <link rel="prev" title="Fbank" href="fbank.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pitch</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf22PitchExtractionOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::PitchExtractionOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf19ProcessPitchOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::ProcessPitchOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf11OnlinePitchE"><code class="docutils literal notranslate"><span class="pre">knf::OnlinePitch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf27ComputeAndProcessKaldiPitchERK22PitchExtractionOptionsRK19ProcessPitchOptionsPKf7int32_t"><code class="docutils literal notranslate"><span class="pre">ComputeAndProcessKaldiPitch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">Pitch</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/pitch.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pitch">
+<h1>Pitch<a class="headerlink" href="#pitch" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/feature-pitch.h">kaldi-native-fbank/csrc/feature-pitch.h</a> — the equivalent of
+kaldi's <code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.cc">pitch-functions</a>, the ICASSP 2014
+pitch algorithm of Ghahremani et al.).</p>
+<p>Streaming:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">PitchExtractionOptions</span><span class="w"> </span><span class="n">pitch_opts</span><span class="p">;</span>
+<span class="n">pitch_opts</span><span class="p">.</span><span class="n">min_f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
+<span class="n">pitch_opts</span><span class="p">.</span><span class="n">max_f0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">ProcessPitchOptions</span><span class="w"> </span><span class="n">process_opts</span><span class="p">;</span><span class="w">   </span><span class="c1">// 3-dim output by default</span>
+
+<span class="n">knf</span><span class="o">::</span><span class="n">OnlinePitch</span><span class="w"> </span><span class="nf">pitch</span><span class="p">(</span><span class="n">pitch_opts</span><span class="p">,</span><span class="w"> </span><span class="n">process_opts</span><span class="p">);</span>
+<span class="n">pitch</span><span class="p">.</span><span class="n">AcceptWaveform</span><span class="p">(</span><span class="n">pitch_opts</span><span class="p">.</span><span class="n">samp_freq</span><span class="p">,</span><span class="w"> </span><span class="n">samples</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="n">pitch</span><span class="p">.</span><span class="n">InputFinished</span><span class="p">();</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">pitch</span><span class="p">.</span><span class="n">NumFramesReady</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">feat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pitch</span><span class="p">.</span><span class="n">GetFrame</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="w">  </span><span class="c1">// size == pitch.Dim()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Batch (kaldi's <code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code>):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">MatrixF</span><span class="w"> </span><span class="n">feats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">ComputeAndProcessKaldiPitch</span><span class="p">(</span>
+<span class="w">    </span><span class="n">pitch_opts</span><span class="p">,</span><span class="w"> </span><span class="n">process_opts</span><span class="p">,</span><span class="w"> </span><span class="n">samples</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w">  </span><span class="c1">// (num_frames, Dim())</span>
+</pre></div>
+</div>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptionsE">
+<span id="_CPPv3N3knf22PitchExtractionOptionsE"></span><span id="_CPPv2N3knf22PitchExtractionOptionsE"></span><span id="knf::PitchExtractionOptions"></span><span class="target" id="structknf_1_1PitchExtractionOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PitchExtractionOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for the raw pitch extraction stage (kaldi's <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1PitchExtractionOptions"><span class="std std-ref"><span class="pre">PitchExtractionOptions</span></span></a></code>). </p>
+<p>Mirrors the flags of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-kaldi-pitch-feats.cc"><code class="docutils literal notranslate"><span class="pre">compute-kaldi-pitch-feats</span></code></a> / <code class="docutils literal notranslate"><span class="pre">OnlinePitchFeature</span></code>; see <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">src/feat/pitch-functions.h</a>.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classknf_1_1OnlinePitch"><span class="std std-ref">OnlinePitch</span></a>, <a class="reference internal" href="#namespaceknf_1a4b91019a8fa7c8a60b3753c629b68761"><span class="std std-ref">ComputeAndProcessKaldiPitch</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf22PitchExtractionOptions14NccfWindowSizeEv">
+<span id="_CPPv3NK3knf22PitchExtractionOptions14NccfWindowSizeEv"></span><span id="_CPPv2NK3knf22PitchExtractionOptions14NccfWindowSizeEv"></span><span id="knf::PitchExtractionOptions::NccfWindowSizeC"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a0049d48f2b74f261fa8122084aa8e525"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NccfWindowSize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf22PitchExtractionOptions14NccfWindowSizeEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The NCCF window size in samples after resampling. This is the &quot;basic window size&quot;, not the full window size after extending by max-lag. Because of floating point representation, it is more reliable to divide by 1000 instead of multiplying by 0.001, but it is a bit slower. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf22PitchExtractionOptions15NccfWindowShiftEv">
+<span id="_CPPv3NK3knf22PitchExtractionOptions15NccfWindowShiftEv"></span><span id="_CPPv2NK3knf22PitchExtractionOptions15NccfWindowShiftEv"></span><span id="knf::PitchExtractionOptions::NccfWindowShiftC"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a000eaa0197714bf151f88621e4c2f8db"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NccfWindowShift</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf22PitchExtractionOptions15NccfWindowShiftEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The NCCF window shift in samples after resampling. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions9samp_freqE">
+<span id="_CPPv3N3knf22PitchExtractionOptions9samp_freqE"></span><span id="_CPPv2N3knf22PitchExtractionOptions9samp_freqE"></span><span id="knf::PitchExtractionOptions::samp_freq__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1afa0602aa7aa2ffdabf230c0ad7aebef3"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samp_freq</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">16000</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions9samp_freqE" title="Link to this definition"></a><br /></dt>
+<dd><p>Waveform data sample frequency in Hz (must match the waveform). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--sample-frequency</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions14frame_shift_msE">
+<span id="_CPPv3N3knf22PitchExtractionOptions14frame_shift_msE"></span><span id="_CPPv2N3knf22PitchExtractionOptions14frame_shift_msE"></span><span id="knf::PitchExtractionOptions::frame_shift_ms__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a9e7aef5f5df68319543047bd45a8d4a3"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frame_shift_ms</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">10.0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions14frame_shift_msE" title="Link to this definition"></a><br /></dt>
+<dd><p>Frame shift in milliseconds. Kaldi <code class="docutils literal notranslate"><span class="pre">--frame-shift</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions15frame_length_msE">
+<span id="_CPPv3N3knf22PitchExtractionOptions15frame_length_msE"></span><span id="_CPPv2N3knf22PitchExtractionOptions15frame_length_msE"></span><span id="knf::PitchExtractionOptions::frame_length_ms__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a42fd79c36b5c9ec490bfa6be4993d923"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frame_length_ms</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">25.0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions15frame_length_msE" title="Link to this definition"></a><br /></dt>
+<dd><p>Frame length in milliseconds. Kaldi <code class="docutils literal notranslate"><span class="pre">--frame-length</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions13preemph_coeffE">
+<span id="_CPPv3N3knf22PitchExtractionOptions13preemph_coeffE"></span><span id="_CPPv2N3knf22PitchExtractionOptions13preemph_coeffE"></span><span id="knf::PitchExtractionOptions::preemph_coeff__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1ae53e0774394d72a1bc0b3efc8785de61"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">preemph_coeff</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions13preemph_coeffE" title="Link to this definition"></a><br /></dt>
+<dd><p>Preemphasis coefficient (use is deprecated in kaldi; kept for parity). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--preemphasis-coefficient</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions6min_f0E">
+<span id="_CPPv3N3knf22PitchExtractionOptions6min_f0E"></span><span id="_CPPv2N3knf22PitchExtractionOptions6min_f0E"></span><span id="knf::PitchExtractionOptions::min_f0__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a909759e0f422bc77ad269a227d880ade"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_f0</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">50</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions6min_f0E" title="Link to this definition"></a><br /></dt>
+<dd><p>Min F0 to search for (Hz). Kaldi <code class="docutils literal notranslate"><span class="pre">--min-f0</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions6max_f0E">
+<span id="_CPPv3N3knf22PitchExtractionOptions6max_f0E"></span><span id="_CPPv2N3knf22PitchExtractionOptions6max_f0E"></span><span id="knf::PitchExtractionOptions::max_f0__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1ac72dcd375118ac195417512593ffa300"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_f0</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">400</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions6max_f0E" title="Link to this definition"></a><br /></dt>
+<dd><p>Max F0 to search for (Hz). Kaldi <code class="docutils literal notranslate"><span class="pre">--max-f0</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions11soft_min_f0E">
+<span id="_CPPv3N3knf22PitchExtractionOptions11soft_min_f0E"></span><span id="_CPPv2N3knf22PitchExtractionOptions11soft_min_f0E"></span><span id="knf::PitchExtractionOptions::soft_min_f0__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1aec14c3ea363deae5b71528860fd91f27"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">soft_min_f0</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">10.0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions11soft_min_f0E" title="Link to this definition"></a><br /></dt>
+<dd><p>Minimum f0, applied in a soft way; must not exceed <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1PitchExtractionOptions_1a909759e0f422bc77ad269a227d880ade"><span class="std std-ref"><span class="pre">min_f0</span></span></a></code>. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--soft-min-f0</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions14penalty_factorE">
+<span id="_CPPv3N3knf22PitchExtractionOptions14penalty_factorE"></span><span id="_CPPv2N3knf22PitchExtractionOptions14penalty_factorE"></span><span id="knf::PitchExtractionOptions::penalty_factor__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1aa2717f4f630de192dcc0e1c62f82539e"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">penalty_factor</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.1</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions14penalty_factorE" title="Link to this definition"></a><br /></dt>
+<dd><p>Cost factor for F0 change (Viterbi inter-frame penalty). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--penalty-factor</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions14lowpass_cutoffE">
+<span id="_CPPv3N3knf22PitchExtractionOptions14lowpass_cutoffE"></span><span id="_CPPv2N3knf22PitchExtractionOptions14lowpass_cutoffE"></span><span id="knf::PitchExtractionOptions::lowpass_cutoff__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a09479abdbc24763e2c1f38dc64a7c734"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lowpass_cutoff</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1000</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions14lowpass_cutoffE" title="Link to this definition"></a><br /></dt>
+<dd><p>Cutoff frequency for the low-pass filter (Hz). Kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-cutoff</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions13resample_freqE">
+<span id="_CPPv3N3knf22PitchExtractionOptions13resample_freqE"></span><span id="_CPPv2N3knf22PitchExtractionOptions13resample_freqE"></span><span id="knf::PitchExtractionOptions::resample_freq__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a864c45cbbff1c16d3f69843c0e7270ea"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resample_freq</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">4000</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions13resample_freqE" title="Link to this definition"></a><br /></dt>
+<dd><p>Frequency that we down-sample the signal to. </p>
+<p>Must be more than twice <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1PitchExtractionOptions_1a09479abdbc24763e2c1f38dc64a7c734"><span class="std std-ref"><span class="pre">lowpass_cutoff</span></span></a></code>. Kaldi <code class="docutils literal notranslate"><span class="pre">--resample-frequency</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions11delta_pitchE">
+<span id="_CPPv3N3knf22PitchExtractionOptions11delta_pitchE"></span><span id="_CPPv2N3knf22PitchExtractionOptions11delta_pitchE"></span><span id="knf::PitchExtractionOptions::delta_pitch__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a0e0f3767a60bcf85dc6b84d43719bf85"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_pitch</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.005</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions11delta_pitchE" title="Link to this definition"></a><br /></dt>
+<dd><p>The pitch tolerance in pruning lags: the relative change in pitch that the algorithm measures (the lags are spaced in a geometric progression with ratio <span class="math notranslate nohighlight">\( 1 + \mathrm{delta\_pitch} \)</span>). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions12nccf_ballastE">
+<span id="_CPPv3N3knf22PitchExtractionOptions12nccf_ballastE"></span><span id="_CPPv2N3knf22PitchExtractionOptions12nccf_ballastE"></span><span id="knf::PitchExtractionOptions::nccf_ballast__float"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1aab6fcaecadefd914d935e03bdc4a6732"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nccf_ballast</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">7000</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions12nccf_ballastE" title="Link to this definition"></a><br /></dt>
+<dd><p>Increasing this factor reduces NCCF for quiet frames, helping ensure pitch continuity in unvoiced regions. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions20lowpass_filter_widthE">
+<span id="_CPPv3N3knf22PitchExtractionOptions20lowpass_filter_widthE"></span><span id="_CPPv2N3knf22PitchExtractionOptions20lowpass_filter_widthE"></span><span id="knf::PitchExtractionOptions::lowpass_filter_width__int32_t"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a718a08848f1b7186578eb01ad85a70ed"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lowpass_filter_width</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions20lowpass_filter_widthE" title="Link to this definition"></a><br /></dt>
+<dd><p>Integer that determines the filter width of the low-pass filter; more gives a sharper filter. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--lowpass-filter-width</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions21upsample_filter_widthE">
+<span id="_CPPv3N3knf22PitchExtractionOptions21upsample_filter_widthE"></span><span id="_CPPv2N3knf22PitchExtractionOptions21upsample_filter_widthE"></span><span id="knf::PitchExtractionOptions::upsample_filter_width__int32_t"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1acfd35eb19ca8f32e6bd03225ebe15818"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">upsample_filter_width</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">5</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions21upsample_filter_widthE" title="Link to this definition"></a><br /></dt>
+<dd><p>Integer that determines the filter width when upsampling the NCCF. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--upsample-filter-width</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions18max_frames_latencyE">
+<span id="_CPPv3N3knf22PitchExtractionOptions18max_frames_latencyE"></span><span id="_CPPv2N3knf22PitchExtractionOptions18max_frames_latencyE"></span><span id="knf::PitchExtractionOptions::max_frames_latency__int32_t"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a61516287cc1919b81387c1559f8a17d0"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_frames_latency</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions18max_frames_latencyE" title="Link to this definition"></a><br /></dt>
+<dd><p>The maximum number of frames of latency that we allow the pitch processing to introduce, for online operation. </p>
+<p>If you set this to a large value, there would be no inaccuracy from the Viterbi traceback (but it might make you wait to see the pitch). Normalization right context is more relevant for online latency; you can leave this at zero. Kaldi <code class="docutils literal notranslate"><span class="pre">--max-frames-latency</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions16frames_per_chunkE">
+<span id="_CPPv3N3knf22PitchExtractionOptions16frames_per_chunkE"></span><span id="_CPPv2N3knf22PitchExtractionOptions16frames_per_chunkE"></span><span id="knf::PitchExtractionOptions::frames_per_chunk__int32_t"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a47f11d91a836afae3ff0dcc66aa80c8f"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frames_per_chunk</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions16frames_per_chunkE" title="Link to this definition"></a><br /></dt>
+<dd><p>Only relevant for ComputeAndProcessKaldiPitch. </p>
+<p>If nonzero, we provide the input as chunks of this size. This affects the energy normalization which has a small effect on the resulting features, especially at the beginning of a file. For best compatibility with online operation, you might want to set this to a small value, like one frame. Kaldi <code class="docutils literal notranslate"><span class="pre">--frames-per-chunk</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions26simulate_first_pass_onlineE">
+<span id="_CPPv3N3knf22PitchExtractionOptions26simulate_first_pass_onlineE"></span><span id="_CPPv2N3knf22PitchExtractionOptions26simulate_first_pass_onlineE"></span><span id="knf::PitchExtractionOptions::simulate_first_pass_online__b"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1aa116efc64cca728e5459450a48ab20f7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate_first_pass_online</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions26simulate_first_pass_onlineE" title="Link to this definition"></a><br /></dt>
+<dd><p>Only relevant for ComputeAndProcessKaldiPitch, and only if <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1PitchExtractionOptions_1a47f11d91a836afae3ff0dcc66aa80c8f"><span class="std std-ref"><span class="pre">frames_per_chunk</span></span></a></code> is nonzero. </p>
+<p>If true, we output the features as soon as they are available, which simulates the first-pass features you would get in online decoding. If false, the features you get will be the same as those available at the end of the utterance, after InputFinished() has been called (e.g. during lattice rescoring). Kaldi <code class="docutils literal notranslate"><span class="pre">--simulate-first-pass-online</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions15recompute_frameE">
+<span id="_CPPv3N3knf22PitchExtractionOptions15recompute_frameE"></span><span id="_CPPv2N3knf22PitchExtractionOptions15recompute_frameE"></span><span id="knf::PitchExtractionOptions::recompute_frame__int32_t"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1af17a2b95e1ddd09ffac7b28501b4f277"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recompute_frame</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">500</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions15recompute_frameE" title="Link to this definition"></a><br /></dt>
+<dd><p>Only relevant for online operation or when emulating online operation (e.g. </p>
+<p>when setting <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1PitchExtractionOptions_1a47f11d91a836afae3ff0dcc66aa80c8f"><span class="std std-ref"><span class="pre">frames_per_chunk</span></span></a></code>). This is the frame-index on which we recompute the NCCF (e.g. frame-index 500 = after 5 seconds); if the segment ends before this we do it when the segment ends. We do this by re-computing the signal average energy, which affects the NCCF via the &quot;ballast term&quot;, scaling the resampled NCCF by a factor derived from the average change in the &quot;ballast term&quot;, and re-doing the backtrace computation. Making this infinity would be the most exact, but would introduce unwanted latency at the end of long utterances, for little benefit. Kaldi <code class="docutils literal notranslate"><span class="pre">--recompute-frame</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions19nccf_ballast_onlineE">
+<span id="_CPPv3N3knf22PitchExtractionOptions19nccf_ballast_onlineE"></span><span id="_CPPv2N3knf22PitchExtractionOptions19nccf_ballast_onlineE"></span><span id="knf::PitchExtractionOptions::nccf_ballast_online__b"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1a29afca4b8a01249c4e6baa32d4dc87e6"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nccf_ballast_online</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions19nccf_ballast_onlineE" title="Link to this definition"></a><br /></dt>
+<dd><p>This is a &quot;hidden config&quot; used only for testing the online pitch extraction. </p>
+<p>If true, we compute the signal root-mean-squared for the ballast term only up to the current frame, rather than the end of the current chunk of signal. This makes the output insensitive to the chunking, which is useful for testing purposes. Kaldi <code class="docutils literal notranslate"><span class="pre">--nccf-ballast-online</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf22PitchExtractionOptions10snip_edgesE">
+<span id="_CPPv3N3knf22PitchExtractionOptions10snip_edgesE"></span><span id="_CPPv2N3knf22PitchExtractionOptions10snip_edgesE"></span><span id="knf::PitchExtractionOptions::snip_edges__b"></span><span class="target" id="structknf_1_1PitchExtractionOptions_1ab37bfb5464b620c79da2df7e98ef4de8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">snip_edges</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf22PitchExtractionOptions10snip_edgesE" title="Link to this definition"></a><br /></dt>
+<dd><p>If false, the incomplete frames near the ending edge won't be snipped, so that the number of frames is the file size divided by the frame-shift. </p>
+<p>This makes different types of features give the same number of frames. Kaldi <code class="docutils literal notranslate"><span class="pre">--snip-edges</span></code>. (Note: unlike the other feature types, kaldi's pitch extractor defaults this to true.) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptionsE">
+<span id="_CPPv3N3knf19ProcessPitchOptionsE"></span><span id="_CPPv2N3knf19ProcessPitchOptionsE"></span><span id="knf::ProcessPitchOptions"></span><span class="target" id="structknf_1_1ProcessPitchOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ProcessPitchOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for the pitch post-processing stage (kaldi's <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1ProcessPitchOptions"><span class="std std-ref"><span class="pre">ProcessPitchOptions</span></span></a></code>). </p>
+<p>Determines which features are produced from the raw (NCCF, pitch) pair. With the defaults, each frame is the 3-dimensional (POV-feature, normalized-log-pitch, delta-log-pitch) used by kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc"><code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code></a>; see <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/pitch-functions.h">src/feat/pitch-functions.h</a>.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#classknf_1_1OnlinePitch"><span class="std std-ref">OnlinePitch</span></a>, <a class="reference internal" href="#namespaceknf_1a4b91019a8fa7c8a60b3753c629b68761"><span class="std std-ref">ComputeAndProcessKaldiPitch</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf19ProcessPitchOptions3DimEv">
+<span id="_CPPv3NK3knf19ProcessPitchOptions3DimEv"></span><span id="_CPPv2NK3knf19ProcessPitchOptions3DimEv"></span><span id="knf::ProcessPitchOptions::DimC"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a4f28281379056539ea7a51c988ee5db0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf19ProcessPitchOptions3DimEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The output feature dimension implied by the <code class="docutils literal notranslate"><span class="pre">add_*</span></code> flags. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions11pitch_scaleE">
+<span id="_CPPv3N3knf19ProcessPitchOptions11pitch_scaleE"></span><span id="_CPPv2N3knf19ProcessPitchOptions11pitch_scaleE"></span><span id="knf::ProcessPitchOptions::pitch_scale__float"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a9adc7b0f8774745b04d15d5a10f80f6d"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pitch_scale</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2.0</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions11pitch_scaleE" title="Link to this definition"></a><br /></dt>
+<dd><p>The final normalized-log-pitch feature is scaled with this value. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--pitch-scale</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions9pov_scaleE">
+<span id="_CPPv3N3knf19ProcessPitchOptions9pov_scaleE"></span><span id="_CPPv2N3knf19ProcessPitchOptions9pov_scaleE"></span><span id="knf::ProcessPitchOptions::pov_scale__float"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a7b494119a70cc16284c023f6e85c8fba"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pov_scale</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2.0</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions9pov_scaleE" title="Link to this definition"></a><br /></dt>
+<dd><p>The final POV feature is scaled with this value. Kaldi <code class="docutils literal notranslate"><span class="pre">--pov-scale</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions10pov_offsetE">
+<span id="_CPPv3N3knf19ProcessPitchOptions10pov_offsetE"></span><span id="_CPPv2N3knf19ProcessPitchOptions10pov_offsetE"></span><span id="knf::ProcessPitchOptions::pov_offset__float"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1adffacdd2223da50fb68ae49ab1245646"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pov_offset</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions10pov_offsetE" title="Link to this definition"></a><br /></dt>
+<dd><p>An offset that can be added to the final POV feature (useful for online decoding, where we don't do CMN to the pitch-derived features). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--pov-offset</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions17delta_pitch_scaleE">
+<span id="_CPPv3N3knf19ProcessPitchOptions17delta_pitch_scaleE"></span><span id="_CPPv2N3knf19ProcessPitchOptions17delta_pitch_scaleE"></span><span id="knf::ProcessPitchOptions::delta_pitch_scale__float"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a39082e67e0ff42c9e51c6bbd013096ad"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_pitch_scale</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">10.0</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions17delta_pitch_scaleE" title="Link to this definition"></a><br /></dt>
+<dd><p>Term to scale the final delta log-pitch feature. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-scale</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions24delta_pitch_noise_stddevE">
+<span id="_CPPv3N3knf19ProcessPitchOptions24delta_pitch_noise_stddevE"></span><span id="_CPPv2N3knf19ProcessPitchOptions24delta_pitch_noise_stddevE"></span><span id="knf::ProcessPitchOptions::delta_pitch_noise_stddev__float"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1adabdb4926edc1a8430866d83297319ab"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_pitch_noise_stddev</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.005</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions24delta_pitch_noise_stddevE" title="Link to this definition"></a><br /></dt>
+<dd><p>Standard deviation for the noise we add to the delta log-pitch (before scaling); should be about the same as the <code class="docutils literal notranslate"><span class="pre">delta_pitch</span></code> option to pitch creation. </p>
+<p>The purpose is to get rid of peaks in the delta-pitch caused by discretization of pitch values. (The noise is drawn from a deterministic stream — see ComputeAndProcessKaldiPitch — so the features are reproducible.) Kaldi <code class="docutils literal notranslate"><span class="pre">--delta-pitch-noise-stddev</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions26normalization_left_contextE">
+<span id="_CPPv3N3knf19ProcessPitchOptions26normalization_left_contextE"></span><span id="_CPPv2N3knf19ProcessPitchOptions26normalization_left_contextE"></span><span id="knf::ProcessPitchOptions::normalization_left_context__int32_t"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1ac3c6126b8494766f9a6fb09b10cce0da"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normalization_left_context</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">75</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions26normalization_left_contextE" title="Link to this definition"></a><br /></dt>
+<dd><p>Left-context (in frames) for moving-window normalization of the log pitch. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-left-context</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions27normalization_right_contextE">
+<span id="_CPPv3N3knf19ProcessPitchOptions27normalization_right_contextE"></span><span id="_CPPv2N3knf19ProcessPitchOptions27normalization_right_contextE"></span><span id="knf::ProcessPitchOptions::normalization_right_context__int32_t"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1ac91557daf9db76bdd629dc37699b83f2"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normalization_right_context</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">75</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions27normalization_right_contextE" title="Link to this definition"></a><br /></dt>
+<dd><p>Right-context (in frames) for moving-window normalization of the log pitch; should be reduced in online decoding to reduce latency. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--normalization-right-context</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions12delta_windowE">
+<span id="_CPPv3N3knf19ProcessPitchOptions12delta_windowE"></span><span id="_CPPv2N3knf19ProcessPitchOptions12delta_windowE"></span><span id="knf::ProcessPitchOptions::delta_window__int32_t"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a513cea26f49d7a6708035a199be4595a"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_window</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions12delta_windowE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames on each side of the central frame to use for the delta window. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--delta-window</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions5delayE">
+<span id="_CPPv3N3knf19ProcessPitchOptions5delayE"></span><span id="_CPPv2N3knf19ProcessPitchOptions5delayE"></span><span id="knf::ProcessPitchOptions::delay__int32_t"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a1fc9d81110c3962724d4dbf34a6c8417"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delay</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions5delayE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames by which the pitch information is delayed. </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--delay</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions15add_pov_featureE">
+<span id="_CPPv3N3knf19ProcessPitchOptions15add_pov_featureE"></span><span id="_CPPv2N3knf19ProcessPitchOptions15add_pov_featureE"></span><span id="knf::ProcessPitchOptions::add_pov_feature__b"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a0dd2c7cc5e14f6f148673c1321862ba0"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_pov_feature</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions15add_pov_featureE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, the warped NCCF is added to the output features (1 dim). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--add-pov-feature</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions24add_normalized_log_pitchE">
+<span id="_CPPv3N3knf19ProcessPitchOptions24add_normalized_log_pitchE"></span><span id="_CPPv2N3knf19ProcessPitchOptions24add_normalized_log_pitchE"></span><span id="knf::ProcessPitchOptions::add_normalized_log_pitch__b"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1ae243a5a09242685ef194f858085f4749"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_normalized_log_pitch</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions24add_normalized_log_pitchE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, the log-pitch with POV-weighted mean subtraction over a 1.5 second window is added to the output features (1 dim). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--add-normalized-log-pitch</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions15add_delta_pitchE">
+<span id="_CPPv3N3knf19ProcessPitchOptions15add_delta_pitchE"></span><span id="_CPPv2N3knf19ProcessPitchOptions15add_delta_pitchE"></span><span id="knf::ProcessPitchOptions::add_delta_pitch__b"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1ad1124ba5e4936c217789ffbd62eea7ef"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_delta_pitch</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions15add_delta_pitchE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, the time derivative of log-pitch is added to the output features (1 dim). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--add-delta-pitch</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf19ProcessPitchOptions17add_raw_log_pitchE">
+<span id="_CPPv3N3knf19ProcessPitchOptions17add_raw_log_pitchE"></span><span id="_CPPv2N3knf19ProcessPitchOptions17add_raw_log_pitchE"></span><span id="knf::ProcessPitchOptions::add_raw_log_pitch__b"></span><span class="target" id="structknf_1_1ProcessPitchOptions_1a34612360718b4d35b1c0db27d6970f27"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_raw_log_pitch</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf19ProcessPitchOptions17add_raw_log_pitchE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, log(pitch) is added to the output features (1 dim). </p>
+<p>Kaldi <code class="docutils literal notranslate"><span class="pre">--add-raw-log-pitch</span></code>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11OnlinePitchE">
+<span id="_CPPv3N3knf11OnlinePitchE"></span><span id="_CPPv2N3knf11OnlinePitchE"></span><span id="knf::OnlinePitch"></span><span class="target" id="classknf_1_1OnlinePitch"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlinePitch</span></span></span><a class="headerlink" href="#_CPPv4N3knf11OnlinePitchE" title="Link to this definition"></a><br /></dt>
+<dd><p>Streaming pitch extraction with post-processing (kaldi's <code class="docutils literal notranslate"><span class="pre">OnlinePitchFeature</span></code> + <code class="docutils literal notranslate"><span class="pre">OnlineProcessPitch</span></code>). </p>
+<p>This is the streaming interface of kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc"><code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code></a>: it consumes waveform chunks and produces the processed pitch features (by default 3-dimensional: POV, normalized-log-pitch, delta-pitch).</p>
+<p>Usage mirrors OnlineMfcc: feed the waveform with <a class="reference internal" href="#classknf_1_1OnlinePitch_1a5c013ac6c3d6baee736c5cbd17360c72"><span class="std std-ref">AcceptWaveform()</span></a>, call <a class="reference internal" href="#classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"><span class="std std-ref">InputFinished()</span></a> when no more data is coming, then read frames with <a class="reference internal" href="#classknf_1_1OnlinePitch_1a540b9c7850cf092c58d136faacefbd5e"><span class="std std-ref">GetFrame()</span></a>. Frames may become available before <a class="reference internal" href="#classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"><span class="std std-ref">InputFinished()</span></a> (with latency: see <code class="docutils literal notranslate"><span class="pre">normalization_right_context</span></code> and <code class="docutils literal notranslate"><span class="pre">max_frames_latency</span></code>), and <a class="reference internal" href="#classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"><span class="std std-ref">InputFinished()</span></a> flushes the remainder.</p>
+<p>Features for a given frame may be revised as more data arrives (the Viterbi traceback and the normalization window settle over time), except for the delta-pitch noise which is drawn once per frame. After <a class="reference internal" href="#classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"><span class="std std-ref">InputFinished()</span></a>, the features are final and stable.</p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#structknf_1_1PitchExtractionOptions"><span class="std std-ref">PitchExtractionOptions</span></a>, <a class="reference internal" href="#structknf_1_1ProcessPitchOptions"><span class="std std-ref">ProcessPitchOptions</span></a>, <a class="reference internal" href="#namespaceknf_1a4b91019a8fa7c8a60b3753c629b68761"><span class="std std-ref">ComputeAndProcessKaldiPitch</span></a>, OnlineMfcc</p>
+</div>
+<dl class="simple">
+<dt><strong>Used by:</strong></dt><dd><p>Batch extraction via ComputeAndProcessKaldiPitch; MFA-style feature pipelines that append pitch to MFCC (<code class="docutils literal notranslate"><span class="pre">paste-feats</span></code>).</p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11OnlinePitch11OnlinePitchERK22PitchExtractionOptionsRK19ProcessPitchOptions">
+<span id="_CPPv3N3knf11OnlinePitch11OnlinePitchERK22PitchExtractionOptionsRK19ProcessPitchOptions"></span><span id="_CPPv2N3knf11OnlinePitch11OnlinePitchERK22PitchExtractionOptionsRK19ProcessPitchOptions"></span><span id="knf::OnlinePitch::OnlinePitch__PitchExtractionOptionsCR.ProcessPitchOptionsCR"></span><span class="target" id="classknf_1_1OnlinePitch_1a72f1c5eacb7189dcf11a8faf1bf1aa79"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlinePitch</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf22PitchExtractionOptionsE" title="knf::PitchExtractionOptions"><span class="n"><span class="pre">PitchExtractionOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf19ProcessPitchOptionsE" title="knf::ProcessPitchOptions"><span class="n"><span class="pre">ProcessPitchOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">popts</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf11OnlinePitch11OnlinePitchERK22PitchExtractionOptionsRK19ProcessPitchOptions" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct with the given extraction and post-processing options. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- <strong>[in]</strong> Raw pitch extraction options. </p></li>
+<li><p><strong>popts</strong> -- <strong>[in]</strong> Post-processing options; at least one of the <code class="docutils literal notranslate"><span class="pre">add_*</span></code> flags must be true. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf11OnlinePitch3DimEv">
+<span id="_CPPv3NK3knf11OnlinePitch3DimEv"></span><span id="_CPPv2NK3knf11OnlinePitch3DimEv"></span><span id="knf::OnlinePitch::DimC"></span><span class="target" id="classknf_1_1OnlinePitch_1aa669ac638105151cff0f2d5243c722ee"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf11OnlinePitch3DimEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The output feature dimension (= <code class="docutils literal notranslate"><span class="pre">popts.Dim()</span></code>, 3 by default). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf11OnlinePitch19FrameShiftInSecondsEv">
+<span id="_CPPv3NK3knf11OnlinePitch19FrameShiftInSecondsEv"></span><span id="_CPPv2NK3knf11OnlinePitch19FrameShiftInSecondsEv"></span><span id="knf::OnlinePitch::FrameShiftInSecondsC"></span><span class="target" id="classknf_1_1OnlinePitch_1a2173c3cd082ae7c4452577ff0e7b22e2"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FrameShiftInSeconds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf11OnlinePitch19FrameShiftInSecondsEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The frame shift in seconds. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf11OnlinePitch14NumFramesReadyEv">
+<span id="_CPPv3NK3knf11OnlinePitch14NumFramesReadyEv"></span><span id="_CPPv2NK3knf11OnlinePitch14NumFramesReadyEv"></span><span id="knf::OnlinePitch::NumFramesReadyC"></span><span class="target" id="classknf_1_1OnlinePitch_1a4c7325d125150d1a665948b1188cfddf"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NumFramesReady</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf11OnlinePitch14NumFramesReadyEv" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of frames that are already computed and readable via <a class="reference internal" href="#classknf_1_1OnlinePitch_1a540b9c7850cf092c58d136faacefbd5e"><span class="std std-ref">GetFrame()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf11OnlinePitch11IsLastFrameE7int32_t">
+<span id="_CPPv3NK3knf11OnlinePitch11IsLastFrameE7int32_t"></span><span id="_CPPv2NK3knf11OnlinePitch11IsLastFrameE7int32_t"></span><span id="knf::OnlinePitch::IsLastFrame__int32_tC"></span><span class="target" id="classknf_1_1OnlinePitch_1a56f93dad0efec3ee1057522443dd971b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IsLastFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">frame</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf11OnlinePitch11IsLastFrameE7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if <code class="docutils literal notranslate"><span class="pre">frame</span></code> is the last frame (only true after <a class="reference internal" href="#classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"><span class="std std-ref">InputFinished()</span></a> has been called and this is the final frame). </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf11OnlinePitch8GetFrameE7int32_t">
+<span id="_CPPv3NK3knf11OnlinePitch8GetFrameE7int32_t"></span><span id="_CPPv2NK3knf11OnlinePitch8GetFrameE7int32_t"></span><span id="knf::OnlinePitch::GetFrame__int32_tC"></span><span class="target" id="classknf_1_1OnlinePitch_1a540b9c7850cf092c58d136faacefbd5e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">float</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">frame</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf11OnlinePitch8GetFrameE7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">frame</span></code>-th feature vector. </p>
+<p>The frame is computed on demand and cached internally; calling this repeatedly for the same frame returns the same values (as long as <code class="docutils literal notranslate"><span class="pre">frame</span></code> &lt; <a class="reference internal" href="#classknf_1_1OnlinePitch_1a4c7325d125150d1a665948b1188cfddf"><span class="std std-ref">NumFramesReady()</span></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>frame</strong> -- <strong>[in]</strong> Frame index, must be &lt; <a class="reference internal" href="#classknf_1_1OnlinePitch_1a4c7325d125150d1a665948b1188cfddf"><span class="std std-ref">NumFramesReady()</span></a>. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Feature vector of size <a class="reference internal" href="#classknf_1_1OnlinePitch_1aa669ac638105151cff0f2d5243c722ee"><span class="std std-ref">Dim()</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11OnlinePitch14AcceptWaveformEfPKf7int32_t">
+<span id="_CPPv3N3knf11OnlinePitch14AcceptWaveformEfPKf7int32_t"></span><span id="_CPPv2N3knf11OnlinePitch14AcceptWaveformEfPKf7int32_t"></span><span id="knf::OnlinePitch::AcceptWaveform__float.floatCP.int32_t"></span><span class="target" id="classknf_1_1OnlinePitch_1a5c013ac6c3d6baee736c5cbd17360c72"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AcceptWaveform</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sampling_rate</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">waveform</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf11OnlinePitch14AcceptWaveformEfPKf7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Add waveform samples to the extractor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sampling_rate</strong> -- <strong>[in]</strong> Sample rate of the waveform in Hz; must match <code class="docutils literal notranslate"><span class="pre">opts.samp_freq</span></code>. </p></li>
+<li><p><strong>waveform</strong> -- <strong>[in]</strong> Pointer to a 1-D array of n samples. </p></li>
+<li><p><strong>n</strong> -- <strong>[in]</strong> Number of samples in <code class="docutils literal notranslate"><span class="pre">waveform</span></code>. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf11OnlinePitch13InputFinishedEv">
+<span id="_CPPv3N3knf11OnlinePitch13InputFinishedEv"></span><span id="_CPPv2N3knf11OnlinePitch13InputFinishedEv"></span><span id="knf::OnlinePitch::InputFinished"></span><span class="target" id="classknf_1_1OnlinePitch_1a7a0259da9b198441e03867501e18dc6b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputFinished</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf11OnlinePitch13InputFinishedEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Tell the extractor no more waveform will be added; this flushes out the last frames and fixes the features of all frames. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf27ComputeAndProcessKaldiPitchERK22PitchExtractionOptionsRK19ProcessPitchOptionsPKf7int32_t">
+<span id="_CPPv3N3knf27ComputeAndProcessKaldiPitchERK22PitchExtractionOptionsRK19ProcessPitchOptionsPKf7int32_t"></span><span id="_CPPv2N3knf27ComputeAndProcessKaldiPitchERK22PitchExtractionOptionsRK19ProcessPitchOptionsPKf7int32_t"></span><span id="knf::ComputeAndProcessKaldiPitch__PitchExtractionOptionsCR.ProcessPitchOptionsCR.floatCP.int32_t"></span><span class="target" id="namespaceknf_1a4b91019a8fa7c8a60b3753c629b68761"></span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">knf</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ComputeAndProcessKaldiPitch</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf22PitchExtractionOptionsE" title="knf::PitchExtractionOptions"><span class="n"><span class="pre">PitchExtractionOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pitch_opts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf19ProcessPitchOptionsE" title="knf::ProcessPitchOptions"><span class="n"><span class="pre">ProcessPitchOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">process_opts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">wave</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf27ComputeAndProcessKaldiPitchERK22PitchExtractionOptionsRK19ProcessPitchOptionsPKf7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Batch pitch extraction (kaldi's <code class="docutils literal notranslate"><a class="reference internal" href="#namespaceknf_1a4b91019a8fa7c8a60b3753c629b68761"><span class="std std-ref"><span class="pre">ComputeAndProcessKaldiPitch</span></span></a></code>). </p>
+<p>Combines the raw pitch extraction and the post-processing in one call; the output equals what kaldi's <a class="reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/featbin/compute-and-process-kaldi-pitch-feats.cc"><code class="docutils literal notranslate"><span class="pre">compute-and-process-kaldi-pitch-feats</span></code></a> produces for the same input and options. It is sensitive to the variables in <code class="docutils literal notranslate"><span class="pre">pitch_opts</span></code> that relate to online processing, i.e. <code class="docutils literal notranslate"><span class="pre">max_frames_latency</span></code>, <code class="docutils literal notranslate"><span class="pre">frames_per_chunk</span></code>, <code class="docutils literal notranslate"><span class="pre">simulate_first_pass_online</span></code>, <code class="docutils literal notranslate"><span class="pre">recompute_frame</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pitch_opts</strong> -- <strong>[in]</strong> Raw pitch extraction options. </p></li>
+<li><p><strong>process_opts</strong> -- <strong>[in]</strong> Post-processing options. </p></li>
+<li><p><strong>wave</strong> -- <strong>[in]</strong> Pointer to a 1-D array of n waveform samples (as returned by a WAV reader; kaldi semantics, i.e. raw int16 magnitudes, not divided by 32768). </p></li>
+<li><p><strong>n</strong> -- <strong>[in]</strong> Number of samples in <code class="docutils literal notranslate"><span class="pre">wave</span></code>. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Feature matrix of shape (num_frames, process_opts.Dim()). </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fbank.html" class="btn btn-neutral float-left" title="Fbank" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="splice.html" class="btn btn-neutral float-right" title="Splice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
