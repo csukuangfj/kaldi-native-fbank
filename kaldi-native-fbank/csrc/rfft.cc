@@ -23,6 +23,7 @@
 #include <memory>
 #include <vector>
 
+#include "kaldi-native-fbank/csrc/macros.h"
 #include "kiss_fftr.h"  // NOLINT(build/include_subdir)
 
 namespace knf {
@@ -31,13 +32,13 @@ class Rfft::RfftImpl {
  public:
   RfftImpl(int32_t n, bool inverse) : n_(n), inverse_(inverse) {
     if ((n & 1) != 0) {
-      fprintf(stderr, "n should be even. Given: %d \n", n);
-      exit(-1);
+      KNF_LOGE("n should be even. Given: %d", n);
+      throw std::invalid_argument("n should be even");
     }
 
     if (n < 0) {
-      fprintf(stderr, "n should be positive. Given: %d \n", n);
-      exit(-1);
+      KNF_LOGE("n should be positive. Given: %d", n);
+      throw std::invalid_argument("n should be positive");
     }
   }
 

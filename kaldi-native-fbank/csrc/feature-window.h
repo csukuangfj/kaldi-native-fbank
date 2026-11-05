@@ -301,8 +301,8 @@ float InnerProduct(const float *a, const float *b, int32_t n);
 /// * "blackman":    \f$ w[n] = c - 0.5 \cos(a n) + (0.5 - c) \cos(2 a n) \f$
 ///   where \f$ c = \f$ `blackman_coeff`.
 ///
-/// If `window_type` is not one of the above, an error message is printed to
-/// stderr and the process exits.
+/// If `window_type` is not one of the above, an error is logged with
+/// KNF_LOGE() and std::invalid_argument is thrown.
 ///
 /// @param window_type  One of "hamming", "rectangular", "povey", "hanning",
 ///                     "hann", "sine", "blackman".

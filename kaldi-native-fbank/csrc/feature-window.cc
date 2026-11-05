@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
+#include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {
 
@@ -61,8 +62,8 @@ std::vector<float> GetWindow(const std::string &window_type,
       window_data[i] = blackman_coeff - 0.5 * cos(a * i_fl) +
                        (0.5 - blackman_coeff) * cos(2 * a * i_fl);
     } else {
-      fprintf(stderr, "Invalid window type '%s'\n", window_type.c_str());
-      exit(-1);
+      KNF_LOGE("Invalid window type '%s'", window_type.c_str());
+      throw std::invalid_argument("invalid window type: " + window_type);
     }
   }
 

@@ -17,6 +17,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "kaldi-native-fbank/csrc/macros.h"
+
 namespace knf {
 
 namespace {
@@ -115,7 +117,7 @@ void ApplyCmvnInPlace(const MatrixD &stats, const CmvnOptions &opts,
         stats.row(1).head(dim) / count - mean.array().square().matrix();
     // kaldi floors the per-dim variance at 1e-20 (and warns).
     if ((var.array() < 1.0e-20).any()) {
-      fprintf(stderr, "WARNING: Flooring cepstral variance to %e\n", 1.0e-20);
+      KNF_LOGE("WARNING: Flooring cepstral variance to %e", 1.0e-20);
     }
     var = var.cwiseMax(1.0e-20);
     if (!opts.reverse) {

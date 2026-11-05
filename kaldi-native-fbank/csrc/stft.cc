@@ -23,6 +23,7 @@
 #include <string>
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
+#include "kaldi-native-fbank/csrc/macros.h"
 #include "kaldi-native-fbank/csrc/rfft.h"
 
 namespace knf {
@@ -119,8 +120,8 @@ class Stft::Impl {
       std::fill(ans.begin(), ans.begin() + pad_amount, data[0]);
       std::fill(ans.end() - pad_amount, ans.end(), data[n - 1]);
     } else {
-      fprintf(stderr, "Unsupported pad_mode: '%s'. Use 0 padding\n",
-              config_.pad_mode.c_str());
+      KNF_LOGE("Unsupported pad_mode: '%s'. Use 0 padding",
+               config_.pad_mode.c_str());
     }
 
     return ans;

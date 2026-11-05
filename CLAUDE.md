@@ -143,7 +143,10 @@ Three documentation layers, all must stay in sync:
 - Keep function/file names and semantics aligned with kaldi.
 - No logging framework (log.h was removed): report errors by **throwing
   exceptions** (`std::invalid_argument` for bad arguments,
-  `std::runtime_error` for invalid state).
+  `std::runtime_error` for invalid state).  For messages that must be
+  printed (warnings, debug dumps), use the printf-style **`KNF_LOGE(...)`**
+  macro from `kaldi-native-fbank/csrc/macros.h` (mirrors sherpa-onnx's
+  SHERPA_ONNX_LOGE); never call `fprintf` directly.
 
 ## Testing discipline
 

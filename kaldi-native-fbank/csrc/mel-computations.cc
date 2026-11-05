@@ -28,6 +28,7 @@
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/kaldi-math.h"
+#include "kaldi-native-fbank/csrc/macros.h"
 
 namespace knf {
 
@@ -249,7 +250,7 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
       for (auto k : bins_[i].second) os << k << ", ";
       os << "\n";
     }
-    std::fprintf(stderr, "%s", os.str().c_str());
+    KNF_LOGE("%s", os.str().c_str());
   }
 }
 
@@ -401,7 +402,7 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
       for (auto k : bins_[i].second) os << k << ", ";
       os << "\n";
     }
-    fprintf(stderr, "%s\n", os.str().c_str());
+    KNF_LOGE("%s", os.str().c_str());
   }
 }
 
@@ -463,10 +464,11 @@ void MelBanks::Compute(const float *power_spectrum,
   }
 
   if (debug_) {
-    fprintf(stderr, "MEL BANKS:\n");
-    for (int32_t i = 0; i < num_bins; i++)
-      fprintf(stderr, " %f", mel_energies_out[i]);
-    fprintf(stderr, "\n");
+    std::ostringstream dbg;
+    dbg << "MEL BANKS:\n";
+    for (int32_t i = 0; i < num_bins; i++) dbg << " " << mel_energies_out[i];
+    dbg << "\n";
+    KNF_LOGE("%s", dbg.str().c_str());
   }
 }
 
