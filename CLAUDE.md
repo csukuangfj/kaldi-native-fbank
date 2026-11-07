@@ -48,9 +48,12 @@ ctest            # use the real ctest binary, see gotchas below
 - Runner preference: **never use `macos-13`** — for macOS x64 use
   `macos-15-intel`.
 - Platform wheel builds follow sherpa-onnx's per-platform layout: linux
-  (x64, arm64, arm32, **x86/i686**), macos (x64, arm64, **universal2**),
-  windows (x86, x64, arm64), termux (3 ABIs: aarch64/arm/x86_64; the i686
-  ABI is skipped — its termux package mirror is unreliable).
+  (x64, arm64, arm32), macos (x64, arm64, **universal2**),
+  windows (x86, x64, arm64), termux (3 ABIs: aarch64/arm/x86_64).  Like
+  sherpa-onnx, no manylinux i686 wheels are built (`*-manylinux_i686` is
+  skipped everywhere; the i686 manylinux container has no working network
+  on the hosted runners), and the termux i686 ABI is skipped — its package
+  mirror is unreliable.
 - `build-test.yaml` builds AND runs the tests on all those platforms:
   native runners for linux/macos/windows (including macos universal2 via
   `CMAKE_OSX_ARCHITECTURES=arm64;x86_64` and windows-arm64 on

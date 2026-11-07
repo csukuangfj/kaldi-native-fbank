@@ -23,6 +23,15 @@ set_target_properties(_kaldi_native_fbank PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../kaldi_native_fbank/lib"
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../kaldi_native_fbank/lib"
 )
+# multi-config generators (MSVC) append /<Config> to the output dirs above;
+# pin them so the module always lands in kaldi_native_fbank/lib/.
+foreach(cfg IN ITEMS DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+  string(TOUPPER "${cfg}" CFG)
+  set_target_properties(_kaldi_native_fbank PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_SOURCE_DIR}/../kaldi_native_fbank/lib"
+    RUNTIME_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_SOURCE_DIR}/../kaldi_native_fbank/lib"
+  )
+endforeach()
 
 if(APPLE)
   if(PYTHON_EXECUTABLE)

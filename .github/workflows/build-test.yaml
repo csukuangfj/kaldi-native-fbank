@@ -117,6 +117,17 @@ jobs:
           cd build
           cmake --build . --config Release -j 2
 
+      - name: Run tests (x86_64 slice via Rosetta)
+        if: matrix.name == 'macos-universal2'
+        shell: bash
+        run: |
+          base=$(cd .. && pwd)
+          export PYTHONPATH="$base/kaldi-native-fbank/python:$base/kaldi-native-fbank/python/kaldi_native_fbank/lib:$PYTHONPATH"
+          for t in "$base"/kaldi-native-fbank/python/tests/test_*.py; do
+            echo "--- $t (x86_64 slice)"
+            arch -x86_64 python3 "$t" || [ $? -eq 77 ]
+          done
+
       - name: Run tests
         shell: bash
         run: |

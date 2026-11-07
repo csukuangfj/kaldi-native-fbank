@@ -33,9 +33,24 @@ jobs:
       fail-fast: false
       matrix:
         # ubuntu-latest (26.04) no longer ships Python 3.8/3.9; use
-        # ubuntu-22.04 so the full python matrix is available.
-        os: [windows-latest, macos-latest, ubuntu-22.04]
+        # ubuntu-22.04 so the full python matrix is available.  The arm
+        # runners only provide the newer CPythons.
+        os: [windows-latest, windows-11-arm, macos-15-intel, macos-latest,
+             ubuntu-22.04, ubuntu-24.04-arm]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        exclude:
+          - os: windows-11-arm
+            python-version: "3.8"
+          - os: windows-11-arm
+            python-version: "3.9"
+          - os: windows-11-arm
+            python-version: "3.10"
+          - os: windows-11-arm
+            python-version: "3.11"
+          - os: ubuntu-24.04-arm
+            python-version: "3.8"
+          - os: ubuntu-24.04-arm
+            python-version: "3.9"
 
     steps:
       - uses: actions/checkout@v4
@@ -58,3 +73,20 @@ jobs:
         run: |
           python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__file__)"
           python3 -c "import kaldi_native_fbank; print(kaldi_native_fbank.__version__)"
+
+      - name: Smoke test (compute features)
+        shell: bash
+        run: |
+          python3 - <<'EOF'
+          import numpy as np
+          import kaldi_native_fbank as knf
+
+          opts = knf.FbankOptions()
+          fbank = knf.OnlineFbank(opts)
+          fbank.accept_waveform(16000, np.zeros(1600, dtype=np.float32))
+          fbank.input_finished()
+          assert fbank.num_frames_ready > 0, "no frames produced"
+          feat = fbank.get_frame(0)
+          assert feat.shape == (opts.mel_opts.num_bins,), feat.shape
+          print("smoke OK:", fbank.num_frames_ready, "frames, dim", feat.shape[0])
+          EOF
