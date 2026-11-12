@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"feature-cmvn_8h.html":[2,0,0,0,0],
+"feature-cmvn_8h_source.html":[2,0,0,0,0],
 "feature-delta_8h.html":[2,0,0,0,1],
 "feature-delta_8h_source.html":[2,0,0,0,1],
 "feature-fbank_8h.html":[2,0,0,0,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "structknf_1_1NemoFbankOptions.html":[1,0,0,22],
 "structknf_1_1NemoFbankOptions.html#a4691b8345377ba0ddbe3cbe02415a8ae":[0,0,0,22,8],
 "structknf_1_1NemoFbankOptions.html#a4691b8345377ba0ddbe3cbe02415a8ae":[1,0,0,22,8],
-"structknf_1_1NemoFbankOptions.html#a623efcfc08139a8265c7742f63aa111c":[0,0,0,22,0],
-"structknf_1_1NemoFbankOptions.html#a623efcfc08139a8265c7742f63aa111c":[1,0,0,22,0],
-"structknf_1_1NemoFbankOptions.html#a6e80a224ed0fa29c09027b0ddc37ae42":[0,0,0,22,6]
+"structknf_1_1NemoFbankOptions.html#a623efcfc08139a8265c7742f63aa111c":[0,0,0,22,0]
 };

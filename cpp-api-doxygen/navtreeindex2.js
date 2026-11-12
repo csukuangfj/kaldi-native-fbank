@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"structknf_1_1NemoFbankOptions.html#a623efcfc08139a8265c7742f63aa111c":[1,0,0,22,0],
+"structknf_1_1NemoFbankOptions.html#a6e80a224ed0fa29c09027b0ddc37ae42":[0,0,0,22,6],
 "structknf_1_1NemoFbankOptions.html#a6e80a224ed0fa29c09027b0ddc37ae42":[1,0,0,22,6],
 "structknf_1_1NemoFbankOptions.html#a898a79b1757f1c43ce969ec515252ff7":[0,0,0,22,2],
 "structknf_1_1NemoFbankOptions.html#a898a79b1757f1c43ce969ec515252ff7":[1,0,0,22,2],

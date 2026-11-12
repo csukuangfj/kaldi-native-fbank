@@ -113,6 +113,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2a468f2ee15e25bbd5cf3047a56b163c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct the resampler.  <br /></td></tr>
 <tr class="memitem:a7b4d622fe8c333655604fb47ca993fb6" id="r_a7b4d622fe8c333655604fb47ca993fb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b4d622fe8c333655604fb47ca993fb6">Resample</a> (const <a class="el" href="namespaceknf.html#aed956c160f6b906b75023a8451eb2975">VectorF</a> &amp;input, bool flush, <a class="el" href="namespaceknf.html#aed956c160f6b906b75023a8451eb2975">VectorF</a> *output)</td></tr>
 <tr class="memdesc:a7b4d622fe8c333655604fb47ca993fb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resample (possibly a piece of) a signal.  <br /></td></tr>
+<tr class="memitem:a5c374fb9dce94b9009b8f3fa52f82114" id="r_a5c374fb9dce94b9009b8f3fa52f82114"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c374fb9dce94b9009b8f3fa52f82114">Resample</a> (const float *input, int32_t input_dim, bool flush, std::vector&lt; float &gt; *output)</td></tr>
+<tr class="memdesc:a5c374fb9dce94b9009b8f3fa52f82114"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience overload taking a float pointer + length.  <br /></td></tr>
 <tr class="memitem:af1b02449e808a99dfea597963a7f2cf2" id="r_af1b02449e808a99dfea597963a7f2cf2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1b02449e808a99dfea597963a7f2cf2">Reset</a> ()</td></tr>
 <tr class="memdesc:af1b02449e808a99dfea597963a7f2cf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the internal state prior to processing a new signal.  <br /></td></tr>
 <tr class="memitem:ae8cdf7d3b39c4a814f4c545f6492c612" id="r_ae8cdf7d3b39c4a814f4c545f6492c612"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8cdf7d3b39c4a814f4c545f6492c612">GetInputSamplingRate</a> () const</td></tr>
@@ -224,8 +226,51 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a5c374fb9dce94b9009b8f3fa52f82114" name="a5c374fb9dce94b9009b8f3fa52f82114"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c374fb9dce94b9009b8f3fa52f82114">&#9670;&#160;</a></span>Resample() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void knf::LinearResample::Resample </td>
+          <td>(</td>
+          <td class="paramtype">const float *</td>          <td class="paramname"><span class="paramname"><em>input</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t</td>          <td class="paramname"><span class="paramname"><em>input_dim</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>flush</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; float &gt; *</td>          <td class="paramname"><span class="paramname"><em>output</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convenience overload taking a float pointer + length. </p>
+<p>It behaves exactly like <a class="el" href="#a7b4d622fe8c333655604fb47ca993fb6" title="Resample (possibly a piece of) a signal.">Resample(const VectorF &amp;, bool, VectorF *)</a>, except that the input is given as a float pointer and the output is a std::vector&lt;float&gt;.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The input signal (a piece of it). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_dim</td><td>Number of samples in <span class="tt">input</span>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flush</td><td>True if this is the last piece of the signal. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>The resampled output (resized internally). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a7b4d622fe8c333655604fb47ca993fb6" name="a7b4d622fe8c333655604fb47ca993fb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b4d622fe8c333655604fb47ca993fb6">&#9670;&#160;</a></span>Resample()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b4d622fe8c333655604fb47ca993fb6">&#9670;&#160;</a></span>Resample() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
