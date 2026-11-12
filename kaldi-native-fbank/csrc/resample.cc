@@ -198,6 +198,16 @@ void LinearResample::Resample(const VectorF &input, bool flush,
   }
 }
 
+void LinearResample::Resample(const float *input, int32_t input_dim, bool flush,
+                              std::vector<float> *output) {
+  Eigen::Map<const VectorF> wave(input, input_dim);
+
+  VectorF resampled;
+  Resample(wave, flush, &resampled);
+
+  output->assign(resampled.data(), resampled.data() + resampled.size());
+}
+
 void LinearResample::SetRemainder(const VectorF &input) {
   VectorF old_remainder(input_remainder_);
   // max_remainder_needed is the width of the filter from side to side,
