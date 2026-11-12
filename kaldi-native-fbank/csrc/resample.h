@@ -232,6 +232,21 @@ class LinearResample {
   void Resample(const VectorF &input, bool flush, VectorF *output);
 
   /**
+   * @brief Convenience overload taking a float pointer + length.
+   *
+   * It behaves exactly like Resample(const VectorF &, bool, VectorF *),
+   * except that the input is given as a float pointer and the output is a
+   * std::vector<float>.
+   *
+   * @param [in] input     The input signal (a piece of it).
+   * @param [in] input_dim Number of samples in `input`.
+   * @param [in] flush     True if this is the last piece of the signal.
+   * @param [out] output   The resampled output (resized internally).
+   */
+  void Resample(const float *input, int32_t input_dim, bool flush,
+                std::vector<float> *output);
+
+  /**
    * @brief Reset the internal state prior to processing a new signal.
    *
    * It is only necessary if you have called Resample(x, y, false) for some

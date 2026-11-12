@@ -65,8 +65,10 @@ set(test_srcs
   test-cmvn.cc
   test-delta.cc
   test-fbank-eps.cc
+  test-mel-computations.cc
   test-online-nemo-fbank.cc
   test-pitch.cc
+  test-resample.cc
   test-rfft.cc
   test-splice.cc
   test-transform.cc

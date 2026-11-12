@@ -229,7 +229,26 @@ void MelBanks::InitKaldiMelBanks(const MelBanksOptions &opts,
       }
     }
     if (first_index == -1 || last_index < first_index) {
-      throw std::invalid_argument("You may have set num_mel_bins too large.");
+      // A mel bin may contain no FFT bin when its triangle is narrower than
+      // the FFT bin spacing; this happens at low frequencies when num_bins
+      // is large. Kaldi aborts in that case. Librosa and torchaudio silently
+      // use an all-zero filter for such a bin, so we do the same to stay
+      // compatible with models trained with them; only warn here.
+      //
+      // Bin 0 is not logged: when low_freq sits exactly on an FFT bin
+      // boundary, its triangle legitimately has no interior FFT bin and
+      // models trained with librosa/torchaudio already see a zero filter
+      // there.
+      if (bin != 0) {
+        KNF_LOGE(
+            "Mel bin %d (of %d) contains no FFT bin (low_freq=%f, "
+            "high_freq=%f, num_bins=%d). Using an all-zero filter for it. "
+            "Please check your feature configuration.",
+            bin, num_bins, low_freq, high_freq, num_bins);
+      }
+
+      bins_[bin].first = 0;
+      continue;
     }
 
     bins_[bin].first = first_index;
@@ -386,7 +405,26 @@ void MelBanks::InitLibrosaMelBanks(const MelBanksOptions &opts,
     }  // for (int32_t i = 0; i < num_fft_bins + 1; ++i)
 
     if (first_index == -1 || last_index < first_index) {
-      throw std::invalid_argument("You may have set num_mel_bins too large.");
+      // A mel bin may contain no FFT bin when its triangle is narrower than
+      // the FFT bin spacing; this happens at low frequencies when num_bins
+      // is large. Kaldi aborts in that case. Librosa and torchaudio silently
+      // use an all-zero filter for such a bin, so we do the same to stay
+      // compatible with models trained with them; only warn here.
+      //
+      // Bin 0 is not logged: when low_freq sits exactly on an FFT bin
+      // boundary, its triangle legitimately has no interior FFT bin and
+      // models trained with librosa/torchaudio already see a zero filter
+      // there.
+      if (bin != 0) {
+        KNF_LOGE(
+            "Mel bin %d (of %d) contains no FFT bin (low_freq=%f, "
+            "high_freq=%f, num_bins=%d). Using an all-zero filter for it. "
+            "Please check your feature configuration.",
+            bin, num_bins, low_freq, high_freq, num_bins);
+      }
+
+      bins_[bin].first = 0;
+      continue;
     }
 
     bins_[bin].first = first_index;
