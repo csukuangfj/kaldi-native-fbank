@@ -80,9 +80,13 @@ class BuildExtension(build_ext):
         cmake_args += extra_cmake_args
 
         if is_windows():
+            # /p:TrackFileAccess=false: MSBuild's FileTracker writes .tlog files
+            # under the target dir; in long build paths (e.g. pip build
+            # isolation temp dirs) that exceeds MAX_PATH and fails with
+            # FileTracker error FTK1011.  Tracking is not needed for install.
             build_cmd = f"""
                 cmake {cmake_args} -B {self.build_temp} -S {kaldi_native_fbank_dir}
-                cmake --build {self.build_temp} --target install --config Release -- -m
+                cmake --build {self.build_temp} --target install --config Release -- -m /p:TrackFileAccess=false
             """
             print(f"build command is:\n{build_cmd}")
             ret = os.system(
@@ -92,7 +96,7 @@ class BuildExtension(build_ext):
                 raise Exception("Failed to configure kaldi_native_fbank")
 
             ret = os.system(
-                f"cmake --build {self.build_temp} --target install --config Release -- -m"
+                f"cmake --build {self.build_temp} --target install --config Release -- -m /p:TrackFileAccess=false"
             )
             if ret != 0:
                 raise Exception("Failed to install kaldi_native_fbank")
