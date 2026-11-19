@@ -93,8 +93,7 @@ addition to cepstral mean normalization.)doc")
       .def_readwrite("modulus", &OnlineCmvnOptions::modulus,
                      R"doc(Kept for kaldi configuration compatibility; results
 are not affected (stats are updated incrementally).)doc")
-      .def_readwrite("ring_buffer_size",
-                     &OnlineCmvnOptions::ring_buffer_size,
+      .def_readwrite("ring_buffer_size", &OnlineCmvnOptions::ring_buffer_size,
                      R"doc(Kept for kaldi configuration compatibility (see
 ``modulus``).)doc")
       .def_readwrite("skip_dims", &OnlineCmvnOptions::skip_dims,
@@ -189,8 +188,7 @@ Example:
            R"doc(Construct with options and adaptation state.  The state
 carries the required global CMVN stats, and optionally speaker stats and a
 frozen state from a previous utterance.)doc")
-      .def_property_readonly("dim", &OnlineCmvn::Dim,
-                             "Feature dimension.")
+      .def_property_readonly("dim", &OnlineCmvn::Dim, "Feature dimension.")
       .def_property_readonly("num_frames_accepted",
                              &OnlineCmvn::NumFramesAccepted,
                              R"doc(Number of frames accepted so far.)doc")
@@ -229,8 +227,8 @@ with the next utterance of the same speaker.)doc")
           [](const MatrixD &speaker_stats, const MatrixD &global_stats,
              const OnlineCmvnOptions &opts, const MatrixD &stats) -> MatrixD {
             MatrixD out = stats;
-            OnlineCmvn::SmoothOnlineCmvnStats(speaker_stats, global_stats,
-                                              opts, &out);
+            OnlineCmvn::SmoothOnlineCmvnStats(speaker_stats, global_stats, opts,
+                                              &out);
             return out;
           },
           py::arg("speaker_stats"), py::arg("global_stats"), py::arg("opts"),
