@@ -162,8 +162,8 @@ variance normalization with 1-row stats raises an exception (same as kaldi).
 :return: A normalized copy of ``feats``.
 :rtype: numpy.ndarray
 
-Example
--------
+.. rubric:: Example
+
 
 .. code-block:: python
 

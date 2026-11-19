@@ -14,6 +14,7 @@ Python API
    stft
    transform
    cmvn
+   online-cmvn
    delta
    pitch
    reference

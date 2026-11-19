@@ -49,8 +49,8 @@ This is kaldi's `transform-feats <https://github.com/kaldi-asr/kaldi/blob/master
   :math:`y = x\, M_{[:,\,0:n-1]}^{T} + M_{[:,\,n-1]}`;
 * otherwise :meth:`apply` raises an exception.
 
-Example
--------
+.. rubric:: Example
+
 
 .. code-block:: python
 

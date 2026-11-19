@@ -292,8 +292,8 @@ block:
 :return: The matrix of shape ``(num_frames, dim * (order + 1))``, float32.
 :rtype: numpy.ndarray
 
-Example
--------
+.. rubric:: Example
+
 
 .. code-block:: python
 

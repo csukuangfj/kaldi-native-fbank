@@ -14,6 +14,7 @@ set(sources
   istft.cc
   kaldi-math.cc
   mel-computations.cc
+  online-cmvn.cc
   online-feature.cc
   online-nemo-fbank.cc
   resample.cc
@@ -66,6 +67,7 @@ set(test_srcs
   test-delta.cc
   test-fbank-eps.cc
   test-mel-computations.cc
+  test-online-cmvn.cc
   test-online-nemo-fbank.cc
   test-pitch.cc
   test-resample.cc

@@ -429,8 +429,8 @@ realization, so the result is identical on every platform.
    float32.
 :rtype: numpy.ndarray
 
-Example
--------
+.. rubric:: Example
+
 
 .. code-block:: python
 
