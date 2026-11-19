@@ -1,0 +1,82 @@
+# Runs the kaldi-parity tests inside the kaldi docker image
+# (ghcr.io/<owner>/kaldi), so kaldi does not have to be installed on the
+# runner: the image ships /opt/kaldi with all reference binaries on PATH.
+#
+# What runs:
+#   tests/parity/parity_mfcc.py        knf.OnlineMfcc  vs compute-mfcc-feats
+#   tests/parity/parity_online_cmvn.py knf.OnlineCmvn  vs apply-cmvn-online
+#
+# Inputs: the golden wavs in tests/data/feat_golden/ (16 kHz mono) and the
+# configs in tests/data/parity/.
+name: parity
+
+on:
+  push:
+    branches:
+      - master
+      - ci-fix
+  workflow_dispatch:
+
+jobs:
+  parity-vs-kaldi:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image name
+        id: image
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "name=ghcr.io/${owner}/kaldi:latest" >> "$GITHUB_OUTPUT"
+
+      # build-kaldi.yaml pushes this image; retry the pull until it is there.
+      - name: Pull the image
+        run: |
+          image="${{ steps.image.outputs.name }}"
+          for i in $(seq 1 30); do
+            if docker pull "$image"; then
+              echo "Pulled $image on attempt $i"; exit 0
+            fi
+            echo "Attempt $i: $image not ready yet, retrying in 20s..."
+            sleep 20
+          done
+          echo "ERROR: could not pull $image"; exit 1
+
+      - name: Run parity tests inside the container
+        run: |
+          docker run --rm -i \
+            -v "${{ github.workspace }}:/work" -w /work \
+            ${{ steps.image.outputs.name }} bash -s <<'PARITY'
+            set -e
+            # python + a compiler for the kaldi_native_fbank extension
+            apt-get update -qq
+            apt-get install -y -qq python3-pip python3-venv cmake g++ ninja-build
+
+            python3 -m venv /venv && . /venv/bin/activate
+            pip install -q numpy kaldi-native-io
+            pip install -q .    # build kaldi_native_fbank from this checkout
+
+            # --kaldi-dir is auto-detected as /opt/kaldi/src inside the image
+            python3 tests/parity/parity_mfcc.py \
+              --wav tests/data/feat_golden/zh0_1s.wav \
+              --wav tests/data/feat_golden/en0_1s.wav \
+              --config tests/data/parity/mfcc.conf
+
+            python3 tests/parity/parity_online_cmvn.py \
+              --wav tests/data/feat_golden/zh0_1s.wav \
+              --wav tests/data/feat_golden/en0_1s.wav \
+              --config tests/data/parity/mfcc.conf \
+              --global-stats tests/data/parity/global_cmvn.stats
+          PARITY
