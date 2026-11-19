@@ -15,6 +15,7 @@ var dir_7a451eb3a08db169ff8d9a5fc8f79b2b =
     [ "kaldi-math.h", "kaldi-math_8h.html", "kaldi-math_8h" ],
     [ "macros.h", "macros_8h.html", "macros_8h" ],
     [ "mel-computations.h", "mel-computations_8h.html", "mel-computations_8h" ],
+    [ "online-cmvn.h", "online-cmvn_8h.html", "online-cmvn_8h" ],
     [ "online-feature.h", "online-feature_8h.html", "online-feature_8h" ],
     [ "online-nemo-fbank.h", "online-nemo-fbank_8h.html", "online-nemo-fbank_8h" ],
     [ "resample.h", "resample_8h.html", "resample_8h" ],

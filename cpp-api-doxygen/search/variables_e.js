@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['raw_5fenergy_0',['raw_energy',['../structknf_1_1FbankOptions.html#a96d4fe928e80832712f1ff5f788ec792',1,'knf::FbankOptions::raw_energy'],['../structknf_1_1MfccOptions.html#a5380e8cbbb0fee7e3009fdd393b74023',1,'knf::MfccOptions::raw_energy']]],
-  ['real_1',['real',['../structknf_1_1StftResult.html#a4326722d464201975be8825e93ef2f10',1,'knf::StftResult']]],
-  ['recompute_5fframe_2',['recompute_frame',['../structknf_1_1PitchExtractionOptions.html#af17a2b95e1ddd09ffac7b28501b4f277',1,'knf::PitchExtractionOptions']]],
-  ['remove_5fdc_5foffset_3',['remove_dc_offset',['../structknf_1_1FrameExtractionOptions.html#a89fd029be094f1947596d6ecfd793814',1,'knf::FrameExtractionOptions']]],
-  ['resample_5ffreq_4',['resample_freq',['../structknf_1_1PitchExtractionOptions.html#a864c45cbbff1c16d3f69843c0e7270ea',1,'knf::PitchExtractionOptions']]],
-  ['reverse_5',['reverse',['../structknf_1_1CmvnOptions.html#aa4a230b1e2b712b2a3f81721bfd0327f',1,'knf::CmvnOptions']]],
-  ['right_5fcontext_6',['right_context',['../structknf_1_1SpliceOptions.html#af6517c66d485e5a0d79b69aacc74b139',1,'knf::SpliceOptions']]],
-  ['round_5fto_5fpower_5fof_5ftwo_7',['round_to_power_of_two',['../structknf_1_1FrameExtractionOptions.html#af6387d89e6429c3911192d4617e9eddc',1,'knf::FrameExtractionOptions']]]
+  ['pad_5fmode_0',['pad_mode',['../structknf_1_1StftConfig.html#a611f3aaf78ae7dccfe6b2db58e3423cf',1,'knf::StftConfig']]],
+  ['penalty_5ffactor_1',['penalty_factor',['../structknf_1_1PitchExtractionOptions.html#aa2717f4f630de192dcc0e1c62f82539e',1,'knf::PitchExtractionOptions']]],
+  ['pitch_5fscale_2',['pitch_scale',['../structknf_1_1ProcessPitchOptions.html#a9adc7b0f8774745b04d15d5a10f80f6d',1,'knf::ProcessPitchOptions']]],
+  ['pov_5foffset_3',['pov_offset',['../structknf_1_1ProcessPitchOptions.html#adffacdd2223da50fb68ae49ab1245646',1,'knf::ProcessPitchOptions']]],
+  ['pov_5fscale_4',['pov_scale',['../structknf_1_1ProcessPitchOptions.html#a7b494119a70cc16284c023f6e85c8fba',1,'knf::ProcessPitchOptions']]],
+  ['preemph_5fcoeff_5',['preemph_coeff',['../structknf_1_1PitchExtractionOptions.html#ae53e0774394d72a1bc0b3efc8785de61',1,'knf::PitchExtractionOptions::preemph_coeff'],['../structknf_1_1FrameExtractionOptions.html#acdb64e4d0020a0a8ab9aff908348ff70',1,'knf::FrameExtractionOptions::preemph_coeff'],['../structknf_1_1NemoFbankOptions.html#ab024bf046471ec0aeff49a7061c2e594',1,'knf::NemoFbankOptions::preemph_coeff']]]
 ];

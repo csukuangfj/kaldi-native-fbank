@@ -8,6 +8,7 @@ var searchData=
   ['getmatrix_5',['GetMatrix',['../classknf_1_1MelBanks.html#a534705056d665165b8bbb85c4c8706a6',1,'knf::MelBanks']]],
   ['getoptions_6',['GetOptions',['../classknf_1_1FbankComputer.html#a1d079502047d49771ee10e6f7bfb6cbe',1,'knf::FbankComputer::GetOptions()'],['../classknf_1_1MfccComputer.html#a57c9937e58ce4209f5fe162976f1b6c3',1,'knf::MfccComputer::GetOptions()'],['../classknf_1_1RawAudioSamplesComputer.html#ad2e89f7c6d9cb87abb4fef19b095efb3',1,'knf::RawAudioSamplesComputer::GetOptions()']]],
   ['getoutputsamplingrate_7',['GetOutputSamplingRate',['../classknf_1_1LinearResample.html#a84fa5c4ddb9743e0f7f0dc6da2be447f',1,'knf::LinearResample']]],
-  ['getwindow_8',['GetWindow',['../classknf_1_1FeatureWindowFunction.html#a9406afb52ff820d36535cd5163c66d75',1,'knf::FeatureWindowFunction::GetWindow()'],['../namespaceknf.html#a55e42f91ccc87b171ca6399641979105',1,'knf::GetWindow(const std::string &amp;window_type, int32_t window_size, float blackman_coeff=0.42)']]],
-  ['goldendir_9',['GoldenDir',['../namespaceknf.html#acc327887861fee6e2f2c8855d8cfa7bb',1,'knf']]]
+  ['getstate_8',['GetState',['../classknf_1_1OnlineCmvn.html#ab1a1e5db5c82d8376c31916160d8e0d8',1,'knf::OnlineCmvn']]],
+  ['getwindow_9',['GetWindow',['../classknf_1_1FeatureWindowFunction.html#a9406afb52ff820d36535cd5163c66d75',1,'knf::FeatureWindowFunction::GetWindow()'],['../namespaceknf.html#a55e42f91ccc87b171ca6399641979105',1,'knf::GetWindow(const std::string &amp;window_type, int32_t window_size, float blackman_coeff=0.42)']]],
+  ['goldendir_10',['GoldenDir',['../namespaceknf.html#acc327887861fee6e2f2c8855d8cfa7bb',1,'knf']]]
 ];

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; kaldi-native-fbank 1.23.1 documentation</title>
+  <title>Index &mdash; kaldi-native-fbank 1.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -13,7 +13,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=1c69af05"></script>
+      <script src="_static/documentation_options.js?v=2b91256f"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -576,6 +576,56 @@
 </li>
       <li><a href="cpp-api/cmvn.html#_CPPv4N3knf13InitCmvnStatsE7int32_tP7MatrixD">knf::InitCmvnStats (C++ function)</a>
 </li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvnE">knf::OnlineCmvn (C++ class)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn13AcceptFeatureEPKf7int32_t">knf::OnlineCmvn::AcceptFeature (C++ function)</a>, <a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn13AcceptFeatureERK7VectorF">[1]</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn14AcceptFeaturesERK7MatrixF">knf::OnlineCmvn::AcceptFeatures (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4NK3knf10OnlineCmvn3DimEv">knf::OnlineCmvn::Dim (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn6FreezeEv">knf::OnlineCmvn::Freeze (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4NK3knf10OnlineCmvn8GetStateEv">knf::OnlineCmvn::GetState (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4NK3knf10OnlineCmvn17NumFramesAcceptedEv">knf::OnlineCmvn::NumFramesAccepted (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn10OnlineCmvnERK17OnlineCmvnOptionsRK15OnlineCmvnState">knf::OnlineCmvn::OnlineCmvn (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf10OnlineCmvn21SmoothOnlineCmvnStatsERK7MatrixDRK7MatrixDRK17OnlineCmvnOptionsP7MatrixD">knf::OnlineCmvn::SmoothOnlineCmvnStats (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptionsE">knf::OnlineCmvnOptions (C++ struct)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions10cmn_windowE">knf::OnlineCmvnOptions::cmn_window (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions13global_framesE">knf::OnlineCmvnOptions::global_frames (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions7modulusE">knf::OnlineCmvnOptions::modulus (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions14normalize_meanE">knf::OnlineCmvnOptions::normalize_mean (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions18normalize_varianceE">knf::OnlineCmvnOptions::normalize_variance (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions16ring_buffer_sizeE">knf::OnlineCmvnOptions::ring_buffer_size (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions9skip_dimsE">knf::OnlineCmvnOptions::skip_dims (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf17OnlineCmvnOptions14speaker_framesE">knf::OnlineCmvnOptions::speaker_frames (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4NK3knf17OnlineCmvnOptions8ToStringEv">knf::OnlineCmvnOptions::ToString (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf15OnlineCmvnStateE">knf::OnlineCmvnState (C++ struct)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf15OnlineCmvnState12frozen_stateE">knf::OnlineCmvnState::frozen_state (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf15OnlineCmvnState17global_cmvn_statsE">knf::OnlineCmvnState::global_cmvn_stats (C++ member)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf15OnlineCmvnState15OnlineCmvnStateERK7MatrixD">knf::OnlineCmvnState::OnlineCmvnState (C++ function)</a>
+</li>
+      <li><a href="cpp-api/online-cmvn.html#_CPPv4N3knf15OnlineCmvnState18speaker_cmvn_statsE">knf::OnlineCmvnState::speaker_cmvn_stats (C++ member)</a>
+</li>
       <li><a href="cpp-api/fbank.html#_CPPv4N3knf11OnlineFbankE">knf::OnlineFbank (C++ type)</a>
 </li>
       <li><a href="cpp-api/pitch.html#_CPPv4N3knf11OnlinePitchE">knf::OnlinePitch (C++ class)</a>
@@ -590,8 +640,6 @@
 </li>
       <li><a href="cpp-api/pitch.html#_CPPv4N3knf11OnlinePitch13InputFinishedEv">knf::OnlinePitch::InputFinished (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp-api/pitch.html#_CPPv4NK3knf11OnlinePitch11IsLastFrameE7int32_t">knf::OnlinePitch::IsLastFrame (C++ function)</a>
 </li>
       <li><a href="cpp-api/pitch.html#_CPPv4NK3knf11OnlinePitch14NumFramesReadyEv">knf::OnlinePitch::NumFramesReady (C++ function)</a>

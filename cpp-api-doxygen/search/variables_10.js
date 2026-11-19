@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['upsample_5ffilter_5fwidth_0',['upsample_filter_width',['../structknf_1_1PitchExtractionOptions.html#acfd35eb19ca8f32e6bd03225ebe15818',1,'knf::PitchExtractionOptions']]],
-  ['use_5fenergy_1',['use_energy',['../structknf_1_1FbankOptions.html#aa0da98d67e5913d9f3ccf132c70a2820',1,'knf::FbankOptions::use_energy'],['../structknf_1_1MfccOptions.html#aeb1ab65d0ed0558be69f1a4218acb397',1,'knf::MfccOptions::use_energy']]],
-  ['use_5flog_5ffbank_2',['use_log_fbank',['../structknf_1_1FbankOptions.html#ace68bb4c794abf479c31b54324a30e2d',1,'knf::FbankOptions']]],
-  ['use_5flog_5ffloor_3',['use_log_floor',['../structknf_1_1FbankOptions.html#af222c9138914d2f78cfdce9f2ba93173',1,'knf::FbankOptions']]],
-  ['use_5fpower_4',['use_power',['../structknf_1_1FbankOptions.html#ab76de644a26e3db7b4f43a7655ce1303',1,'knf::FbankOptions']]],
-  ['use_5fslaney_5fmel_5fscale_5',['use_slaney_mel_scale',['../structknf_1_1MelBanksOptions.html#aea7cecc3fdfb2cf999e675536c64fea4',1,'knf::MelBanksOptions']]]
+  ['samp_5ffreq_0',['samp_freq',['../structknf_1_1PitchExtractionOptions.html#afa0602aa7aa2ffdabf230c0ad7aebef3',1,'knf::PitchExtractionOptions::samp_freq'],['../structknf_1_1FrameExtractionOptions.html#affcacbd2bea93885e38ed692e27ebfee',1,'knf::FrameExtractionOptions::samp_freq'],['../structknf_1_1NemoFbankOptions.html#a4691b8345377ba0ddbe3cbe02415a8ae',1,'knf::NemoFbankOptions::samp_freq']]],
+  ['seed_1',['seed',['../structknf_1_1RandomState.html#affcbdf8e272df9bcf893a6443536db8c',1,'knf::RandomState']]],
+  ['simulate_5ffirst_5fpass_5fonline_2',['simulate_first_pass_online',['../structknf_1_1PitchExtractionOptions.html#aa116efc64cca728e5459450a48ab20f7',1,'knf::PitchExtractionOptions']]],
+  ['skip_5fdims_3',['skip_dims',['../structknf_1_1OnlineCmvnOptions.html#aef7aca3cc8bd9539bba539083eb94f0e',1,'knf::OnlineCmvnOptions']]],
+  ['snip_5fedges_4',['snip_edges',['../structknf_1_1PitchExtractionOptions.html#ab37bfb5464b620c79da2df7e98ef4de8',1,'knf::PitchExtractionOptions::snip_edges'],['../structknf_1_1FrameExtractionOptions.html#a99cf7a8f53022e06422a2adfea511ab7',1,'knf::FrameExtractionOptions::snip_edges']]],
+  ['soft_5fmin_5ff0_5',['soft_min_f0',['../structknf_1_1PitchExtractionOptions.html#aec14c3ea363deae5b71528860fd91f27',1,'knf::PitchExtractionOptions']]],
+  ['speaker_5fcmvn_5fstats_6',['speaker_cmvn_stats',['../structknf_1_1OnlineCmvnState.html#a5769d05ad2ce583eb253243acfe8f581',1,'knf::OnlineCmvnState']]],
+  ['speaker_5fframes_7',['speaker_frames',['../structknf_1_1OnlineCmvnOptions.html#ae3348d700eb9a5426442de5d5da136a6',1,'knf::OnlineCmvnOptions']]]
 ];

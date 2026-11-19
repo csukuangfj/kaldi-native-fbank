@@ -21,6 +21,8 @@ var searchData=
   ['rfft_18',['Rfft',['../classknf_1_1Rfft.html',1,'knf::Rfft'],['../classknf_1_1Rfft.html#a952b4890f2a63c2c4f2386fd3523b546',1,'knf::Rfft::Rfft()']]],
   ['rfft_2eh_19',['rfft.h',['../rfft_8h.html',1,'']]],
   ['right_5fcontext_20',['right_context',['../structknf_1_1SpliceOptions.html#af6517c66d485e5a0d79b69aacc74b139',1,'knf::SpliceOptions']]],
-  ['round_5fto_5fpower_5fof_5ftwo_21',['round_to_power_of_two',['../structknf_1_1FrameExtractionOptions.html#af6387d89e6429c3911192d4617e9eddc',1,'knf::FrameExtractionOptions']]],
-  ['rounduptonearestpoweroftwo_22',['RoundUpToNearestPowerOfTwo',['../namespaceknf.html#a165a3aa959ff921ee358b716a70b81bb',1,'knf']]]
+  ['ring_5fbuffer_5fsize_21',['ring_buffer_size',['../structknf_1_1OnlineCmvnOptions.html#a524e8aed9a704bb30158b1ad972d0523',1,'knf::OnlineCmvnOptions']]],
+  ['round_5fto_5fpower_5fof_5ftwo_22',['round_to_power_of_two',['../structknf_1_1FrameExtractionOptions.html#af6387d89e6429c3911192d4617e9eddc',1,'knf::FrameExtractionOptions']]],
+  ['rounduptonearestpoweroftwo_23',['RoundUpToNearestPowerOfTwo',['../namespaceknf.html#a165a3aa959ff921ee358b716a70b81bb',1,'knf']]],
+  ['running_20cmvn_20—_20online_20cmvn_20h_24',['Online (running) CMVN — online-cmvn.h',['../index.html#online_cmvn',1,'']]]
 ];

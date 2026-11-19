@@ -8,6 +8,7 @@ Full doxygen reference (auto-generated from the headers):
    :maxdepth: 2
 
    cmvn
+   online-cmvn
    delta
    mfcc
    fbank

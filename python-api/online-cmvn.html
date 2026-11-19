@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online CMVN &mdash; kaldi-native-fbank 1.23.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2b91256f"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Delta features" href="delta.html" />
+    <link rel="prev" title="CMVN" href="cmvn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whisper.html">Whisper Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nemo.html">NeMo filter bank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raw-audio.html">Raw audio framing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="window.html">Window &amp; frame extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mel.html">Mel filter banks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Online CMVN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#offline-vs-online-cmvn">Offline vs online CMVN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#freezing-the-normalization">Freezing the normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#formulas">Formulas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#correspondence-with-kaldi">Correspondence with kaldi</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cpp-api/index.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Python API</a></li>
+      <li class="breadcrumb-item active">Online CMVN</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python-api/online-cmvn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="online-cmvn">
+<h1>Online CMVN<a class="headerlink" href="#online-cmvn" title="Link to this heading"></a></h1>
+<p>Running (online) cepstral mean and variance normalization, a port of kaldi's
+<code class="docutils literal notranslate"><span class="pre">OnlineCmvn</span></code> / <code class="docutils literal notranslate"><span class="pre">OnlineCmvnState</span></code>
+(<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/online-feature.h">feat/online-feature.h</a>, see
+<a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/online-cmvn.h">kaldi-native-fbank/csrc/online-cmvn.h</a>).</p>
+<p>Unlike the offline CMVN of <a class="reference internal" href="cmvn.html"><span class="doc">CMVN</span></a> (which needs the whole utterance), this
+class looks only at the <strong>past</strong>: each frame is normalized with statistics
+accumulated from the frames seen so far.  This is what kaldi's online decoding
+and i-vector front-ends use — if you train on features normalized this way you
+must decode with the same kind of normalization (kaldi's &quot;matched&quot; online
+training).</p>
+<section id="offline-vs-online-cmvn">
+<h2>Offline vs online CMVN<a class="headerlink" href="#offline-vs-online-cmvn" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>offline (<a class="reference internal" href="cmvn.html"><span class="doc">CMVN</span></a>)</p></th>
+<th class="head"><p>online (this page)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>stats over the whole</p></td>
+<td><p>stats over the previous <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code> frames</p></td>
+</tr>
+<tr class="row-odd"><td><p>utterance (sees the future)</p></td>
+<td><p>(streaming, past only)</p></td>
+</tr>
+<tr class="row-even"><td><p>output is zero-mean per</p></td>
+<td><p>output only <em>approximately</em> centered,</p></td>
+</tr>
+<tr class="row-odd"><td><p>utterance</p></td>
+<td><p>especially at the start</p></td>
+</tr>
+<tr class="row-even"><td><p>one shot</p></td>
+<td><p>one frame at a time</p></td>
+</tr>
+<tr class="row-odd"><td><p>reversable (<code class="docutils literal notranslate"><span class="pre">reverse=True</span></code>)</p></td>
+<td><p>frozen via <code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.freeze()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>In the steady state (middle of a long utterance) the class accumulates stats
+from the previous <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code> frames (default 600, i.e. 6 seconds) and uses
+them to normalize the current frame.  At the <strong>beginning of an utterance</strong>,
+when fewer than <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code> frames of context exist, the stats are
+augmented first with up to <code class="docutils literal notranslate"><span class="pre">speaker_frames</span></code> frames of speaker stats (from
+previous utterances of the same speaker) and then with up to <code class="docutils literal notranslate"><span class="pre">global_frames</span></code>
+frames of global stats (from training data) — so the very first frames are
+normalized against a &quot;typical&quot; distribution instead of almost nothing.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
+
+<span class="n">dim</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">global_stats</span> <span class="o">=</span> <span class="o">...</span>          <span class="c1"># [2, dim+1] float64, e.g. kaldi's global_cmvn.stats</span>
+
+<span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineCmvnOptions</span><span class="p">()</span>          <span class="c1"># kaldi defaults</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineCmvnState</span><span class="p">(</span><span class="n">global_cmvn_stats</span><span class="o">=</span><span class="n">global_stats</span><span class="p">)</span>
+<span class="n">cmvn</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineCmvn</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+
+<span class="c1"># push raw feature frames one by one (or in batches)</span>
+<span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">accept_features</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>       <span class="c1"># [200, dim] float32, normalized</span>
+<span class="c1"># out[t] = feats[t] - running_mean(t)   (mean normalization)</span>
+
+<span class="c1"># hand the speaker adaptation over to the next utterance:</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+<span class="n">cmvn2</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineCmvn</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">cmvn2</span><span class="o">.</span><span class="n">accept_features</span><span class="p">(</span><span class="n">next_utterance</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Single frames use <code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.accept_feature()</span></code>, which returns the
+normalized frame of shape <code class="docutils literal notranslate"><span class="pre">[dim]</span></code>.</p>
+</section>
+<section id="freezing-the-normalization">
+<h2>Freezing the normalization<a class="headerlink" href="#freezing-the-normalization" title="Link to this heading"></a></h2>
+<p>Calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.freeze()</span></code> fixes the normalization at the current
+frame: later frames are normalized with the frozen stats and the running stats
+stop updating.  This is kaldi's mechanism for estimating fMLLR (or anything
+else) on top of a <em>fixed</em> CMVN.  The frozen state travels with
+<code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvnState</span></code>, so the next utterance of the speaker is normalized
+the same way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cmvn</span><span class="o">.</span><span class="n">accept_features</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>
+<span class="n">cmvn</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+<span class="n">steady</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">accept_features</span><span class="p">(</span><span class="n">more_feats</span><span class="p">)</span>   <span class="c1"># constant offset per dim</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>                    <span class="c1"># carries frozen_state</span>
+<span class="n">cmvn2</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">OnlineCmvn</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>         <span class="c1"># keeps the frozen normalization</span>
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h2>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvnOptions</span></code> mirrors kaldi's <code class="docutils literal notranslate"><span class="pre">OnlineCmvnOptions</span></code> (defaults
+match):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>default</p></th>
+<th class="head"><p>meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cmn_window</span></code></p></td>
+<td><p>600</p></td>
+<td><p>frames of sliding context for the running stats</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">speaker_frames</span></code></p></td>
+<td><p>600</p></td>
+<td><p>frames of previous utterance(s) of this speaker to
+back off to at utterance start (<code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">cmn_window</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">global_frames</span></code></p></td>
+<td><p>200</p></td>
+<td><p>frames of global stats to back off to further
+(<code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">speaker_frames</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">normalize_mean</span></code></p></td>
+<td><p>True</p></td>
+<td><p>subtract the running mean</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">normalize_variance</span></code></p></td>
+<td><p>False</p></td>
+<td><p>also divide by the running standard deviation
+(requires <code class="docutils literal notranslate"><span class="pre">normalize_mean=True</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">modulus</span></code></p></td>
+<td><p>20</p></td>
+<td><p>kept for kaldi configuration compatibility; this
+port updates stats incrementally, so results are
+not affected</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ring_buffer_size</span></code></p></td>
+<td><p>20</p></td>
+<td><p>kept for kaldi configuration compatibility (see
+<code class="docutils literal notranslate"><span class="pre">modulus</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">skip_dims</span></code></p></td>
+<td><p>&quot;&quot;</p></td>
+<td><p>colon-separated dimensions to skip normalization
+of, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;13:14:15&quot;</span></code> (useful for e.g. pitch
+features appended to the base features)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="formulas">
+<h2>Formulas<a class="headerlink" href="#formulas" title="Link to this heading"></a></h2>
+<p>Stats have kaldi's 2 x (dim+1) layout (same as <a class="reference internal" href="cmvn.html"><span class="doc">CMVN</span></a>):
+<code class="docutils literal notranslate"><span class="pre">row0</span> <span class="pre">=</span> <span class="pre">[sum_1..sum_D,</span> <span class="pre">count]</span></code>, <code class="docutils literal notranslate"><span class="pre">row1</span> <span class="pre">=</span> <span class="pre">[sumsq_1..sumsq_D,</span> <span class="pre">0]</span></code>.</p>
+<p>For each accepted frame <span class="math notranslate nohighlight">\(x_t\)</span> the running window stats are updated
+(frame <span class="math notranslate nohighlight">\(t\)</span> added, frame <span class="math notranslate nohighlight">\(t - c\)</span> removed if it leaves the window,
+where <span class="math notranslate nohighlight">\(c\)</span> is the option <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code>):</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{count} = \sum_{s=t-c+1}^{t} 1, \qquad
+\mathrm{sum}_d = \sum_{s=t-c+1}^{t} x_{s,d}, \qquad
+\mathrm{sumsq}_d = \sum_{s=t-c+1}^{t} x_{s,d}^2\]</div>
+<p>The window stats are then <em>smoothed</em>
+with the speaker and global stats (this is what happens when
+<span class="math notranslate nohighlight">\(\mathrm{count} &lt; c\)</span>, e.g. at the start of an utterance):</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{sum} \mathrel{+}= \frac{\min(c - n,\ s_f,\ n_s)}{n_s}\, \mathrm{sum}_{\mathrm{spk}},
+\quad\text{then}\quad
+\mathrm{sum} \mathrel{+}= \frac{\min(c - n',\ g_f)}{n_g}\, \mathrm{sum}_{\mathrm{glob}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(n\)</span> is the window count, <span class="math notranslate nohighlight">\(s_f\)</span>/<code class="docutils literal notranslate"><span class="pre">speaker_frames</span></code>,
+<span class="math notranslate nohighlight">\(g_f\)</span>/<code class="docutils literal notranslate"><span class="pre">global_frames</span></code>, <span class="math notranslate nohighlight">\(n_s\)</span>/<code class="docutils literal notranslate"><span class="pre">n_g</span></code> the counts of the speaker
+and global stats (same for <code class="docutils literal notranslate"><span class="pre">sumsq</span></code>).  Finally the frame is normalized with
+the smoothed stats:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}y_{t,d} = x_{t,d} - \frac{\mathrm{sum}_d}{\mathrm{count}}
+\qquad (\text{mean normalization})\\y_{t,d} = \frac{x_{t,d} - \mu_d}{\sqrt{\sigma_d^2}}, \quad
+\mu_d = \frac{\mathrm{sum}_d}{\mathrm{count}}, \quad
+\sigma_d^2 = \frac{\mathrm{sumsq}_d}{\mathrm{count}} - \mu_d^2
+\qquad (\text{+ variance normalization})\end{aligned}\end{align} \]</div>
+<p>Note the frame being normalized <strong>is included</strong> in the stats that normalize it
+(like kaldi).  Variance is floored at <span class="math notranslate nohighlight">\(10^{-20}\)</span> before the square root.</p>
+</section>
+<section id="correspondence-with-kaldi">
+<h2>Correspondence with kaldi<a class="headerlink" href="#correspondence-with-kaldi" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>kaldi (<code class="docutils literal notranslate"><span class="pre">feat/online-feature.h</span></code>)</p></th>
+<th class="head"><p>kaldi-native-fbank</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvnOptions</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvnOptions</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvnState</span></code></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvnState</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvn</span></code> (pull-style filter: <code class="docutils literal notranslate"><span class="pre">GetFrame(t)</span></code>)</p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvn</span></code> (push-style: <code class="docutils literal notranslate"><span class="pre">accept_*</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvn::Freeze(t)</span></code></p></td>
+<td><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.freeze()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvn::GetState(t,</span> <span class="pre">&amp;s)</span></code></p></td>
+<td><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.get_state()</span></code> (speaker stats are accumulated
+incrementally; same result)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OnlineCmvn::SetState(s)</span></code></p></td>
+<td><p>pass the state to the <code class="xref py py-class docutils literal notranslate"><span class="pre">OnlineCmvn</span></code> constructor</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SmoothOnlineCmvnStats</span></code></p></td>
+<td><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">OnlineCmvn.smooth_online_cmvn_stats()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Parity with kaldi is tested frame-by-frame against
+<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/online2bin/apply-cmvn-online.cc">apply-cmvn-online</a> in
+<code class="docutils literal notranslate"><span class="pre">tests/parity/parity_online_cmvn.py</span></code> (several option sets including
+speaker-state handover agree to about 1e-5).</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cmvn.html" class="btn btn-neutral float-left" title="CMVN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="delta.html" class="btn btn-neutral float-right" title="Delta features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

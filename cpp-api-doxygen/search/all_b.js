@@ -18,5 +18,7 @@ var searchData=
   ['melscaleslaney_15',['MelScaleSlaney',['../classknf_1_1MelBanks.html#a7e6f5202c6c851b2d725e4595b4d24c5',1,'knf::MelBanks']]],
   ['mfcccomputer_16',['MfccComputer',['../classknf_1_1MfccComputer.html',1,'knf::MfccComputer'],['../classknf_1_1MfccComputer.html#aeafc8ba5cab4fed163ee959c683e38d1',1,'knf::MfccComputer::MfccComputer()']]],
   ['mfccoptions_17',['MfccOptions',['../structknf_1_1MfccOptions.html',1,'knf::MfccOptions'],['../structknf_1_1MfccOptions.html#af39a44780294409594ce2d85e429643b',1,'knf::MfccOptions::MfccOptions()']]],
-  ['min_5ff0_18',['min_f0',['../structknf_1_1PitchExtractionOptions.html#a909759e0f422bc77ad269a227d880ade',1,'knf::PitchExtractionOptions']]]
+  ['min_5ff0_18',['min_f0',['../structknf_1_1PitchExtractionOptions.html#a909759e0f422bc77ad269a227d880ade',1,'knf::PitchExtractionOptions']]],
+  ['modules_19',['Modules',['../index.html#modules',1,'']]],
+  ['modulus_20',['modulus',['../structknf_1_1OnlineCmvnOptions.html#a6d44b01555ff0b86abbe6744495abdd8',1,'knf::OnlineCmvnOptions']]]
 ];

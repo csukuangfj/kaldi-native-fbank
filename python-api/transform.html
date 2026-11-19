@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feature transforms (LDA) &mdash; kaldi-native-fbank 1.23.1 documentation</title>
+  <title>Feature transforms (LDA) &mdash; kaldi-native-fbank 1.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=1c69af05"></script>
+      <script src="../_static/documentation_options.js?v=2b91256f"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -68,6 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="online-cmvn.html">Online CMVN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
@@ -138,8 +139,7 @@ of <span class="math notranslate nohighlight">\(M\)</span> is the offset:
 <span class="math notranslate nohighlight">\(y = x\, M_{[:,\,0:n-1]}^{T} + M_{[:,\,n-1]}\)</span>;</p></li>
 <li><p>otherwise <a class="reference internal" href="#kaldi_native_fbank.FeatureTransform.apply" title="kaldi_native_fbank.FeatureTransform.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code></a> raises an exception.</p></li>
 </ul>
-<section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<p class="rubric">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lda</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">FeatureTransform</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"lda.mat"</span><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>            <span class="c1"># (T, lda.output_dim)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">transform_features</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="n">lda</span><span class="p">)</span>
@@ -151,8 +151,8 @@ of <span class="math notranslate nohighlight">\(M\)</span> is the offset:
 </div>
 <p>Construct a transform from a matrix directly.</p>
 <dl class="field-list simple">
-<dt class="field-odd">param mat<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The transform matrix of shape <code class="docutils literal notranslate"><span class="pre">(output_dim,</span> <span class="pre">input_dim)</span></code>, or
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mat</strong> -- The transform matrix of shape <code class="docutils literal notranslate"><span class="pre">(output_dim,</span> <span class="pre">input_dim)</span></code>, or
 one column wider for an affine transform (the last column is the
 offset).</p>
 </dd>
@@ -240,7 +240,6 @@ offset).</p>
 </dl>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 <dl class="py function">

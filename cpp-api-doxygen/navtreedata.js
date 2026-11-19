@@ -25,6 +25,8 @@
 var NAVTREE =
 [
   [ "kaldi-native-fbank C++ API", "index.html", [
+    [ "Modules", "index.html#modules", null ],
+    [ "Online (running) CMVN — online-cmvn.h", "index.html#online_cmvn", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -57,8 +59,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"feature-cmvn_8h.html",
-"structknf_1_1NemoFbankOptions.html#a623efcfc08139a8265c7742f63aa111c"
+"classknf_1_1Stft.html#acc1b09d066dde70bf2c7883b0fe79a19",
+"structknf_1_1MfccOptions.html#a4ada476da241214b540e3f8f2237e97e"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

@@ -101,6 +101,9 @@ $(function(){initNavTree('namespaceknf.html','',''); });
   <div class="headertitle"><div class="title">knf Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>This file is part of kaldi-native-fbank.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -144,6 +147,12 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for constructing triangular mel-filterbank bins.  <a href="structknf_1_1MelBanksOptions.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MelBanks" id="r_MelBanks"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classknf_1_1MelBanks.html">MelBanks</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triangular mel-filterbank bins.  <a href="classknf_1_1MelBanks.html#details">More...</a><br /></td></tr>
+<tr class="memitem:OnlineCmvnOptions" id="r_OnlineCmvnOptions"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structknf_1_1OnlineCmvnOptions.html">OnlineCmvnOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <a class="el" href="classknf_1_1OnlineCmvn.html" title="Online (running) cepstral mean and optional variance normalization.">OnlineCmvn</a>, mirroring kaldi's <a class="el" href="structknf_1_1OnlineCmvnOptions.html" title="Options for OnlineCmvn, mirroring kaldi&#39;s OnlineCmvnOptions (kaldi/src/feat/online-feature....">OnlineCmvnOptions</a> (kaldi/src/feat/online-feature.h).  <a href="structknf_1_1OnlineCmvnOptions.html#details">More...</a><br /></td></tr>
+<tr class="memitem:OnlineCmvnState" id="r_OnlineCmvnState"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structknf_1_1OnlineCmvnState.html">OnlineCmvnState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">State of CMVN adaptation between utterances (not the within-utterance computation state).  <a href="structknf_1_1OnlineCmvnState.html#details">More...</a><br /></td></tr>
+<tr class="memitem:OnlineCmvn" id="r_OnlineCmvn"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classknf_1_1OnlineCmvn.html">OnlineCmvn</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Online (running) cepstral mean and optional variance normalization.  <a href="classknf_1_1OnlineCmvn.html#details">More...</a><br /></td></tr>
 <tr class="memitem:RecyclingVector" id="r_RecyclingVector"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classknf_1_1RecyclingVector.html">RecyclingVector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class serves as a storage for feature vectors with an option to limit the memory usage by removing old elements.  <a href="classknf_1_1RecyclingVector.html#details">More...</a><br /></td></tr>
 <tr class="memitem:OnlineGenericBaseFeature" id="r_OnlineGenericBaseFeature"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classknf_1_1OnlineGenericBaseFeature.html">OnlineGenericBaseFeature</a></td></tr>
@@ -276,7 +285,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a89d19e27582d18ec063cabae792ed26a" id="r_a89d19e27582d18ec063cabae792ed26a"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89d19e27582d18ec063cabae792ed26a">kGoldenDotProductTol</a> = 1e-4</td></tr>
 <tr class="memdesc:a89d19e27582d18ec063cabae792ed26a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison tolerance for golden matrices whose kaldi reference was produced by matrix multiplications or long dot products (the LDA transform-feats outputs and the pitch NCCF): kaldi's BLAS and Eigen accumulate the sums in different orders, which gives per-platform float noise of up to a few 1e-5.  <br /></td></tr>
 </table>
-<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This file is part of kaldi-native-fbank. </p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
 <a id="af006bac15f087f8aea1c60384106f11f" name="af006bac15f087f8aea1c60384106f11f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af006bac15f087f8aea1c60384106f11f">&#9670;&#160;</a></span>MatrixD</h2>
 

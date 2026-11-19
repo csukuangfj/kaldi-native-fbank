@@ -1,8 +1,12 @@
 var searchData=
 [
-  ['samp_5ffreq_0',['samp_freq',['../structknf_1_1PitchExtractionOptions.html#afa0602aa7aa2ffdabf230c0ad7aebef3',1,'knf::PitchExtractionOptions::samp_freq'],['../structknf_1_1FrameExtractionOptions.html#affcacbd2bea93885e38ed692e27ebfee',1,'knf::FrameExtractionOptions::samp_freq'],['../structknf_1_1NemoFbankOptions.html#a4691b8345377ba0ddbe3cbe02415a8ae',1,'knf::NemoFbankOptions::samp_freq']]],
-  ['seed_1',['seed',['../structknf_1_1RandomState.html#affcbdf8e272df9bcf893a6443536db8c',1,'knf::RandomState']]],
-  ['simulate_5ffirst_5fpass_5fonline_2',['simulate_first_pass_online',['../structknf_1_1PitchExtractionOptions.html#aa116efc64cca728e5459450a48ab20f7',1,'knf::PitchExtractionOptions']]],
-  ['snip_5fedges_3',['snip_edges',['../structknf_1_1PitchExtractionOptions.html#ab37bfb5464b620c79da2df7e98ef4de8',1,'knf::PitchExtractionOptions::snip_edges'],['../structknf_1_1FrameExtractionOptions.html#a99cf7a8f53022e06422a2adfea511ab7',1,'knf::FrameExtractionOptions::snip_edges']]],
-  ['soft_5fmin_5ff0_4',['soft_min_f0',['../structknf_1_1PitchExtractionOptions.html#aec14c3ea363deae5b71528860fd91f27',1,'knf::PitchExtractionOptions']]]
+  ['raw_5fenergy_0',['raw_energy',['../structknf_1_1FbankOptions.html#a96d4fe928e80832712f1ff5f788ec792',1,'knf::FbankOptions::raw_energy'],['../structknf_1_1MfccOptions.html#a5380e8cbbb0fee7e3009fdd393b74023',1,'knf::MfccOptions::raw_energy']]],
+  ['real_1',['real',['../structknf_1_1StftResult.html#a4326722d464201975be8825e93ef2f10',1,'knf::StftResult']]],
+  ['recompute_5fframe_2',['recompute_frame',['../structknf_1_1PitchExtractionOptions.html#af17a2b95e1ddd09ffac7b28501b4f277',1,'knf::PitchExtractionOptions']]],
+  ['remove_5fdc_5foffset_3',['remove_dc_offset',['../structknf_1_1FrameExtractionOptions.html#a89fd029be094f1947596d6ecfd793814',1,'knf::FrameExtractionOptions']]],
+  ['resample_5ffreq_4',['resample_freq',['../structknf_1_1PitchExtractionOptions.html#a864c45cbbff1c16d3f69843c0e7270ea',1,'knf::PitchExtractionOptions']]],
+  ['reverse_5',['reverse',['../structknf_1_1CmvnOptions.html#aa4a230b1e2b712b2a3f81721bfd0327f',1,'knf::CmvnOptions']]],
+  ['right_5fcontext_6',['right_context',['../structknf_1_1SpliceOptions.html#af6517c66d485e5a0d79b69aacc74b139',1,'knf::SpliceOptions']]],
+  ['ring_5fbuffer_5fsize_7',['ring_buffer_size',['../structknf_1_1OnlineCmvnOptions.html#a524e8aed9a704bb30158b1ad972d0523',1,'knf::OnlineCmvnOptions']]],
+  ['round_5fto_5fpower_5fof_5ftwo_8',['round_to_power_of_two',['../structknf_1_1FrameExtractionOptions.html#af6387d89e6429c3911192d4617e9eddc',1,'knf::FrameExtractionOptions']]]
 ];

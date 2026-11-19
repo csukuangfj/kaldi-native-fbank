@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pitch &mdash; kaldi-native-fbank 1.23.1 documentation</title>
+  <title>Pitch &mdash; kaldi-native-fbank 1.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=1c69af05"></script>
+      <script src="../_static/documentation_options.js?v=2b91256f"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,6 +61,7 @@
 <li class="toctree-l2"><a class="reference internal" href="stft.html">STFT / iSTFT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="transform.html">Feature transforms (LDA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="online-cmvn.html">Online CMVN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Pitch</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#api-reference">API reference</a><ul>
@@ -693,8 +694,7 @@ float32.</p>
 <dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
-<section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<p class="rubric">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">wave</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">kaldi_native_fbank</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">knf</span>
@@ -716,7 +716,6 @@ float32.</p>
 <p><a class="reference internal" href="#kaldi_native_fbank.OnlinePitch" title="kaldi_native_fbank.OnlinePitch"><code class="xref py py-class docutils literal notranslate"><span class="pre">OnlinePitch</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.PitchExtractionOptions" title="kaldi_native_fbank.PitchExtractionOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">PitchExtractionOptions</span></code></a>,
 <a class="reference internal" href="#kaldi_native_fbank.ProcessPitchOptions" title="kaldi_native_fbank.ProcessPitchOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessPitchOptions</span></code></a></p>
 </div>
-</section>
 </dd></dl>
 
 </section>

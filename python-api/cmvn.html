@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CMVN &mdash; kaldi-native-fbank 1.23.1 documentation</title>
+  <title>CMVN &mdash; kaldi-native-fbank 1.23.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=1c69af05"></script>
+      <script src="../_static/documentation_options.js?v=2b91256f"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Delta features" href="delta.html" />
+    <link rel="next" title="Online CMVN" href="online-cmvn.html" />
     <link rel="prev" title="Feature transforms (LDA)" href="transform.html" /> 
 </head>
 
@@ -76,6 +76,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#golden-tests">Golden tests</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="online-cmvn.html">Online CMVN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="delta.html">Delta features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html">Python API reference</a></li>
@@ -548,8 +549,7 @@ variance normalization with 1-row stats raises an exception (same as kaldi).</p>
 <dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
-<section id="example">
-<h4>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h4>
+<p class="rubric">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">compute_cmvn_stats</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>
 <span class="n">opts</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">CmvnOptions</span><span class="p">()</span>  <span class="c1"># norm_vars=False, reverse=False</span>
 <span class="n">normed</span> <span class="o">=</span> <span class="n">knf</span><span class="o">.</span><span class="n">apply_cmvn</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">feats</span><span class="p">)</span>
@@ -560,7 +560,6 @@ variance normalization with 1-row stats raises an exception (same as kaldi).</p>
 <p><a class="reference internal" href="#kaldi_native_fbank.apply_cmvn_" title="kaldi_native_fbank.apply_cmvn_"><code class="xref py py-func docutils literal notranslate"><span class="pre">apply_cmvn_()</span></code></a>, <a class="reference internal" href="#kaldi_native_fbank.compute_cmvn_stats" title="kaldi_native_fbank.compute_cmvn_stats"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_cmvn_stats()</span></code></a>,
 <a class="reference internal" href="#kaldi_native_fbank.CmvnAccumulator" title="kaldi_native_fbank.CmvnAccumulator"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmvnAccumulator</span></code></a></p>
 </div>
-</section>
 </dd></dl>
 
 <dl class="py function">
@@ -602,7 +601,7 @@ for the exact commands and parameter groups).  See
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="transform.html" class="btn btn-neutral float-left" title="Feature transforms (LDA)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="delta.html" class="btn btn-neutral float-right" title="Delta features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="online-cmvn.html" class="btn btn-neutral float-right" title="Online CMVN" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

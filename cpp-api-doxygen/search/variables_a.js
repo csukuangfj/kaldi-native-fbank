@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['max_5ff0_0',['max_f0',['../structknf_1_1PitchExtractionOptions.html#ac72dcd375118ac195417512593ffa300',1,'knf::PitchExtractionOptions']]],
-  ['max_5fframes_5flatency_1',['max_frames_latency',['../structknf_1_1PitchExtractionOptions.html#a61516287cc1919b81387c1559f8a17d0',1,'knf::PitchExtractionOptions']]],
-  ['mel_5fopts_2',['mel_opts',['../structknf_1_1FbankOptions.html#a5a10e440baa2c6b5c9a832806ea174e7',1,'knf::FbankOptions::mel_opts'],['../structknf_1_1MfccOptions.html#a4ada476da241214b540e3f8f2237e97e',1,'knf::MfccOptions::mel_opts']]],
-  ['min_5ff0_3',['min_f0',['../structknf_1_1PitchExtractionOptions.html#a909759e0f422bc77ad269a227d880ade',1,'knf::PitchExtractionOptions']]]
+  ['left_5fcontext_0',['left_context',['../structknf_1_1SpliceOptions.html#aef4904ddb5c75d16d676589ccd2e6248',1,'knf::SpliceOptions']]],
+  ['low_5ffreq_1',['low_freq',['../structknf_1_1MelBanksOptions.html#ad4e7975b5d5ae9f6bda6c8bb4c988547',1,'knf::MelBanksOptions::low_freq'],['../structknf_1_1NemoFbankOptions.html#ace5061974494030f44793c65e6a7557c',1,'knf::NemoFbankOptions::low_freq']]],
+  ['lowpass_5fcutoff_2',['lowpass_cutoff',['../structknf_1_1PitchExtractionOptions.html#a09479abdbc24763e2c1f38dc64a7c734',1,'knf::PitchExtractionOptions']]],
+  ['lowpass_5ffilter_5fwidth_3',['lowpass_filter_width',['../structknf_1_1PitchExtractionOptions.html#a718a08848f1b7186578eb01ad85a70ed',1,'knf::PitchExtractionOptions']]]
 ];

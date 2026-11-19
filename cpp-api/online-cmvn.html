@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Online CMVN &mdash; kaldi-native-fbank 1.23.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2b91256f"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Delta" href="delta.html" />
+    <link rel="prev" title="CMVN" href="cmvn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            kaldi-native-fbank
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python-api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cmvn.html">CMVN</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Online CMVN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#api-doxygen">API (doxygen)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf17OnlineCmvnOptionsE"><code class="docutils literal notranslate"><span class="pre">knf::OnlineCmvnOptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf15OnlineCmvnStateE"><code class="docutils literal notranslate"><span class="pre">knf::OnlineCmvnState</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N3knf10OnlineCmvnE"><code class="docutils literal notranslate"><span class="pre">knf::OnlineCmvn</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="delta.html">Delta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mfcc.html">MFCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fbank.html">Fbank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pitch.html">Pitch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splice.html">Splice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">Transform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">kaldi-native-fbank</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">C++ API</a></li>
+      <li class="breadcrumb-item active">Online CMVN</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cpp-api/online-cmvn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="online-cmvn">
+<h1>Online CMVN<a class="headerlink" href="#online-cmvn" title="Link to this heading"></a></h1>
+<p>Full doxygen reference (auto-generated from the headers):
+<a class="reference external" href="../cpp-api-doxygen/index.html">C++ API doxygen</a></p>
+<p>Header: <a class="extlink-knf reference external" href="https://github.com/csukuangfj/kaldi-native-fbank/blob/master/kaldi-native-fbank/csrc/online-cmvn.h">kaldi-native-fbank/csrc/online-cmvn.h</a></p>
+<p>Running (online) cepstral mean/variance normalization — a port of kaldi's
+<code class="docutils literal notranslate"><span class="pre">OnlineCmvn</span></code> (<a class="extlink-kaldi reference external" href="https://github.com/kaldi-asr/kaldi/blob/master/src/feat/online-feature.h">feat/online-feature.h</a>),
+push-style: feed raw feature frames, get normalized frames back.  See
+<a class="reference internal" href="../python-api/online-cmvn.html"><span class="doc">Online CMVN</span></a> for the semantics, formulas and options.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="o">::</span><span class="n">OnlineCmvnOptions</span><span class="w"> </span><span class="n">opts</span><span class="p">;</span><span class="w">              </span><span class="c1">// kaldi defaults</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">OnlineCmvnState</span><span class="w"> </span><span class="nf">state</span><span class="p">(</span><span class="n">global_stats</span><span class="p">);</span><span class="w"> </span><span class="c1">// MatrixD [2, dim+1]</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">OnlineCmvn</span><span class="w"> </span><span class="nf">cmvn</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">knf</span><span class="o">::</span><span class="n">VectorF</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">frames</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">knf</span><span class="o">::</span><span class="n">VectorF</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cmvn</span><span class="p">.</span><span class="n">AcceptFeature</span><span class="p">(</span><span class="n">frame</span><span class="p">);</span><span class="w">   </span><span class="c1">// normalized</span>
+<span class="p">}</span>
+<span class="n">cmvn</span><span class="p">.</span><span class="n">Freeze</span><span class="p">();</span><span class="w">                          </span><span class="c1">// fix the normalization</span>
+<span class="n">knf</span><span class="o">::</span><span class="n">OnlineCmvnState</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cmvn</span><span class="p">.</span><span class="n">GetState</span><span class="p">();</span><span class="w">  </span><span class="c1">// hand over to next utterance</span>
+</pre></div>
+</div>
+<section id="api-doxygen">
+<h2>API (doxygen)<a class="headerlink" href="#api-doxygen" title="Link to this heading"></a></h2>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptionsE">
+<span id="_CPPv3N3knf17OnlineCmvnOptionsE"></span><span id="_CPPv2N3knf17OnlineCmvnOptionsE"></span><span id="knf::OnlineCmvnOptions"></span><span class="target" id="structknf_1_1OnlineCmvnOptions"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlineCmvnOptions</span></span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptionsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Options for <a class="reference internal" href="#classknf_1_1OnlineCmvn"><span class="std std-ref">OnlineCmvn</span></a>, mirroring kaldi's <a class="reference internal" href="#structknf_1_1OnlineCmvnOptions"><span class="std std-ref">OnlineCmvnOptions</span></a> (kaldi/src/feat/online-feature.h). </p>
+<p>The defaults match kaldi's.</p>
+<p>The options control two things: the sliding window of the running statistics, and how the sparse stats at the start of an utterance are backed off (&quot;smoothed&quot;) with speaker and global stats. See <a class="reference internal" href="#classknf_1_1OnlineCmvn_1ac35867f91f40d70a2ab00e70f3f99715"><span class="std std-ref">OnlineCmvn::SmoothOnlineCmvnStats</span></a> for the smoothing formulas. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf17OnlineCmvnOptions8ToStringEv">
+<span id="_CPPv3NK3knf17OnlineCmvnOptions8ToStringEv"></span><span id="_CPPv2NK3knf17OnlineCmvnOptions8ToStringEv"></span><span id="knf::OnlineCmvnOptions::ToStringC"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a4d63a66ceca08fe638b9f6374dfde1c7"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ToString</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf17OnlineCmvnOptions8ToStringEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the options as a string. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions10cmn_windowE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions10cmn_windowE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions10cmn_windowE"></span><span id="knf::OnlineCmvnOptions::cmn_window__int32_t"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1ae23fa4d67965696cd91ce47853293378"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cmn_window</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">600</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions10cmn_windowE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames of sliding context for cepstral mean normalization (kaldi: –cmn-window). </p>
+<p>In the steady state the normalization of frame t uses the stats of frames t-cmn_window+1 .. t. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions14speaker_framesE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions14speaker_framesE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions14speaker_framesE"></span><span id="knf::OnlineCmvnOptions::speaker_frames__int32_t"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1ae3348d700eb9a5426442de5d5da136a6"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speaker_frames</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">600</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions14speaker_framesE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames of previous utterance(s) from this speaker to back off to at the beginning of an utterance (kaldi: –speaker-frames). </p>
+<p>Should be &lt;= cmn_window; values above it are clamped at use time. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions13global_framesE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions13global_framesE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions13global_framesE"></span><span id="knf::OnlineCmvnOptions::global_frames__int32_t"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a32910bbd8a92986ca06d987543a8197d"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_frames</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">200</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions13global_framesE" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames of global-average stats to back off to further, when even the speaker stats cannot fill the window (kaldi: –global-frames). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions14normalize_meanE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions14normalize_meanE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions14normalize_meanE"></span><span id="knf::OnlineCmvnOptions::normalize_mean__b"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a410b4b367dee9fdb6ab54d11246652ef"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normalize_mean</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions14normalize_meanE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true (default), subtract the running mean. </p>
+<p>Must be true when normalize_variance is true (kaldi: –norm-means). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions18normalize_varianceE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions18normalize_varianceE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions18normalize_varianceE"></span><span id="knf::OnlineCmvnOptions::normalize_variance__b"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a8206b4e2d34d780478ab4498f9cb4d28"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normalize_variance</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions18normalize_varianceE" title="Link to this definition"></a><br /></dt>
+<dd><p>If true, also divide by the running standard deviation (kaldi: –norm-vars). </p>
+<p>Off by default; enable only if the features were trained with variance normalization. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions7modulusE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions7modulusE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions7modulusE"></span><span id="knf::OnlineCmvnOptions::modulus__int32_t"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a6d44b01555ff0b86abbe6744495abdd8"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">modulus</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions7modulusE" title="Link to this definition"></a><br /></dt>
+<dd><p>How often kaldi snapshots stats internally (every <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1OnlineCmvnOptions_1a6d44b01555ff0b86abbe6744495abdd8"><span class="std std-ref"><span class="pre">modulus</span></span></a></code> frames). </p>
+<p>Kept for configuration compatibility; this push-style port updates the stats incrementally, so the value does not affect results. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions16ring_buffer_sizeE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions16ring_buffer_sizeE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions16ring_buffer_sizeE"></span><span id="knf::OnlineCmvnOptions::ring_buffer_size__int32_t"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1a524e8aed9a704bb30158b1ad972d0523"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ring_buffer_size</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20</span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions16ring_buffer_sizeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Size of kaldi's ring buffer for cached stats snapshots. </p>
+<p>Kept for configuration compatibility (see <code class="docutils literal notranslate"><a class="reference internal" href="#structknf_1_1OnlineCmvnOptions_1a6d44b01555ff0b86abbe6744495abdd8"><span class="std std-ref"><span class="pre">modulus</span></span></a></code>); must be &gt;= modulus. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf17OnlineCmvnOptions9skip_dimsE">
+<span id="_CPPv3N3knf17OnlineCmvnOptions9skip_dimsE"></span><span id="_CPPv2N3knf17OnlineCmvnOptions9skip_dimsE"></span><span id="knf::OnlineCmvnOptions::skip_dims__ss"></span><span class="target" id="structknf_1_1OnlineCmvnOptions_1aef7aca3cc8bd9539bba539083eb94f0e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">skip_dims</span></span></span><a class="headerlink" href="#_CPPv4N3knf17OnlineCmvnOptions9skip_dimsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Colon-separated list of dimensions to skip normalization of, e.g. </p>
+<p>&quot;13:14:15&quot; (kaldi: –skip-dims). For skipped dims the stats are faked to mean 0 / variance 1, so the frame values pass through unchanged. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15OnlineCmvnStateE">
+<span id="_CPPv3N3knf15OnlineCmvnStateE"></span><span id="_CPPv2N3knf15OnlineCmvnStateE"></span><span id="knf::OnlineCmvnState"></span><span class="target" id="structknf_1_1OnlineCmvnState"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlineCmvnState</span></span></span><a class="headerlink" href="#_CPPv4N3knf15OnlineCmvnStateE" title="Link to this definition"></a><br /></dt>
+<dd><p>State of CMVN adaptation between utterances (not the within-utterance computation state). </p>
+<p>Stats matrices follow kaldi's layout: 2 x (dim+1) as <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">sum-stats</span> <span class="pre">count</span> <span class="pre">;</span> <span class="pre">sum-squared-stats</span> <span class="pre">0</span> <span class="pre">]</span></code>. Pass the state of one utterance to a new <a class="reference internal" href="#classknf_1_1OnlineCmvn"><span class="std std-ref">OnlineCmvn</span></a> to continue with the next utterance of the same speaker; the speaker stats then back off the normalization at the start of that utterance (see <a class="reference internal" href="#classknf_1_1OnlineCmvn"><span class="std std-ref">OnlineCmvn</span></a> for the smoothing rules). </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15OnlineCmvnState15OnlineCmvnStateERK7MatrixD">
+<span id="_CPPv3N3knf15OnlineCmvnState15OnlineCmvnStateERK7MatrixD"></span><span id="_CPPv2N3knf15OnlineCmvnState15OnlineCmvnStateERK7MatrixD"></span><span id="knf::OnlineCmvnState::OnlineCmvnState__MatrixDCR"></span><span class="target" id="structknf_1_1OnlineCmvnState_1a3bbf6ce6a47f126ba4661f9f86a8e1b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlineCmvnState</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">global_stats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf15OnlineCmvnState15OnlineCmvnStateERK7MatrixD" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct with global stats (the required part of the state). </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15OnlineCmvnState18speaker_cmvn_statsE">
+<span id="_CPPv3N3knf15OnlineCmvnState18speaker_cmvn_statsE"></span><span id="_CPPv2N3knf15OnlineCmvnState18speaker_cmvn_statsE"></span><span id="knf::OnlineCmvnState::speaker_cmvn_stats__MatrixD"></span><span class="target" id="structknf_1_1OnlineCmvnState_1a5769d05ad2ce583eb253243acfe8f581"></span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speaker_cmvn_stats</span></span></span><a class="headerlink" href="#_CPPv4N3knf15OnlineCmvnState18speaker_cmvn_statsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Total CMVN stats for this speaker up till now, 2 x (dim+1); may be empty at the very first utterance. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15OnlineCmvnState17global_cmvn_statsE">
+<span id="_CPPv3N3knf15OnlineCmvnState17global_cmvn_statsE"></span><span id="_CPPv2N3knf15OnlineCmvnState17global_cmvn_statsE"></span><span id="knf::OnlineCmvnState::global_cmvn_stats__MatrixD"></span><span class="target" id="structknf_1_1OnlineCmvnState_1a7fab679ae9a181d27e3e45105f490b08"></span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_cmvn_stats</span></span></span><a class="headerlink" href="#_CPPv4N3knf15OnlineCmvnState17global_cmvn_statsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Global CMVN stats, 2 x (dim+1), e.g. </p>
+<p>loaded from kaldi's <code class="docutils literal notranslate"><span class="pre">global_cmvn.stats</span></code>. Required by <a class="reference internal" href="#classknf_1_1OnlineCmvn"><span class="std std-ref">OnlineCmvn</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf15OnlineCmvnState12frozen_stateE">
+<span id="_CPPv3N3knf15OnlineCmvnState12frozen_stateE"></span><span id="_CPPv2N3knf15OnlineCmvnState12frozen_stateE"></span><span id="knf::OnlineCmvnState::frozen_state__MatrixD"></span><span class="target" id="structknf_1_1OnlineCmvnState_1a22ec9724cacc5748d0e3d3a94700f893"></span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">frozen_state</span></span></span><a class="headerlink" href="#_CPPv4N3knf15OnlineCmvnState12frozen_stateE" title="Link to this definition"></a><br /></dt>
+<dd><p>If non-empty, 2 x (dim+1): the &quot;frozen&quot; normalization in use since <a class="reference internal" href="#classknf_1_1OnlineCmvn_1a7813e306dfe3e7f2c4392d6219f2f810"><span class="std std-ref">OnlineCmvn::Freeze()</span></a> was called (kaldi uses this to estimate fMLLR on top of a fixed CMVN). </p>
+<p>Carries over to the next utterance. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvnE">
+<span id="_CPPv3N3knf10OnlineCmvnE"></span><span id="_CPPv2N3knf10OnlineCmvnE"></span><span id="knf::OnlineCmvn"></span><span class="target" id="classknf_1_1OnlineCmvn"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OnlineCmvn</span></span></span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvnE" title="Link to this definition"></a><br /></dt>
+<dd><p>Online (running) cepstral mean and optional variance normalization. </p>
+<p>A port of kaldi's <a class="reference internal" href="#classknf_1_1OnlineCmvn"><span class="std std-ref">OnlineCmvn</span></a> (kaldi/src/feat/online-feature.h), push-style: feed raw feature frames one by one and get the normalized frames back (kaldi's version is a pull-style filter in an OnlineFeatureInterface chain).</p>
+<p>Unlike the offline CMVN of feature-cmvn.h (which uses the whole utterance), this class looks only at the past. In the middle of a long utterance it accumulates stats from the previous <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code> frames (default 600, i.e. 6 seconds) and normalizes the current frame with them. At the beginning of an utterance the window stats are augmented (&quot;smoothed&quot;) with up to <code class="docutils literal notranslate"><span class="pre">speaker_frames</span></code> frames of speaker stats from previous utterances and up to <code class="docutils literal notranslate"><span class="pre">global_frames</span></code> frames of global stats, so the first frames are normalized against a reasonable distribution.</p>
+<p>The frame being normalized is included in the stats that normalize it (exactly like kaldi). Variance normalization floors the variance at 1e-20.</p>
+<p>
+Example: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">knf</span><span class="p">::</span><span class="n">OnlineCmvnOptions</span> <span class="n">opts</span><span class="p">;</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">OnlineCmvnState</span> <span class="n">state</span><span class="p">(</span><span class="n">global_stats</span><span class="p">);</span>  <span class="o">//</span> <span class="n">MatrixD</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">OnlineCmvn</span> <span class="n">cmvn</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">knf</span><span class="p">::</span><span class="n">VectorF</span> <span class="o">&amp;</span><span class="n">f</span> <span class="p">:</span> <span class="n">frames</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">knf</span><span class="p">::</span><span class="n">VectorF</span> <span class="n">y</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">AcceptFeature</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">auto</span> <span class="n">next_state</span> <span class="o">=</span> <span class="n">cmvn</span><span class="o">.</span><span class="n">GetState</span><span class="p">();</span>  <span class="o">//</span> <span class="n">hand</span> <span class="n">over</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">utterance</span>
+</pre></div>
+</div>
+ </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Features normalized this way are only <em>approximately</em> zero-mean, especially at utterance start. Acoustic models must be trained with the same kind of normalization (&quot;matched&quot; online training).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parity with kaldi is tested frame-by-frame against <code class="docutils literal notranslate"><span class="pre">apply-cmvn-online</span></code> in tests/parity/parity_online_cmvn.py.</p>
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn10OnlineCmvnERK17OnlineCmvnOptionsRK15OnlineCmvnState">
+<span id="_CPPv3N3knf10OnlineCmvn10OnlineCmvnERK17OnlineCmvnOptionsRK15OnlineCmvnState"></span><span id="_CPPv2N3knf10OnlineCmvn10OnlineCmvnERK17OnlineCmvnOptionsRK15OnlineCmvnState"></span><span id="knf::OnlineCmvn::OnlineCmvn__OnlineCmvnOptionsCR.OnlineCmvnStateCR"></span><span class="target" id="classknf_1_1OnlineCmvn_1a3caa26b79f553b522c37fbcfb6f85c2f"></span><span class="sig-name descname"><span class="n"><span class="pre">OnlineCmvn</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf17OnlineCmvnOptionsE" title="knf::OnlineCmvnOptions"><span class="n"><span class="pre">OnlineCmvnOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf15OnlineCmvnStateE" title="knf::OnlineCmvnState"><span class="n"><span class="pre">OnlineCmvnState</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn10OnlineCmvnERK17OnlineCmvnOptionsRK15OnlineCmvnState" title="Link to this definition"></a><br /></dt>
+<dd><p>Construct with options and adaptation state. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>opts</strong> -- [in] The options (defaults match kaldi). </p></li>
+<li><p><strong>state</strong> -- [in] Adaptation state; <code class="docutils literal notranslate"><span class="pre">state.global_cmvn_stats</span></code> must be a 2 x (dim+1) matrix. <code class="docutils literal notranslate"><span class="pre">speaker_cmvn_stats</span></code> and <code class="docutils literal notranslate"><span class="pre">frozen_state</span></code> may be empty; if <code class="docutils literal notranslate"><span class="pre">frozen_state</span></code> is set, the normalization is frozen from the start (see <a class="reference internal" href="#classknf_1_1OnlineCmvn_1a7813e306dfe3e7f2c4392d6219f2f810"><span class="std std-ref">Freeze()</span></a>). </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf10OnlineCmvn3DimEv">
+<span id="_CPPv3NK3knf10OnlineCmvn3DimEv"></span><span id="_CPPv2NK3knf10OnlineCmvn3DimEv"></span><span id="knf::OnlineCmvn::DimC"></span><span class="target" id="classknf_1_1OnlineCmvn_1ae41ee739c68701c2ebca8ad14a711bdd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dim</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf10OnlineCmvn3DimEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Feature dimension (dim of the global stats minus one). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf10OnlineCmvn17NumFramesAcceptedEv">
+<span id="_CPPv3NK3knf10OnlineCmvn17NumFramesAcceptedEv"></span><span id="_CPPv2NK3knf10OnlineCmvn17NumFramesAcceptedEv"></span><span id="knf::OnlineCmvn::NumFramesAcceptedC"></span><span class="target" id="classknf_1_1OnlineCmvn_1a7519b41a70d53bc6b31fd1356f7fe34f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NumFramesAccepted</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf10OnlineCmvn17NumFramesAcceptedEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Number of frames accepted so far. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn13AcceptFeatureEPKf7int32_t">
+<span id="_CPPv3N3knf10OnlineCmvn13AcceptFeatureEPKf7int32_t"></span><span id="_CPPv2N3knf10OnlineCmvn13AcceptFeatureEPKf7int32_t"></span><span id="knf::OnlineCmvn::AcceptFeature__floatCP.int32_t"></span><span class="target" id="classknf_1_1OnlineCmvn_1a78a2f7ef5ae0db592a1ed297f68b53de"></span><span class="n"><span class="pre">VectorF</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AcceptFeature</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">feat</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn13AcceptFeatureEPKf7int32_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Push one raw feature frame; return the normalized frame. </p>
+<p>
+The frame is normalized with stats that include the frame itself (like kaldi). The raw frame also updates the speaker stats used by <a class="reference internal" href="#classknf_1_1OnlineCmvn_1ab1a1e5db5c82d8376c31916160d8e0d8"><span class="std std-ref">GetState()</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feat</strong> -- [in] Pointer to <code class="docutils literal notranslate"><span class="pre">dim</span></code> raw feature values. </p></li>
+<li><p><strong>dim</strong> -- [in] Feature dimension (must equal <a class="reference internal" href="#classknf_1_1OnlineCmvn_1ae41ee739c68701c2ebca8ad14a711bdd"><span class="std std-ref">Dim()</span></a>). </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized frame, same dimension.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn13AcceptFeatureERK7VectorF">
+<span id="_CPPv3N3knf10OnlineCmvn13AcceptFeatureERK7VectorF"></span><span id="_CPPv2N3knf10OnlineCmvn13AcceptFeatureERK7VectorF"></span><span id="knf::OnlineCmvn::AcceptFeature__VectorFCR"></span><span class="target" id="classknf_1_1OnlineCmvn_1a948dcc43bcdc2c00dad213b2ab7d2899"></span><span class="n"><span class="pre">VectorF</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AcceptFeature</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">VectorF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feat</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn13AcceptFeatureERK7VectorF" title="Link to this definition"></a><br /></dt>
+<dd><p>Same as <a class="reference internal" href="#classknf_1_1OnlineCmvn_1a78a2f7ef5ae0db592a1ed297f68b53de"><span class="std std-ref">AcceptFeature(const float *, int32_t)</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn14AcceptFeaturesERK7MatrixF">
+<span id="_CPPv3N3knf10OnlineCmvn14AcceptFeaturesERK7MatrixF"></span><span id="_CPPv2N3knf10OnlineCmvn14AcceptFeaturesERK7MatrixF"></span><span id="knf::OnlineCmvn::AcceptFeatures__MatrixFCR"></span><span class="target" id="classknf_1_1OnlineCmvn_1ac20a2e3a771183010852780160055ff3"></span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AcceptFeatures</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixF</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">feats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn14AcceptFeaturesERK7MatrixF" title="Link to this definition"></a><br /></dt>
+<dd><p>Push a batch of raw feature frames. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feats</strong> -- [in] Raw features, rows are frames, [T, dim]. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized features, [T, dim]. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn6FreezeEv">
+<span id="_CPPv3N3knf10OnlineCmvn6FreezeEv"></span><span id="_CPPv2N3knf10OnlineCmvn6FreezeEv"></span><span id="knf::OnlineCmvn::Freeze"></span><span class="target" id="classknf_1_1OnlineCmvn_1a7813e306dfe3e7f2c4392d6219f2f810"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Freeze</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn6FreezeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Freeze the normalization at the current frame. </p>
+<p>From now on frames are normalized with the current (smoothed) stats and the running stats stop updating. The frozen state is part of <a class="reference internal" href="#classknf_1_1OnlineCmvn_1ab1a1e5db5c82d8376c31916160d8e0d8"><span class="std std-ref">GetState()</span></a> so later utterances of the speaker keep the same normalization (kaldi uses this to estimate fMLLR on top of a fixed CMVN). </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3knf10OnlineCmvn8GetStateEv">
+<span id="_CPPv3NK3knf10OnlineCmvn8GetStateEv"></span><span id="_CPPv2NK3knf10OnlineCmvn8GetStateEv"></span><span id="knf::OnlineCmvn::GetStateC"></span><span class="target" id="classknf_1_1OnlineCmvn_1ab1a1e5db5c82d8376c31916160d8e0d8"></span><a class="reference internal" href="#_CPPv4N3knf15OnlineCmvnStateE" title="knf::OnlineCmvnState"><span class="n"><span class="pre">OnlineCmvnState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GetState</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3knf10OnlineCmvn8GetStateEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the adaptation state for the next utterance. </p>
+<p>Contains the speaker stats accumulated over all accepted frames (plus any incoming speaker stats), the global stats, and any frozen state — equivalent to kaldi's OnlineCmvn::GetState(cur_frame). </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3knf10OnlineCmvn21SmoothOnlineCmvnStatsERK7MatrixDRK7MatrixDRK17OnlineCmvnOptionsP7MatrixD">
+<span id="_CPPv3N3knf10OnlineCmvn21SmoothOnlineCmvnStatsERK7MatrixDRK7MatrixDRK17OnlineCmvnOptionsP7MatrixD"></span><span id="_CPPv2N3knf10OnlineCmvn21SmoothOnlineCmvnStatsERK7MatrixDRK7MatrixDRK17OnlineCmvnOptionsP7MatrixD"></span><span id="knf::OnlineCmvn::SmoothOnlineCmvnStats__MatrixDCR.MatrixDCR.OnlineCmvnOptionsCR.MatrixDP"></span><span class="target" id="classknf_1_1OnlineCmvn_1ac35867f91f40d70a2ab00e70f3f99715"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SmoothOnlineCmvnStats</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">speaker_stats</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">global_stats</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N3knf17OnlineCmvnOptionsE" title="knf::OnlineCmvnOptions"><span class="n"><span class="pre">OnlineCmvnOptions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opts</span></span>, <span class="n"><span class="pre">MatrixD</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">stats</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N3knf10OnlineCmvn21SmoothOnlineCmvnStatsERK7MatrixDRK7MatrixDRK17OnlineCmvnOptionsP7MatrixD" title="Link to this definition"></a><br /></dt>
+<dd><p>Smooth window stats with speaker and global stats. </p>
+<p>A port of kaldi's static <a class="reference internal" href="#classknf_1_1OnlineCmvn_1ac35867f91f40d70a2ab00e70f3f99715"><span class="std std-ref">OnlineCmvn::SmoothOnlineCmvnStats</span></a>. Adds up to <code class="docutils literal notranslate"><span class="pre">speaker_frames</span></code> worth of speaker stats and up to <code class="docutils literal notranslate"><span class="pre">global_frames</span></code> worth of global stats to <code class="docutils literal notranslate"><span class="pre">stats</span></code>, scaled by their counts, so the total count approaches <code class="docutils literal notranslate"><span class="pre">cmn_window</span></code> (a no-op once it is reached).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>speaker_stats</strong> -- [in] Speaker stats [2, dim+1], may be empty. </p></li>
+<li><p><strong>global_stats</strong> -- [in] Global stats [2, dim+1] (required at runtime). </p></li>
+<li><p><strong>opts</strong> -- [in] The options in use. </p></li>
+<li><p><strong>stats</strong> -- [in,out] Window stats to smooth. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cmvn.html" class="btn btn-neutral float-left" title="CMVN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="delta.html" class="btn btn-neutral float-right" title="Delta" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2026, Next-gen Kaldi team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
