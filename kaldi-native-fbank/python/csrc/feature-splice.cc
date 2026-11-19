@@ -96,8 +96,8 @@ The output therefore has the same number of frames as the input and
    float32.
 :rtype: numpy.ndarray
 
-Example
--------
+.. rubric:: Example
+
 
 .. code-block:: python
 

@@ -16,6 +16,9 @@ from kaldi_native_fbank import MelBanks
 from kaldi_native_fbank import MelBanksOptions
 from kaldi_native_fbank import MfccOptions
 from kaldi_native_fbank import NemoFbankOptions
+from kaldi_native_fbank import OnlineCmvn
+from kaldi_native_fbank import OnlineCmvnOptions
+from kaldi_native_fbank import OnlineCmvnState
 from kaldi_native_fbank import OnlineFbank
 from kaldi_native_fbank import OnlineMfcc
 from kaldi_native_fbank import OnlineNemoFbank
@@ -34,7 +37,7 @@ from kaldi_native_fbank import WhisperFeatureOptions
 import numpy
 import numpy.typing
 import typing
-__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureTransform', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_and_process_kaldi_pitch', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames', 'transform_features']
+__all__: list[str] = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FbankOptions', 'FeatureTransform', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineCmvn', 'OnlineCmvnOptions', 'OnlineCmvnState', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'Rfft', 'SpliceOptions', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_and_process_kaldi_pitch', 'compute_cmvn_stats', 'compute_deltas', 'splice_frames', 'transform_features']
 def apply_cmvn(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], opts: kaldi_native_fbank.CmvnOptions, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
     """
     Apply cmvn to features and return the normalized copy.
@@ -80,8 +83,8 @@ def apply_cmvn(stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[
     :return: A normalized copy of ``feats``.
     :rtype: numpy.ndarray
     
-    Example
-    -------
+    .. rubric:: Example
+    
     
     .. code-block:: python
     
@@ -138,8 +141,8 @@ def compute_and_process_kaldi_pitch(pitch_opts: kaldi_native_fbank.PitchExtracti
        float32.
     :rtype: numpy.ndarray
     
-    Example
-    -------
+    .. rubric:: Example
+    
     
     .. code-block:: python
     
@@ -415,8 +418,8 @@ def compute_deltas(opts: kaldi_native_fbank.DeltaOptions, feats: typing.Annotate
     :return: The matrix of shape ``(num_frames, dim * (order + 1))``, float32.
     :rtype: numpy.ndarray
     
-    Example
-    -------
+    .. rubric:: Example
+    
     
     .. code-block:: python
     
@@ -449,8 +452,8 @@ def splice_frames(feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32,
        float32.
     :rtype: numpy.ndarray
     
-    Example
-    -------
+    .. rubric:: Example
+    
     
     .. code-block:: python
     

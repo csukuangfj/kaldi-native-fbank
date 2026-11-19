@@ -1,8 +1,59 @@
 /**
  * @mainpage kaldi-native-fbank C++ API
  *
- * Kaldi-compatible feature extraction (MFCC/Fbank/CMVN/...).
- * Headers live in kaldi-native-fbank/csrc/.
+ * Kaldi-compatible feature extraction.  Headers live in
+ * `kaldi-native-fbank/csrc/`.  All computations match kaldi numerically
+ * (kaldi uses `float`/`double` matrices; this library uses row-major Eigen
+ * typedefs MatrixF / MatrixD / VectorF from feature-matrix.h).
+ *
+ * @section modules Modules
+ *
+ * - **Feature extraction** — @ref knf::OnlineFbank "Fbank" /
+ *   @ref knf::OnlineMfcc "Mfcc" (feature-fbank.h, feature-mfcc.h),
+ *   pitch (feature-pitch.h), Whisper and NeMo front-ends
+ *   (whisper-feature.h, online-nemo-fbank.h), raw-audio framing
+ *   (feature-raw-audio-samples.h), streaming bases (online-feature.h).
+ * - **Windowing & spectra** — feature-window.h (kaldi's povey-window
+ *   framing), rfft.h, stft.h / istft.h, mel-computations.h.
+ * - **Transforms** — feature-splice.h (frame splicing), feature-transform.h
+ *   (applying a fixed matrix, e.g. LDA), feature-delta.h (deltas).
+ * - **CMVN** — feature-cmvn.h (offline, per-utterance) and
+ *   @ref knf::OnlineCmvn "online-cmvn.h" (running/streaming, see below).
+ * - **Utilities** — resample.h (linear resampling), feature-functions.h,
+ *   kaldi-math.h.
+ *
+ * @section online_cmvn Online (running) CMVN — online-cmvn.h
+ *
+ * @ref knf::OnlineCmvn is a port of kaldi's `OnlineCmvn`
+ * (kaldi/src/feat/online-feature.h): cepstral mean (and optional variance)
+ * normalization computed **only from the past**, for streaming use.  Unlike
+ * the offline CMVN of feature-cmvn.h (whole-utterance stats), it
+ * accumulates a sliding window of the previous `cmn_window` frames
+ * (default 600) and normalizes the current frame with them; at the start of
+ * an utterance the window is backed off with `speaker_frames` frames of
+ * speaker stats (from previous utterances, see
+ * @ref knf::OnlineCmvnState) and `global_frames` frames of global stats.
+ *
+ * The class is push-style: `AcceptFeature(frame)` returns the normalized
+ * frame.  `Freeze()` fixes the normalization (stats stop updating), and
+ * `GetState()` carries the speaker adaptation (and any frozen normalization)
+ * to the next utterance of the same speaker.
+ *
+ * @code
+ * knf::OnlineCmvnOptions opts;                  // kaldi defaults
+ * knf::OnlineCmvnState state(global_stats);     // MatrixD [2, dim+1]
+ * knf::OnlineCmvn cmvn(opts, state);
+ * for (const knf::VectorF &f : frames) {
+ *   knf::VectorF y = cmvn.AcceptFeature(f);     // normalized
+ * }
+ * auto next = cmvn.GetState();                  // next utterance
+ * @endcode
+ *
+ * Options, formulas and the correspondence with kaldi are documented on the
+ * struct/class pages (@ref knf::OnlineCmvnOptions, @ref knf::OnlineCmvnState,
+ * @ref knf::OnlineCmvn) and in `docs/source/python-api/online-cmvn.rst`.
+ * Parity with kaldi's `apply-cmvn-online` is tested in
+ * `tests/parity/parity_online_cmvn.py`.
  *
  * See also the Python API documentation.
  */

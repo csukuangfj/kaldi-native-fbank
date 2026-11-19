@@ -25,6 +25,7 @@ Options: FbankOptions, MfccOptions, FrameExtractionOptions, MelBanksOptions,
     WhisperFeatureOptions, NemoFbankOptions, RawAudioSamplesOptions,
     StftConfig, CmvnOptions, PitchExtractionOptions, ProcessPitchOptions
 CMVN: compute_cmvn_stats, apply_cmvn, apply_cmvn_, CmvnAccumulator
+Streaming CMVN: OnlineCmvn, OnlineCmvnOptions, OnlineCmvnState
 Pitch: compute_and_process_kaldi_pitch
 Transforms: Stft, IStft, Rfft, MelBanks, FeatureWindowFunction
 
@@ -44,7 +45,7 @@ import numpy
 import numpy.typing
 import typing
 from . import lib
-__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FeatureTransform', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_and_process_kaldi_pitch', 'compute_deltas', 'transform_features', 'splice_frames']
+__all__: list = ['CmvnAccumulator', 'CmvnOptions', 'DeltaOptions', 'FeatureTransform', 'FbankOptions', 'FeatureWindowFunction', 'FrameExtractionOptions', 'IStft', 'MelBanks', 'MelBanksOptions', 'MfccOptions', 'NemoFbankOptions', 'OnlineCmvn', 'OnlineCmvnOptions', 'OnlineCmvnState', 'OnlineFbank', 'OnlineMfcc', 'OnlineNemoFbank', 'OnlinePitch', 'OnlineRawAudioSamples', 'OnlineWhisperFbank', 'PitchExtractionOptions', 'ProcessPitchOptions', 'RawAudioSamplesOptions', 'SpliceOptions', 'Rfft', 'Stft', 'StftConfig', 'StftResult', 'WhisperFeatureOptions', 'apply_cmvn', 'apply_cmvn_', 'compute_cmvn_stats', 'compute_and_process_kaldi_pitch', 'compute_deltas', 'transform_features', 'splice_frames']
 class CmvnAccumulator:
     """
     Incremental accumulator for speaker-level / streaming cmvn.
@@ -200,8 +201,8 @@ class FeatureTransform:
       :math:`y = x\\, M_{[:,\\,0:n-1]}^{T} + M_{[:,\\,n-1]}`;
     * otherwise :meth:`apply` raises an exception.
     
-    Example
-    -------
+    .. rubric:: Example
+    
     
     .. code-block:: python
     
@@ -1055,6 +1056,237 @@ class NemoFbankOptions:
         """
     @samp_freq.setter
     def samp_freq(self, arg0: typing.SupportsFloat) -> None:
+        ...
+class OnlineCmvn:
+    """
+    Online (running) cepstral mean and optional variance
+    normalization, a port of kaldi's ``OnlineCmvn`` (``feat/online-feature.h``).
+    
+    Unlike offline CMVN this looks only at the past: in the middle of a long
+    utterance it accumulates stats from the previous ``cmn_window`` frames
+    (default 600) and uses them to normalize the current frame.  At the beginning
+    of an utterance the stats are augmented with up to ``speaker_frames`` frames of
+    speaker stats and up to ``global_frames`` frames of global stats.  Frames are
+    normalized using stats that include the frame itself, like kaldi.
+    
+    This class is push-style: feed raw feature frames one by one and get the
+    normalized frames back.
+    
+    Example:
+    
+        opts = knf.OnlineCmvnOptions()
+        state = knf.OnlineCmvnState(global_cmvn_stats)  # [2, dim+1]
+        cmvn = knf.OnlineCmvn(opts, state)
+        normalized = cmvn.accept_features(raw_feats)  # [T, dim] float32
+        state = cmvn.get_state()  # pass to the next utterance of this speaker
+    
+    .. seealso:: :class:`OnlineCmvnOptions`, :class:`OnlineCmvnState`
+    """
+    @staticmethod
+    def smooth_online_cmvn_stats(speaker_stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], global_stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"], opts: OnlineCmvnOptions, stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float64], "[m, n]"]:
+        """
+        Smooth window stats with speaker and global stats; a port of
+        kaldi's static ``OnlineCmvn::SmoothOnlineCmvnStats``.
+        
+        :param speaker_stats: Speaker stats ``[2, dim + 1]`` (may be empty).
+        :param global_stats: Global stats ``[2, dim + 1]``.
+        :param opts: The options in use.
+        :param stats: Window stats ``[2, dim + 1]`` to smooth.
+        :return: Smoothed stats ``[2, dim + 1]``.
+        """
+    def __init__(self, opts: OnlineCmvnOptions, state: OnlineCmvnState) -> None:
+        """
+        Construct with options and adaptation state.  The state
+        carries the required global CMVN stats, and optionally speaker stats and a
+        frozen state from a previous utterance.
+        """
+    def accept_feature(self, feat: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, 1]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, 1]"]:
+        """
+        Push one raw feature frame; returns the normalized frame.
+        
+        :param feat: Raw feature frame of shape ``[dim]`` (float32).
+        :return: Normalized frame of shape ``[dim]`` (float32).
+        """
+    def accept_features(self, feats: typing.Annotated[numpy.typing.ArrayLike, numpy.float32, "[m, n]"]) -> typing.Annotated[numpy.typing.NDArray[numpy.float32], "[m, n]"]:
+        """
+        Push a batch of raw feature frames; returns the normalized
+        frames.
+        
+        :param feats: Raw features of shape ``[T, dim]`` (float32, rows are frames).
+        :return: Normalized features of shape ``[T, dim]`` (float32).
+        """
+    def freeze(self) -> None:
+        """
+        Freeze the normalization at the current frame: from now on
+        frames are normalized with the current stats and the stats stop updating
+        (kaldi's ``OnlineCmvn::Freeze``).
+        """
+    def get_state(self) -> OnlineCmvnState:
+        """
+        Return the adaptation state (speaker stats including all
+        accepted frames, plus any frozen state), like kaldi's
+        ``OnlineCmvn::GetState``.  Pass it to a new :class:`OnlineCmvn` to continue
+        with the next utterance of the same speaker.
+        """
+    @property
+    def dim(self) -> int:
+        """
+        Feature dimension.
+        """
+    @property
+    def num_frames_accepted(self) -> int:
+        """
+        Number of frames accepted so far.
+        """
+class OnlineCmvnOptions:
+    """
+    Options for :class:`OnlineCmvn`, mirroring kaldi's ``OnlineCmvnOptions``
+    (see ``feat/online-feature.h``).
+    
+    .. seealso:: :class:`OnlineCmvn`
+       For how the options affect the normalization.
+    """
+    def __init__(self, cmn_window: typing.SupportsInt = 600, speaker_frames: typing.SupportsInt = 600, global_frames: typing.SupportsInt = 200, normalize_mean: bool = True, normalize_variance: bool = False, modulus: typing.SupportsInt = 20, ring_buffer_size: typing.SupportsInt = 20, skip_dims: str = '') -> None:
+        """
+        Construct with the given options.  The defaults match kaldi.
+        
+        :param cmn_window: Number of frames of sliding context for cepstral mean
+           normalization.
+        :param speaker_frames: Number of frames of previous utterance(s) from this
+           speaker to use.  Must be ``<= cmn_window``.
+        :param global_frames: Number of frames of global-average stats to use at the
+           beginning.  Must be ``<= speaker_frames``.
+        :param normalize_mean: If ``True`` (default), subtract the running mean.
+        :param normalize_variance: If ``True``, also divide by the running standard
+           deviation.  Requires ``normalize_mean=True``.
+        :param modulus: Kept for kaldi configuration compatibility; results are not
+           affected (stats are updated incrementally).
+        :param ring_buffer_size: Kept for kaldi configuration compatibility (see
+           ``modulus``).
+        :param skip_dims: Colon-separated list of dimensions to skip normalization
+           of, e.g. ``"13:14:15"``.
+        """
+    def __str__(self) -> str:
+        """
+        Return the options as a string.
+        """
+    @property
+    def cmn_window(self) -> int:
+        """
+        Number of frames of sliding context for cepstral
+        mean normalization.
+        """
+    @cmn_window.setter
+    def cmn_window(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def global_frames(self) -> int:
+        """
+        Number of frames of global-average cepstral mean
+        normalization stats to use for the first utterance of a speaker.
+        """
+    @global_frames.setter
+    def global_frames(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def modulus(self) -> int:
+        """
+        Kept for kaldi configuration compatibility; results
+        are not affected (stats are updated incrementally).
+        """
+    @modulus.setter
+    def modulus(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def normalize_mean(self) -> bool:
+        """
+        If ``True``, do mean normalization (you cannot
+        normalize the variance but not the mean).
+        """
+    @normalize_mean.setter
+    def normalize_mean(self, arg0: bool) -> None:
+        ...
+    @property
+    def normalize_variance(self) -> bool:
+        """
+        If ``True``, do cepstral variance normalization in
+        addition to cepstral mean normalization.
+        """
+    @normalize_variance.setter
+    def normalize_variance(self, arg0: bool) -> None:
+        ...
+    @property
+    def ring_buffer_size(self) -> int:
+        """
+        Kept for kaldi configuration compatibility (see
+        ``modulus``).
+        """
+    @ring_buffer_size.setter
+    def ring_buffer_size(self, arg0: typing.SupportsInt) -> None:
+        ...
+    @property
+    def skip_dims(self) -> str:
+        """
+        Colon-separated list of dimensions to skip
+        normalization of, e.g. ``"13:14:15"``.
+        """
+    @skip_dims.setter
+    def skip_dims(self, arg0: str) -> None:
+        ...
+    @property
+    def speaker_frames(self) -> int:
+        """
+        Number of frames of previous utterance(s) from this
+        speaker to use in cepstral mean normalization.
+        """
+    @speaker_frames.setter
+    def speaker_frames(self, arg0: typing.SupportsInt) -> None:
+        ...
+class OnlineCmvnState:
+    """
+    State of CMVN adaptation between utterances (not the
+    within-utterance computation state).
+    
+    Stats matrices follow kaldi's layout: 2 x (dim+1) as
+    ``[ sum-stats count ; sum-squared-stats 0 ]``.
+    
+    Pass the state of one utterance to a new :class:`OnlineCmvn` to continue with
+    the next utterance of the same speaker.
+    
+    .. seealso:: :meth:`OnlineCmvn.get_state`
+    """
+    def __init__(self, global_cmvn_stats: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"] = ...) -> None:
+        """
+        Construct with global CMVN stats (required by
+        :class:`OnlineCmvn`), e.g. loaded from kaldi's ``global_cmvn.stats``.
+        
+        :param global_cmvn_stats: Global stats of shape ``[2, dim + 1]``.
+        """
+    @property
+    def frozen_state(self) -> typing.Annotated[numpy.typing.NDArray[numpy.float64], "[m, n]"]:
+        """
+        If non-empty ``[2, dim + 1]``, the "frozen" normalization used
+        since :meth:`OnlineCmvn.freeze`.
+        """
+    @frozen_state.setter
+    def frozen_state(self, arg1: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"]) -> None:
+        ...
+    @property
+    def global_cmvn_stats(self) -> typing.Annotated[numpy.typing.NDArray[numpy.float64], "[m, n]"]:
+        """
+        Global CMVN stats ``[2, dim + 1]`` (required).
+        """
+    @global_cmvn_stats.setter
+    def global_cmvn_stats(self, arg1: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"]) -> None:
+        ...
+    @property
+    def speaker_cmvn_stats(self) -> typing.Annotated[numpy.typing.NDArray[numpy.float64], "[m, n]"]:
+        """
+        Total CMVN stats for this speaker up till now
+        ``[2, dim + 1]``; may be empty at the start.
+        """
+    @speaker_cmvn_stats.setter
+    def speaker_cmvn_stats(self, arg1: typing.Annotated[numpy.typing.ArrayLike, numpy.float64, "[m, n]"]) -> None:
         ...
 class OnlineFbank:
     """

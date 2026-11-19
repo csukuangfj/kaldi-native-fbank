@@ -11,6 +11,7 @@ pybind11_add_module(_kaldi_native_fbank
   istft.cc
   kaldi-native-fbank.cc
   mel-computations.cc
+  online-cmvn.cc
   online-feature.cc
   online-nemo-fbank.cc
   rfft.cc
