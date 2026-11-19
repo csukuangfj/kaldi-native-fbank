@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <functional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -82,15 +83,13 @@ void OnlineCmvn::SmoothOnlineCmvnStats(const MatrixD &speaker_stats,
            speaker_count = speaker_stats(0, dim);
     if (count_from_speaker > opts.speaker_frames)
       count_from_speaker = opts.speaker_frames;
-    if (count_from_speaker > speaker_count)
-      count_from_speaker = speaker_count;
+    if (count_from_speaker > speaker_count) count_from_speaker = speaker_count;
     if (count_from_speaker > 0.0) {
       double scale = count_from_speaker / speaker_count;
       // When normalize_variance is false, kaldi smooths only row 0 (see the
       // row-range shortcut in its SmoothOnlineCmvnStats).
       stats->row(0).noalias() += scale * speaker_stats.row(0);
-      if (smooth_row1)
-        stats->row(1).noalias() += scale * speaker_stats.row(1);
+      if (smooth_row1) stats->row(1).noalias() += scale * speaker_stats.row(1);
     }
     cur_count = (*stats)(0, dim);
   }
@@ -100,16 +99,16 @@ void OnlineCmvn::SmoothOnlineCmvnStats(const MatrixD &speaker_stats,
     double count_from_global = opts.cmn_window - cur_count,
            global_count = global_stats(0, dim);
     if (global_count <= 0.0) {
-      throw std::runtime_error("SmoothOnlineCmvnStats: global count must be "
-                               "positive");
+      throw std::runtime_error(
+          "SmoothOnlineCmvnStats: global count must be "
+          "positive");
     }
     if (count_from_global > opts.global_frames)
       count_from_global = opts.global_frames;
     if (count_from_global > 0.0) {
       double scale = count_from_global / global_count;
       stats->row(0).noalias() += scale * global_stats.row(0);
-      if (smooth_row1)
-        stats->row(1).noalias() += scale * global_stats.row(1);
+      if (smooth_row1) stats->row(1).noalias() += scale * global_stats.row(1);
     }
   } else {
     throw std::runtime_error("Global CMN stats are required");
@@ -232,8 +231,7 @@ void OnlineCmvn::UpdateStats(const VectorF &feat) {
 
   stats_.row(0).head(dim_) += feat_dbl.transpose();
   if (opts_.normalize_variance) {
-    stats_.row(1).head(dim_) +=
-        feat_dbl.array().square().matrix().transpose();
+    stats_.row(1).head(dim_) += feat_dbl.array().square().matrix().transpose();
   }
   stats_(0, dim_) += 1.0;
 

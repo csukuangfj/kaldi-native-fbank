@@ -10,8 +10,9 @@
 # shared libraries (bad RPATH, missing DLL, wrong architecture) fails here
 # rather than on a user's machine.
 #
-# numpy is optional: waveforms are passed in as plain Python lists, so this
-# also runs inside the Termux images where numpy may not be packaged.
+# numpy is required to import the package (the pybind11 extension binds
+# Eigen types); the waveforms themselves are passed in as plain Python lists
+# so the test logic needs nothing beyond it.
 
 import math
 import platform

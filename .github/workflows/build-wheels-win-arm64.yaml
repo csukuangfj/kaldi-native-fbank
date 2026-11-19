@@ -64,6 +64,7 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install --force-reinstall ./wheelhouse/*.whl
+          python3 -m pip install numpy
 
           cd "$RUNNER_TEMP"
 

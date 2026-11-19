@@ -94,7 +94,7 @@ TEST(OnlineCmvn, OutputFiniteAndCentered) {
 // from first principles and compared within 1e-4.
 TEST(OnlineCmvn, MatchesNaiveReference) {
   for (int iter = 0; iter < 200; iter++) {
-    int32_t T = 1 + iter % 7 * 10;         // 1..61 frames
+    int32_t T = 1 + iter % 7 * 10;  // 1..61 frames
     int32_t dim = 1 + iter % 8;
     OnlineCmvnOptions opts;
     opts.cmn_window = 5 + iter % 45;
@@ -158,7 +158,8 @@ TEST(OnlineCmvn, MatchesNaiveReference) {
           take = std::min(take, spk(0, dim));
           if (take > 0.0) {
             sum += take / spk(0, dim) * spk(0, d);
-            if (opts.normalize_variance) sumsq += take / spk(0, dim) * spk(1, d);
+            if (opts.normalize_variance)
+              sumsq += take / spk(0, dim) * spk(1, d);
             count += take;
           }
         }
@@ -169,7 +170,8 @@ TEST(OnlineCmvn, MatchesNaiveReference) {
           take = std::min(take, glob(0, dim));
           if (take > 0.0) {
             sum += take / glob(0, dim) * glob(0, d);
-            if (opts.normalize_variance) sumsq += take / glob(0, dim) * glob(1, d);
+            if (opts.normalize_variance)
+              sumsq += take / glob(0, dim) * glob(1, d);
             count += take;
           }
         }
@@ -180,8 +182,8 @@ TEST(OnlineCmvn, MatchesNaiveReference) {
           var = std::max(var, 1.0e-20);
           want = (feats(t, d) - mean) / std::sqrt(var);
         }
-        EXPECT_NEAR(out(t, d), want, 1e-4) << "iter=" << iter << " t=" << t
-                                          << " d=" << d;
+        EXPECT_NEAR(out(t, d), want, 1e-4)
+            << "iter=" << iter << " t=" << t << " d=" << d;
       }
     }
   }
@@ -347,9 +349,9 @@ TEST(OnlineCmvn, StateHandoverUsesSpeakerStats) {
   double max_diff = 0.0;
   for (int32_t t = 0; t < 80; t++) {
     for (int32_t d = 0; d < 5; d++) {
-      max_diff = std::max(max_diff,
-                          static_cast<double>(std::fabs(adapted(t, d) -
-                                                        plain(t, d))));
+      max_diff =
+          std::max(max_diff,
+                   static_cast<double>(std::fabs(adapted(t, d) - plain(t, d))));
     }
   }
   EXPECT_GT(max_diff, 1e-3);  // speaker stats must change the normalization

@@ -1,0 +1,134 @@
+# Runs the kaldi-parity tests inside the kaldi docker image
+# (ghcr.io/<owner>/kaldi), following the method of
+# test-github-actions/.github/workflows/test-kaldi.yaml and
+# test-kaldi-torch.yaml: kaldi does not have to be installed on the runner;
+# the image ships /opt/kaldi with all reference binaries on PATH.
+#
+# What runs:
+#   tests/parity/parity_mfcc.py        knf.OnlineMfcc  vs compute-mfcc-feats
+#   tests/parity/parity_online_cmvn.py knf.OnlineCmvn  vs apply-cmvn-online
+#
+# Inputs: the golden wavs in tests/data/feat_golden/ (16 kHz mono) and the
+# configs in tests/data/parity/.
+name: parity
+
+on:
+  push:
+    branches:
+      - master
+      - ci-fix
+  workflow_dispatch:
+
+jobs:
+  parity:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image name
+        id: image
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "name=ghcr.io/${owner}/kaldi:latest" >> "$GITHUB_OUTPUT"
+
+      # build-kaldi.yaml pushes this image. On a fresh push the two workflows run
+      # in parallel, so retry the pull briefly until the image is available.
+      - name: Pull the image (retry until build-kaldi pushes it)
+        run: |
+          image="${{ steps.image.outputs.name }}"
+          for i in $(seq 1 30); do
+            if docker pull "$image"; then
+              echo "Pulled $image on attempt $i"; exit 0
+            fi
+            echo "Attempt $i: $image not ready yet, retrying in 20s..."
+            sleep 20
+          done
+          echo "ERROR: could not pull $image"; exit 1
+
+      # Runs inside the kaldi container.  Builds kaldi_native_fbank from this
+      # checkout into a venv (the Debian 12 base is PEP 668 "externally
+      # managed", so a venv avoids pip refusing system installs) and runs the
+      # parity tests against /opt/kaldi.  The quoted heredoc (<<'...') is
+      # passed verbatim to `bash -s` in the container, so no shell quoting
+      # needs escaping.
+      - name: Run parity tests inside the container
+        run: |
+          docker run --rm -i \
+            -v "${{ github.workspace }}:/work" -w /work \
+            ${{ steps.image.outputs.name }} bash -s <<'KALDI_PARITY'
+            set -u
+
+            echo "################ BASIC ################"
+            echo "==== python3 ===="
+            python3 --version
+            which python3
+            echo "==== kaldi ===="
+            ls /opt/kaldi/src/featbin/compute-mfcc-feats /opt/kaldi/src/online2bin/apply-cmvn-online
+
+            echo
+            echo "################ INSTALL ################"
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update
+            apt-get install -y --no-install-recommends python3-pip python3-venv python3-dev cmake g++ ninja-build
+
+            python3 -m venv /opt/venv
+            . /opt/venv/bin/activate
+            python -m pip install --upgrade pip
+
+            function retry() {
+              $* || (sleep 2 && $*) || (sleep 4 && $*) || (sleep 8 && $*)
+            }
+
+            echo "==== installing python packages ===="
+            retry pip install numpy kaldi-native-io
+            retry pip install .    # build kaldi_native_fbank from this checkout
+
+            echo
+            echo "################ PARITY ################"
+            fail=0
+
+            echo "==== parity_mfcc.py (golden wavs) ===="
+            # --kaldi-dir is auto-detected as /opt/kaldi/src inside the image
+            if python3 tests/parity/parity_mfcc.py \
+                 --wav tests/data/feat_golden/zh0_1s.wav \
+                 --wav tests/data/feat_golden/en0_1s.wav \
+                 --config tests/data/parity/mfcc.conf; then
+              echo "OK      parity_mfcc"
+            else
+              echo "FAILED  parity_mfcc"
+              fail=1
+            fi
+
+            echo
+            echo "==== parity_online_cmvn.py (golden wavs) ===="
+            if python3 tests/parity/parity_online_cmvn.py \
+                 --wav tests/data/feat_golden/zh0_1s.wav \
+                 --wav tests/data/feat_golden/en0_1s.wav \
+                 --config tests/data/parity/mfcc.conf \
+                 --global-stats tests/data/parity/global_cmvn.stats; then
+              echo "OK      parity_online_cmvn"
+            else
+              echo "FAILED  parity_online_cmvn"
+              fail=1
+            fi
+
+            echo
+            if [ "$fail" -eq 0 ]; then
+              echo "PARITY COMPLETE — all checks passed"
+            else
+              echo "PARITY COMPLETE — BUT SOME CHECKS FAILED"
+              exit 1
+            fi
+          KALDI_PARITY

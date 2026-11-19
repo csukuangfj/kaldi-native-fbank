@@ -234,6 +234,7 @@ jobs:
             pip install --upgrade pip setuptools wheel
 
             pip install /wheels/*.whl
+            pip install numpy
 
             # termux has no writable /tmp and / is not writable, so use "/"
             # as a clean cwd outside the source tree. sys.path[0] is the

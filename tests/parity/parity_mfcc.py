@@ -26,6 +26,7 @@ Usage:
 """
 
 import argparse
+import os
 import subprocess
 import sys
 import tempfile
@@ -40,8 +41,10 @@ import kaldi_native_io
 
 def get_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--kaldi-dir", default="/Users/fangjun/open-source/kaldi/src",
-                   help="kaldi src dir containing featbin/compute-mfcc-feats")
+    p.add_argument("--kaldi-dir", default=None,
+                   help="kaldi src dir containing featbin/ online2bin/ "
+                        "(default: $KALDI_ROOT/src, /opt/kaldi/src, or the "
+                        "local checkout)")
     p.add_argument("--wav", action="append", required=True,
                    help="test wav (mono, 16 kHz); may be repeated")
     p.add_argument("--config", required=True,
@@ -94,8 +97,19 @@ def run_knf(samples):
                      for i in range(mfcc.num_frames_ready)]).astype(np.float32)
 
 
+def default_kaldi_src():
+    for cand in (os.environ.get("KALDI_ROOT"), "/opt/kaldi",
+                 "/Users/fangjun/open-source/kaldi"):
+        if cand and os.path.isdir(os.path.join(cand, "src")):
+            return os.path.join(cand, "src")
+    return None
+
+
 def main():
     args = get_args()
+    if args.kaldi_dir is None:
+        args.kaldi_dir = default_kaldi_src()
+        assert args.kaldi_dir, "no kaldi found; pass --kaldi-dir or set KALDI_ROOT"
     wav_paths = [Path(w) for w in args.wav]
     ref = run_kaldi(args.kaldi_dir, args.config, wav_paths)
 

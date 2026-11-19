@@ -42,6 +42,7 @@ jobs:
           CIBW_ARCHS_LINUX: armv7l
           # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags
           CIBW_MANYLINUX_ARMV7L_IMAGE: quay.io/pypa/manylinux_2_35_armv7l:2025.11.29-1
+          CIBW_TEST_REQUIRES: numpy
           CIBW_TEST_COMMAND: python3 {project}/scripts/smoke_test.py
 
       - name: Build wheels
@@ -54,6 +55,7 @@ jobs:
           CIBW_ARCHS_LINUX: armv7l
           # https://quay.io/repository/pypa/manylinux_2_35_armv7l?tab=tags
           CIBW_MANYLINUX_ARMV7L_IMAGE: quay.io/pypa/manylinux_2_35_armv7l
+          CIBW_TEST_REQUIRES: numpy
           CIBW_TEST_COMMAND: python3 {project}/scripts/smoke_test.py
 
       - name: Display wheels
