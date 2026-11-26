@@ -38,7 +38,7 @@ namespace knf {
 ///     \qquad 0 < k < n/2 \f]
 ///
 /// @par Used by:
-/// FbankComputer, MfccComputer, Stft and IStft.
+/// FbankComputer, MfccComputer, WhisperFeatureComputer, Stft and IStft.
 ///
 /// @see ComputePowerSpectrum, Stft
 class Rfft {

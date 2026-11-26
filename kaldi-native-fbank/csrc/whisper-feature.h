@@ -42,6 +42,7 @@
 
 #include "kaldi-native-fbank/csrc/feature-window.h"
 #include "kaldi-native-fbank/csrc/mel-computations.h"
+#include "kaldi-native-fbank/csrc/rfft.h"
 
 namespace knf {
 
@@ -105,6 +106,7 @@ class WhisperFeatureComputer {
 
  private:
   std::unique_ptr<MelBanks> mel_banks_;  ///< Librosa-style mel filter banks.
+  std::unique_ptr<Rfft> rfft_;           ///< FFT engine, of size 400.
   WhisperFeatureOptions opts_;           ///< Options given to the constructor.
 };
 
