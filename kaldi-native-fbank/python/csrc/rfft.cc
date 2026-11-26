@@ -62,7 +62,13 @@ On return of the forward transform:
 * for ``1 < k < n/2``: ``out[2*k] = R[k]``, ``out[2*k+1] = I[k]``
 
 :param d: 1-D list of n floats.
-:return: The packed spectrum, a 1-D list of n floats.)doc");
+:return: The packed spectrum, a 1-D list of n floats.
+
+.. note::
+
+   The FFT plan and a scratch buffer are built once in the constructor and
+   reused by every call, so calls on one :class:`Rfft` must not overlap.
+   This method holds the GIL, which serializes Python callers.)doc");
 }
 
 }  // namespace knf
