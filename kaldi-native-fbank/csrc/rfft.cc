@@ -42,6 +42,15 @@ class Rfft::RfftImpl {
       KNF_LOGE("n should be positive. Given: %d", n);
       throw std::invalid_argument("n should be positive");
     }
+
+    // The kissfft plan (factorization and twiddle factors) depends only on n
+    // and the direction, so build it once here instead of once per frame.
+    cfg_.reset(kiss_fftr_alloc(n_, inverse_ ? 1 : 0, nullptr, nullptr));
+    if (!cfg_) {
+      KNF_LOGE("kiss_fftr_alloc failed for n = %d", n);
+      throw std::runtime_error("kiss_fftr_alloc failed");
+    }
+    buf_.resize(n_ / 2 + 1);
   }
 
   void Compute(float *in_out) {
@@ -61,16 +70,10 @@ class Rfft::RfftImpl {
   }
 
  private:
-  void Forward(float *in_out) const {
-    // kiss_fftr_free is the deallocator matching kiss_fftr_alloc; lifetime
-    // is managed by the unique_ptr below (RAII).
-    auto free_cfg = [](kiss_fftr_cfg p) { kiss_fftr_free(p); };  // NOLINT
-    std::unique_ptr<std::remove_pointer_t<kiss_fftr_cfg>, decltype(free_cfg)>
-        cfg(kiss_fftr_alloc(n_, 0, nullptr, nullptr), free_cfg);
+  void Forward(float *in_out) {
+    std::vector<kiss_fft_cpx> &out = buf_;
 
-    std::vector<kiss_fft_cpx> out(n_ / 2 + 1);
-
-    kiss_fftr(cfg.get(), in_out, out.data());
+    kiss_fftr(cfg_.get(), in_out, out.data());
 
     in_out[0] = out[0].r;
     in_out[1] = out[n_ / 2].r;
@@ -81,8 +84,8 @@ class Rfft::RfftImpl {
     }
   }
 
-  void Reverse(float *in_out) const {
-    std::vector<kiss_fft_cpx> out(n_ / 2 + 1);
+  void Reverse(float *in_out) {
+    std::vector<kiss_fft_cpx> &out = buf_;
     out[0].r = in_out[0];
     out[0].i = 0;
 
@@ -94,18 +97,27 @@ class Rfft::RfftImpl {
       out[i].i = in_out[2 * i + 1];
     }
 
-    // kiss_fftr_free is the deallocator matching kiss_fftr_alloc; lifetime
-    // is managed by the unique_ptr below (RAII).
-    auto free_cfg = [](kiss_fftr_cfg p) { kiss_fftr_free(p); };  // NOLINT
-    std::unique_ptr<std::remove_pointer_t<kiss_fftr_cfg>, decltype(free_cfg)>
-        cfg(kiss_fftr_alloc(n_, 1, nullptr, nullptr), free_cfg);
-
-    kiss_fftri(cfg.get(), out.data(), in_out);
+    kiss_fftri(cfg_.get(), out.data(), in_out);
   }
 
  private:
-  int32_t n_;
-  bool inverse_ = false;
+  /// Deleter for the kissfft plan: kiss_fftr_free() is the deallocator
+  /// matching kiss_fftr_alloc().
+  struct CfgDeleter {
+    void operator()(kiss_fftr_cfg p) const { kiss_fftr_free(p); }  // NOLINT
+  };
+
+  int32_t n_;             ///< Number of fft points.
+  bool inverse_ = false;  ///< True for the inverse transform.
+
+  /// kissfft plan for n_ points in the direction given by inverse_. It also
+  /// holds kissfft's internal scratch space, so it is written by every
+  /// Compute() call.
+  std::unique_ptr<std::remove_pointer_t<kiss_fftr_cfg>, CfgDeleter> cfg_;
+
+  /// Scratch buffer of n_ / 2 + 1 complex bins: the output of the forward
+  /// transform, the input of the inverse transform.
+  std::vector<kiss_fft_cpx> buf_;
 };
 
 Rfft::Rfft(int32_t n, bool inverse /*=false*/)

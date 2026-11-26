@@ -2146,6 +2146,12 @@ class Rfft:
         
         :param d: 1-D list of n floats.
         :return: The packed spectrum, a 1-D list of n floats.
+        
+        .. note::
+        
+           The FFT plan and a scratch buffer are built once in the constructor and
+           reused by every call, so calls on one :class:`Rfft` must not overlap.
+           This method holds the GIL, which serializes Python callers.
         """
 class SpliceOptions:
     """

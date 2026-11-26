@@ -62,6 +62,12 @@ class Rfft {
    *                 in_out[2*k] = R[k]
    *                 in_out[2*k+1] = I[k]
    *
+   @note The kissfft plan for n points is built once in the constructor and
+   *     reused by every call, together with a scratch buffer owned by this
+   *     object, so Compute() is not reentrant: calls on the same Rfft, or on
+   *     an object that owns one such as FbankComputer or MfccComputer, must
+   *     not overlap. Use one object per thread. Stft and IStft create a local
+   *     Rfft in each call.
    */
   void Compute(float *in_out);
 

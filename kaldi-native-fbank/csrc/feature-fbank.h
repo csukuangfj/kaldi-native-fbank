@@ -190,6 +190,9 @@ class FbankComputer {
        vector as a workspace, which is why it's a non-const pointer.
      @param [out] feature  Pointer to a vector of size this->Dim(), to which
          the computed feature will be written. It should be pre-allocated.
+     @note Not reentrant: the Rfft member keeps its plan and scratch buffer
+         in this object (see Rfft::Compute()), so calls on one object must
+         not overlap.
   */
   void Compute(float signal_raw_log_energy, float vtln_warp,
                std::vector<float> *signal_frame, float *feature);
